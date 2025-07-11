@@ -13,9 +13,9 @@ const DemoPage = () => import('../pages/DemoPage.vue')
 
 const routes = [
 	{
-		path: '/auth',
+		path: '/admin',
 		component: AuthLayout,
-		redirect: '/auth/login',
+		redirect: '/admin/login',
 		children: [
 			{
 				path: 'login',
