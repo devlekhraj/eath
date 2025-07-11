@@ -50,7 +50,7 @@
 <!-- Top Meta Bar -->
 <div class="bg-dark text-light py-2 px-3 d-flex justify-content-between small">
   <div>
-    <i class="fas fa-phone-alt"></i> +977 9800000000
+    <i class="fas fa-phone-alt"></i> +977 (986) 098-9998
     <i class="fas fa-envelope ms-3"></i> info@eathtravel.com
   </div>
   <div>
