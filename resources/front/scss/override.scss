@@ -1,0 +1,112 @@
+// TailwindCSS-like base reset for inputs, lists, etc.
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0.375rem 0.75rem; // similar to Bootstrap default padding for inputs
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem; // ~6px radius like Tailwind
+    background-color: white;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus {
+        outline: none;
+        border-color: $secondary;
+        box-shadow: 0 0 0 0.2rem rgba(236, 146, 20, 0.25); // $secondary with opacity
+    }
+}
+
+
+a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover,
+    &:focus {
+        color: darken($secondary, 10%);
+        text-decoration: underline;
+    }
+}
+
+// Remove default button styles (like Tailwind 'btn-reset')
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+}
+
+// Add any other Tailwind base resets you want here...
+
+.form-control {
+    box-shadow: none !important;
+    border-color: #dee2e6 !important;
+    height: 50px;
+
+}
+
+
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    background-color: white;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: #dee2e6 !important;
+    }
+
+    &:active {
+        outline: none !important;
+        border-color: #dee2e6 !important;
+        box-shadow: none !important;
+    }
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+
+// background
+.bg-light-1 {
+    background-color: #fbfbfb;
+}
+
+a {
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: inherit;
+}
+
+ol,
+ul {
+    padding: 0;
+    list-style-type: none !important;
+
+    li {
+        list-style-type: none !important;
+    }
+}
+.swiper{
+    border-radius: 0!important;
+    max-height: none !important;
+}
+p{
+    padding: 0;
+    margin: 0;
+}
