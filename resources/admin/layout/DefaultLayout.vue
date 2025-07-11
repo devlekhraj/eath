@@ -46,38 +46,38 @@ const menuGroups = ref([
 	{
 		groupName: 'Bookings',
 		items: [
-			{ name: 'Manage Bookings', icon: 'mdi-calendar-check-outline', route_name: 'adminDemoPage' },
-			{ name: 'New Booking', icon: 'mdi-plus-circle-outline', route_name: 'adminDemoPage' },
+			{ name: 'Manage Bookings', icon: 'mdi-calendar-check-outline', route_name: 'adminBookingPage' },
+			{ name: 'New Booking', icon: 'mdi-plus-circle-outline', route_name: 'adminBookingForm' },
 		],
 	},
 	{
 		groupName: 'Our Blogs',
 		items: [
-			{ name: 'Create Blog', icon: 'mdi-note-plus-outline', route_name: 'adminDemoPage' },
-			{ name: 'All Blogs', icon: 'mdi-note-text-outline', route_name: 'adminDemoPage' },
-			{ name: 'Categories', icon: 'mdi-note-text-outline', route_name: 'adminDemoPage' },
+			{ name: 'Create Blog', icon: 'mdi-note-plus-outline', route_name: 'adminBlogForm' },
+			{ name: 'All Blogs', icon: 'mdi-note-text-outline', route_name: 'adminBlogPage' },
+			{ name: 'Categories', icon: 'mdi-note-text-outline', route_name: 'adminBlogCategorypage' },
 		],
 	},
 	{
 		groupName: 'Packages',
 		items: [
-			{ name: 'All Packages', icon: 'mdi-package-variant-closed', route_name: 'adminDemoPage' },
-			{ name: 'Create Package', icon: 'mdi-plus-box-outline', route_name: 'adminDemoPage' },
-			{ name: 'Categories', icon: 'mdi-tag-multiple-outline', route_name: 'adminDemoPage' },
+			{ name: 'All Packages', icon: 'mdi-package-variant-closed', route_name: 'adminPackagePage' },
+			{ name: 'Create Package', icon: 'mdi-plus-box-outline', route_name: 'adminPackageForm' },
+			{ name: 'Categories', icon: 'mdi-tag-multiple-outline', route_name: 'adminPackageCategoryPage' },
 		],
 	},
 	{
 		groupName: 'Customers',
 		items: [
-			{ name: 'Customer List', icon: 'mdi-account-group-outline', route_name: 'adminDemoPage' },
-			{ name: 'Inquiries', icon: 'mdi-message-question-outline', route_name: 'adminDemoPage' },
+			{ name: 'Customer List', icon: 'mdi-account-group-outline', route_name: 'adminCustomerPage' },
+			{ name: 'Inquiries', icon: 'mdi-message-question-outline', route_name: 'adminInquiryPage' },
 		],
 	},
 	{
 		groupName: 'Finance',
 		items: [
-			{ name: 'Invoices', icon: 'mdi-file-document-outline', route_name: 'adminDemoPage' },
-			{ name: 'Reports', icon: 'mdi-chart-box-outline', route_name: 'adminDemoPage' },
+			{ name: 'Invoices', icon: 'mdi-file-document-outline', route_name: 'adminInvoicePage' },
+			{ name: 'Reports', icon: 'mdi-chart-box-outline', route_name: 'adminReportPage' },
 		],
 	},
 	{
@@ -89,6 +89,7 @@ const menuGroups = ref([
 		],
 	},
 ])
+
 </script>
 
 <template>

@@ -1,68 +1,176 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// Layout
-const DefaultLayout = () => import('../layout/DefaultLayout.vue')
-const AuthLayout = () => import('../layout/AuthLayout.vue')
-
-// Admin
-const AdminLoginPage = () => import('../pages/auth/LoginPage.vue')
-const AdminPasswodResetPage = () => import('../pages/auth/PasswordResetPage.vue')
-
-const DashboardPage = () => import('../pages/dashboard/DashboardPage.vue')
-const DemoPage = () => import('../pages/DemoPage.vue')
-
 const routes = [
 	{
 		path: '/admin',
-		component: AuthLayout,
+		component: import('@/layout/AuthLayout.vue'),
 		redirect: '/admin/login',
 		children: [
 			{
 				path: 'login',
 				name: 'adminLoginPage',
-				component: AdminLoginPage,
+				component: import('@pages/auth/LoginPage.vue'),
 				meta: {
 					requireAuth: false,
-					title: 'Admin Login',
-					subtitle: 'Admin Login Page',
+					title: 'Login',
+					subtitle: 'Access your admin panel',
 				},
 			},
 			{
 				path: 'reset-password',
 				name: 'adminResetPasswordPage',
-				component: AdminPasswodResetPage,
+				component: import('@pages/auth/PasswordResetPage.vue'),
 				meta: {
 					requireAuth: false,
-					title: 'Password Reset',
-					subtitle: 'Admin Password Reset Page',
+					title: 'Reset Password',
+					subtitle: 'Recover your admin account',
 				},
 			},
 		],
 	},
 	{
 		path: '/admin',
-		component: DefaultLayout,
+		component: import('@/layout/DefaultLayout.vue'),
 		redirect: '/admin/dashboard',
 		children: [
 			{
 				path: 'dashboard',
 				name: 'adminDashboardPage',
-				component: DashboardPage,
+				component: import('@pages/dashboard/DashboardPage.vue'),
 				meta: {
 					requireAuth: true,
 					title: 'Dashboard',
 					subtitle: 'Overview of key metrics',
 				},
 			},
-
+			{
+				path: 'blogs',
+				name: 'adminBlogPage',
+				component: () => import('@pages/blogs/BlogPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'All Blogs',
+					subtitle: 'Manage your blog articles',
+				},
+			},
+			{
+				path: 'blog-form',
+				name: 'adminBlogForm',
+				component: () => import('@pages/blogs/BlogForm.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Create Blog',
+					subtitle: 'Write and publish a new blog post',
+				},
+			},
+			{
+				path: 'blog-categories',
+				name: 'adminBlogCategorypage',
+				component: () => import('@pages/blogs/BlogCategoryPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Blog Categories',
+					subtitle: 'Organize your blog content',
+				},
+			},
+			{
+				path: 'bookings',
+				name: 'adminBookingPage',
+				component: () => import('@pages/bookings/BookingPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Manage Bookings',
+					subtitle: 'View and edit travel bookings',
+				},
+			},
+			{
+				path: 'booking-form',
+				name: 'adminBookingForm',
+				component: () => import('@pages/bookings/BookingForm.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'New Booking',
+					subtitle: 'Create a new travel booking',
+				},
+			},
+			{
+				path: 'customers',
+				name: 'adminCustomerPage',
+				component: () => import('@pages/customers/CustomerPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Customer List',
+					subtitle: 'View and manage all customers',
+				},
+			},
+			{
+				path: 'packages',
+				name: 'adminPackagePage',
+				component: () => import('@pages/packages/PackagePage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Available Packages',
+					subtitle: 'All the available packages',
+				},
+			},
+			{
+				path: 'package-form',
+				name: 'adminPackageForm',
+				component: () => import('@pages/packages/PackageForm.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Package Form',
+					subtitle: 'Package Form',
+				},
+			},
+			{
+				path: 'package-categories',
+				name: 'adminPackageCategoryPage',
+				component: () => import('@pages/packages/PackageCategoryPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Package Categories',
+					subtitle: 'View and manage all customers',
+				},
+			},
+			{
+				path: 'inquiries',
+				name: 'adminInquiryPage',
+				component: () => import('@pages/customers/CustomerInquiryPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Inquiries',
+					subtitle: 'Handle customer questions and requests',
+				},
+			},
+			{
+				path: 'invoices',
+				name: 'adminInvoicePage',
+				component: () => import('@pages/finance/InvoicePage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Invoices',
+					subtitle: 'Track and manage billing',
+				},
+			},
+			{
+				path: 'reports',
+				name: 'adminReportPage',
+				component: () => import('@pages/finance/ReportPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Reports',
+					subtitle: 'Analyze business performance',
+				},
+			},
 			{
 				path: 'demo-page',
 				name: 'adminDemoPage',
-				component: DemoPage,
+				component: import('@pages/DemoPage.vue'),
 				meta: {
 					requireAuth: true,
 					title: 'Demo Page',
-					subtitle: '',
+					subtitle: 'Temporary placeholder for testing',
 				},
 			},
 		],
