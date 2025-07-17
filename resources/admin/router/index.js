@@ -3,13 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
 	{
 		path: '/admin',
-		component: import('@/layout/AuthLayout.vue'),
+		component: () => import('@/layout/AuthLayout.vue'),
 		redirect: '/admin/login',
 		children: [
 			{
 				path: 'login',
 				name: 'adminLoginPage',
-				component: import('@pages/auth/LoginPage.vue'),
+				component: () => import('@pages/auth/LoginPage.vue'),
 				meta: {
 					requireAuth: false,
 					title: 'Login',
@@ -19,7 +19,7 @@ const routes = [
 			{
 				path: 'reset-password',
 				name: 'adminResetPasswordPage',
-				component: import('@pages/auth/PasswordResetPage.vue'),
+				component: () => import('@pages/auth/PasswordResetPage.vue'),
 				meta: {
 					requireAuth: false,
 					title: 'Reset Password',
@@ -30,13 +30,13 @@ const routes = [
 	},
 	{
 		path: '/admin',
-		component: import('@/layout/DefaultLayout.vue'),
+		component: () => import('@/layout/DefaultLayout.vue'),
 		redirect: '/admin/dashboard',
 		children: [
 			{
 				path: 'dashboard',
 				name: 'adminDashboardPage',
-				component: import('@pages/dashboard/DashboardPage.vue'),
+				component: () => import('@pages/dashboard/DashboardPage.vue'),
 				meta: {
 					requireAuth: true,
 					title: 'Dashboard',
@@ -163,10 +163,66 @@ const routes = [
 					subtitle: 'Analyze business performance',
 				},
 			},
+
+			// gallery routes
+			{
+				path: 'gallery',
+				name: 'adminGalleryPage',
+				component: () => import('@pages/gallery/GalleryPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Gallery',
+					subtitle: 'Manage media gallery',
+				},
+			},
+			{
+				path: 'gallery-form',
+				name: 'adminGalleryForm',
+				component: () => import('@pages/gallery/GalleryForm.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Gallery Form',
+					subtitle: 'Upload or edit gallery images',
+				},
+			},
+
+			// settings
+			{
+				path: 'notifications',
+				name: 'adminNotificationPage',
+				component: () => import('@pages/settings/NotificationPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Notifications',
+					subtitle: 'Send alerts and messages',
+				},
+			},
+			{
+				path: 'user-management',
+				name: 'adminUserManagementPage',
+				component: () => import('@pages/settings/UserManagementPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'User Management',
+					subtitle: 'Manage admin panel users',
+				},
+			},
+			{
+				path: 'general-settings',
+				name: 'adminGeneralSettingPage',
+				component: () => import('@pages/settings/GeneralSettingPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Settings',
+					subtitle: 'Application-wide configurations',
+				},
+			},
+
+			// demo page
 			{
 				path: 'demo-page',
 				name: 'adminDemoPage',
-				component: import('@pages/DemoPage.vue'),
+				component: () => import('@pages/DemoPage.vue'),
 				meta: {
 					requireAuth: true,
 					title: 'Demo Page',
@@ -188,7 +244,7 @@ router.beforeEach((to, from, next) => {
 	const requiresAuth = to.matched.some(record => record.meta.requireAuth)
 
 	if (requiresAuth && !isLoggedIn) {
-		return next({ name: 'adminLoginPage' }) // point to /auth/login only
+		return next({ name: 'adminLoginPage' })
 	}
 
 	if (to.name === 'adminLoginPage' && isLoggedIn) {
@@ -198,6 +254,4 @@ router.beforeEach((to, from, next) => {
 	next()
 })
 
-
 export default router
-

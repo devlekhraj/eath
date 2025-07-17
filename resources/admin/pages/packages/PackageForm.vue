@@ -1,18 +1,10 @@
-<script>
-export default {
-    data() {
-        
-        return {};
-    },
-};
+<script setup lang="ts">
+import { ref } from 'vue'
+const content = ref('')
 </script>
 
 <template>
-    <div>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, quidem.</p>
-    </div>
+  <VContainer>
+    <RichTextEditor v-model="content" />
+  </VContainer>
 </template>
-
-<style>
-    
-</style>

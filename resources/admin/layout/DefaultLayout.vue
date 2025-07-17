@@ -81,11 +81,18 @@ const menuGroups = ref([
 		],
 	},
 	{
+		groupName: 'Gallery',
+		items: [
+			{ name: 'All Images', icon: 'mdi-file-document-outline', route_name: 'adminGalleryPage' },
+			{ name: 'Add Image', icon: 'mdi-chart-box-outline', route_name: 'adminGalleryForm' },
+		],
+	},
+	{
 		groupName: 'Settings',
 		items: [
-			{ name: 'Notifications', icon: 'mdi-bell-outline', route_name: 'adminDemoPage' },
-			{ name: 'General Settings', icon: 'mdi-cog-outline', route_name: 'adminDemoPage' },
-			{ name: 'User Management', icon: 'mdi-account-cog-outline', route_name: 'adminDemoPage' },
+			{ name: 'Notifications', icon: 'mdi-bell-outline', route_name: 'adminNotificationPage' },
+			{ name: 'General Settings', icon: 'mdi-cog-outline', route_name: 'adminGeneralSettingPage' },
+			{ name: 'User Management', icon: 'mdi-account-cog-outline', route_name: 'adminUserManagementPage' },
 		],
 	},
 ])
@@ -94,17 +101,18 @@ const menuGroups = ref([
 
 <template>
 	<v-app>
-		<v-navigation-drawer v-model="drawer" app :permanent="$vuetify.display.mdAndUp" temporary>
+		<v-navigation-drawer v-model="drawer" app :permanent="$vuetify.display.mdAndUp" temporary class="border-0">
 			<v-list dense nav>
 				<template v-for="group in menuGroups" :key="group.groupName">
-					<v-list-subheader class="text-uppercase group-title mb-0 pb-0">{{ group.groupName
-						}}</v-list-subheader>
+					<v-list-subheader class="text-uppercase group-title mb-0 pb-0">{{
+						group.groupName }}</v-list-subheader>
 					<v-list-item v-for="item in group.items" :key="item.name" :to="{ name: item.route_name }" link
 						class="rounded py-2">
 						<template #prepend>
-							<v-icon class="mr-0">{{ item.icon }}</v-icon>
+							<v-icon class="mr-0" style="font-size: 1.5rem;" color="primary">{{ item.icon }}</v-icon>
 						</template>
-						<v-list-item-title>{{ item.name }}</v-list-item-title>
+						<v-list-item-title style="font-size: 0.8rem !important; color: #5a5a5a;">{{ item.name
+						}}</v-list-item-title>
 					</v-list-item>
 				</template>
 			</v-list>
@@ -174,7 +182,7 @@ const menuGroups = ref([
 				</div>
 			</div>
 
-			<div style="overflow-y: auto; max-height: calc(100vh - 70px);">
+			<div style="overflow-y: auto; max-height: calc(100vh - 70px);" class="pa-4">
 				<router-view></router-view>
 			</div>
 		</v-main>
@@ -209,10 +217,19 @@ const menuGroups = ref([
 	color: #1976d2;
 }
 
-.group-title {
-	font-size: 0.9rem;
-	font-weight: 500;
-	padding-bottom: 6px;
+// .group-title {
+// 	font-size: 0.9rem;
+// 	font-weight: 500;
+// 	padding-bottom: 6px;
+// }
+
+.v-list-subheader__text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: #2b77d2;
+	font-weight: 600;
+	font-size: 0.8rem;
 }
 
 .v-list-item {
