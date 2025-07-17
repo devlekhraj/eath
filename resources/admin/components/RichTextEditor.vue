@@ -62,11 +62,11 @@ const extensions = [
     Table,
     History,
     TextAlign,
-    
+
 ]
 </script>
 
 <template>
-    <VuetifyTiptap v-model="content" label="" :min-height="400" style="max-height: calc(100vh - 100px)" class="p-4"
+    <VuetifyTiptap v-model="content" :min-height="400" style="max-height: calc(100vh - 100px)" class="p-4"
         :placeholder="'Type here...'" :toolbar="true" :toolbar-position="'top'" :extensions="extensions" />
 </template>

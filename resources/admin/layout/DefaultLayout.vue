@@ -80,16 +80,16 @@ const menuGroups = ref([
 			{ name: 'Reports', icon: 'mdi-chart-box-outline', route_name: 'adminReportPage' },
 		],
 	},
-	{
-		groupName: 'Gallery',
-		items: [
-			{ name: 'All Images', icon: 'mdi-file-document-outline', route_name: 'adminGalleryPage' },
-			{ name: 'Add Image', icon: 'mdi-chart-box-outline', route_name: 'adminGalleryForm' },
-		],
-	},
+	// {
+	// 	groupName: 'Gallery',
+	// 	items: [
+	// 		{ name: 'Add Image', icon: 'mdi-chart-box-outline', route_name: 'adminGalleryForm' },
+	// 	],
+	// },
 	{
 		groupName: 'Settings',
 		items: [
+			{ name: 'All Images', icon: 'mdi-file-document-outline', route_name: 'adminGalleryPage' },
 			{ name: 'Notifications', icon: 'mdi-bell-outline', route_name: 'adminNotificationPage' },
 			{ name: 'General Settings', icon: 'mdi-cog-outline', route_name: 'adminGeneralSettingPage' },
 			{ name: 'User Management', icon: 'mdi-account-cog-outline', route_name: 'adminUserManagementPage' },
