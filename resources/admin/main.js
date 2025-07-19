@@ -26,10 +26,15 @@ import { useAuthStore } from '@/stores/auth'
 import ModalTemplate from '@components/ModalTemplate.vue'
 import RichTextEditor from '@components/RichTextEditor.vue'
 import { VuetifyViewer } from 'vuetify-pro-tiptap' // ✅ import
+import { VDateInput } from 'vuetify/labs/VDateInput'
+
 
 // Vuetify setup
 const vuetify = createVuetify({
-  components,
+  components:{
+    ...components,
+    VDateInput,
+  },
   directives,
   theme: {
     defaultTheme: 'light',

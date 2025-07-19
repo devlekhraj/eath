@@ -27,6 +27,7 @@ const rules = {
   positive: (value: any) => !value || Number(value) >= 0 || 'Must be positive',
 }
 
+
 async function submitPackage() {
   if (!formRef.value) return
   const valid = await formRef.value.validate()
@@ -82,123 +83,96 @@ async function submitPackage() {
       <v-col cols="12" md="8">
         <v-card elevation="0" class="pa-6">
           <v-form ref="formRef" lazy-validation>
-            <v-text-field
-              v-model="packageName"
-              label="Package Name"
-              :rules="[rules.required]"
-              :disabled="submitting"
-              required
-            />
+            <v-text-field v-model="packageName" density="comfortable" label="Package Name" variant="outlined"
+              :rules="[rules.required]" :disabled="submitting" required />
 
-            <RichTextEditor
-              v-model="description"
-              label="Description"
-              :disabled="submitting"
-              class="mt-4"
-            />
+            <RichTextEditor v-model="description" label="Description" :disabled="submitting" class="mt-4" />
 
-            <v-textarea
-              v-model="additionalInfo"
-              label="Additional Info"
-              rows="3"
-              auto-grow
-              class="mt-4"
-            />
+            <v-textarea v-model="additionalInfo" label="Additional Info" rows="3" variant="outlined" auto-grow
+              class="mt-4" />
 
-            <v-row class="mt-2">
-              <v-col cols="6">
-                <v-text-field
-                  v-model="durationDays"
-                  label="Duration (Days)"
-                  type="number"
-                  :rules="[rules.numeric, rules.positive]"
-                  :disabled="submitting"
-                />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="durationNights"
-                  label="Duration (Nights)"
-                  type="number"
-                  :rules="[rules.numeric, rules.positive]"
-                  :disabled="submitting"
-                />
-              </v-col>
-            </v-row>
 
-            <v-text-field
-              v-model="price"
-              label="Price (NPR)"
-              type="number"
-              :rules="[rules.numeric, rules.positive]"
-              :disabled="submitting"
-              class="mt-2"
-            />
 
-            <v-row class="mt-2">
-              <v-col cols="6">
-                <v-text-field
-                  v-model="startDate"
-                  label="Start Date"
-                  type="date"
-                  :disabled="submitting"
-                />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="endDate"
-                  label="End Date"
-                  type="date"
-                  :disabled="submitting"
-                />
-              </v-col>
-            </v-row>
-
-            <v-switch
-              v-model="isActive"
-              label="Active"
-              color="success"
-              class="mt-2"
-              :disabled="submitting"
-            />
-
-            <v-switch
-              v-model="isFeatured"
-              label="Featured"
-              color="primary"
-              class="mt-2"
-              :disabled="submitting"
-            />
-
-            <v-textarea
-              v-model="termsConditions"
-              label="Terms & Conditions"
-              rows="3"
-              class="mt-4"
-              auto-grow
-            />
-
-            <v-textarea
-              v-model="cancellationPolicy"
-              label="Cancellation Policy"
-              rows="3"
-              class="mt-2"
-              auto-grow
-            />
 
             <div class="mt-6 text-center">
-              <v-btn
-                size="large"
-                color="primary"
-                rounded
-                :loading="submitting"
-                :disabled="submitting"
-                @click="submitPackage"
-              >
+              <v-btn size="large" color="primary" rounded :loading="submitting" :disabled="submitting"
+                @click="submitPackage">
                 <v-icon left>mdi-plus</v-icon> Create Package
               </v-btn>
             </div>
           </v-form>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-card elevation="0" class="pa-6">
+          <v-row class="mt-2">
+            <v-col cols="6">
+              <v-text-field v-model="durationDays" label="Duration (Days)" density="comfortable" type="number"
+                variant="outlined" prepend-inner-icon="mdi-clock" :rules="[rules.numeric, rules.positive]"
+                :disabled="submitting" />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="durationNights" label="Duration (Nights)" density="comfortable"
+                prepend-inner-icon="mdi-clock" type="number" variant="outlined" :rules="[rules.numeric, rules.positive]"
+                :disabled="submitting" />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="price" label="Price (USD)" type="number" density="comfortable"
+                prepend-inner-icon="mdi-currency-usd" variant="outlined" :rules="[rules.numeric, rules.positive]"
+                :disabled="submitting" class="" />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="price" label="Altitude (feet)" type="number" density="comfortable"
+                prepend-inner-icon="mdi-image-filter-hdr" variant="outlined" :rules="[rules.numeric, rules.positive]"
+                :disabled="submitting" class="" />
+            </v-col>
+
+
+
+            <v-col cols="6">
+
+              <v-date-input label="Start Date" prepend-icon="" prepend-inner-icon="mdi-calendar" v-model="startDate"
+                variant="outlined" :disabled="submitting" density="comfortable"></v-date-input>
+            </v-col>
+            <v-col cols="6">
+              <v-date-input label="Start Date" prepend-icon="" prepend-inner-icon="mdi-calendar" v-model="endDate"
+                variant="outlined" :disabled="submitting" density="comfortable"></v-date-input>
+
+            </v-col>
+
+
+            <v-col cols="6">
+              <div>
+                <v-switch v-model="isActive" label="Active" color="success" inset :disabled="submitting" />
+              </div>
+
+            </v-col>
+            <v-col cols="6">
+              <div>
+                <v-switch v-model="isFeatured" label="Featured" color="success" inset :disabled="submitting" />
+              </div>
+
+            </v-col>
+            <v-col cols="12">
+              <div>
+                <v-textarea v-model="termsConditions" label="Terms & Conditions" rows="3" variant="outlined"
+                  class="mt-4" auto-grow />
+
+
+              </div>
+
+            </v-col>
+            <v-col cols="12">
+              <div>
+                <v-textarea v-model="cancellationPolicy" label="Cancellation Policy" rows="3" variant="outlined"
+                  class="mt-2" auto-grow />
+
+
+              </div>
+
+            </v-col>
+          </v-row>
+
         </v-card>
       </v-col>
     </v-row>
