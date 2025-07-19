@@ -109,7 +109,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-calendar-day text-info"></i>
+                                        <i class="fas fa-calendar-day "></i>
                                     </div>
                                     <span class="ms-2">Day Tours</span>
                                 </a>
@@ -117,7 +117,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-flag text-info"></i>
+                                        <i class="fas fa-flag "></i>
                                     </div>
                                     <span class="ms-2">Nepal Tours</span>
                                 </a>
@@ -125,7 +125,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-helicopter text-info"></i>
+                                        <i class="fas fa-helicopter "></i>
                                     </div>
                                     <span class="ms-2">Helicopter Tours</span>
                                 </a>
@@ -133,7 +133,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-hiking text-info"></i>
+                                        <i class="fas fa-hiking "></i>
                                     </div>
                                     <span class="ms-2">Trekking in Nepal</span>
                                 </a>
@@ -141,7 +141,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-mountain text-info"></i>
+                                        <i class="fas fa-mountain "></i>
                                     </div>
                                     <span class="ms-2">Peak Climbing in Nepal</span>
                                 </a>
@@ -149,7 +149,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-bolt text-info"></i>
+                                        <i class="fas fa-bolt "></i>
                                     </div>
                                     <span class="ms-2">Adventure Sports in Nepal</span>
                                 </a>
@@ -157,7 +157,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-ring text-info"></i>
+                                        <i class="fas fa-ring "></i>
                                     </div>
                                     <span class="ms-2">Destination Wedding in Nepal</span>
                                 </a>
@@ -165,7 +165,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-utensils text-info"></i>
+                                        <i class="fas fa-utensils "></i>
                                     </div>
                                     <span class="ms-2">Cooking Classes in Kathmandu</span>
                                 </a>
@@ -187,7 +187,7 @@
                                     <div class="row g-4">
                                         <!-- Everest Region -->
                                         <div class="col-md-3">
-                                            <h6 class="text-uppercase text-info mb-2 fw-bold">
+                                            <h6 class="text-uppercase  mb-2 fw-bold">
                                                  Everest Region
                                             </h6>
                                             <ul class="list-unstyled">
@@ -222,7 +222,7 @@
 
                                         <!-- Annapurna Region -->
                                         <div class="col-md-3">
-                                            <h6 class="text-uppercase text-info mb-2 fw-bold">
+                                            <h6 class="text-uppercase  mb-2 fw-bold">
                                                Annapurna Region
                                             </h6>
                                             <ul class="list-unstyled">
@@ -252,7 +252,7 @@
 
                                         <!-- Manaslu & Langtang Region -->
                                         <div class="col-md-3">
-                                            <h6 class="text-uppercase text-info mb-2 fw-bold">
+                                            <h6 class="text-uppercase  mb-2 fw-bold">
                                                 Manaslu Region
                                             </h6>
                                             <ul class="list-unstyled">
@@ -264,7 +264,7 @@
                                                         Days</a></li>
                                             </ul>
 
-                                            <h6 class="text-uppercase text-info mt-4 mb-2 fw-bold">
+                                            <h6 class="text-uppercase  mt-4 mb-2 fw-bold">
                                                Langtang Region
                                             </h6>
                                             <ul class="list-unstyled">
@@ -281,7 +281,7 @@
 
                                         <!-- Western & Eastern Region -->
                                         <div class="col-md-3">
-                                            <h6 class="text-uppercase text-info mb-2 fw-bold">
+                                            <h6 class="text-uppercase  mb-2 fw-bold">
                                                Western Region
                                             </h6>
                                             <ul class="list-unstyled">
@@ -301,7 +301,7 @@
                                                         Days</a></li>
                                             </ul>
 
-                                            <h6 class="text-uppercase text-info mt-4 mb-2 fw-bold">
+                                            <h6 class="text-uppercase  mt-4 mb-2 fw-bold">
                                                Eastern
                                                 Region
                                             </h6>
@@ -326,7 +326,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-mountain text-info"></i>
+                                        <i class="fas fa-mountain "></i>
                                     </div>
                                     <span class="ms-2">Everest Heli Tour with Kalapatthar Landing</span>
                                 </a>
@@ -334,7 +334,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-church text-info"></i>
+                                        <i class="fas fa-church "></i>
                                     </div>
                                     <span class="ms-2">Muktinath Helicopter Tour</span>
                                 </a>
@@ -342,7 +342,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-water text-info"></i>
+                                        <i class="fas fa-water "></i>
                                     </div>
                                     <span class="ms-2">Gosaikunda Heli Tour</span>
                                 </a>
@@ -350,7 +350,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-mountain-sun text-info"></i>
+                                        <i class="fas fa-mountain-sun "></i>
                                     </div>
                                     <span class="ms-2">Mount Everest Heli Tour</span>
                                 </a>
@@ -358,7 +358,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-tree text-info"></i>
+                                        <i class="fas fa-tree "></i>
                                     </div>
                                     <span class="ms-2">Langtang Valley Heli Tour - Day Tour</span>
                                 </a>
@@ -366,7 +366,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-hiking text-info"></i>
+                                        <i class="fas fa-hiking "></i>
                                     </div>
                                     <span class="ms-2">Mardi Himal Heli Tour</span>
                                 </a>
@@ -374,7 +374,7 @@
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
-                                        <i class="fas fa-sun text-info"></i>
+                                        <i class="fas fa-sun "></i>
                                     </div>
                                     <span class="ms-2">Annapurna Heli Tour</span>
                                 </a>
@@ -391,8 +391,8 @@
                 </ul>
             </div>
             <div class="d-flex align-items-center">
-                <i class="fas fa-user-circle me-2 text-primary" style="font-size: 2rem"></i>
-                <strong class="text-primary">Login</strong>
+                <i class="fas fa-user-circle me-2" style="font-size: 2rem"></i>
+                <strong>Login</strong>
 
             </div>
 
