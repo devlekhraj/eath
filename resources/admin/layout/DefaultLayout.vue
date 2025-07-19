@@ -111,7 +111,7 @@ const menuGroups = ref([
 						<template #prepend>
 							<v-icon class="mr-0" style="font-size: 1.5rem;" color="primary">{{ item.icon }}</v-icon>
 						</template>
-						<v-list-item-title style="font-size: 0.8rem !important; color: #5a5a5a;">{{ item.name
+						<v-list-item-title style="font-size: 0.9rem !important; color: #5a5a5a;">{{ item.name
 						}}</v-list-item-title>
 					</v-list-item>
 				</template>

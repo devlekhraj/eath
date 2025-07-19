@@ -4,14 +4,18 @@ import router from './router'
 import { createPinia } from 'pinia'
 
 // Vuetify
-import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify-pro-tiptap/style.css'
 import '@fortawesome/fontawesome-free/css/all.css'
+import '@fontsource/poppins/400.css'
+import '@fontsource/poppins/500.css'
+import '@fontsource/poppins/600.css'
+import '@fontsource/poppins/700.css'
 
+import 'vuetify/styles'
 // Axios global config
 import './axios.config.js'
 
@@ -31,12 +35,13 @@ const vuetify = createVuetify({
     defaultTheme: 'light',
     themes: {
       light: {
-        typography: {
-          fontFamily: 'Poppins, sans-serif',
+        colors: {
+          // your colors here (optional)
         },
       },
     },
   },
+  // Remove `typography` and `defaults.global.style` sections completely
 })
 
 const app = createApp(App)

@@ -1,12 +1,13 @@
 <template>
     <v-dialog v-model="show" :width="dialogWidth" persistent scrollable>
-        <component :is="currentComponent" v-bind="componentProps" 
-        @onClose="handleClose"
-        v-if="currentComponent" />
+        <component :is="currentComponent" v-bind="componentProps" v-if="currentComponent" @onClose="handleClose"
+            @close="handleClose" @saved="success" />
     </v-dialog>
 </template>
 
 <script>
+import { markRaw } from 'vue';
+
 export default {
     name: 'ModalTemplate',
     props: {
@@ -32,28 +33,31 @@ export default {
                 lg: 900,
                 xl: 1200,
             },
-        }
+        };
     },
     watch: {
         size(newSize) {
-            this.dialogWidth = this.sizeMap[newSize] || this.sizeMap.md
+            this.dialogWidth = this.sizeMap[newSize] || this.sizeMap.md;
         },
     },
     methods: {
         open({ title = '', component = null, size = 'md', props = {} }) {
-            this.title = title
-            this.currentComponent = component
-            this.componentProps = props
-            this.dialogWidth = this.sizeMap[size] || this.sizeMap.md
-            this.show = true
+            this.title = title;
+            this.currentComponent = markRaw(component); // Prevent Vue from making it reactive
+            this.componentProps = props;
+            this.dialogWidth = this.sizeMap[size] || this.sizeMap.md;
+            this.show = true;
         },
         close() {
-            this.show = false
-            this.$emit('close')
+            this.show = false;
+            this.$emit('close');
         },
         handleClose() {
-            this.close()
+            this.close();
+        },
+        success() {
+            this.$emit('saved');
         },
     },
-}
+};
 </script>

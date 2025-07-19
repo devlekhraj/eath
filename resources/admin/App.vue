@@ -4,10 +4,6 @@
   </v-app>
 </template>
 <style>
-/* Override the entire Vuetify app font */
-.v-application {
-  font-family: 'Poppins', sans-serif !important;
-}
 
 .v-dialog>.v-overlay__content>.v-card,
 .v-dialog>.v-overlay__content>.v-sheet,

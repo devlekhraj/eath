@@ -103,6 +103,9 @@ const routes = [
 					subtitle: 'View and manage all customers',
 				},
 			},
+
+
+			// packages routes
 			{
 				path: 'packages',
 				name: 'adminPackagePage',
@@ -110,6 +113,16 @@ const routes = [
 				meta: {
 					requireAuth: true,
 					title: 'Available Packages',
+					subtitle: 'All the available packages',
+				},
+			},
+			{
+				path: 'packages/:id',
+				name: 'adminPackageDetailPage',
+				component: () => import('@pages/packages/PackageDetailpage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Package Detail',
 					subtitle: 'All the available packages',
 				},
 			},

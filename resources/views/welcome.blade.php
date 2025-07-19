@@ -48,15 +48,17 @@
 <body>
 
 <!-- Top Meta Bar -->
-<div class="bg-dark text-light py-2 px-3 d-flex justify-content-between small">
-  <div>
-    <i class="fas fa-phone-alt"></i> +977 (986) 098-9998
-    <i class="fas fa-envelope ms-3"></i> info@eathtravel.com
-  </div>
-  <div>
-    <a href="#" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
-    <a href="#" class="text-light me-2"><i class="fab fa-instagram"></i></a>
-    <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+<div class="bg-info">
+  <div class="text-light py-2 px-3 d-flex justify-content-between small container">
+    <div>
+      <i class="fas fa-phone-alt"></i> +977 (986) 098-9998
+      <i class="fas fa-envelope ms-3"></i> info@eathtravel.com
+    </div>
+    <div>
+      <a href="#" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="text-light me-2"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+    </div>
   </div>
 </div>
 

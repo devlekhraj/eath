@@ -63,7 +63,6 @@ axios.interceptors.response.use(
 // Optionally, you can set the base URL for your Laravel API if needed
 // window.axios.defaults.baseURL = 'http://localhost:8000/api'; // Update with your API URL
 
-console.log(window.location.hostname);
 if (window.location.hostname === 'eathways.test') {
     window.axios.defaults.baseURL = 'https://eathways.test/api/v1';
 } else {

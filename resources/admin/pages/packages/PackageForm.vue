@@ -1,90 +1,204 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import axios from 'axios'
 
-// Main content fields
+// Form refs and states
+const formRef = ref(null)
+const submitting = ref(false)
+
+// Fields
 const packageName = ref('')
-const content = ref('')
+const description = ref('')
+const additionalInfo = ref('')
+const durationDays = ref(null)
+const durationNights = ref(null)
+const price = ref(null)
+const startDate = ref('')
+const endDate = ref('')
+const isActive = ref(false)
+const isFeatured = ref(false)
+const termsConditions = ref('')
+const cancellationPolicy = ref('')
 
-// List fields
-const inclusions = ref<string[]>([])
-const exclusions = ref<string[]>([])
-const checklists = ref<string[]>([])
-
-// Itinerary structure
-interface ItineraryItem {
-  day: number
-  title: string
-  description: string
+// Validation rules
+const rules = {
+  required: (value: any) => !!value || 'This field is required',
+  numeric: (value: any) => !value || !isNaN(value) || 'Must be a number',
+  positive: (value: any) => !value || Number(value) >= 0 || 'Must be positive',
 }
-const itinerary = ref<ItineraryItem[]>([])
 
-// Adders
-const addInclusion = () => inclusions.value.push('')
-const addExclusion = () => exclusions.value.push('')
-const addChecklist = () => checklists.value.push('')
-const addItineraryItem = () => {
-  itinerary.value.push({ day: itinerary.value.length + 1, title: '', description: '' })
+async function submitPackage() {
+  if (!formRef.value) return
+  const valid = await formRef.value.validate()
+  if (!valid) {
+    console.log('Form validation failed')
+    return
+  }
+
+  submitting.value = true
+  try {
+    const payload = {
+      name: packageName.value,
+      description: description.value,
+      additional_info: additionalInfo.value,
+      duration_days: durationDays.value,
+      duration_nights: durationNights.value,
+      price: price.value,
+      start_date: startDate.value,
+      end_date: endDate.value,
+      is_active: isActive.value,
+      is_featured: isFeatured.value,
+      terms_conditions: termsConditions.value,
+      cancellation_policy: cancellationPolicy.value,
+    }
+
+    await axios.post('/admin/travel-packages', payload)
+    console.log('Package created successfully!')
+
+    // Reset form
+    packageName.value = ''
+    description.value = ''
+    additionalInfo.value = ''
+    durationDays.value = null
+    durationNights.value = null
+    price.value = null
+    startDate.value = ''
+    endDate.value = ''
+    isActive.value = false
+    isFeatured.value = false
+    termsConditions.value = ''
+    cancellationPolicy.value = ''
+    formRef.value.resetValidation()
+  } catch (error) {
+    console.error('Failed to create package', error)
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
-
 <template>
   <v-container>
     <v-row>
-      <!-- Left Column -->
-      <v-col cols="12" md="7">
+      <v-col cols="12" md="8">
         <v-card elevation="0" class="pa-6">
-          <v-text-field v-model="packageName" label="Package Name" variant="outlined" density="comfortable" />
-          <RichTextEditor label="Description" v-model="content" />
-        </v-card>
-      </v-col>
+          <v-form ref="formRef" lazy-validation>
+            <v-text-field
+              v-model="packageName"
+              label="Package Name"
+              :rules="[rules.required]"
+              :disabled="submitting"
+              required
+            />
 
-      <!-- Right Column (Collapsible Sections) -->
-      <v-col cols="12" md="5">
-        <v-card elevation="0" class="pa-3">
-          <v-expansion-panels multiple>
-            <!-- Itinerary -->
-            <v-expansion-panel elevation="0">
-              <v-expansion-panel-title>Itinerary</v-expansion-panel-title>
-              <v-expansion-panel-text>
-                <v-btn size="small" @click="addItineraryItem" class="mb-2">Add Day</v-btn>
-                <div v-for="(item, index) in itinerary" :key="index" class="mb-4 border-b pb-4">
-                  <v-text-field v-model="item.title" :label="`Day ${item.day} Title`" class="mb-2" />
-                  <v-textarea v-model="item.description" :label="`Day ${item.day} Description`" auto-grow />
-                </div>
-              </v-expansion-panel-text>
-            </v-expansion-panel>
-            <!-- Inclusions -->
-            <v-expansion-panel elevation="0">
-              <v-expansion-panel-title>Inclusions</v-expansion-panel-title>
-              <v-expansion-panel-text>
-                <v-btn size="small" @click="addInclusion" class="mb-2">Add Inclusion</v-btn>
-                <v-text-field v-for="(item, index) in inclusions" :key="index" v-model="inclusions[index]"
-                  label="Inclusion" class="mb-2" />
-              </v-expansion-panel-text>
-            </v-expansion-panel>
+            <RichTextEditor
+              v-model="description"
+              label="Description"
+              :disabled="submitting"
+              class="mt-4"
+            />
 
-            <!-- Exclusions -->
-            <v-expansion-panel elevation="0">
-              <v-expansion-panel-title>Exclusions</v-expansion-panel-title>
-              <v-expansion-panel-text>
-                <v-btn size="small" @click="addExclusion" class="mb-2">Add Exclusion</v-btn>
-                <v-text-field v-for="(item, index) in exclusions" :key="index" v-model="exclusions[index]"
-                  label="Exclusion" class="mb-2" />
-              </v-expansion-panel-text>
-            </v-expansion-panel>
+            <v-textarea
+              v-model="additionalInfo"
+              label="Additional Info"
+              rows="3"
+              auto-grow
+              class="mt-4"
+            />
 
-            <!-- Checklist -->
-            <v-expansion-panel elevation="0">
-              <v-expansion-panel-title>Checklist</v-expansion-panel-title>
-              <v-expansion-panel-text>
-                <v-btn size="small" @click="addChecklist" class="mb-2">Add Checklist</v-btn>
-                <v-text-field v-for="(item, index) in checklists" :key="index" v-model="checklists[index]"
-                  label="Checklist Item" class="mb-2" />
-              </v-expansion-panel-text>
-            </v-expansion-panel>
+            <v-row class="mt-2">
+              <v-col cols="6">
+                <v-text-field
+                  v-model="durationDays"
+                  label="Duration (Days)"
+                  type="number"
+                  :rules="[rules.numeric, rules.positive]"
+                  :disabled="submitting"
+                />
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="durationNights"
+                  label="Duration (Nights)"
+                  type="number"
+                  :rules="[rules.numeric, rules.positive]"
+                  :disabled="submitting"
+                />
+              </v-col>
+            </v-row>
 
+            <v-text-field
+              v-model="price"
+              label="Price (NPR)"
+              type="number"
+              :rules="[rules.numeric, rules.positive]"
+              :disabled="submitting"
+              class="mt-2"
+            />
 
-          </v-expansion-panels>
+            <v-row class="mt-2">
+              <v-col cols="6">
+                <v-text-field
+                  v-model="startDate"
+                  label="Start Date"
+                  type="date"
+                  :disabled="submitting"
+                />
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="endDate"
+                  label="End Date"
+                  type="date"
+                  :disabled="submitting"
+                />
+              </v-col>
+            </v-row>
+
+            <v-switch
+              v-model="isActive"
+              label="Active"
+              color="success"
+              class="mt-2"
+              :disabled="submitting"
+            />
+
+            <v-switch
+              v-model="isFeatured"
+              label="Featured"
+              color="primary"
+              class="mt-2"
+              :disabled="submitting"
+            />
+
+            <v-textarea
+              v-model="termsConditions"
+              label="Terms & Conditions"
+              rows="3"
+              class="mt-4"
+              auto-grow
+            />
+
+            <v-textarea
+              v-model="cancellationPolicy"
+              label="Cancellation Policy"
+              rows="3"
+              class="mt-2"
+              auto-grow
+            />
+
+            <div class="mt-6 text-center">
+              <v-btn
+                size="large"
+                color="primary"
+                rounded
+                :loading="submitting"
+                :disabled="submitting"
+                @click="submitPackage"
+              >
+                <v-icon left>mdi-plus</v-icon> Create Package
+              </v-btn>
+            </div>
+          </v-form>
         </v-card>
       </v-col>
     </v-row>

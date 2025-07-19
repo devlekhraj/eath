@@ -11,7 +11,7 @@ export default defineConfig({
             //   input: ['resources/js/app.js'],
             input: [
                 'resources/admin/main.js',
-                'resources/admin/admin.css',
+                'resources/admin/admin.scss',
 
                 'resources/front/scss/website.scss',
                 'resources/front/js/website.js'

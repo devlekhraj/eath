@@ -7,9 +7,16 @@
     <title>Admin Panel</title>
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    {{-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" /> --}}
 
-    @vite(['resources/admin/main.js', 'resources/admin/admin.css'])
+    @vite(['resources/admin/main.js', 'resources/admin/admin.scss'])
+    <style>
+        *,
+        html,
+        body{
+            font-family: 'Poppins', sans-serif !important;
+        }
+    </style>
 </head>
 
 <body>

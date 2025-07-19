@@ -1,0 +1,52 @@
+*,
+html,
+body,
+.text-caption,
+.v-application {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+// Force Vuetify typography classes to use Poppins
+label.v-label.v-label--clickable,
+.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6,
+.v-card-title, .v-dialog-title, .v-btn, .v-label, .v-input__control, .v-field-label {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+.v-list-item-title {
+    font-size: 0.9rem !important;
+}
+
+// .v-messages__message{
+//     font-family: 'Poppins', sans-serif !important;
+// }
+
+.font-medium{
+    font-size: medium;
+}
+
+.font-large{
+    font-size: large;
+}
+.font-small{
+    font-size: small;
+}
+.font-x-small{
+    font-size: x-small;
+}
