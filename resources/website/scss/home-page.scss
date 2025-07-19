@@ -146,3 +146,10 @@
         }
     }
 }
+
+footer a.text-muted:hover {
+    color: #0dcaf0 !important;
+    /* or any lighter primary shade */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
