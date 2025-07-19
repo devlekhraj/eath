@@ -26,18 +26,43 @@
       </template> -->
       <template #item.is_active="{ item }">
         <div>
-          <v-switch v-model="item.is_active" :true-value="1" density="compact" :false-value="0" color="success" hide-details
-            @change="toggleActive(item)" /> 
+          <v-switch v-model="item.is_active" :true-value="1" density="compact" :false-value="0" color="success"
+            hide-details @change="toggleActive(item)" />
         </div>
       </template>
 
 
 
       <template #item.actions="{ item }">
-        <v-btn icon color="primary" variant="text">
-          <v-icon>mdi-eye-circle</v-icon>
-        </v-btn>
+        <v-menu location="bottom end">
+          <template #activator="{ props }">
+            <v-btn v-bind="props" icon variant="text" color="primary">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list density="compact" elevation="1">
+            <v-list-item @click="viewItem(item)">
+              <v-list-item-title>
+                <v-icon start icon="mdi-eye" class="mr-2" /> View Detail
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item @click="editItem(item)">
+              <v-list-item-title>
+                <v-icon start icon="mdi-pencil" class="mr-2" /> Edit Cateogry
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item @click="deleteItem(item)">
+              <v-list-item-title>
+                <v-icon start icon="mdi-delete" class="mr-2" /> Delete Category
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </template>
+
     </v-data-table>
 
     <modal-template ref="globalModal"></modal-template>

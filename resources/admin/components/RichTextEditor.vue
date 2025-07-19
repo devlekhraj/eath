@@ -15,7 +15,13 @@ import {
     Table,
     Underline,
     Video,
+    BulletList,
+    OrderedList,
     VuetifyTiptap,
+    Code,
+    CodeBlock,
+    HorizontalRule,
+    Blockquote
 } from 'vuetify-pro-tiptap'
 
 const props = defineProps<{
@@ -40,6 +46,8 @@ const extensions = [
         }
     }),
     Bold,
+    BulletList,
+    OrderedList,
     Italic,
     Underline,
     Strike,
@@ -47,6 +55,10 @@ const extensions = [
     Highlight,
     Heading,
     Link,
+    Code,
+    CodeBlock,
+    Blockquote,
+    HorizontalRule,
     Image.configure({
         inline: false,
         allowBase64: true,

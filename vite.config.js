@@ -13,8 +13,8 @@ export default defineConfig({
                 'resources/admin/main.js',
                 'resources/admin/admin.scss',
 
-                'resources/front/scss/website.scss',
-                'resources/front/js/website.js'
+                'resources/website/scss/website.scss',
+                'resources/website/js/website.js'
             ],
             refresh: true,
         }),
