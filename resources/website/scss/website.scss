@@ -46,7 +46,7 @@ a {
 
 .mega-menu {
   .dropdown-item {
-    padding: 4px 0;
+    padding: 5px 10px;
     border-radius: 3px;
     white-space: normal !important;
     word-wrap: break-word;
@@ -56,10 +56,13 @@ a {
     color: #666464;
     font-size: 0.9rem;
   }
-
+  h6{
+    padding-left: 10px;
+  }
   .dropdown-item:hover {
     background-color: #fff;
-    color: #27a47e;
+    color: #44caf0;
+    background: #f6f6f6;
   }
 }
 
