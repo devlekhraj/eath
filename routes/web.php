@@ -15,5 +15,5 @@ Route::prefix('auth')->group(function () {
 // Optional: Welcome page
 Route::get('/', function () {
     // return view('website.index');
-    return view('welcome');
+    return view('website.index');
 });

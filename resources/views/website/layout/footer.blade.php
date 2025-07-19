@@ -1,140 +1,82 @@
-<style>
-    footer a,
-    label {
-        color: #626262;
-    }
+<!-- Professional Travel Company Footer with Gradient Background -->
+<footer class="pt-5 pb-4 position-relative" style="background: linear-gradient(to right, #f8f9fa, #e0f7fc);">
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/9860220454" target="_blank"
+        class="position-fixed bottom-0 end-0 m-4 bg-success text-white rounded-circle d-flex justify-content-center align-items-center shadow-lg"
+        style="width: 52px; height: 52px; z-index: 1050;" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp fs-4"></i>
+    </a>
 
-    .info {
-        /* font-size: 0.9rem; */
-    }
-
-    footer ul {
-        padding-left: 10px;
-    }
-
-    .facebook-color {
-        color: #1877F2;
-    }
-
-    .instagram-color {
-        background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .tiktok-color {
-        color: #000000;
-    }
-
-    .twitter-color {
-        color: #1DA1F2;
-    }
-
-    .linkedin-color {
-        color: #0A66C2;
-    }
-
-    .google-color {
-        color: #DB4437;
-    }
-
-    .youtube-color {
-        color: #FF0000;
-    }
-
-    a.text-dark:hover,
-    a:hover {
-        opacity: 0.8;
-        text-decoration: none;
-    }
-</style>
-
-<footer class="pb-5">
-    <div class="container-fluid theme-space">
-        <div class="px-3 py-5">
-            <div class="mb-4">
-                <img src="{{ asset('images/fts-logo.png') }}" alt="" width="200">
-            </div>
-            <div>
-                <div class="row">
-                    <div class="col-12 col-md-4">
-                        <div class="mb-4">
-                            <h6>Contact Us</h6>
-                            <div class="ps-2">
-                                <div class="d-flex align-items-center mb-3">
-                                    <i data-lucide="phone-call" class="me-2"></i>
-                                    <div>
-                                        <label>Phone Number</label>
-                                        <p class="info">01 876 5430, (9860)-989-0999</p>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <i data-lucide="mail" class="me-2"></i>
-                                    <div>
-                                        <label>Email</label>
-                                        <p class="info">info@fatafatsewa.com</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div>
-                            <h6>Quick Links</h6>
-                            <ul>
-                                <li><a href="#">Apply For a Franchise</a></li>
-                                <li><a href="#">Become Affiliate Partner</a></li>
-                                <li><a href="#">Blogs</a></li>
-                                <li><a href="#">Corporate Order</a></li>
-                                <li><a href="#">Franchise Enquiry</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div>
-                            <h6>Policy & Security</h6>
-                            <ul>
-                                <li><a href="#">Data Security</a></li>
-                                <li><a href="#">Cancellation Policy</a></li>
-                                <li><a href="#">Terms & Conditions</a></li>
-                                <li><a href="#">Payments and Security</a></li>
-                                <li><a href="#">Cookie Policy</a></li>
-                            </ul>
-                        </div>
-                    </div>
+    <div class="container">
+        <div class="row gy-4">
+            <!-- Logo and About -->
+            <div class="col-lg-4 col-md-6">
+                <a class="navbar-brand fw-bold text-primary fs-4" href="#">
+                    <img src="/images/logo.png" alt="" height="70">
+                </a>
+                <h5 class="fw-bold text-dark mb-3">E.A.T.H Travel</h5>
+                <p class="text-muted small">
+                    At E.A.T.H Travel, we specialize in immersive adventure and cultural experiences across Nepal.
+                    Trusted by global travelers since 2008, our mission is to make your journey unforgettable.
+                </p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="text-dark" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-dark" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-dark" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="text-dark" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
                 </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6">
+                <h6 class="text-uppercase text-dark mb-3">Quick Links</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Home</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Packages</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Destinations</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Blog</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="text-uppercase text-dark mb-3">Customer Service</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Terms & Conditions</a>
+                    </li>
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Privacy Policy</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Travel Insurance</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">FAQs</a></li>
+                    <li><a href="#contact" class="text-muted text-decoration-none d-block mb-2">Support</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="text-uppercase text-dark mb-3">Contact Us</h6>
+                <p class="text-muted small mb-2"><i class="fas fa-map-marker-alt me-2 text-info"></i>Thamel,
+                    Kathmandu, Nepal</p>
+                <p class="text-muted small mb-2"><i class="fas fa-phone me-2 text-info"></i>+977 9800000000</p>
+                <p class="text-muted small mb-2"><i class="fas fa-envelope me-2 text-info"></i>support@eathtravel.com
+                </p>
+                <p class="text-muted small"><i class="fas fa-globe me-2 text-info"></i>www.eathtravel.com</p>
             </div>
         </div>
-        <div>
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    <div>&copy; 2025 Fatafat Sewa Pvt Ltd | All Right Reserved</div>
-                </div>
-                <div class="col-12 col-md-6 d-flex gap-3 align-items-center justify-content-md-end mt-3 mt-md-0">
-                    <!-- FontAwesome 6 social icons with brand colors -->
-                    <a href="#" class="facebook-color" aria-label="Facebook">
-                        <i class="fab fa-facebook-f fa-lg"></i>
-                    </a>
-                    <a href="#" class="instagram-color" aria-label="Instagram">
-                        <i class="fab fa-instagram fa-lg"></i>
-                    </a>
-                    <a href="#" class="tiktok-color" aria-label="TikTok">
-                        <i class="fab fa-tiktok fa-lg"></i>
-                    </a>
-                    <a href="#" class="twitter-color" aria-label="Twitter">
-                        <i class="fab fa-twitter fa-lg"></i>
-                    </a>
-                    <a href="#" class="linkedin-color" aria-label="LinkedIn">
-                        <i class="fab fa-linkedin-in fa-lg"></i>
-                    </a>
-                    <a href="#" class="google-color" aria-label="Google">
-                        <i class="fab fa-google fa-lg"></i>
-                    </a>
-                    <a href="#" class="youtube-color" aria-label="YouTube">
-                        <i class="fab fa-youtube fa-lg"></i>
-                    </a>
-                </div>
-            </div>
+
+        <hr class="border-info my-4">
+
+        <!-- Bottom Bar -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted">
+            <span>&copy; {{ date('Y') }} E.A.T.H Travel. All rights reserved.</span>
+            <span>Crafted with ❤️ for adventure seekers worldwide</span>
         </div>
     </div>
 </footer>
+
+
+
+
+</body>
+
+</html>

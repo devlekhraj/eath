@@ -3,7 +3,13 @@
 $secondary: #ec9214;
 
 // Bootstrap import
+// @import "bootstrap/scss/bootstrap";
+
+/* Core Libraries */
 @import "bootstrap/scss/bootstrap";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "swiper/css/bundle";
+
 @import "override";
 
 // Override .theme-space padding
@@ -19,14 +25,56 @@ $secondary: #ec9214;
   }
 }
 
-
-// Global font override
-body {
-  font-family: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  /* font-family: "DM Sans", sans-serif; */
+  font-family: "Poppins", sans-serif;
 }
+
+
+
+/* Ensure the mega menu aligns with the container */
+/* Center the mega menu and restrict width to container size */
+.navbar .dropdown.position-static .dropdown-menu {
+
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  /* max-width: 1140px; */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.whatsapp-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #25d366;
+  color: white;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+
+
+.whatsapp-fab i {
+  font-size: 28px;
+}
+
+.whatsapp-fab a:hover {
+  color: white
+}
+
+
 
 ul {
   padding: 0;
@@ -56,9 +104,11 @@ a {
     color: #666464;
     font-size: 0.9rem;
   }
-  h6{
+
+  h6 {
     padding-left: 10px;
   }
+
   .dropdown-item:hover {
     background-color: #fff;
     color: #44caf0;
@@ -88,27 +138,18 @@ a {
       padding: 10px;
     }
 
-    li {
-      // padding: 4px 0;
-    }
-
     .dropdown-item {
       color: #666464;
       font-size: 0.9rem;
     }
 
-    // ul {
-    //   li {
-    //     padding: 16px 14px I !important;
-
-    //     a {
-    //       padding: 9px 10px !important;
-    //     }
-    //   }
-    // }
   }
 
 }
-.dropdown-item.active, .dropdown-item:active {
-    background-color: #ffffff !important;
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #ffffff !important;
 }
+
+@import "home-page";

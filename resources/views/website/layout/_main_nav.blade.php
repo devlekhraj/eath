@@ -1,108 +1,4 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E.A.T.H Travel - Explore Adventure Tourism & Hospitality</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@400;700&display=swap"
-        rel="stylesheet">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
-
-    <style>
-        * {
-            /* font-family: "DM Sans", sans-serif; */
-            font-family: "Poppins", sans-serif;
-        }
-
-        .swiper {
-            width: 100%;
-            height: 600px;
-        }
-
-        .swiper-slide {
-            position: relative;
-            background-position: center;
-            background-size: cover;
-        }
-
-        .swiper-slide .caption {
-            position: absolute;
-            bottom: 60px;
-            left: 60px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-
-
-        /* Ensure the mega menu aligns with the container */
-        /* Center the mega menu and restrict width to container size */
-        .navbar .dropdown.position-static .dropdown-menu {
-
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            /* max-width: 1140px; */
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-left-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
-
-        .whatsapp-fab {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background-color: #25d366;
-            color: white;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-            z-index: 1000;
-            transition: background-color 0.3s ease;
-        }
-
-        .whatsapp-fab:hover {
-            /* background-color: #1ebe57; */
-        }
-
-        .whatsapp-fab i {
-            font-size: 28px;
-        }
-
-        .whatsapp-fab a:hover {
-            color: white
-        }
-    </style>
-
-
-    @vite(['resources/website/scss/website.scss', 'resources/website/js/website.js'])
-</head>
-
-<body>
-
+<div>
     <!-- Top Meta Bar -->
     <div class="bg-info">
         <div class="text-light py-2 px-3 d-flex justify-content-between small container">
@@ -117,7 +13,6 @@
             </div>
         </div>
     </div>
-
     <!-- Navbar with Mega Menu -->
     <nav class="navbar navbar-expand-lg py-0">
         <div class="container">
@@ -130,7 +25,7 @@
 
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav gap-3">
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="destinationDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Destinations
@@ -203,13 +98,14 @@
                         </ul>
 
 
-                    </li>
+                    </li> --}}
 
 
                     <!-- Mega Menu -->
                     <li class="nav-item dropdown position-static">
                         <a class="nav-link dropdown-toggle" href="#" id="megaMenu"
-                            data-bs-toggle="dropdown">Trekking in Nepal</a>
+                            data-bs-toggle="dropdown">Trekking
+                            in Nepal</a>
                         <div class="dropdown-menu mt-0 p-0 border-0 border-radius-0 shadow-sm mega-menu"
                             aria-labelledby="megaMenu">
                             <div class="container px-4">
@@ -227,23 +123,32 @@
                                                         Trek</a></li>
                                                 <li><a href="#" class="dropdown-item">Pikey Peak Trek - 9
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Footprint Special Everest
+                                                <li><a href="#" class="dropdown-item">Footprint Special
+                                                        Everest
                                                         BC Trek - 16 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Everest Base Camp Luxury
+                                                <li><a href="#" class="dropdown-item">Everest Base Camp
+                                                        Luxury
                                                         Trek - 13 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Gokyo Lakes & Renjola Pass
+                                                <li><a href="#" class="dropdown-item">Gokyo Lakes & Renjola
+                                                        Pass
                                                         Trek - 15 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Everest Panorama Trek - 8
+                                                <li><a href="#" class="dropdown-item">Everest Panorama Trek
+                                                        - 8
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Everest BC Yoga Trek - 16
+                                                <li><a href="#" class="dropdown-item">Everest BC Yoga Trek -
+                                                        16
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Everest Helicopter Trek -
+                                                <li><a href="#" class="dropdown-item">Everest Helicopter
+                                                        Trek -
                                                         13 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Everest Three Pass Trek -
+                                                <li><a href="#" class="dropdown-item">Everest Three Pass
+                                                        Trek -
                                                         21 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Everest Chola Pass Trek -
+                                                <li><a href="#" class="dropdown-item">Everest Chola Pass
+                                                        Trek -
                                                         18 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Everest Base Camp Trek -
+                                                <li><a href="#" class="dropdown-item">Everest Base Camp Trek
+                                                        -
                                                         12 Days</a></li>
                                                 <li><a href="#" class="dropdown-item">Everest Base Camp via
                                                         Salleri - 18 Days</a></li>
@@ -258,7 +163,8 @@
                                             <ul class="list-unstyled">
                                                 <li><a href="#" class="dropdown-item">Tilicho Lake Trek - 9
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Ghorepani Poon Hill Trek -
+                                                <li><a href="#" class="dropdown-item">Ghorepani Poon Hill
+                                                        Trek -
                                                         8 Days</a></li>
                                                 <li><a href="#" class="dropdown-item">Mardi Himal Trek - 9
                                                         Days</a></li>
@@ -266,16 +172,21 @@
                                                         Tilicho Lake Trek</a></li>
                                                 <li><a href="#" class="dropdown-item">Khopra Danda Trek - 10
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Nar-Phu Valley Trek - 13
+                                                <li><a href="#" class="dropdown-item">Nar-Phu Valley Trek -
+                                                        13
                                                         Days</a></li>
                                                 <li><a href="#" class="dropdown-item">ABC with Poonhill - 13
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Annapurna Circuit Trek -
+                                                <li><a href="#" class="dropdown-item">Annapurna Circuit Trek
+                                                        -
                                                         13 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Mardi Himal Base Camp Yoga
+                                                <li><a href="#" class="dropdown-item">Mardi Himal Base Camp
+                                                        Yoga
                                                         Trek</a></li>
-                                                <li><a href="#" class="dropdown-item">ABC Trek - 8 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Annapurna Circuit Biking
+                                                <li><a href="#" class="dropdown-item">ABC Trek - 8 Days</a>
+                                                </li>
+                                                <li><a href="#" class="dropdown-item">Annapurna Circuit
+                                                        Biking
                                                         Trek - 14 Days</a></li>
                                             </ul>
                                         </div>
@@ -290,7 +201,8 @@
                                                         Valley Trek - 21 Days</a></li>
                                                 <li><a href="#" class="dropdown-item">Tsum Valley Trek - 14
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Manaslu Circuit Trek - 15
+                                                <li><a href="#" class="dropdown-item">Manaslu Circuit Trek -
+                                                        15
                                                         Days</a></li>
                                             </ul>
 
@@ -298,13 +210,16 @@
                                                 Langtang Region
                                             </h6>
                                             <ul class="list-unstyled">
-                                                <li><a href="#" class="dropdown-item">Yala Peak Climbing - 14
+                                                <li><a href="#" class="dropdown-item">Yala Peak Climbing -
+                                                        14
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Langtang Valley Trek - 11
+                                                <li><a href="#" class="dropdown-item">Langtang Valley Trek -
+                                                        11
                                                         Days</a></li>
                                                 <li><a href="#" class="dropdown-item">Ruby Valley Trek - 12
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Langtang & Gosaikunda Trek
+                                                <li><a href="#" class="dropdown-item">Langtang & Gosaikunda
+                                                        Trek
                                                         - 16 Days</a></li>
                                             </ul>
                                         </div>
@@ -315,19 +230,25 @@
                                                 Western Region
                                             </h6>
                                             <ul class="list-unstyled">
-                                                <li><a href="#" class="dropdown-item">Rara Lake Trek Package - 8
+                                                <li><a href="#" class="dropdown-item">Rara Lake Trek Package
+                                                        - 8
                                                         Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Upper Dolpo Circuit Trek -
+                                                <li><a href="#" class="dropdown-item">Upper Dolpo Circuit
+                                                        Trek -
                                                         26 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">API Himal Base Camp Trek -
+                                                <li><a href="#" class="dropdown-item">API Himal Base Camp
+                                                        Trek -
                                                         17 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Shey Phoksundo Lake Trek -
+                                                <li><a href="#" class="dropdown-item">Shey Phoksundo Lake
+                                                        Trek -
                                                         11 Days</a></li>
                                                 <li><a href="#" class="dropdown-item">Mustang Region Trek &
                                                         Tours</a></li>
-                                                <li><a href="#" class="dropdown-item">Upper Mustang Jeep Tour -
+                                                <li><a href="#" class="dropdown-item">Upper Mustang Jeep
+                                                        Tour -
                                                         13 Days</a></li>
-                                                <li><a href="#" class="dropdown-item">Upper Mustang Trek - 17
+                                                <li><a href="#" class="dropdown-item">Upper Mustang Trek -
+                                                        17
                                                         Days</a></li>
                                             </ul>
 
@@ -336,7 +257,8 @@
                                                 Region
                                             </h6>
                                             <ul class="list-unstyled">
-                                                <li><a href="#" class="dropdown-item">Kanchenjunga Circuit/Base
+                                                <li><a href="#" class="dropdown-item">Kanchenjunga
+                                                        Circuit/Base
                                                         Camp Trek - 20 Days</a></li>
                                             </ul>
                                         </div>
@@ -418,6 +340,9 @@
                     <li class="nav-item">
                         <a class="nav-link fw-semibold" href="#">Travel Guides</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="#">FAQs</a>
+                    </li>
                 </ul>
             </div>
             <div class="d-flex align-items-center">
@@ -428,132 +353,4 @@
 
         </div>
     </nav>
-
-
-    <!-- Swiper Hero Slider -->
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide"
-                style="background-image: url('/images/banners/1.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
-            </div>
-            <div class="swiper-slide"
-                style="background-image: url('/images/banners/2.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
-            </div>
-            <div class="swiper-slide"
-                style="background-image: url('/images/banners/3.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Packages Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-4">Top Travel Packages</h2>
-            <div class="row g-4">
-                @foreach (['https://images.unsplash.com/photo-1582719478250-d9a9f6b1458f', 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1', 'https://images.unsplash.com/photo-1532911557891-df962f4ff07b'] as $image)
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <img src="{{ $image }}" class="card-img-top" alt="Package Image">
-                            <div class="card-body">
-                                <h5 class="card-title">Adventure in Nepal</h5>
-                                <p class="card-text">Explore the best trails and sights with our guided tours.</p>
-                            </div>
-                            <div class="card-footer text-end">
-                                <a href="#" class="btn btn-primary">View Package</a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <!-- Recent Activities -->
-    <section class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-4">Recent Activities</h2>
-            <div class="row g-4">
-                @foreach (['https://images.unsplash.com/photo-1558981033-0ba5eea27270', 'https://images.unsplash.com/photo-1610275924805-56d155c3a7dc', 'https://images.unsplash.com/photo-1543269865-cbf427effbad'] as $activity)
-                    <div class="col-md-4">
-                        <img src="{{ $activity }}" class="img-fluid rounded shadow-sm" alt="Activity">
-                        <h6 class="mt-2">Memorable Trekking Moments</h6>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-4">Latest from Our Blog</h2>
-            <div class="row g-4">
-                @foreach (['https://images.unsplash.com/photo-1502920917128-1aa500764ce7', 'https://images.unsplash.com/photo-1499696010184-5dfc46a7c3aa', 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0'] as $blog)
-                    <div class="col-md-4">
-                        <div class="card h-100">
-                            <img src="{{ $blog }}" class="card-img-top" alt="Blog">
-                            <div class="card-body">
-                                <h5 class="card-title">Top Travel Tips</h5>
-                                <p class="card-text">Read insights and tips from seasoned travelers and guides.</p>
-                            </div>
-                            <div class="card-footer">
-                                <a href="#" class="text-decoration-none">Read More →</a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <a href="https://wa.me/9860220454" target="_blank" class="whatsapp-fab" aria-label="Chat on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-    <!-- Footer -->
-    <footer class="bg-dark text-light pt-5 pb-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>E.A.T.H Travel</h5>
-                    <p>Explore Adventure Tourism & Hospitality across Nepal. Trusted since 2008.</p>
-                </div>
-                <div class="col-md-4">
-                    <h6>Quick Links</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-light text-decoration-none">Home</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Packages</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Activities</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h6>Contact Us</h6>
-                    <p><i class="fas fa-map-marker-alt"></i> Thamel, Kathmandu, Nepal</p>
-                    <p><i class="fas fa-phone"></i> +977 9800000000</p>
-                    <p><i class="fas fa-envelope"></i> support@eathtravel.com</p>
-                </div>
-            </div>
-            <div class="text-center mt-3">
-                &copy; {{ date('Y') }} E.A.T.H Travel. All Rights Reserved.
-            </div>
-        </div>
-    </footer>
-
-    <!-- JS Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        new Swiper(".mySwiper", {
-            loop: true,
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
-            effect: "fade",
-        });
-    </script>
-
-</body>
-
-</html>
+</div>
