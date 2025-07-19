@@ -36,6 +36,7 @@
             </template>
             <template #item.actions="{ item }">
                <v-btn icon color="primary" variant="text" :to="{ name:'adminPackageDetailPage', params:{ id: item.id }}"> <v-icon>mdi-eye-circle</v-icon></v-btn>
+               <v-btn icon color="warning" variant="text" :to="{ name:'adminPackageForm', query:{ id: item.id }}"> <v-icon>mdi-pencil</v-icon></v-btn>
             </template>
         </v-data-table>
     </v-container>

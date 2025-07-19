@@ -21,7 +21,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
 
     <style>
         * {
@@ -66,7 +66,35 @@
             border-bottom-right-radius: 4px;
         }
 
-       
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: #25d366;
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .whatsapp-fab:hover {
+            /* background-color: #1ebe57; */
+        }
+
+        .whatsapp-fab i {
+            font-size: 28px;
+        }
+
+        .whatsapp-fab a:hover {
+            color: white
+        }
     </style>
 
 
@@ -94,7 +122,7 @@
     <nav class="navbar navbar-expand-lg py-0">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary fs-4" href="#">
-              <img src="/images/logo.png" alt="" height="70">
+                <img src="/images/logo.png" alt="" height="70">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -190,7 +218,7 @@
                                         <!-- Everest Region -->
                                         <div class="col-md-3">
                                             <h6 class="text-uppercase  mb-2 fw-bold">
-                                                 Everest Region
+                                                Everest Region
                                             </h6>
                                             <ul class="list-unstyled">
                                                 <li><a href="#" class="dropdown-item">Everest Base Camp Trek -
@@ -225,7 +253,7 @@
                                         <!-- Annapurna Region -->
                                         <div class="col-md-3">
                                             <h6 class="text-uppercase  mb-2 fw-bold">
-                                               Annapurna Region
+                                                Annapurna Region
                                             </h6>
                                             <ul class="list-unstyled">
                                                 <li><a href="#" class="dropdown-item">Tilicho Lake Trek - 9
@@ -267,7 +295,7 @@
                                             </ul>
 
                                             <h6 class="text-uppercase  mt-4 mb-2 fw-bold">
-                                               Langtang Region
+                                                Langtang Region
                                             </h6>
                                             <ul class="list-unstyled">
                                                 <li><a href="#" class="dropdown-item">Yala Peak Climbing - 14
@@ -284,7 +312,7 @@
                                         <!-- Western & Eastern Region -->
                                         <div class="col-md-3">
                                             <h6 class="text-uppercase  mb-2 fw-bold">
-                                               Western Region
+                                                Western Region
                                             </h6>
                                             <ul class="list-unstyled">
                                                 <li><a href="#" class="dropdown-item">Rara Lake Trek Package - 8
@@ -304,7 +332,7 @@
                                             </ul>
 
                                             <h6 class="text-uppercase  mt-4 mb-2 fw-bold">
-                                               Eastern
+                                                Eastern
                                                 Region
                                             </h6>
                                             <ul class="list-unstyled">
@@ -406,28 +434,17 @@
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
             <div class="swiper-slide"
-                style="background-image: url('https://images.unsplash.com/photo-1549880181-56a44cf4a9a9')">
-                {{-- <div class="caption">
-                    <h2>Explore Nepal with E.A.T.H</h2>
-                    <p>Adventure, Culture, and Nature Await You</p>
-                </div> --}}
+                style="background-image: url('/images/banners/1.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
             </div>
             <div class="swiper-slide"
-                style="background-image: url('https://images.unsplash.com/photo-1507537297725-24a1c029d3ca')">
-                {{-- <div class="caption">
-                    <h2>Custom Travel Packages</h2>
-                    <p>Tailored tours for your perfect vacation</p>
-                </div> --}}
+                style="background-image: url('/images/banners/2.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
             </div>
             <div class="swiper-slide"
-                style="background-image: url('https://images.unsplash.com/photo-1596436889106-be35e843f974')">
-                {{-- <div class="caption">
-                    <h2>Trusted Since 2008</h2>
-                    <p>Thousands of happy travelers every year</p>
-                </div> --}}
+                style="background-image: url('/images/banners/3.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
             </div>
         </div>
     </div>
+
 
     <!-- Packages Section -->
     <section class="py-5 bg-light">
@@ -490,6 +507,9 @@
         </div>
     </section>
 
+    <a href="https://wa.me/9860220454" target="_blank" class="whatsapp-fab" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
     <!-- Footer -->
     <footer class="bg-dark text-light pt-5 pb-3">
         <div class="container">
