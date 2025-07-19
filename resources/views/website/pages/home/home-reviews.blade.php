@@ -92,21 +92,23 @@
                                     </div>
                                 </div>
 
-                                {{-- Truncated or scrollable text --}}
-                                <p class="text-muted flex-grow-1"
-                                    style="overflow: hidden; max-height: 100px; text-overflow: ellipsis;">
-                                    “{{ $review['comment'] }}”
-                                </p>
-
-                                {{-- Rating aligned to bottom --}}
-                                <div class="text-warning mt-auto pt-2">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $review['rating'])
-                                            <i class="fa-solid fa-star"></i>
-                                        @else
-                                            <i class="fa-regular fa-star"></i>
-                                        @endif
-                                    @endfor
+                                <div style="min-height: 150px">
+                                    {{-- Truncated or scrollable text --}}
+                                    <p class="text-muted flex-grow-1"
+                                        style="overflow: hidden; max-height: 100px; text-overflow: ellipsis;">
+                                        “{{ $review['comment'] }}”
+                                    </p>
+    
+                                    {{-- Rating aligned to bottom --}}
+                                    <div class="text-warning mt-auto pt-2">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $review['rating'])
+                                                <i class="fa-solid fa-star"></i>
+                                            @else
+                                                <i class="fa-regular fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
                                 </div>
                             </div>
                         </div>

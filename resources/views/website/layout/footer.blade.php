@@ -1,5 +1,6 @@
 <!-- Professional Travel Company Footer with Gradient Background -->
-<footer class="pt-5 pb-4 position-relative" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
+<footer class="pt-5 pb-4 position-relative"
+    style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/9860220454" target="_blank"
         class="position-fixed bottom-0 end-0 m-4 bg-success text-white rounded-circle d-flex justify-content-center align-items-center shadow-lg"
@@ -29,7 +30,7 @@
 
             <!-- Quick Links -->
             <div class="col-lg-2 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3">Quick Links</h6>
+                <h6 class="text-uppercase text-dark mb-3" style="font-weight: 600">Quick Links</h6>
                 <ul class="list-unstyled small">
                     <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Home</a></li>
                     <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Packages</a></li>
@@ -41,7 +42,7 @@
 
             <!-- Customer Service -->
             <div class="col-lg-3 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3">Customer Service</h6>
+                <h6 class="text-uppercase text-dark mb-3" style="font-weight: 600">Customer Service</h6>
                 <ul class="list-unstyled small">
                     <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Terms & Conditions</a>
                     </li>
@@ -54,14 +55,26 @@
 
             <!-- Contact Info -->
             <div class="col-lg-3 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3">Contact Us</h6>
-                <p class="text-muted small mb-2"><i class="fas fa-map-marker-alt me-2 text-info"></i>Thamel,
-                    Kathmandu, Nepal</p>
-                <p class="text-muted small mb-2"><i class="fas fa-phone me-2 text-info"></i>+977 9800000000</p>
-                <p class="text-muted small mb-2"><i class="fas fa-envelope me-2 text-info"></i>support@eathtravel.com
+                <h6 class="text-uppercase text-dark mb-3" style="font-weight: 600">Contact Us</h6>
+                <p class="text-muted small mb-2">
+                    <i class="fas fa-map-marker-alt me-2 text-info"></i>Thamel, Kathmandu, Nepal
                 </p>
-                <p class="text-muted small"><i class="fas fa-globe me-2 text-info"></i>www.eathtravel.com</p>
+                <p class="text-muted small mb-2">
+                    <i class="fas fa-phone me-2 text-info"></i>
+                    <a href="tel:+9779800000000" class="text-muted text-decoration-none">+977 9800000000</a>
+                </p>
+                <p class="text-muted small mb-2">
+                    <i class="fas fa-envelope me-2 text-info"></i>
+                    <a href="mailto:support@eathtravel.com"
+                        class="text-muted text-decoration-none">support@eathtravel.com</a>
+                </p>
+                <p class="text-muted small">
+                    <i class="fas fa-globe me-2 text-info"></i>
+                    <a href="https://www.eathways.com" target="_blank" rel="noopener noreferrer"
+                        class="text-muted text-decoration-none">www.eathways.com</a>
+                </p>
             </div>
+
         </div>
 
         <hr class="border-info my-4">
@@ -69,7 +82,7 @@
         <!-- Bottom Bar -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted">
             <span>&copy; {{ date('Y') }} E.A.T.H Travel. All rights reserved.</span>
-            <span>Crafted with ❤️ for adventure seekers worldwide</span>
+            <span>Develop by <a class="text-primary" href="https://lekhrajrai.com.np">Lekh Raj Rai</a></span>
         </div>
     </div>
 </footer>
