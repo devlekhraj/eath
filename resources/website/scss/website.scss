@@ -117,7 +117,7 @@ a {
 }
 
 .navbar {
-  background: linear-gradient(164deg, rgb(255 255 255) 0%, rgb(228 249 255) 100%);
+  background: radial-gradient(circle at center, #f0fcff 40%, #ffffff 100%);
 
   .dropdown-menu {
     border: 0;

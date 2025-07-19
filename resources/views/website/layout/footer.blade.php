@@ -1,5 +1,5 @@
 <!-- Professional Travel Company Footer with Gradient Background -->
-<footer class="pt-5 pb-4 position-relative" style="background: linear-gradient(to right, #f8f9fa, #e0f7fc);">
+<footer class="pt-5 pb-4 position-relative" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/9860220454" target="_blank"
         class="position-fixed bottom-0 end-0 m-4 bg-success text-white rounded-circle d-flex justify-content-center align-items-center shadow-lg"

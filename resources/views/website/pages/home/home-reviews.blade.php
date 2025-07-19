@@ -68,9 +68,13 @@
 
 <section class="mt-5 pt-5 py-5">
     <div class="container">
-        <h5 class="fw-bold text-primary mb-4">
-            <i class="fa-solid fa-comments me-2"></i> What Our Customers Say
-        </h5>
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-7 text-primary mb-2">
+                <i class="fa-solid fa-comments me-2"></i> What Our Customers Say
+            </h2>
+            <p class="text-muted fs-5">Hear from adventurers who trusted E.A.T.H Travel for their journeys</p>
+        </div>
+
 
         <div class="swiper reviewSwiper">
             <div class="swiper-wrapper">

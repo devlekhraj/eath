@@ -1,7 +1,7 @@
-<div style="background: linear-gradient(180deg, #ffffff 0%, #eaf8ff 100%);">
-    <div class="container py-5 mt-5">
+<div style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
+    <div class="container py-5">
         <div class="text-center mb-5">
-            <h2 class="fw-bold display-5 text-primary mb-2">Our Featured Travel Packages</h2>
+            <h2 class="fw-bold display-7 text-primary mb-2">Our Featured Travel Packages</h2>
             <p class="text-muted fs-5">Discover handpicked adventures crafted for unforgettable experiences.</p>
         </div>
 
@@ -167,7 +167,7 @@
             <div class="swiper-pagination travel-package-pagination mt-3"></div>
         </div>
 
-        <div class="mt-5">
+        <div class="py-5 my-5">
             <div class="rounded-2 p-4  border border-primary-subtle bg-white">
                 <h5 class="fw-bold mb-4 text-primary">
                     <i class="fa-solid fa-plane-departure me-2"></i> Know Before You Go
