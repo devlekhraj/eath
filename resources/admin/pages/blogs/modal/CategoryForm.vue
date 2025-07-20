@@ -72,7 +72,7 @@ onMounted(() => {
 
 async function fetchParentCategories() {
     try {
-        const resp = await axios.get('admin/package-categories?type=parent')
+        const resp = await axios.get('admin/blog-categories?type=parent')
         parentOptions.value = resp.data || []
     } catch (error) {
         console.error('Failed to load parent categories', error)
@@ -92,7 +92,7 @@ async function submitForm() {
 
 async function handleSubmit() {
     try {
-        const resp = await axios.post('admin/package-categories', form)
+        const resp = await axios.post('admin/blog-categories', form)
         emit('saved')
         emit('close')
     } catch (error) {

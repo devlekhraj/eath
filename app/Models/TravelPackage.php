@@ -25,6 +25,11 @@ class TravelPackage extends Model
             }
         });
     }
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_published' => 'boolean',
+    ];
 
     public function categories()
     {

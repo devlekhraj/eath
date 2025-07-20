@@ -74,7 +74,7 @@ function handleOpen() {
 // Fetch categories and compute hierarchy
 async function fetchCategories() {
   try {
-    const resp = await axios.get('admin/package-categories');
+    const resp = await axios.get('admin/blog-categories');
     categories.value = resp.data.map((item) => {
       return {
         ...item,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Admin\Blog;
+namespace App\Http\Controllers\Api\V1\Admin\BlogCategory;
 
 
 use App\Models\Blog;
@@ -10,15 +10,16 @@ use App\Models\TravelPackage;
 use App\Models\PackageCategory;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BlogResource;
+use App\Http\Resources\BlogCategoryResource;
 use App\Http\Resources\PackageCategoryResource;
+use App\Models\BlogCategory;
 
-class BlogController extends Controller
+class BlogCategoryController extends Controller
 {
     public function index()
     {
         // Logic to retrieve travel packages
-        $packages = Blog::all();
+        $packages = BlogCategory::all();
 
         return response()->json([
             'success' => true,
@@ -27,13 +28,12 @@ class BlogController extends Controller
     }
     public function show(Request $request, $id)
     {
-        // Retrieve the travel package by ID or fail with 404
-        $blog = Blog::with('categories')->findOrFail($id);
+        // Logic to retrieve travel packages
+        $package = BlogCategory::find($id);
 
         return response()->json([
             'success' => true,
-            'data' => new BlogResource($blog),  // Use `new` here
-            'message' => 'Blog retrieved successfully.'
+            'data' => $package
         ], 200);
     }
 
@@ -76,12 +76,12 @@ class BlogController extends Controller
         }
 
         // Handle image upload
-        // if ($request->hasFile('cover_image')) {
-        //     $image = $request->file('cover_image');
-        //     $imageName = time() . '_' . Str::slug($validated['title']) . '.' . $image->getClientOriginalExtension();
-        //     $image->move(public_path('uploads/blogs'), $imageName);
-        //     $validated['cover_image'] = 'uploads/blogs/' . $imageName;
-        // }
+        if ($request->hasFile('cover_image')) {
+            $image = $request->file('cover_image');
+            $imageName = time() . '_' . Str::slug($validated['title']) . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/blogs'), $imageName);
+            $validated['cover_image'] = 'uploads/blogs/' . $imageName;
+        }
 
         // Set default values if not present
         $validated['is_published'] = $request->has('is_published') ? $validated['is_published'] : false;
@@ -97,23 +97,12 @@ class BlogController extends Controller
             $blog = Blog::create($validated);
             $message = 'Blog created successfully.';
         }
-        if (isset($request['category_ids'])) {
-            $blog->categories()->sync($request['category_ids']);
-        } else if ($isUpdate) {
-            $blog->categories()->detach();
-        }
 
         return response()->json([
             'message' => $message,
             'blog'    => $blog,
         ], $isUpdate ? 200 : 201);
     }
-
-
-
-
-
-
 
 
 
@@ -129,7 +118,7 @@ class BlogController extends Controller
 
         $data = $request->only(['name', 'description', 'parent_id']);
 
-        $category = PackageCategory::updateOrCreate(
+        $category = BlogCategory::updateOrCreate(
             ['id' => $request->id],
             $data
         );
@@ -143,7 +132,7 @@ class BlogController extends Controller
 
     public function getCategories(Request $request)
     {
-        $query = PackageCategory::with(['parent', 'children']);
+        $query = BlogCategory::with(['parent', 'children']);
 
         if ($request->query('type') === 'parent') {
             $query->whereNull('parent_id');
@@ -153,9 +142,10 @@ class BlogController extends Controller
 
         return response()->json([
             'success' => true,
-            'data'    => PackageCategoryResource::collection($categories),
+            'data'    => BlogCategoryResource::collection($categories),
         ]);
     }
+
 
     public function toggleActive($id, Request $request)
     {

@@ -33,4 +33,14 @@ class Blog extends Model
     protected $dates = [
         'deleted_at',
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(
+            BlogCategory::class,
+            'category_blog',
+            'blog_id',
+            'blog_category_id'
+        )->withTimestamps();  // <-- this enables automatic update of timestamps on pivot
+    }
 }

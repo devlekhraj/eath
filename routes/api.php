@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Auth\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
+use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
 
 Route::prefix('v1')->middleware('api')->group(function () {
@@ -42,6 +43,10 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('blogs', [BlogController::class, 'storeUpdate']);
         Route::get('blogs/{id}', [BlogController::class, 'show']);
         Route::patch('blogs/{id}/toggle-active', [BlogController::class, 'toggleActive']);
+
+        Route::get('blog-categories', [BlogCategoryController::class, 'getCategories']);
+        Route::post('blog-categories', [BlogCategoryController::class, 'saveCategory']);
+        Route::get('blog-categories/{id}', [BlogCategoryController::class, 'show']);
         
         
         Route::get('galleries', [GalleryController::class, 'index']);

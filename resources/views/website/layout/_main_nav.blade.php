@@ -15,91 +15,18 @@
     </div>
     <!-- Navbar with Mega Menu -->
     {{-- <nav class="navbar navbar-expand-lg py-0" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);"> --}}
-    <nav class="navbar navbar-expand-lg py-0" style="background: radial-gradient(circle at center, #ffffff 40%, #e9faff 100%);">
+    <nav class="navbar navbar-expand-lg py-0"
+        style="background: radial-gradient(circle at center, #ffffff 40%, #e9faff 100%);">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary fs-4" href="#">
                 <img src="/images/logo.png" alt="" height="70">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> --}}
 
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav gap-3">
-                    {{-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="destinationDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Destinations
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="destinationDropdown" id="destination">
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-calendar-day "></i>
-                                    </div>
-                                    <span class="ms-2">Day Tours</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-flag "></i>
-                                    </div>
-                                    <span class="ms-2">Nepal Tours</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-helicopter "></i>
-                                    </div>
-                                    <span class="ms-2">Helicopter Tours</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-hiking "></i>
-                                    </div>
-                                    <span class="ms-2">Trekking in Nepal</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-mountain "></i>
-                                    </div>
-                                    <span class="ms-2">Peak Climbing in Nepal</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-bolt "></i>
-                                    </div>
-                                    <span class="ms-2">Adventure Sports in Nepal</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-ring "></i>
-                                    </div>
-                                    <span class="ms-2">Destination Wedding in Nepal</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center" href="#">
-                                    <div style="width: 20px;">
-                                        <i class="fas fa-utensils "></i>
-                                    </div>
-                                    <span class="ms-2">Cooking Classes in Kathmandu</span>
-                                </a>
-                            </li>
-                        </ul>
-
-
-                    </li> --}}
 
 
                     <!-- Mega Menu -->
@@ -346,12 +273,48 @@
                     </li>
                 </ul>
             </div>
-            <div class="d-flex align-items-center">
-                <i class="fas fa-user-circle me-2" style="font-size: 2rem"></i>
-                <strong>Login</strong>
+            <div>
+                {{-- <div class="d-flex align-items-center d-md-flex">
+                    <i class="fas fa-user-circle me-2" style="font-size: 2rem"></i>
+                    <strong>Login</strong>
+
+                </div> --}}
+                <!-- Navbar Toggler -->
+      
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                        style="border: 0"
+                        data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-label="Toggle navigation">
+                        <i class="fa-solid fa-bars" style="font-size: 28px;"></i>
+                    </button>
+           
+
+                <!-- Offcanvas Sidebar -->
+               
 
             </div>
 
         </div>
     </nav>
+    @include('website.layout.offset-canva')
 </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggles = document.querySelectorAll(".toggle-icon");
+
+        toggles.forEach(icon => {
+            const target = document.querySelector(icon.dataset.target);
+
+            target.addEventListener('show.bs.collapse', function() {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            });
+
+            target.addEventListener('hide.bs.collapse', function() {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            });
+        });
+    });
+</script>

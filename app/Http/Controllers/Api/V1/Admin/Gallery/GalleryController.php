@@ -57,11 +57,8 @@ class GalleryController extends Controller
             File::makeDirectory($fullPath, 0755, true);
         }
 
-        // Initialize filename and counter
         $filename = $safeName . '.' . $extension;
         $counter = 0;
-
-        // Check if file exists and increment counter until unique filename is found
         while (File::exists($fullPath . '/' . $filename)) {
             $counter++;
             $filename = $safeName . '-' . $counter . '.' . $extension;
@@ -79,9 +76,12 @@ class GalleryController extends Controller
             'alt_text' => null,
         ]);
 
+        $fullUrl = asset($filepath); // 👈 Generates full URL
+
         return response()->json([
             'success' => true,
             'data' => $gallery,
+            'url' => $fullUrl, // 👈 Include full image URL in response
         ], 201);
     }
 }

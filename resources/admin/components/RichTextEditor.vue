@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, defineEmits, defineProps, watch } from 'vue'
+// import axios from '@/axios.config'
 import {
     BaseKit,
     Bold,
@@ -61,15 +62,26 @@ const extensions = [
     HorizontalRule,
     Image.configure({
         inline: false,
-        allowBase64: true,
-        upload(file: File) {
-            return new Promise((resolve) => {
-                const reader = new FileReader()
-                reader.onload = () => resolve(reader.result as string)
-                reader.readAsDataURL(file)
-            })
+        allowBase64: false,
+        upload(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            return axios.post('/admin/gallery-upload', formData)
+                .then(response => {
+                    console.log(response.url);
+                    if (response && response.url) {
+                        return response.url; // must return URL string here!
+                    }
+                    return Promise.reject('Upload failed');
+                })
+                .catch(err => {
+                    console.error('Upload error:', err);
+                    return Promise.reject(err);
+                });
         }
     }),
+
     Video,
     Table,
     History,

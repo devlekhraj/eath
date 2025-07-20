@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('blog_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
+            $table->foreignId('parent_id')->nullable()->constrained('blog_categories')->nullOnDelete(); // self join
+            $table->boolean('is_active')->default(false);
             $table->text('description')->nullable();
-            $table->string('icon')->nullable();
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
