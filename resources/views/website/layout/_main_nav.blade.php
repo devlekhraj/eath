@@ -14,7 +14,8 @@
         </div>
     </div>
     <!-- Navbar with Mega Menu -->
-    <nav class="navbar navbar-expand-lg py-0" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
+    {{-- <nav class="navbar navbar-expand-lg py-0" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);"> --}}
+    <nav class="navbar navbar-expand-lg py-0" style="background: radial-gradient(circle at center, #ffffff 40%, #e9faff 100%);">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary fs-4" href="#">
                 <img src="/images/logo.png" alt="" height="70">

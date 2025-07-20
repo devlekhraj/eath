@@ -34,12 +34,15 @@ class TravelPackageController extends Controller
 
     public function storeUpdate(Request $request)
     {
-        $validated = $request->validate([
-            'name'               => 'required|string|unique:travel_packages,name',
+        $id = $request->input('id');
+
+        $rules = [
+            'name'               => 'required|string|unique:travel_packages,name' . ($id ? ",$id" : ''),
             'description'        => 'nullable|string',
             'additional_info'    => 'nullable|string',
             'duration_days'      => 'nullable|integer|min:0',
             'duration_nights'    => 'nullable|integer|min:0',
+            'altitude'           => 'nullable|numeric|min:0',
             'price'              => 'nullable|numeric|min:0',
             'start_date'         => 'nullable|date',
             'end_date'           => 'nullable|date|after_or_equal:start_date',
@@ -55,15 +58,19 @@ class TravelPackageController extends Controller
             'seo_image'          => 'nullable|string|max:255',
             'is_published'       => 'nullable|boolean',
             'published_at'       => 'nullable|date',
-        ]);
+        ];
 
-        // Create travel package
-        $travelPackage = TravelPackage::create($validated);
+        $validated = $request->validate($rules);
+
+        // Update or create logic
+        $travelPackage = $id
+            ? TravelPackage::findOrFail($id)->update($validated)
+            : TravelPackage::create($validated);
 
         return response()->json([
             'success' => true,
-            'data' => $travelPackage,
-            'message' => 'Travel package created successfully.',
+            'data' => $id ? TravelPackage::find($id) : $travelPackage,
+            'message' => $id ? 'Travel package updated successfully.' : 'Travel package created successfully.',
         ]);
     }
 

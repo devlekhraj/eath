@@ -35,6 +35,16 @@ class PackageCategory extends Model
         });
     }
 
+    public function travelPackages()
+    {
+        return $this->belongsToMany(
+            TravelPackage::class,       // Related model
+            'category_package',         // Pivot table name
+            'package_category_id',      // Foreign key on pivot table for this model
+            'travel_package_id'         // Foreign key on pivot table for related model
+        );
+    }
+
     // Relationships
     public function parent()
     {

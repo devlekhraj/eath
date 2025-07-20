@@ -17,7 +17,8 @@
                 {{ formatDate(item.end_date) }}
             </template>
             <template #item.duration_days="{ item }">
-                <span class="text-primary" style="font-size: small;font-weight: 600;">{{ item.duration_days }} days</span>
+                <span class="text-primary" style="font-size: small;font-weight: 600;">{{ item.duration_days }}
+                    days</span>
             </template>
             <template #item.price="{ item }">
                 <span>{{ formatAmount(item.price) }}</span>
@@ -34,9 +35,38 @@
                     {{ item.is_featured ? 'Featured' : 'No' }}
                 </v-chip>
             </template>
-            <template #item.actions="{ item }">
+            <!-- <template #item.actions="{ item }">
                <v-btn icon color="primary" variant="text" :to="{ name:'adminPackageDetailPage', params:{ id: item.id }}"> <v-icon>mdi-eye-circle</v-icon></v-btn>
                <v-btn icon color="warning" variant="text" :to="{ name:'adminPackageForm', query:{ id: item.id }}"> <v-icon>mdi-pencil</v-icon></v-btn>
+            </template> -->
+            <template #item.actions="{ item }">
+                <v-menu location="bottom end">
+                    <template #activator="{ props }">
+                        <v-btn v-bind="props" icon variant="text" color="primary">
+                            <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-list density="compact" elevation="1">
+                        <v-list-item @click="viewItem(item)">
+                            <v-list-item-title>
+                                <v-icon start icon="mdi-eye" class="mr-2" /> View Detail
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item :to="{ name: 'adminPackageForm', query: { id: item.id } }">
+                            <v-list-item-title>
+                                <v-icon start icon="mdi-pencil" class="mr-2" /> Edit
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="deleteItem(item)">
+                            <v-list-item-title>
+                                <v-icon start icon="mdi-delete" class="mr-2" /> Delete
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
             </template>
         </v-data-table>
     </v-container>
@@ -61,7 +91,7 @@ export default {
             travelPackages: [],
         };
     },
-    mounted(){
+    mounted() {
         this.fetchPackages();
     },
 
@@ -69,9 +99,15 @@ export default {
         formatAmount,
         formatDate,
 
-        async fetchPackages(){
-           const resp = await axios.get('admin/travel-packages');
-           this.travelPackages = resp.data;
+        async fetchPackages() {
+            const resp = await axios.get('admin/travel-packages');
+            this.travelPackages = resp.data;
+        },
+        deleteItem(item){
+            console.log({item});
+        },
+        viewItem(item){
+            console.log({item});
         }
     },
 };
