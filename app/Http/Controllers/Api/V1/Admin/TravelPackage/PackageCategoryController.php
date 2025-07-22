@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Admin\TravelPackage;
+
+
+use Illuminate\Http\Request;
+use App\Models\TravelPackage;
+use App\Models\PackageCategory;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\PackageCategoryResource;
+use App\Http\Resources\TravelPackageResource;
+
+class PackageCategoryController extends Controller
+{
+   
+
+    public function saveCategory(Request $request)
+    {
+        $request->validate([
+            'name'        => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'parent_id'   => 'nullable|exists:package_categories,id',
+            'seq_no' => 'nullable|integer',
+            'id'          => 'nullable|exists:package_categories,id',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        $data = $request->only(['name', 'description', 'parent_id']);
+
+        $data["is_active"] = $request->boolean("is_active") ? 1 : 0;
+        $category = PackageCategory::updateOrCreate(
+            ['id' => $request->id],
+            $data
+        );
+
+        return response()->json([
+            'success' => true,
+            'data'    => $category,
+            'message' => $request->id ? 'Category updated successfully.' : 'Category created successfully.'
+        ]);
+    }
+
+    public function getCategories(Request $request)
+    {
+        $query = PackageCategory::with(['parent', 'children']);
+
+        if ($request->query('type') === 'parent') {
+            $query->whereNull('parent_id');
+        }
+
+        $categories = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'data'    => PackageCategoryResource::collection($categories),
+        ]);
+    }
+
+    public function toggleActive($id, Request $request)
+    {
+        $category = PackageCategory::findOrFail($id);
+        $category->is_active = $request->boolean('is_active');
+        $category->save();
+
+        return response()->json(['success' => true, 'message' => 'Status updated']);
+    }
+    public function delete($id, Request $request)
+    {
+        $category = PackageCategory::findOrFail($id);
+        $category->delete(); // This will perform a soft delete
+
+        return response()->json(['message' => 'Category deleted successfully.']);
+    }
+}

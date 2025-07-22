@@ -49,6 +49,14 @@ class TravelPackageResource extends JsonResource
                     'url' => $image->url,
                 ];
             }),
+            'itineraries'            => $this->itineraries->map(function($item){
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'description' => $item->description,
+                    'sort_order' => $item->sort_order,
+                ];
+            }),
             'category_ids'        => $this->categories()->pluck('id')
         ];
     }

@@ -5,29 +5,34 @@
             <template #item.start_date="{ item }">
                 {{ formatDate(item.start_date) }}
             </template>
-            <template #item.sn="{ item, index }">
+
+            <template #item.sn="{ index }">
                 {{ index + 1 }}
             </template>
+
             <template #item.name="{ item }">
                 <span class="text-primary">{{ item.name }}</span>
             </template>
 
-
             <template #item.end_date="{ item }">
                 {{ formatDate(item.end_date) }}
             </template>
+
             <template #item.duration_days="{ item }">
-                <span class="text-primary" style="font-size: small;font-weight: 600;">{{ item.duration_days }}
-                    days</span>
+                <span class="text-primary" style="font-size: small; font-weight: 600;">
+                    {{ item.duration_days }} days
+                </span>
             </template>
+
             <template #item.price="{ item }">
                 <span>{{ formatAmount(item.price) }}</span>
             </template>
 
             <template #item.is_active="{ item }">
-                <v-chip :color="item.is_active ? 'green' : 'red'" dark size="small">
-                    {{ item.is_active ? 'Active' : 'Inactive' }}
-                </v-chip>
+                <div>
+                    <v-switch v-model="item.is_active" density="compact" color="success" hide-details
+                        @change="toggleActive(item)" />
+                </div>
             </template>
 
             <template #item.is_featured="{ item }">
@@ -35,10 +40,7 @@
                     {{ item.is_featured ? 'Featured' : 'No' }}
                 </v-chip>
             </template>
-            <!-- <template #item.actions="{ item }">
-               <v-btn icon color="primary" variant="text" :to="{ name:'adminPackageDetailPage', params:{ id: item.id }}"> <v-icon>mdi-eye-circle</v-icon></v-btn>
-               <v-btn icon color="warning" variant="text" :to="{ name:'adminPackageForm', query:{ id: item.id }}"> <v-icon>mdi-pencil</v-icon></v-btn>
-            </template> -->
+
             <template #item.actions="{ item }">
                 <v-menu location="bottom end">
                     <template #activator="{ props }">
@@ -69,48 +71,75 @@
                 </v-menu>
             </template>
         </v-data-table>
+
+        <modal-template ref="globalModal" @saved="fetchPackages" @close="fetchPackages" />
     </v-container>
 </template>
 
-<script>
-import { formatDate, formatAmount } from '@/utils/format';
-export default {
-    data() {
-        return {
-            headers: [
-                { title: 'SN', key: 'sn', sortable: true },
-                { title: 'Name', key: 'name', sortable: false },
-                { title: 'Duration', key: 'duration_days', sortable: true },
-                { title: 'Price (USD)', key: 'price', sortable: true },
-                { title: 'Start Date', key: 'start_date', sortable: false },
-                { title: 'End Date', key: 'end_date', sortable: false },
-                { title: 'Active', key: 'is_active', sortable: false },
-                { title: 'Featured', key: 'is_featured', sortable: false },
-                { title: 'Actions', key: 'actions', sortable: false },
-            ],
-            travelPackages: [],
-        };
-    },
-    mounted() {
-        this.fetchPackages();
-    },
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import { formatDate, formatAmount } from '@/utils/format'
+import PackageDelete from './modal/PackageDelete.vue'
 
-    methods: {
-        formatAmount,
-        formatDate,
+const headers = [
+    { title: 'SN', key: 'sn', sortable: true },
+    { title: 'Name', key: 'name', sortable: false },
+    { title: 'Duration', key: 'duration_days', sortable: true },
+    { title: 'Price (USD)', key: 'price', sortable: true },
+    { title: 'Start Date', key: 'start_date', sortable: false },
+    { title: 'End Date', key: 'end_date', sortable: false },
+    { title: 'Active', key: 'is_active', sortable: false },
+    { title: 'Featured', key: 'is_featured', sortable: false },
+    { title: 'Actions', key: 'actions', sortable: false },
+]
 
-        async fetchPackages() {
-            const resp = await axios.get('admin/travel-packages');
-            this.travelPackages = resp.data;
+const travelPackages = ref([])
+const globalModal = ref(null);
+
+async function fetchPackages() {
+    try {
+        const resp = await axios.get('admin/travel-packages')
+        travelPackages.value = resp.data
+    } catch (error) {
+        console.error('Failed to fetch travel packages', error)
+    }
+}
+
+async function toggleActive(item) {
+    try {
+        const resp = await axios.patch(`admin/travel-packages/${item.id}/toggle-active`, {
+            is_active: item.is_active
+        });
+        console.log({resp});
+        this.$toast?.success?.('Status updated successfully'); // Optional toast
+    } catch (error) {
+        item.is_active = !item.is_active; // Revert back if failed
+        console.error('Failed to update status:', error);
+        this.$toast?.error?.('Failed to update status');
+    }
+}
+
+function deleteItem(item) {
+    globalModal.value.open({
+        title: 'Delete Category',
+        component: PackageDelete,
+        size: 'sm',
+        props: {
+            item, // <-- correctly passed as a prop
         },
-        deleteItem(item){
-            console.log({item});
-        },
-        viewItem(item){
-            console.log({item});
-        }
-    },
-};
+    });
+}
+
+
+
+function viewItem(item) {
+    console.log('View item:', item)
+}
+
+onMounted(() => {
+    fetchPackages()
+})
 </script>
 
 <style scoped></style>

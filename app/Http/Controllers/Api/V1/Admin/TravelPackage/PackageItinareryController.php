@@ -5,35 +5,44 @@ namespace App\Http\Controllers\Api\V1\Admin\TravelPackage;
 
 use Illuminate\Http\Request;
 use App\Models\TravelPackage;
-use App\Models\PackageCategory;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PackageCategoryResource;
 use App\Http\Resources\TravelPackageResource;
+use App\Models\PackageItierary;
 
-class TravelPackageController extends Controller
+class PackageItinareryController extends Controller
 {
-    public function index()
+
+    public function storeItinerary(Request $request, $id)
     {
-        // Logic to retrieve travel packages
-        $packages = TravelPackage::with('categories')->get();
+        $validated = $request->validate([
+            "id" => "nullable|exists:package_itieraries,id",
+            "title" => "required|string",
+            "description" => "required|string",
+            "sort_order" => "nullable|integer",
+            "travel_package_id" => "required|exists:travel_packages,id",
+        ]);
+
+        $validated["sort_order"] = $validated["sort_order"] ?? 0;
+
+        // Retrieve the travel package
+        $package = TravelPackage::findOrFail($id);
+
+        // If 'id' is present, update the existing itinerary
+        if (!empty($validated['id'])) {
+            $itinerary = $package->itineraries()->findOrFail($validated['id']);
+            $itinerary->update($validated);
+        } else {
+            // Remove unnecessary travel_package_id before creation
+            unset($validated['travel_package_id']);
+            $itinerary = $package->itineraries()->create($validated);
+        }
 
         return response()->json([
             'success' => true,
-            'data' => $packages
-        ], 200);
+            'data' => $itinerary,
+            'message' => 'Itinerary ' . (isset($validated['id']) ? 'updated' : 'created') . ' successfully.'
+        ]);
     }
-    public function show(Request $request, $id)
-    {
-        // Retrieve the travel package by ID or fail with 404
-        $package = TravelPackage::with('categories')->findOrFail($id);
-
-        return response()->json([
-            'success' => true,
-            'data' => new TravelPackageResource($package),  // Use `new` here
-            'message' => 'Travel package retrieved successfully.'
-        ], 200);
-    }
-
 
     public function storeUpdate(Request $request)
     {
@@ -88,7 +97,7 @@ class TravelPackageController extends Controller
         ]);
     }
 
-     public function packageDelete($id, Request $request)
+    public function packageDelete($id, Request $request)
     {
         $category = TravelPackage::findOrFail($id);
         $category->delete(); // This will perform a soft delete
@@ -112,4 +121,12 @@ class TravelPackageController extends Controller
         return response()->json(['success' => true, 'message' => 'Status updated']);
     }
 
+    public function deleteItinerary($id, Request $request)
+    {
+        $category = PackageItierary::findOrFail($id);
+        $category->delete();
+
+
+        return response()->json(['success' => true, 'message' => 'Itinerary Deleted']);
+    }
 }

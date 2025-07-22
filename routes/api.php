@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
+use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageCategoryController;
+use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageItinareryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
 
 Route::prefix('v1')->middleware('api')->group(function () {
@@ -33,11 +35,19 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::get('travel-packages', [TravelPackageController::class, 'index']);
         Route::post('travel-packages', [TravelPackageController::class, 'storeUpdate']);
         Route::get('travel-packages/{id}', [TravelPackageController::class, 'show']);
+        Route::patch('travel-packages/{id}/toggle-active', [TravelPackageController::class, 'toggleActive']);
+        Route::delete('travel-packages/{id}/delete', [TravelPackageController::class, 'packageDelete']);
 
-        Route::get('package-categories', [TravelPackageController::class, 'getCategories']);
-        Route::post('package-categories', [TravelPackageController::class, 'saveCategory']);
-        Route::patch('package-categories/{id}/toggle-active', [TravelPackageController::class, 'toggleActive']);
-        Route::delete('package-categories/{id}/delete', [TravelPackageController::class, 'delete']);
+        Route::post('travel-packages/{id}/itinerary', [PackageItinareryController::class, 'storeItinerary']);
+
+        Route::delete('package-itineraries/{id}/delete', [PackageItinareryController::class, 'deleteItinerary']);
+
+        
+        
+        Route::get('package-categories', [PackageCategoryController::class, 'getCategories']);
+        Route::post('package-categories', [PackageCategoryController::class, 'saveCategory']);
+        Route::patch('package-categories/{id}/toggle-active', [PackageCategoryController::class, 'toggleActive']);
+        Route::delete('package-categories/{id}/delete', [PackageCategoryController::class, 'delete']);
     
     
         Route::get('blogs', [BlogController::class, 'index']);

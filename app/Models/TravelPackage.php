@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TravelPackage extends Model
 {
+    use SoftDeletes;
     protected $guarded = [];
 
     protected $appends = ['images_urls'];
@@ -57,5 +59,20 @@ class TravelPackage extends Model
             'travel_package_id',        // Foreign key on pivot table for this model
             'package_category_id'       // Foreign key on pivot table for related model
         );
+    }
+
+    public function itineraries()
+    {
+        return $this->hasMany(PackageItierary::class);
+    }
+
+    public function exclusions()
+    {
+        return $this->hasMany(PackageExclusion::class);
+    }
+
+    public function inclusions()
+    {
+        return $this->hasMany(PackageInclusion::class);
     }
 }
