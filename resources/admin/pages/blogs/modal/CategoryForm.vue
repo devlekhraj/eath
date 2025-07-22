@@ -66,8 +66,32 @@ const rules = {
     required: v => !!v || 'This field is required',
 }
 
+const props = defineProps({
+    item: {
+        type: Object,
+        default: () => ({}),
+    },
+});
+
+
 onMounted(() => {
-    fetchParentCategories()
+    fetchParentCategories();
+    // Populate form if editing
+
+    if (props.item?.id) {
+        console.log("Edit mode");
+        Object.assign(form, {
+            id: props.item.id,
+            name: props.item.name || '',
+            parent_id: props.item.parent_id || null,
+            description: props.item.description || '',
+            is_active: props.item.is_active ?? true,
+            seq_no: props.item.seq_no || null,
+        });
+    } else {
+        console.log("Add mode");
+    }
+
 })
 
 async function fetchParentCategories() {

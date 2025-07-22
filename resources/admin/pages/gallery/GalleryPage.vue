@@ -1,70 +1,41 @@
 <template>
   <v-container>
     <div class="pb-6 text-right">
-      <v-btn size="large" rounded color="primary"> <v-icon>mdi-upload</v-icon> Upload Image </v-btn>
+      <v-btn size="large" rounded color="primary">
+        <v-icon>mdi-upload</v-icon> Upload Image
+      </v-btn>
     </div>
     <div>
       <v-row>
-        <v-col
-          v-for="n in 6"
-          :key="n"
-          cols="4"
-          md="2"
-          class="d-flex justify-center"
-        >
+        <v-col v-for="(gallery,index) in galleries" :key="index" cols="4" md="2" class="d-flex justify-center">
           <v-tooltip location="top">
             <template #activator="{ props }">
               <div class="image-wrapper" v-bind="props">
-                <v-img
-                  :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
-                  :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                  aspect-ratio="1"
-                  class="bg-grey-lighten-2"
-                  cover
-                >
+                <v-img :lazy-src="galleries.url"
+                  :src="gallery.url" aspect-ratio="1" class="bg-grey-lighten-2"
+                  contain>
                   <template #placeholder>
-                    <v-row
-                      align="center"
-                      class="fill-height ma-0"
-                      justify="center"
-                    >
-                      <v-progress-circular
-                        color="grey lighten-5"
-                        indeterminate
-                      />
+                    <v-row align="center" class="fill-height ma-0" justify="center">
+                      <v-progress-circular color="grey lighten-5" indeterminate />
                     </v-row>
                   </template>
                 </v-img>
-    
+
                 <div class="hover-actions">
                   <!-- View Button -->
                   <v-tooltip location="top">
                     <template #activator="{ on, attrs }">
-                      <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                        icon
-                        color="blue"
-                        size="small"
-                        @click.stop="viewImage(n)"
-                      >
+                      <v-btn v-bind="attrs" v-on="on" icon color="blue" size="small" @click.stop="viewImage(n)">
                         <v-icon>mdi-eye</v-icon>
                       </v-btn>
                     </template>
                     <span>View Image</span>
                   </v-tooltip>
-    
+
                   <!-- Delete Button -->
                   <v-tooltip location="top">
                     <template #activator="{ on, attrs }">
-                      <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                        icon
-                        color="red"
-                        size="small"
-                        @click.stop="deleteImage(n)"
-                      >
+                      <v-btn v-bind="attrs" v-on="on" icon color="red" size="small" @click.stop="deleteImage(n)">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </template>
@@ -73,15 +44,15 @@
                 </div>
               </div>
             </template>
-    
-            <!-- Tooltip Content: File Info -->
+
+            <!-- Tooltip Content -->
             <div class="pa-2" min-width="180">
               <v-row dense>
                 <v-col cols="12">
-                  <strong>{{ getFileName(n) }}</strong>
+                  <strong>{{ gallery?.filename}}</strong>
                 </v-col>
                 <v-col cols="12">
-                  <small>{{ getFileSize(n) }}</small>
+                  <small>adfsfas</small>
                 </v-col>
               </v-row>
             </div>
@@ -92,22 +63,39 @@
   </v-container>
 </template>
 
-<script setup>
-function viewImage(n) {
-  alert(`Viewing image #${n}`);
-}
+<script>
+export default {
+  name: "ImageGallery",
+  data() {
+    return {
+      galleries: [],
+    };
+  },
 
-function deleteImage(n) {
-  alert(`Deleting image #${n}`);
-}
+  mounted() {
+    this.fetchGallery();
+  },
+  methods: {
+    async fetchGallery() {
+      const resp = await axios.get('/admin/galleries');
+      console.log({ resp });
+      this.galleries = resp.data;
+    },
 
-function getFileName(n) {
-  return `image_${n}.jpg`;
-}
-
-function getFileSize(n) {
-  return `${(n * 2.3).toFixed(1)} MB`;
-}
+    viewImage(n) {
+      alert(`Viewing image #${n}`);
+    },
+    deleteImage(n) {
+      alert(`Deleting image #${n}`);
+    },
+    getFileName(n) {
+    indexreturn `image_${n}.jpg`;
+    },
+    getFileSize(n) {
+      return `${(n * 2.3).toFixed(1)} MB`;
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -115,6 +103,7 @@ function getFileSize(n) {
   position: relative;
   width: 100%;
 }
+
 .hover-actions {
   position: absolute;
   top: 8px;

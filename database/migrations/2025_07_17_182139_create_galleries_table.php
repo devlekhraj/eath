@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('filename');
             $table->string('filepath');      // e.g. uploads/image.jpg
             $table->string('mime_type')->nullable();
+            $table->string('file_size');
             $table->string('alt_text')->nullable(); // default alt text
             $table->string('title')->nullable(); // default alt text
             $table->timestamps();

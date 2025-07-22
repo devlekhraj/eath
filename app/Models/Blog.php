@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Blog extends Model
 {
     use SoftDeletes;
 
     protected $table = 'blogs';
+     protected $appends = ['banner_url'];
 
     protected $fillable = [
         'title',
@@ -33,6 +35,27 @@ class Blog extends Model
     protected $dates = [
         'deleted_at',
     ];
+
+    public function getBannerUrlAttribute(): string
+    {
+        $galleryImage = Gallery::where('filename', $this->cover_image)->first();
+        if (!$galleryImage) {
+            return asset('images/logo.png');
+        }
+
+        $filePath = storage_path($galleryImage->filepath);
+         return file_exists($filePath)
+            ? route('image.view', ['filename' => $this->cover_image])
+            : asset('images/logo.png');
+    }
+
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(GalleryUsage::class, 'usage_id')
+            ->where('usage_type', 'blogs')
+            ->with('gallery');
+    }
 
     public function categories()
     {

@@ -56,7 +56,7 @@ class BlogController extends Controller
             ],
             'sub_title'         => 'nullable|string|max:255',
             'content'           => 'required|string',
-            'cover_image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'cover_image'       => 'nullable|string',
             'author'            => 'required|string|max:100',
             'is_published'      => 'nullable|boolean',
             'is_active'         => 'nullable|boolean',

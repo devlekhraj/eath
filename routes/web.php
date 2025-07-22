@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -17,3 +18,5 @@ Route::get('/', function () {
     // return view('website.index');
     return view('website.index');
 });
+
+Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');

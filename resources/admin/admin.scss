@@ -8,9 +8,19 @@ body,
 
 // Force Vuetify typography classes to use Poppins
 label.v-label.v-label--clickable,
-.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6,
-.v-card-title, .v-dialog-title, .v-btn, .v-label, .v-input__control, .v-field-label {
-  font-family: 'Poppins', sans-serif !important;
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4,
+.text-h5,
+.text-h6,
+.v-card-title,
+.v-dialog-title,
+.v-btn,
+.v-label,
+.v-input__control,
+.v-field-label {
+    font-family: 'Poppins', sans-serif !important;
 }
 
 .v-list-item-title {
@@ -21,16 +31,28 @@ label.v-label.v-label--clickable,
 //     font-family: 'Poppins', sans-serif !important;
 // }
 
-.font-medium{
+.font-medium {
     font-size: medium;
 }
 
-.font-large{
+.font-large {
     font-size: large;
 }
-.font-small{
+
+.font-small {
     font-size: small;
 }
-.font-x-small{
+
+.font-x-small {
     font-size: x-small;
+}
+
+.vuetify-pro-tiptap-editor__content.markdown-theme-default p {
+    line-height: 0.7 !important;
+}
+
+/* Apply text selection color only inside Tiptap Pro editor */
+.vuetify-pro-tiptap-editor__content.markdown-theme-default ::selection {
+    background: #222222 !important;
+    color: white !important;
 }

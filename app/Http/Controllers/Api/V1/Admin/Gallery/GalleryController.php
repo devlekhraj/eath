@@ -7,6 +7,8 @@ use App\Models\Gallery;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
+use App\Models\GalleryUsage;
 use Illuminate\Support\Facades\File;
 
 
@@ -51,7 +53,7 @@ class GalleryController extends Controller
         $year = now()->format('Y');
         $month = now()->format('m');
         $relativePath = "gallery/{$year}/{$month}";
-        $fullPath = public_path($relativePath);
+        $fullPath = storage_path($relativePath);
 
         if (!File::exists($fullPath)) {
             File::makeDirectory($fullPath, 0755, true);
@@ -68,20 +70,72 @@ class GalleryController extends Controller
         $image->move($fullPath, $filename);
 
         $filepath = "{$relativePath}/{$filename}";
-
+        $fileSize = File::size($fullPath . '/' . $filename); // in bytes
         $gallery = Gallery::create([
             'filename' => $filename,
             'filepath' => $filepath,
             'mime_type' => $mimeType,
+            'file_size' => $fileSize,
             'alt_text' => null,
+            'image_url'=>route('image.view', ['filename' => $filename]),
         ]);
 
-        $fullUrl = asset($filepath); // 👈 Generates full URL
+
+        if ($request->has('usage_type') && $request->has('usage_id')) {
+            $usageType = $request->input('usage_type');
+            $usageId = $request->input('usage_id');
+            $gallery->usages()->create([
+                "usage_type" => $usageType,
+                "usage_id" => $usageId
+            ]);
+
+            switch($request->usage_type){
+                case 'blogs':
+                    $blog = Blog::find($request->usage_id);
+                    $blog->cover_image = $filename;
+                    $blog->save();
+                    break;
+                default:
+                    break;
+            }
+        }
 
         return response()->json([
             'success' => true,
+            "filename" => $filename,
             'data' => $gallery,
-            'url' => $fullUrl, // 👈 Include full image URL in response
+            'url'=>route('image.view', ['filename' => $filename]),
         ], 201);
+    }
+
+    public function getImage($filename)
+    {
+        $file = Gallery::where('filename', $filename)->first();
+        if (!$file) {
+            return response()->file(public_path('images/logo.png'));
+        }
+
+        $filePath = storage_path($file->filepath);
+
+        if (!file_exists($filePath)) {
+            return response()->file(public_path('images/logo.png'));
+        }
+
+        return response()->file($filePath, [
+            'Content-Type' => mime_content_type($filePath),
+        ]);
+    }
+
+    public function delete($imageId)
+    {
+        $image = GalleryUsage::find($imageId);
+
+        if (!$image) {
+            return response()->json(['message' => 'Image not found'], 404);
+        }
+
+        $image->delete();
+
+        return response()->json(['message' => 'Image deleted successfully']);
     }
 }

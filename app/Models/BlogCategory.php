@@ -18,6 +18,10 @@ class BlogCategory extends Model
         'deleted_at',
     ];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     protected static function boot()
     {
         parent::boot();

@@ -1,7 +1,7 @@
 <template>
     <v-card flat>
         <v-card-title>
-            <span class="font-medium">Category Form</span>
+            <span class="font-medium">Gallery Form</span>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -40,7 +40,7 @@
 
         <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn>
+            <v-btn color="primary" @click="submitForm">Save</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -51,7 +51,6 @@ import axios from 'axios'
 
 const emit = defineEmits(['close', 'saved'])
 const formRef = ref(null)
-let loading = ref(false);
 
 const form = reactive({
     name: '',
@@ -67,38 +66,13 @@ const rules = {
     required: v => !!v || 'This field is required',
 }
 
-const props = defineProps({
-    item: {
-        type: Object,
-        default: () => ({}),
-    },
-});
-
-
-
-
-
 onMounted(() => {
-    fetchParentCategories();
-
-    if (props.item?.id) {
-        console.log("Edit mode");
-        Object.assign(form, {
-            id: props.item.id,
-            name: props.item.name || '',
-            parent_id: props.item.parent_id || null,
-            description: props.item.description || '',
-            is_active: props.item.is_active ?? true,
-            seq_no: props.item.seq_no || null,
-        });
-    } else {
-        console.log("Add mode");
-    }
+    fetchParentCategories()
 })
 
 async function fetchParentCategories() {
     try {
-        const resp = await axios.get('admin/package-categories?type=parent')
+        const resp = await axios.get('admin/blog-categories?type=parent')
         parentOptions.value = resp.data || []
     } catch (error) {
         console.error('Failed to load parent categories', error)
@@ -118,17 +92,13 @@ async function submitForm() {
 
 async function handleSubmit() {
     try {
-        loading.value = true; // ✅ correct way
-        const resp = await axios.post('admin/package-categories', form)
-        console.log(resp);
+        const resp = await axios.post('admin/blog-categories', form)
+        emit('saved')
         emit('close')
     } catch (error) {
         console.error('Category creation failed', error)
-    } finally {
-        loading.value = false; // ✅ always stop loading, even if error
     }
 }
-
 </script>
 
 <style scoped></style>

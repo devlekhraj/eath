@@ -43,16 +43,17 @@ class BlogCategoryController extends Controller
     {
         $isUpdate = $request->has('id');
 
+        dd("here");
         $rules = [
-            'id'                => 'nullable|exists:blogs,id',
+            'id'                => 'nullable|exists:blog_categories,id',
             'title'             => 'required|string|max:255',
             'slug'              => [
                 'required',
                 'string',
                 'max:255',
                 $isUpdate
-                    ? Rule::unique('blogs', 'slug')->ignore($request->id)
-                    : Rule::unique('blogs', 'slug'),
+                    ? Rule::unique('blog_categories', 'slug')->ignore($request->id)
+                    : Rule::unique('blog_categories', 'slug'),
             ],
             'sub_title'         => 'nullable|string|max:255',
             'content'           => 'required|string',
@@ -67,6 +68,7 @@ class BlogCategoryController extends Controller
 
         $validated = $request->validate($rules);
 
+        dd($validated);
 
         // Convert empty strings to null to avoid saving "" strings in DB
         foreach ($validated as $key => $value) {
@@ -111,12 +113,15 @@ class BlogCategoryController extends Controller
         $request->validate([
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
-            'parent_id'   => 'nullable|exists:package_categories,id',
+            'parent_id'   => 'nullable|exists:blog_categories,id',
             'seq_no' => 'nullable|integer',
-            'id'          => 'nullable|exists:package_categories,id',
+            'id'          => 'nullable|exists:blog_categories,id',
+            'is_active' => 'nullable|boolean',
         ]);
 
         $data = $request->only(['name', 'description', 'parent_id']);
+
+        $data['is_active'] = $request->boolean('is_active') ? 1 : 0;
 
         $category = BlogCategory::updateOrCreate(
             ['id' => $request->id],
@@ -149,10 +154,17 @@ class BlogCategoryController extends Controller
 
     public function toggleActive($id, Request $request)
     {
-        $category = PackageCategory::findOrFail($id);
+        $category = BlogCategory::findOrFail($id);
         $category->is_active = $request->boolean('is_active');
         $category->save();
 
         return response()->json(['success' => true, 'message' => 'Status updated']);
+    }
+    public function delete($id, Request $request)
+    {
+        $category = BlogCategory::findOrFail($id);
+        $category->delete(); // This will perform a soft delete
+
+        return response()->json(['message' => 'Category deleted successfully.']);
     }
 }

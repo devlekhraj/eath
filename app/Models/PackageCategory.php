@@ -18,6 +18,10 @@ class PackageCategory extends Model
         'description',
     ];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     protected static function boot()
     {
         parent::boot();

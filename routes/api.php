@@ -37,6 +37,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::get('package-categories', [TravelPackageController::class, 'getCategories']);
         Route::post('package-categories', [TravelPackageController::class, 'saveCategory']);
         Route::patch('package-categories/{id}/toggle-active', [TravelPackageController::class, 'toggleActive']);
+        Route::delete('package-categories/{id}/delete', [TravelPackageController::class, 'delete']);
     
     
         Route::get('blogs', [BlogController::class, 'index']);
@@ -47,11 +48,14 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::get('blog-categories', [BlogCategoryController::class, 'getCategories']);
         Route::post('blog-categories', [BlogCategoryController::class, 'saveCategory']);
         Route::get('blog-categories/{id}', [BlogCategoryController::class, 'show']);
+        Route::patch('blog-categories/{id}/toggle-active', [BlogCategoryController::class, 'toggleActive']);
+        Route::delete('blog-categories/{id}/delete', [BlogCategoryController::class, 'delete']);
         
         
         Route::get('galleries', [GalleryController::class, 'index']);
         Route::post('gallery-upload', [GalleryController::class, 'uploadImage']);
         Route::get('galleries/{id}', [GalleryController::class, 'show']);
+        Route::delete('galleries/{id}/delete', [GalleryController::class, 'delete']);
     
     });
     

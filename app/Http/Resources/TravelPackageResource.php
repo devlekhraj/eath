@@ -42,6 +42,13 @@ class TravelPackageResource extends JsonResource
 
             // Categories relationship as nested resources or just array
             'categories'        => PackageCategoryResource::collection($this->whenLoaded('categories')),
+            'category_ids'        => $this->categories()->pluck('id'),
+            'images'            => $this->images->map(function($image){
+                return [
+                    'id' => $image->id,
+                    'url' => $image->url,
+                ];
+            }),
             'category_ids'        => $this->categories()->pluck('id')
         ];
     }

@@ -1,7 +1,8 @@
 <template>
     <v-dialog v-model="show" :width="dialogWidth" persistent scrollable>
         <component :is="currentComponent" v-bind="componentProps" v-if="currentComponent" @onClose="handleClose"
-            @close="handleClose" @saved="success" />
+            @close="handleClose" 
+            @saved="success" />
     </v-dialog>
 </template>
 

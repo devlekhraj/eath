@@ -32,21 +32,26 @@
 			<!-- Side Controls -->
 			<v-col cols="12" md="4">
 				<v-card class="pa-4" elevation="0">
-					<!-- Featured Image -->
-					<v-file-input v-model="form.image" label="Featured Image" accept="image/*" prepend-icon=""
-						variant="outlined" prepend-inner-icon="mdi-image" @change="onImageChange"
-						class="mb-4"></v-file-input>
 
-					<v-img v-if="previewImage" :src="previewImage" height="200" cover class="rounded mb-4"></v-img>
+					<div v-if="blog_id">
+						<!-- Featured Image -->
+						<v-file-input v-model="selected_image" label="Featured Image" accept="image/*" prepend-icon=""
+						
+							variant="outlined" density="comfortable" prepend-inner-icon="mdi-image"
+							@change="onImageChange" class="mb-4 truncate-file-name"></v-file-input>
+					</div>
+
+					<v-img v-if="previewImage" :src="form.banner_url" height="200" contain class="rounded mb-4"></v-img>
 
 					<!-- Author -->
 					<v-text-field v-model="form.author" prepend-inner-icon="mdi-account" label="Author"
 						variant="outlined" density="comfortable" :rules="[rules.required]" class="mb-4"></v-text-field>
 
-				
-						<v-select v-model="form.category_ids" variant="outlined" :items="blog_categories" item-title="name"
-							item-value="id" label="Select Categories" multiple chips clearable />
-			
+
+					<v-select v-model="form.category_ids" variant="outlined" density="comfortable"
+						:items="blog_categories" item-title="name" item-value="id" label="Select Categories" multiple
+						chips clearable />
+
 
 					<!-- Meta Title -->
 					<v-text-field v-model="form.meta_title" label="Meta Title" variant="outlined" density="comfortable"
@@ -80,13 +85,13 @@ export default {
 			contentError: false,
 			submitting: false,
 			previewImage: null,
+			selected_image: null,
 			form: {
 				title: '',
-				category_ids:[],
+				category_ids: [],
 				sub_title: '',
 				slug: '',
 				content: '',
-				image: null,
 				author: 'Admin',
 				meta_title: '',
 				meta_description: '',
@@ -129,31 +134,35 @@ export default {
 		async fetchBlog() {
 			const resp = await axios.get(`/admin/blogs/${this.blog_id}`);
 			this.form = resp.data;
+			this.previewImage = resp.data.banner_url;
 
 		},
 		onImageChange() {
-			const selected = Array.isArray(this.form.image) ? this.form.image[0] : this.form.image;
+			const selected = Array.isArray(this.selected_image) ? this.selected_image[0] : this.selected_image;
 
 			// Preview
 			if (selected instanceof File) {
-				this.previewImage = URL.createObjectURL(selected)
 
-				const formData = new FormData()
+				const formData = new FormData();
+				if (this.blog_id) {
+					formData.append('usage_id', this.blog_id);
+					formData.append('usage_type', 'blogs');
+				}
 				formData.append('image', selected)
 
 				axios.post('/admin/gallery-upload', formData, {
 					headers: { 'Content-Type': 'multipart/form-data' }
 				})
 					.then(response => {
-						this.form.cover_image = response.data.path
+						this.form.cover_image = response.data.filename;
+						this.previewImage = response.url;
+						this.form.banner_url = response.url;
 					})
 					.catch(error => {
 						console.error('Image upload failed', error)
 					})
 			} else {
 				console.log("test");
-				this.previewImage = null
-				this.form.cover_image = ''
 			}
 		},
 		safeTrim(value) {
@@ -221,6 +230,12 @@ export default {
 </script>
 
 <style scoped>
+.truncate-file-name .v-field__input {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .mb-4 {
 	margin-bottom: 1rem;
 }

@@ -97,13 +97,31 @@
 									:disabled="submitting" />
 							</v-col>
 							<v-col cols="12">
-								<v-select v-model="form.category_ids" :items="package_categories"
-									item-title="name" item-value="id" label="Select Categories" multiple chips
-									clearable />
+								<v-select v-model="form.category_ids" :items="package_categories" item-title="name"
+									item-value="id" label="Select Categories" multiple chips clearable />
 							</v-col>
-							<v-col cols="12">
+
+							<v-col cols="12" v-if="package_id">
+								<v-file-input prepend-icon="" v-model="selected_file" @change="handleUploadImage()"
+									prepend-inner-icon="mdi-image" label="File input"></v-file-input>
 								<div>
-									<v-input-file label></v-input-file>
+									<h4>Slider Images</h4>
+									<v-row>
+										<v-col cols="12" md="6" v-for="(image, index) in form.images" :key="index">
+											<div class="position-relative">
+												<img :src="image.url" alt="Image"
+													style="width: 100%; object-fit: contain;">
+
+												<!-- Delete icon -->
+												<v-icon color="red" small class="position-absolute"
+													style="top: 8px; right: 8px; cursor: pointer; padding: 2px;"
+													@click="handleDelete(image)" title="Delete Image">
+													mdi-close-thick
+												</v-icon>
+											</div>
+										</v-col>
+
+									</v-row>
 								</div>
 							</v-col>
 
@@ -123,6 +141,7 @@
 				</v-col>
 			</v-row>
 		</v-form>
+		<modal-template ref="globalModal"></modal-template>
 	</v-container>
 </template>
 
@@ -157,6 +176,7 @@ export default {
 				is_featured: false,
 				terms_conditions: '',
 				cancellation_policy: '',
+				images: [],
 			},
 			rules: {
 				required: v => !!v || 'This field is required',
@@ -164,6 +184,7 @@ export default {
 				positive: v => !v || Number(v) >= 0 || 'Must be positive',
 			},
 			package_categories: [],
+			selected_file: null,
 		}
 	},
 
@@ -175,8 +196,47 @@ export default {
 		}
 		this.packageCategories();
 	},
-
+	components: {
+		// DeleteImage: () => import('./modal/DeleteImage.vue')
+	},
 	methods: {
+		async handleDelete(imageItem) {
+			console.log('Opening modal with imageItem:', imageItem);
+			const component = (await import('./modal/DeleteImage.vue')).default;
+			this.$refs.globalModal.open({
+				title: 'Delete Image',
+				component,
+				size: 'sm',
+				props: { imageItem }  // imageItem must NOT be undefined or null here
+			});
+		},
+		
+		handleUploadImage() {
+
+			const formData = new FormData();
+			if (this.package_id) {
+				formData.append('usage_id', this.package_id);
+				formData.append('usage_type', 'travel_packages');
+			}
+			formData.append('image', this.selected_file);
+
+			return axios.post('/admin/gallery-upload', formData)
+				.then(response => {
+					console.log(response.url);
+					this.form.images.push({
+						id: response.data.id,
+						url: response.url,
+					});
+					if (response && response.url) {
+						return response.url; // must return URL string here!
+					}
+					return Promise.reject('Upload failed');
+				})
+				.catch(err => {
+					console.error('Upload error:', err);
+					return Promise.reject(err);
+				});
+		},
 		async fetchPackage() {
 			try {
 				const resp = await axios.get(`/admin/travel-packages/${this.package_id}`)

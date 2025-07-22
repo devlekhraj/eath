@@ -14,7 +14,7 @@ class BlogResource extends JsonResource
             'slug'            => $this->slug,
             'sub_title'       => $this->sub_title,
             'content'         => $this->content,
-            'cover_image'     => $this->cover_image ? asset($this->cover_image) : null,
+            'banner_url'     => $this->banner_url,
             'author'          => $this->author,  // can be a relationship or string depending on your model
             'is_published'    => (bool) $this->is_published,
             'is_active'       => (bool) $this->is_active,

@@ -102,10 +102,12 @@ class TravelPackageController extends Controller
             'parent_id'   => 'nullable|exists:package_categories,id',
             'seq_no' => 'nullable|integer',
             'id'          => 'nullable|exists:package_categories,id',
+            'is_active' => 'nullable|boolean',
         ]);
 
         $data = $request->only(['name', 'description', 'parent_id']);
 
+        $data["is_active"] = $request->boolean("is_active") ? 1 : 0;
         $category = PackageCategory::updateOrCreate(
             ['id' => $request->id],
             $data
@@ -141,5 +143,12 @@ class TravelPackageController extends Controller
         $category->save();
 
         return response()->json(['success' => true, 'message' => 'Status updated']);
+    }
+    public function delete($id, Request $request)
+    {
+        $category = PackageCategory::findOrFail($id);
+        $category->delete(); // This will perform a soft delete
+
+        return response()->json(['message' => 'Category deleted successfully.']);
     }
 }

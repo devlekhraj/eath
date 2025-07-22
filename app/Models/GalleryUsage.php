@@ -14,8 +14,17 @@ class GalleryUsage extends Model
         'alt_text',
     ];
 
+    // Append virtual attribute
+    protected $appends = ['url'];
+
     public function gallery(): BelongsTo
     {
         return $this->belongsTo(Gallery::class);
+    }
+
+    // Accessor for the gallery url
+    public function getUrlAttribute(): ?string
+    {
+        return $this->gallery?->url; // null-safe access
     }
 }
