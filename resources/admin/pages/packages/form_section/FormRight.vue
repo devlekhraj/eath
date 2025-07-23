@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <div>
+        <!-- <div>
             <v-card class="elevation-0">
                 <v-card-title class="d-flex align-center justify-space-between py-4">
                     <h2 class="font-medium">Itineraries</h2>
@@ -28,7 +28,7 @@
                     </v-expansion-panel>
                 </v-expansion-panels>
             </v-card>
-        </div>
+        </div> -->
         <!-- <div class="mt-4">
             <v-card class="elevation-0">
                 <v-card-title class="d-flex align-center justify-space-between py-4">
