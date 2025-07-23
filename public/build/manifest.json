@@ -1,0 +1,525 @@
+{
+  "_format-Dx0LrmFw.js": {
+    "file": "assets/format-Dx0LrmFw.js",
+    "name": "format"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-400-normal.woff": {
+    "file": "assets/poppins-devanagari-400-normal-CqVvlrh5.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-400-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-400-normal.woff2": {
+    "file": "assets/poppins-devanagari-400-normal-CJDn6rn8.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-400-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-500-normal.woff": {
+    "file": "assets/poppins-devanagari-500-normal-DMPDjHtT.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-500-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-500-normal.woff2": {
+    "file": "assets/poppins-devanagari-500-normal-BIdkeU1p.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-500-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-600-normal.woff": {
+    "file": "assets/poppins-devanagari-600-normal-ClASKHrr.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-600-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-600-normal.woff2": {
+    "file": "assets/poppins-devanagari-600-normal-STEjXBNN.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-600-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-700-normal.woff": {
+    "file": "assets/poppins-devanagari-700-normal-fHs-vx92.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-700-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-devanagari-700-normal.woff2": {
+    "file": "assets/poppins-devanagari-700-normal-O-jipLrW.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-devanagari-700-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff": {
+    "file": "assets/poppins-latin-400-normal-BOb3E3N0.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2": {
+    "file": "assets/poppins-latin-400-normal-cpxAROuN.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-500-normal.woff": {
+    "file": "assets/poppins-latin-500-normal-DGXqpDMm.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-500-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-500-normal.woff2": {
+    "file": "assets/poppins-latin-500-normal-C8OXljZJ.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-500-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff": {
+    "file": "assets/poppins-latin-600-normal-BJdTmd5m.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2": {
+    "file": "assets/poppins-latin-600-normal-zEkxB9Mr.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff": {
+    "file": "assets/poppins-latin-700-normal-BVuQR_eA.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff2": {
+    "file": "assets/poppins-latin-700-normal-Qrb0O0WB.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-400-normal.woff": {
+    "file": "assets/poppins-latin-ext-400-normal-DaBSavcJ.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-400-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-400-normal.woff2": {
+    "file": "assets/poppins-latin-ext-400-normal-by3JarPu.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-400-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-500-normal.woff": {
+    "file": "assets/poppins-latin-ext-500-normal-CgAe2rWW.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-500-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-500-normal.woff2": {
+    "file": "assets/poppins-latin-ext-500-normal-CK-6C4Hw.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-500-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-600-normal.woff": {
+    "file": "assets/poppins-latin-ext-600-normal-Df5ffKXP.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-600-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-600-normal.woff2": {
+    "file": "assets/poppins-latin-ext-600-normal-CAhIAdZj.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-600-normal.woff2"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-700-normal.woff": {
+    "file": "assets/poppins-latin-ext-700-normal-DctTR6Tg.woff",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-700-normal.woff"
+  },
+  "node_modules/@fontsource/poppins/files/poppins-latin-ext-700-normal.woff2": {
+    "file": "assets/poppins-latin-ext-700-normal-cby-RkWa.woff2",
+    "src": "node_modules/@fontsource/poppins/files/poppins-latin-ext-700-normal.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
+    "file": "assets/fa-brands-400-D1LuMI3I.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2": {
+    "file": "assets/fa-brands-400-D_cYUPeE.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf": {
+    "file": "assets/fa-regular-400-DZaxPHgR.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2": {
+    "file": "assets/fa-regular-400-BjRzuEpd.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": {
+    "file": "assets/fa-solid-900-D0aA9rwL.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": {
+    "file": "assets/fa-solid-900-CTAAxXor.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf": {
+    "file": "assets/fa-v4compatibility-CCth-dXg.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2": {
+    "file": "assets/fa-v4compatibility-C9RhG_FT.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot": {
+    "file": "assets/materialdesignicons-webfont-CSr8KVlo.eot",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.ttf": {
+    "file": "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.ttf"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff": {
+    "file": "assets/materialdesignicons-webfont-PXm3-2wK.woff",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2": {
+    "file": "assets/materialdesignicons-webfont-Dp5v-WZN.woff2",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2"
+  },
+  "node_modules/axios/index.js": {
+    "file": "assets/index-DIycyeiE.js",
+    "name": "index",
+    "src": "node_modules/axios/index.js",
+    "isDynamicEntry": true
+  },
+  "resources/admin/admin.scss": {
+    "file": "assets/admin-V_-FE1Wv.css",
+    "src": "resources/admin/admin.scss",
+    "isEntry": true
+  },
+  "resources/admin/layout/AuthLayout.vue": {
+    "file": "assets/AuthLayout-Bk5OSJaV.js",
+    "name": "AuthLayout",
+    "src": "resources/admin/layout/AuthLayout.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ],
+    "css": [
+      "assets/AuthLayout-DYbNKsuy.css"
+    ]
+  },
+  "resources/admin/layout/DefaultLayout.vue": {
+    "file": "assets/DefaultLayout-C0kIjQBb.js",
+    "name": "DefaultLayout",
+    "src": "resources/admin/layout/DefaultLayout.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ],
+    "css": [
+      "assets/DefaultLayout-CxVX0ONu.css"
+    ]
+  },
+  "resources/admin/main.js": {
+    "file": "assets/main-DAKRFsRP.js",
+    "name": "main",
+    "src": "resources/admin/main.js",
+    "isEntry": true,
+    "imports": [
+      "node_modules/axios/index.js"
+    ],
+    "dynamicImports": [
+      "resources/admin/layout/AuthLayout.vue",
+      "resources/admin/pages/auth/LoginPage.vue",
+      "resources/admin/pages/auth/PasswordResetPage.vue",
+      "resources/admin/layout/DefaultLayout.vue",
+      "resources/admin/pages/dashboard/DashboardPage.vue",
+      "resources/admin/pages/blogs/BlogPage.vue",
+      "resources/admin/pages/blogs/BlogForm.vue",
+      "resources/admin/pages/blogs/BlogCategoryPage.vue",
+      "resources/admin/pages/bookings/BookingPage.vue",
+      "resources/admin/pages/bookings/BookingForm.vue",
+      "resources/admin/pages/customers/CustomerPage.vue",
+      "resources/admin/pages/packages/PackagePage.vue",
+      "resources/admin/pages/packages/PackageDetailPage.vue",
+      "resources/admin/pages/packages/PackageForm.vue",
+      "resources/admin/pages/packages/PackageCategoryPage.vue",
+      "resources/admin/pages/customers/CustomerInquiryPage.vue",
+      "resources/admin/pages/finance/InvoicePage.vue",
+      "resources/admin/pages/finance/ReportPage.vue",
+      "resources/admin/pages/gallery/GalleryPage.vue",
+      "resources/admin/pages/gallery/GalleryForm.vue",
+      "resources/admin/pages/settings/NotificationPage.vue",
+      "resources/admin/pages/settings/UserManagementPage.vue",
+      "resources/admin/pages/settings/GeneralSettingPage.vue",
+      "resources/admin/pages/DemoPage.vue",
+      "node_modules/axios/index.js"
+    ],
+    "css": [
+      "assets/main-5sr5DEvK.css"
+    ],
+    "assets": [
+      "assets/materialdesignicons-webfont-CSr8KVlo.eot",
+      "assets/materialdesignicons-webfont-Dp5v-WZN.woff2",
+      "assets/materialdesignicons-webfont-PXm3-2wK.woff",
+      "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
+      "assets/fa-brands-400-D_cYUPeE.woff2",
+      "assets/fa-brands-400-D1LuMI3I.ttf",
+      "assets/fa-regular-400-BjRzuEpd.woff2",
+      "assets/fa-regular-400-DZaxPHgR.ttf",
+      "assets/fa-solid-900-CTAAxXor.woff2",
+      "assets/fa-solid-900-D0aA9rwL.ttf",
+      "assets/fa-v4compatibility-C9RhG_FT.woff2",
+      "assets/fa-v4compatibility-CCth-dXg.ttf",
+      "assets/poppins-devanagari-400-normal-CJDn6rn8.woff2",
+      "assets/poppins-devanagari-400-normal-CqVvlrh5.woff",
+      "assets/poppins-latin-ext-400-normal-by3JarPu.woff2",
+      "assets/poppins-latin-ext-400-normal-DaBSavcJ.woff",
+      "assets/poppins-latin-400-normal-cpxAROuN.woff2",
+      "assets/poppins-latin-400-normal-BOb3E3N0.woff",
+      "assets/poppins-devanagari-500-normal-BIdkeU1p.woff2",
+      "assets/poppins-devanagari-500-normal-DMPDjHtT.woff",
+      "assets/poppins-latin-ext-500-normal-CK-6C4Hw.woff2",
+      "assets/poppins-latin-ext-500-normal-CgAe2rWW.woff",
+      "assets/poppins-latin-500-normal-C8OXljZJ.woff2",
+      "assets/poppins-latin-500-normal-DGXqpDMm.woff",
+      "assets/poppins-devanagari-600-normal-STEjXBNN.woff2",
+      "assets/poppins-devanagari-600-normal-ClASKHrr.woff",
+      "assets/poppins-latin-ext-600-normal-CAhIAdZj.woff2",
+      "assets/poppins-latin-ext-600-normal-Df5ffKXP.woff",
+      "assets/poppins-latin-600-normal-zEkxB9Mr.woff2",
+      "assets/poppins-latin-600-normal-BJdTmd5m.woff",
+      "assets/poppins-devanagari-700-normal-O-jipLrW.woff2",
+      "assets/poppins-devanagari-700-normal-fHs-vx92.woff",
+      "assets/poppins-latin-ext-700-normal-cby-RkWa.woff2",
+      "assets/poppins-latin-ext-700-normal-DctTR6Tg.woff",
+      "assets/poppins-latin-700-normal-Qrb0O0WB.woff2",
+      "assets/poppins-latin-700-normal-BVuQR_eA.woff"
+    ]
+  },
+  "resources/admin/pages/DemoPage.vue": {
+    "file": "assets/DemoPage-Cu0kUdiV.js",
+    "name": "DemoPage",
+    "src": "resources/admin/pages/DemoPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/auth/LoginPage.vue": {
+    "file": "assets/LoginPage-BTLucwGh.js",
+    "name": "LoginPage",
+    "src": "resources/admin/pages/auth/LoginPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/auth/PasswordResetPage.vue": {
+    "file": "assets/PasswordResetPage-D7Fz8CE_.js",
+    "name": "PasswordResetPage",
+    "src": "resources/admin/pages/auth/PasswordResetPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/blogs/BlogCategoryPage.vue": {
+    "file": "assets/BlogCategoryPage-HtryGREb.js",
+    "name": "BlogCategoryPage",
+    "src": "resources/admin/pages/blogs/BlogCategoryPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/blogs/BlogForm.vue": {
+    "file": "assets/BlogForm-DNfHYVdg.js",
+    "name": "BlogForm",
+    "src": "resources/admin/pages/blogs/BlogForm.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ],
+    "css": [
+      "assets/BlogForm-e3NLczMl.css"
+    ]
+  },
+  "resources/admin/pages/blogs/BlogPage.vue": {
+    "file": "assets/BlogPage-Dp5TgLqo.js",
+    "name": "BlogPage",
+    "src": "resources/admin/pages/blogs/BlogPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_format-Dx0LrmFw.js",
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/bookings/BookingForm.vue": {
+    "file": "assets/BookingForm-DeUqbqNm.js",
+    "name": "BookingForm",
+    "src": "resources/admin/pages/bookings/BookingForm.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/bookings/BookingPage.vue": {
+    "file": "assets/BookingPage-DeUqbqNm.js",
+    "name": "BookingPage",
+    "src": "resources/admin/pages/bookings/BookingPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/customers/CustomerInquiryPage.vue": {
+    "file": "assets/CustomerInquiryPage-BxZe6u6j.js",
+    "name": "CustomerInquiryPage",
+    "src": "resources/admin/pages/customers/CustomerInquiryPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/customers/CustomerPage.vue": {
+    "file": "assets/CustomerPage-C1FEzSrv.js",
+    "name": "CustomerPage",
+    "src": "resources/admin/pages/customers/CustomerPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/dashboard/DashboardPage.vue": {
+    "file": "assets/DashboardPage-Ddr5urkc.js",
+    "name": "DashboardPage",
+    "src": "resources/admin/pages/dashboard/DashboardPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/finance/InvoicePage.vue": {
+    "file": "assets/InvoicePage-B9nWdxZz.js",
+    "name": "InvoicePage",
+    "src": "resources/admin/pages/finance/InvoicePage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/finance/ReportPage.vue": {
+    "file": "assets/ReportPage-DIw6S7YR.js",
+    "name": "ReportPage",
+    "src": "resources/admin/pages/finance/ReportPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/gallery/GalleryForm.vue": {
+    "file": "assets/GalleryForm-D_6xg_V9.js",
+    "name": "GalleryForm",
+    "src": "resources/admin/pages/gallery/GalleryForm.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/gallery/GalleryPage.vue": {
+    "file": "assets/GalleryPage-DLPXFDOv.js",
+    "name": "GalleryPage",
+    "src": "resources/admin/pages/gallery/GalleryPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ],
+    "css": [
+      "assets/GalleryPage-Pw2r-CpE.css"
+    ]
+  },
+  "resources/admin/pages/packages/PackageCategoryPage.vue": {
+    "file": "assets/PackageCategoryPage-BGjeBE9q.js",
+    "name": "PackageCategoryPage",
+    "src": "resources/admin/pages/packages/PackageCategoryPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "node_modules/axios/index.js",
+      "resources/admin/main.js"
+    ]
+  },
+  "resources/admin/pages/packages/PackageDetailPage.vue": {
+    "file": "assets/PackageDetailPage-DJCFURSc.js",
+    "name": "PackageDetailPage",
+    "src": "resources/admin/pages/packages/PackageDetailPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ],
+    "css": [
+      "assets/PackageDetailPage-1er0saBB.css"
+    ]
+  },
+  "resources/admin/pages/packages/PackageForm.vue": {
+    "file": "assets/PackageForm-C0Xgq6j2.js",
+    "name": "PackageForm",
+    "src": "resources/admin/pages/packages/PackageForm.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ],
+    "dynamicImports": [
+      "resources/admin/pages/packages/modal/DeleteImage.vue"
+    ]
+  },
+  "resources/admin/pages/packages/PackagePage.vue": {
+    "file": "assets/PackagePage-B_hmZ2mg.js",
+    "name": "PackagePage",
+    "src": "resources/admin/pages/packages/PackagePage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_format-Dx0LrmFw.js",
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/packages/modal/DeleteImage.vue": {
+    "file": "assets/DeleteImage-BiQWEXgV.js",
+    "name": "DeleteImage",
+    "src": "resources/admin/pages/packages/modal/DeleteImage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/settings/GeneralSettingPage.vue": {
+    "file": "assets/GeneralSettingPage-BtmB0gJ3.js",
+    "name": "GeneralSettingPage",
+    "src": "resources/admin/pages/settings/GeneralSettingPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/settings/NotificationPage.vue": {
+    "file": "assets/NotificationPage-BvpxuX53.js",
+    "name": "NotificationPage",
+    "src": "resources/admin/pages/settings/NotificationPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/admin/pages/settings/UserManagementPage.vue": {
+    "file": "assets/UserManagementPage-CuW7-FoE.js",
+    "name": "UserManagementPage",
+    "src": "resources/admin/pages/settings/UserManagementPage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/admin/main.js",
+      "node_modules/axios/index.js"
+    ]
+  },
+  "resources/website/js/website.js": {
+    "file": "assets/website-CVM4xejU.js",
+    "name": "website",
+    "src": "resources/website/js/website.js",
+    "isEntry": true,
+    "imports": [
+      "node_modules/axios/index.js"
+    ],
+    "css": [
+      "assets/website-CJ-KzOvo.css"
+    ]
+  },
+  "resources/website/scss/website.scss": {
+    "file": "assets/website-BlG2U-Bt.css",
+    "src": "resources/website/scss/website.scss",
+    "isEntry": true
+  }
+}

@@ -1,0 +1,1 @@
+function o(t){if(!t)return"N/A";const r=new Date(t),n=r.getFullYear(),e=String(r.getMonth()+1).padStart(2,"0"),a=String(r.getDate()).padStart(2,"0");return`${n}/${e}/${a}`}function c(t){return t==null||isNaN(t)?"N/A":new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(t)}export{c as a,o as f};
