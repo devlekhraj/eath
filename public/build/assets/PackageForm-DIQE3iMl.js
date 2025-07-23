@@ -1,1 +1,0 @@
-import{_ as t,j as o,o as r,d as a}from"./main-CZTs9DHq.js";import"./index-DIycyeiE.js";const s={};function n(c,e){return r(),o("div",null,e[0]||(e[0]=[a("p",null,"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repellat, beatae.",-1)]))}const m=t(s,[["render",n]]);export{m as default};
