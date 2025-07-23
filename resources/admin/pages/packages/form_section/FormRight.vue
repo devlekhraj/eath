@@ -205,19 +205,19 @@ async function handleSaved(param) {
     position: absolute;
 }
 
-.top-0 {
-    top: 0;
-}
+// .top-0 {
+//     top: 0;
+// }
 
-.right-0 {
-    right: 0;
-}
+// .right-0 {
+//     right: 0;
+// }
 
-.mt-1 {
-    margin-top: 4px;
-}
+// .mt-1 {
+//     margin-top: 4px;
+// }
 
-.mr-1 {
-    margin-right: 4px;
-}
+// .mr-1 {
+//     margin-right: 4px;
+// }
 </style>

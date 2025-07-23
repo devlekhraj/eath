@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style scoped>
-li {
+/* li {
     margin-bottom: 4px;
-}
+} */
 </style>
