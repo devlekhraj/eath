@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <!-- <div>
             <v-card class="elevation-0">
                 <v-card-title class="d-flex align-center justify-space-between py-4">
@@ -124,7 +124,7 @@
             </v-card>
         </div> -->
         <modal-template ref="globalModal" @saved="handleSaved" @close="handleClose"></modal-template>
-    </v-container>
+    </div>
 </template>
 
 <script setup>
