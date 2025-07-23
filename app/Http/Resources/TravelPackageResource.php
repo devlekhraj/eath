@@ -57,6 +57,22 @@ class TravelPackageResource extends JsonResource
                     'sort_order' => $item->sort_order,
                 ];
             }),
+            'inclusions'            => $this->inclusions->map(function($item){
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'description' => $item->description,
+                    'sort_order' => $item->sort_order,
+                ];
+            }),
+            'exclusions'            => $this->exclusions->map(function($item){
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'description' => $item->description,
+                    'sort_order' => $item->sort_order,
+                ];
+            }),
             'category_ids'        => $this->categories()->pluck('id')
         ];
     }

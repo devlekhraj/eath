@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->integer('sort_order')->default(0);
+            $table->boolean('is_excluded')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

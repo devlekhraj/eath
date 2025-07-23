@@ -97,7 +97,7 @@
 										required</span>
 								</div>
 
-								<v-col cols="12">
+								<!-- <v-col cols="12">
 									<v-textarea v-model="form.terms_conditions" label="Terms & Conditions" rows="3"
 										variant="outlined" auto-grow class="mt-4"
 										:error-messages="errors.terms_conditions" />
@@ -107,7 +107,7 @@
 									<v-textarea v-model="form.cancellation_policy" label="Cancellation Policy" rows="3"
 										variant="outlined" auto-grow class="mt-2"
 										:error-messages="errors.cancellation_policy" />
-								</v-col>
+								</v-col> -->
 
 								<!-- <div>
 									<v-textarea v-model="form.additional_info" label="Additional Info" rows="3"
@@ -213,8 +213,8 @@ export default {
 				end_date: '',
 				is_active: false,
 				is_featured: false,
-				terms_conditions: '',
-				cancellation_policy: '',
+				// terms_conditions: '',
+				// cancellation_policy: '',
 				images: [],
 			},
 			rules: {

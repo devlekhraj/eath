@@ -63,16 +63,16 @@ class TravelPackage extends Model
 
     public function itineraries()
     {
-        return $this->hasMany(PackageItierary::class);
+        return $this->hasMany(PackageItierary::class)->orderBy('sort_order','asc');
     }
 
-    public function exclusions()
-    {
-        return $this->hasMany(PackageExclusion::class);
-    }
 
     public function inclusions()
     {
-        return $this->hasMany(PackageInclusion::class);
+        return $this->hasMany(PackageInclusion::class)->where('is_excluded',false);
+    }
+    public function exclusions()
+    {
+        return $this->hasMany(PackageInclusion::class)->where('is_excluded',true);
     }
 }

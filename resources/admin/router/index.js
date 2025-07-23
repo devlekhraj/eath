@@ -44,6 +44,18 @@ const routes = [
 				},
 			},
 			{
+				path: 'banners',
+				name: 'adminBannerImages',
+				component: () => import('@pages/banners/BannerPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Main Sider',
+					subtitle: 'Home page main banner images',
+				},
+			},
+
+
+			{
 				path: 'blogs',
 				name: 'adminBlogPage',
 				component: () => import('@pages/blogs/BlogPage.vue'),
