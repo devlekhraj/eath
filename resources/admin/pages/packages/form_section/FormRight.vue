@@ -200,9 +200,9 @@ async function handleSaved(param) {
 }
 </script>
 <style lang="scss" scoped>
-.position-absolute {
-    position: absolute;
-}
+// .position-absolute {
+//     position: absolute;
+// }
 
 // .top-0 {
 //     top: 0;

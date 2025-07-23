@@ -174,8 +174,8 @@
 
 				<v-col cols="12" md="5">
 					<div class="mb-4">
-						<FormRight @close="fetchPackage" :travelPackage="travel_package"
-							:travelPackageId="package_id" />
+						<!-- <FormRight @close="fetchPackage" :travelPackage="travel_package"
+							:travelPackageId="package_id" /> -->
 							
 					</div>
 				</v-col>
