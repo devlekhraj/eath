@@ -1,1 +1,0 @@
-import{_ as e,r as t,j as r,o as a}from"./main-qpuE_wfz.js";import"./index-DIycyeiE.js";const o={__name:"FormRight",props:{travelPackage:{type:Object,default:()=>({})},travelPackageId:{type:Number,required:!0}},emits:["close"],setup(c,{emit:s}){return t(null),(_,p)=>(a(),r("div"))}},l=e(o,[["__scopeId","data-v-37a0938d"]]);export{l as default};

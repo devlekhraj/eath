@@ -128,7 +128,7 @@
 
 						</v-card>
 					</div>
-					<div class="mt-4" v-if="package_id">
+					<div class="mt-4">
 						<v-card elevation="0" class="pa-6">
 							<v-card-title class="py-3">
 								<div>
@@ -172,7 +172,7 @@
 					</div>
 				</v-col>
 
-				<v-col cols="12" md="5" v-if="package_id">
+				<v-col cols="12" md="5">
 					<div class="mb-4">
 						<FormRight @close="fetchPackage" :travelPackage="travel_package"
 							:travelPackageId="package_id" />
@@ -250,7 +250,6 @@ export default {
 	},
 	methods: {
 		async handleDelete(imageItem) {
-			console.log('Opening modal with imageItem:', imageItem);
 			const component = (await import('./modal/DeleteImage.vue')).default;
 			this.$refs.globalModal.open({
 				title: 'Delete Image',
@@ -324,7 +323,7 @@ export default {
 				return;
 			}
 
-
+			console.log("Test");
 			this.submitting = true
 			this.errors = {}
 
@@ -349,15 +348,6 @@ export default {
 
 				const resp = await axios.post('/admin/travel-packages', this.form);
 				this.showSuccess("Package created");
-
-				this.package_id = resp.data.id
-				this.fetchPackage();
-				this.$router.push({
-					name:'adminPackageForm',
-					query:{
-						id: this.package_id
-					}
-				})
 				if (this.package_id) return;
 				// Clear form
 				Object.assign(this.form, {
