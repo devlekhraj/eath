@@ -1,0 +1,1 @@
+import{_ as o,j as t,o as l,d as r}from"./main-qpuE_wfz.js";import"./index-DIycyeiE.js";const n={};function s(a,e){return l(),t("div",null,e[0]||(e[0]=[r("p",null,"galery form",-1),r("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita, cum.",-1)]))}const m=o(n,[["render",s]]);export{m as default};

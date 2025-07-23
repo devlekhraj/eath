@@ -174,9 +174,9 @@
 
 				<v-col cols="12" md="5">
 					<div class="mb-4">
-						<!-- <FormRight @close="fetchPackage" :travelPackage="travel_package"
-							:travelPackageId="package_id" /> -->
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, expedita?</p>
+						<FormRight @close="fetchPackage" :travelPackage="travel_package"
+							:travelPackageId="package_id" />
+						<!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, expedita?</p> -->
 					</div>
 				</v-col>
 			</v-row>

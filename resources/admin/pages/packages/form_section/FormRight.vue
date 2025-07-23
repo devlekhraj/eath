@@ -123,7 +123,7 @@
     
             </v-card>
         </div> -->
-        <modal-template ref="globalModal" @saved="handleSaved" @close="handleClose"></modal-template>
+        <!-- <modal-template ref="globalModal" @saved="handleSaved" @close="handleClose"></modal-template> -->
     </div>
 </template>
 
