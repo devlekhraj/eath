@@ -1,4 +1,4 @@
-<<template>
+<template>
     <v-container>
         <v-data-table :headers="headers" :items="travelPackages" :items-per-page="20" :sort-by="['name']"
             :sort-desc="[false]">

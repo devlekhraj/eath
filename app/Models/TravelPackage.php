@@ -69,10 +69,10 @@ class TravelPackage extends Model
 
     public function inclusions()
     {
-        return $this->hasMany(PackageInclusion::class)->where('is_excluded',false);
+        return $this->hasMany(PackageInclusion::class)->where('is_excluded',false)->orderBy('sort_order','asc');
     }
     public function exclusions()
     {
-        return $this->hasMany(PackageInclusion::class)->where('is_excluded',true);
+        return $this->hasMany(PackageInclusion::class)->where('is_excluded',true)->orderBy('sort_order','asc');
     }
 }

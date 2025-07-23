@@ -30,19 +30,23 @@
         <v-card-actions class="justify-space-between">
             <div>
                 <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-                <v-btn v-if="props.item?.id" variant="text" class="ml-4" color="error" :loading="loading_delete" :disabled="loading_delete" @click="handleDelete">Delete</v-btn>
+                <v-btn v-if="props.item?.id" variant="text" class="ml-4" color="error" :loading="loading_delete"
+                    :disabled="loading_delete" @click="handleDelete">Delete</v-btn>
             </div>
             <div>
-                <v-btn color="primary"  :loading="loading" :disabled="loading"
-                    @click="submitForm">Save</v-btn>
+                <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn>
             </div>
         </v-card-actions>
     </v-card>
 </template>
 
 <script setup>
+
 import { ref, reactive, onMounted } from 'vue'
 import { useTravelPackageStore } from '@/stores/travel_package' // adjust path as needed
+import { useSnackbar } from '@/composables/snackbar'
+
+const { showSuccess, showError } = useSnackbar()
 
 const travelPackageStore = useTravelPackageStore()
 
@@ -101,10 +105,12 @@ async function handleDelete(item) {
 
         // Submit logic here, for example:
         const resp = await axios.delete(`/admin/package-itineraries/${props.item.id}/delete`)
+        showSuccess("Itinerary Deleted Successfully");
         console.log(resp.data);
         emit('close')
 
     } catch (err) {
+        showSuccess("Failed to Delete");
         console.error('Failed to save:', err)
     } finally {
         loading_delete.value = false
@@ -127,10 +133,12 @@ async function submitForm() {
         // Submit logic here, for example:
         const resp = await axios.post(`/admin/travel-packages/${props.travelPackageId}/itinerary`, form)
         console.log(resp.data);
+        showSuccess("Success");
         emit('close')
 
     } catch (err) {
         console.error('Failed to save:', err)
+        showError("Failed");
     } finally {
         loading.value = false
     }

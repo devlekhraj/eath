@@ -25,13 +25,16 @@ class PackageInclusionController extends Controller
         ]);
 
         $validated["sort_order"] = $validated["sort_order"] ?? 0;
+        $validated["is_excluded"] = $validated["is_excluded"] == true?1: 0;
 
+        // dd($validated);
         // Retrieve the travel package
         $package = TravelPackage::findOrFail($id);
 
         // If 'id' is present, update the existing itinerary
         if (!empty($validated['id'])) {
-            $inclusion = $package->inclusions()->findOrFail($validated['id']);
+
+            $inclusion = PackageInclusion::find($validated['id']);
             $inclusion->update($validated);
         } else {
             // Remove unnecessary travel_package_id before creation

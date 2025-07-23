@@ -43,34 +43,37 @@ class TravelPackageResource extends JsonResource
             // Categories relationship as nested resources or just array
             'categories'        => PackageCategoryResource::collection($this->whenLoaded('categories')),
             'category_ids'        => $this->categories()->pluck('id'),
-            'images'            => $this->images->map(function($image){
+            'images'            => $this->images->map(function ($image) {
                 return [
                     'id' => $image->id,
                     'url' => $image->url,
                 ];
             }),
-            'itineraries'            => $this->itineraries->map(function($item){
+            'itineraries'            => $this->itineraries->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
                     'description' => $item->description,
                     'sort_order' => $item->sort_order,
+
                 ];
             }),
-            'inclusions'            => $this->inclusions->map(function($item){
+            'inclusions'            => $this->inclusions->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
                     'description' => $item->description,
                     'sort_order' => $item->sort_order,
+                    "is_excluded" => $item->is_excluded
                 ];
             }),
-            'exclusions'            => $this->exclusions->map(function($item){
+            'exclusions'            => $this->exclusions->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
                     'description' => $item->description,
                     'sort_order' => $item->sort_order,
+                    "is_excluded" => $item->is_excluded
                 ];
             }),
             'category_ids'        => $this->categories()->pluck('id')

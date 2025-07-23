@@ -119,7 +119,7 @@
 								<div class="mt-6 text-center">
 									<v-btn size="large" color="primary" rounded :loading="submitting"
 										:disabled="submitting" @click="submitPackage">
-										<v-icon left>mdi-check</v-icon> {{ package_id ? 'Update Package' :'Create Package' }}
+										<v-icon left>mdi-check</v-icon> {{ package_id ? 'Update Package' : 'Create Package' }}
 									</v-btn>
 								</div>
 							</v-card-text>
@@ -185,6 +185,7 @@
 </template>
 
 <script>
+import { useSnackbar } from '@/composables/snackbar'
 import { useRoute } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
 export default {
@@ -238,6 +239,15 @@ export default {
 	components: {
 		FormRight: defineAsyncComponent(() => import('./form_section/FormRight.vue'))
 	},
+	setup() {
+		const { showSuccess, showError } = useSnackbar()
+
+		// Return methods to be used in Options API
+		return {
+			showSuccess,
+			showError,
+		}
+	},
 	methods: {
 		async handleDelete(imageItem) {
 			console.log('Opening modal with imageItem:', imageItem);
@@ -267,11 +277,13 @@ export default {
 						url: response.url,
 					});
 					if (response && response.url) {
+						this.showSuccess("Image uploaded");
 						return response.url; // must return URL string here!
 					}
 					return Promise.reject('Upload failed');
 				})
 				.catch(err => {
+					this.showError(err?.response?.data?.message || 'An error occurred')
 					console.error('Upload error:', err);
 					return Promise.reject(err);
 				});
@@ -336,7 +348,7 @@ export default {
 				}
 
 				const resp = await axios.post('/admin/travel-packages', this.form);
-
+				this.showSuccess("Package created");
 				if (this.package_id) return;
 				// Clear form
 				Object.assign(this.form, {

@@ -3,8 +3,7 @@
         <v-card class="elevation-0">
             <v-card-title class="d-flex align-center justify-space-between py-4">
                 <h2 class="font-medium">Itineraries</h2>
-                <v-btn color="primary" size="large" rounded @click="handleOpen()"><v-icon>mdi-plus</v-icon> Add
-                    Itinerary</v-btn>
+                <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()"><v-icon>mdi-plus</v-icon></v-btn>
             </v-card-title>
             <v-divider></v-divider>
             <v-expansion-panels multiple elevation="1">
@@ -33,15 +32,14 @@
         <v-card class="elevation-0">
             <v-card-title class="d-flex align-center justify-space-between py-4">
                 <h2 class="font-medium">Included Items</h2>
-                <v-btn color="primary" size="large" rounded @click="editItem({}, false)">
-                    <v-icon start>mdi-plus</v-icon>
-                    Add Item
+                <v-btn color="primary" size="small" icon @click="editItem({}, false)">
+                    <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </v-card-title>
 
 
             <v-card-text>
-                <div>
+                <div v-if="travelPackage?.inclusions?.length">
                     <v-list density="compact" class="mb-4">
                         <v-list-item v-for="(item, index) in travelPackage?.inclusions" :key="'inc-' + item.id"
                             class="py-4 position-relative border mb-4 rounded">
@@ -71,6 +69,9 @@
 
 
                 </div>
+                <div v-else class="pl-4">
+                    <p>Items not added yet</p>
+                </div>
             </v-card-text>
 
         </v-card>
@@ -79,15 +80,13 @@
         <v-card class="elevation-0">
             <v-card-title class="d-flex align-center justify-space-between py-4">
                 <h2 class="font-medium">Excluded Items</h2>
-                <v-btn color="primary" size="large" rounded @click="editItem({}, true)">
-                    <v-icon start>mdi-plus</v-icon>
-                    Add Item
-                </v-btn>
+                <v-btn color="primary" size="small" icon @click="editItem({}, true)">
+                    <v-icon>mdi-plus</v-icon></v-btn>
             </v-card-title>
 
 
             <v-card-text>
-                <div>
+                <div v-if="travelPackage?.exclusions?.length">
                     <v-list density="compact" class="mb-4">
                         <v-list-item v-for="(item, index) in travelPackage?.exclusions" :key="'inc-' + item.id"
                             class="py-4 position-relative border mb-4 rounded">
@@ -97,10 +96,6 @@
                                     @click="editItem(item, true)">
                                     <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
-                                <!-- <v-btn icon size="x-small" color="error" variant="tonal" class="ml-2"
-                                    @click="deleteItem(item)">
-                                    <v-icon>mdi-delete</v-icon>
-                                </v-btn> -->
                             </div>
 
                             <v-list-item-content>
@@ -119,7 +114,9 @@
                         </v-list-item>
                     </v-list>
 
-
+                </div>
+                <div v-else class="pl-4">
+                    <p>Items not added yet</p>
                 </div>
             </v-card-text>
 

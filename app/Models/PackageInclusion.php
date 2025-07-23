@@ -10,4 +10,7 @@ class PackageInclusion extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+     protected $casts = [
+        'is_excluded' => 'boolean',
+    ];
 }
