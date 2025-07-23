@@ -29,7 +29,7 @@
                 </v-expansion-panels>
             </v-card>
         </div>
-        <div class="mt-4">
+        <!-- <div class="mt-4">
             <v-card class="elevation-0">
                 <v-card-title class="d-flex align-center justify-space-between py-4">
                     <h2 class="font-medium">Included Items</h2>
@@ -44,7 +44,7 @@
                         <v-list density="compact" class="mb-4">
                             <v-list-item v-for="(item, index) in travelPackage?.inclusions" :key="'inc-' + item.id"
                                 class="py-4 position-relative border mb-4 rounded">
-                                <!-- Top right action buttons -->
+                               
                                 <div class="position-absolute top-0 right-0 mt-1 mr-1 d-flex">
                                     <v-btn icon size="x-small" variant="tonal" color="primary"
                                         @click="editItem(item, false)">
@@ -91,7 +91,7 @@
                         <v-list density="compact" class="mb-4">
                             <v-list-item v-for="(item, index) in travelPackage?.exclusions" :key="'inc-' + item.id"
                                 class="py-4 position-relative border mb-4 rounded">
-                                <!-- Top right action buttons -->
+                  
                                 <div class="position-absolute top-0 right-0 mt-1 mr-1 d-flex">
                                     <v-btn icon size="x-small" variant="tonal" color="primary"
                                         @click="editItem(item, true)">
@@ -122,7 +122,7 @@
                 </v-card-text>
     
             </v-card>
-        </div>
+        </div> -->
         <modal-template ref="globalModal" @saved="handleSaved" @close="handleClose"></modal-template>
     </v-container>
 </template>
