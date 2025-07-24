@@ -110,7 +110,7 @@
 
 						</v-card>
 					</div>
-					<div class="mt-4" v-if="package_id">
+					<!-- <div class="mt-4" v-if="package_id">
 						<v-card elevation="0" class="pa-6">
 							<v-card-title class="py-3">
 								<div>
@@ -134,7 +134,7 @@
 														<img :src="image.url" alt="Image"
 															style="width: 100%; object-fit: contain;">
 
-														<!-- Delete icon -->
+										
 														<v-icon color="red" small class="position-absolute"
 															style="top: 8px; right: 8px; cursor: pointer; padding: 2px;"
 															@click="handleDelete(image)" title="Delete Image">
@@ -151,7 +151,7 @@
 								</v-row>
 							</v-card-text>
 						</v-card>
-					</div>
+					</div> -->
 				</v-col>
 
 				<v-col cols="12" md="5" v-if="package_id">
