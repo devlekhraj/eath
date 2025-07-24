@@ -1,45 +1,45 @@
 <template>
-    <div>
-        <v-card flat>
-            <v-card-title>
-                <span class="font-medium">Itinerary Form</span>
-            </v-card-title>
-    
-            <v-divider></v-divider>
-    
-            <v-card-text>
-                <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
-                    <v-row>
-                        <v-col cols="12" md="12">
-                            <v-text-field v-model="form.title" label="Title" variant="outlined" density="comfortable"
-                                placeholder="Day 1" :rules="[rules.required]" required />
-                        </v-col>
-    
-                        <v-col cols="12" md="12">
-                            <RichTextEditor v-model="form.description" />
-                            <span v-if="descriptionError" class="text-error text-caption">Content is required</span>
-                        </v-col>
-    
-                        <v-col cols="6" md="6">
-                            <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" variant="outlined"
-                                density="comfortable" />
-                        </v-col>
-                    </v-row>
-                </v-form>
-            </v-card-text>
-    
-            <v-card-actions class="justify-space-between">
-                <div>
-                    <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-                    <v-btn v-if="props.item?.id" variant="text" class="ml-4" color="error" :loading="loading_delete"
-                        :disabled="loading_delete" @click="handleDelete">Delete</v-btn>
-                </div>
-                <div>
-                    <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn>
-                </div>
-            </v-card-actions>
-        </v-card>
-    </div>
+    <v-card flat>
+        <v-card-title>
+            <span class="font-medium">Itinerary Form</span>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-card-text>
+            <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
+                <v-row>
+                    <v-col cols="12" md="8">
+                        <v-text-field v-model="form.title" label="Title" variant="outlined" density="comfortable"
+                            placeholder="Day 1" :rules="[rules.required]" required />
+                    </v-col>
+                    <v-col cols="12" md="4">
+                        <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" variant="outlined"
+                            density="comfortable" />
+                    </v-col>
+
+                    <v-col cols="12" md="12">
+                        <RichTextEditor v-model="form.description" />
+                        <span v-if="descriptionError" class="text-error text-caption">Content is required</span>
+                    </v-col>
+
+
+                </v-row>
+            </v-form>
+        </v-card-text>
+
+        <v-divider></v-divider>
+        <v-card-actions class="justify-space-between">
+            <div>
+                <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
+                <v-btn v-if="props.item?.id" variant="text" class="ml-4" color="error" :loading="loading_delete"
+                    :disabled="loading_delete" @click="handleDelete">Delete</v-btn>
+            </div>
+            <div>
+                <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn>
+            </div>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <script setup>

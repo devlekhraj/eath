@@ -103,7 +103,7 @@ const menuGroups = ref([
 <template>
 	<v-app>
 		<v-navigation-drawer v-model="drawer" app :permanent="$vuetify.display.mdAndUp" temporary class="border-0">
-			<v-list dense nav>
+			<v-list dense nav id="main-nav">
 				<template v-for="group in menuGroups" :key="group.groupName">
 					<v-list-subheader class="text-uppercase group-title mb-0 pb-0">{{
 						group.groupName }}</v-list-subheader>
