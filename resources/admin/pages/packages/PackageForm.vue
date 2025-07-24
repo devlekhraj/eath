@@ -156,7 +156,8 @@
 
 				<v-col cols="12" md="5" v-if="package_id">
 					<div class="mb-4">
-						<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis, maxime?</p>
+						<FormRight @close="fetchPackage" :travelPackage="travel_package"
+							:travelPackageId="package_id" />
 					</div>
 				</v-col>
 			</v-row>
