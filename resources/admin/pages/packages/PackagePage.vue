@@ -1,6 +1,8 @@
 <template>
     <v-container>
-        <v-data-table :headers="headers" :items="filteredItems" :items-per-page="20" :sort-by="['name']"
+        <v-data-table :headers="headers" :items="filteredItems" 
+        :loading="fetching_data"
+        :items-per-page="20" :sort-by="['name']"
             :sort-desc="[false]">
             <!-- Top slot: search box left, add button right -->
             <template #top>
@@ -140,11 +142,17 @@ const filteredItems = computed(() => {
     )
 })
 
+
+const fetching_data  = ref(false);
+
 async function fetchPackages() {
     try {
+        fetching_data.value = true;
         const resp = await axios.get('admin/travel-packages')
+        fetching_data.value = false;
         travelPackages.value = resp.data
     } catch (error) {
+        fetching_data.value = false;
         console.error('Failed to fetch travel packages', error)
     }
 }

@@ -11,12 +11,12 @@
                 <v-row>
                     <v-col cols="12">
                         <v-text-field v-model="form.name" label="Package Name" density="comfortable" variant="outlined"
-                            :rules="[rules.required]" />
+                            :rules="[rules.required]" :error-messages="serverErrors.name" />
                     </v-col>
 
                     <v-col cols="12">
                         <v-text-field v-model="form.slug" label="Slug" density="comfortable" variant="outlined"
-                            :rules="[rules.required, rules.slug]"
+                            :rules="[rules.required, rules.slug]" :error-messages="serverErrors.slug"
                             hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint
                             @input="onSlugInput" />
                     </v-col>
@@ -38,21 +38,23 @@ import { useSnackbar } from '@/composables/snackbar'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const loading = ref(false);
-
-const emit = defineEmits(['close', 'saved'])
+const loading = ref(false)
 const formRef = ref(null)
+const emit = defineEmits(['close', 'saved'])
 
 const form = reactive({
     name: '',
     slug: '',
 })
 
+const serverErrors = reactive({
+    name: null,
+    slug: null,
+})
+
 const slugEdited = ref(false)
 
 const { showSuccess, showError } = useSnackbar()
-
-
 
 function slugify(text) {
     return text
@@ -64,7 +66,6 @@ function slugify(text) {
         .replace(/^-+|-+$/g, '')       // Trim start/end -
 }
 
-// Auto-update slug only if user hasn't edited it manually
 watch(() => form.name, (newName) => {
     if (!slugEdited.value) {
         form.slug = slugify(newName)
@@ -75,10 +76,9 @@ function onSlugInput() {
     slugEdited.value = true
 }
 
-
 const rules = {
     required: v => !!v || 'This field is required',
-    slug: (v) =>
+    slug: v =>
         !v || /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(v) ||
         'Slug must contain only lowercase letters, numbers, and hyphens',
 }
@@ -86,10 +86,13 @@ const rules = {
 function handleCancel() {
     formRef.value?.reset()
     slugEdited.value = false
+    Object.keys(serverErrors).forEach(key => (serverErrors[key] = null))
     emit('close')
 }
 
 async function submitForm() {
+    Object.keys(serverErrors).forEach(key => (serverErrors[key] = null))
+
     const { valid } = await formRef.value.validate()
     if (!valid) return
     await handleSubmit()
@@ -97,16 +100,22 @@ async function submitForm() {
 
 async function handleSubmit() {
     try {
-        loading.value = true;
+        loading.value = true
         const resp = await axios.post('/admin/travel-packages', form)
-        loading.value = false;
-        showSuccess(resp.data?.message || 'Blog created successfully')
-        // emit('close')
+        showSuccess(resp.data?.message || 'Package created successfully')
         router.push({ name: 'adminPackageForm', query: { id: resp.data.id } })
     } catch (error) {
-        loading.value = false;
-        showError(error?.response?.data?.message || 'An error occurred')
-        console.error('Blog creation failed', error)
+        if (error.response?.status === 422) {
+            const errors = error.response.data?.errors || {}
+            Object.keys(errors).forEach(key => {
+                serverErrors[key] = errors[key]
+            })
+        } else {
+            showError(error?.response?.data?.message || 'An error occurred')
+        }
+        console.error('Package creation failed', error)
+    } finally {
+        loading.value = false
     }
 }
 </script>

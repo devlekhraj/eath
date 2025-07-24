@@ -40,7 +40,7 @@
 
         <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" @click="submitForm">Save</v-btn>
+            <v-btn color="primary" :loading="loading" @click="submitForm">Save</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -118,15 +118,20 @@ async function submitForm() {
     handleSubmit()
 }
 
+const loading = ref(false)
+
 async function handleSubmit() {
     try {
         // Convert sort_order to integer, default to 0 if empty
         form.sort_order = parseInt(form.sort_order) || 0
 
+        loading.value = true;
         const resp = await axios.post('admin/blog-categories', form)
+        loading.value = false;
         showSuccess(resp.message || 'Success')
         emit('close')
     } catch (error) {
+        loading.value = false;
         showError(error?.response?.data?.message || 'An error occurred')
         console.error('Category creation failed', error)
     }

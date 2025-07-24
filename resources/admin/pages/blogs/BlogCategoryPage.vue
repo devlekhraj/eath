@@ -6,7 +6,9 @@
       </v-btn>
     </div> -->
 
-    <v-data-table :headers="headers" :items="filteredItems" :items-per-page="20" :sort-by="['name']" :sort-desc="[false]">
+    <v-data-table :headers="headers" 
+    :loading="fetching_data"
+    :items="filteredItems" :items-per-page="20" :sort-by="['name']" :sort-desc="[false]">
 
 
       <template #top>
@@ -153,10 +155,12 @@ function handleDelete(item = {}) {
   });
 }
 
+const fetching_data = ref(false);
 
 // Fetch categories and compute hierarchy
 async function fetchCategories() {
   try {
+    fetching_data.value = true;
     const resp = await axios.get('admin/blog-categories');
     categories.value = resp.data.map((item) => {
       return {
@@ -166,7 +170,9 @@ async function fetchCategories() {
           : item.name_en,
       };
     });
-  } catch (error) {
+     fetching_data.value = false;
+    } catch (error) {
+    fetching_data.value = false;
     console.error('Failed to load categories', error);
   }
 }

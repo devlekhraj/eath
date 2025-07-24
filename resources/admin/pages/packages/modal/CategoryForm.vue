@@ -10,23 +10,50 @@
             <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation>
                 <v-row>
                     <v-col cols="12" md="12">
-                        <v-text-field v-model="form.name" label="Category Name" variant="outlined" density="comfortable"
-                            :rules="[rules.required]" required />
+                        <v-text-field
+                            v-model="form.name"
+                            label="Category Name"
+                            variant="outlined"
+                            density="comfortable"
+                            :rules="[rules.required]"
+                            :error-messages="serverErrors.name"
+                            required
+                        />
                     </v-col>
 
                     <v-col cols="12" md="12">
-                        <v-select v-model="form.parent_id" :items="parentOptions" item-title="name" item-value="id"
-                            label="Parent Category" variant="outlined" density="comfortable" clearable />
+                        <v-select
+                            v-model="form.parent_id"
+                            :items="parentOptions"
+                            item-title="name"
+                            item-value="id"
+                            label="Parent Category"
+                            variant="outlined"
+                            density="comfortable"
+                            clearable
+                            :error-messages="serverErrors.parent_id"
+                        />
                     </v-col>
 
                     <v-col cols="12" md="12">
-                        <v-textarea v-model="form.description" label="Description" variant="outlined"
-                            density="comfortable" />
+                        <v-textarea
+                            v-model="form.description"
+                            label="Description"
+                            variant="outlined"
+                            density="comfortable"
+                            :error-messages="serverErrors.description"
+                        />
                     </v-col>
 
                     <v-col cols="6" md="6">
-                        <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" variant="outlined"
-                            density="comfortable" />
+                        <v-text-field
+                            v-model="form.sort_order"
+                            label="Sequence Number"
+                            type="number"
+                            variant="outlined"
+                            density="comfortable"
+                            :error-messages="serverErrors.sort_order"
+                        />
                     </v-col>
 
                     <v-col cols="6" md="6">
@@ -52,7 +79,7 @@ import { useSnackbar } from '@/composables/snackbar'
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
 const formRef = ref(null)
-let loading = ref(false);
+const loading = ref(false)
 
 const form = reactive({
     name: '',
@@ -63,6 +90,7 @@ const form = reactive({
 })
 
 const parentOptions = ref([])
+const serverErrors = reactive({})
 
 const rules = {
     required: v => !!v || 'This field is required',
@@ -73,17 +101,12 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-});
-
-
-
-
+})
 
 onMounted(() => {
-    fetchParentCategories();
+    fetchParentCategories()
 
     if (props.item?.id) {
-        console.log("Edit mode");
         Object.assign(form, {
             id: props.item.id,
             name: props.item.name || '',
@@ -91,9 +114,7 @@ onMounted(() => {
             description: props.item.description || '',
             is_active: props.item.is_active ?? true,
             sort_order: props.item.sort_order || 0,
-        });
-    } else {
-        console.log("Add mode");
+        })
     }
 })
 
@@ -112,28 +133,35 @@ function handleCancel() {
 }
 
 async function submitForm() {
+    // Clear previous server errors
+    Object.keys(serverErrors).forEach(key => (serverErrors[key] = null))
+
     const { valid } = await formRef.value.validate()
     if (!valid) return
+
     handleSubmit()
 }
 
 async function handleSubmit() {
     try {
-
         form.sort_order = parseInt(form.sort_order) || 0
 
-        loading.value = true; // ✅ correct way
-        const resp = await axios.post('admin/package-categories', form);
-        showSuccess(resp.message || "Category created successfully");
+        loading.value = true
+        const resp = await axios.post('admin/package-categories', form)
+
+        showSuccess(resp.message || 'Category created successfully')
         emit('close')
     } catch (error) {
-        showError(error?.response?.data?.message || 'Failed to update status');
+        if (error.response?.status === 422) {
+            Object.assign(serverErrors, error.response.data.errors || {})
+        } else {
+            showError(error?.response?.data?.message || 'Failed to update status')
+        }
         console.error('Category creation failed', error)
     } finally {
-        loading.value = false; // ✅ always stop loading, even if error
+        loading.value = false
     }
 }
-
 </script>
 
 <style scoped></style>

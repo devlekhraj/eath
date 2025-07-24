@@ -1,6 +1,8 @@
 <template>
     <v-container>
-        <v-data-table :headers="headers" :items="filteredItems" :items-per-page="20" :sort-by="['name']"
+        <v-data-table :headers="headers" 
+        :loading="fetching_data"
+        :items="filteredItems" :items-per-page="20" :sort-by="['name']"
             :sort-desc="[false]">
 
             <template #top>
@@ -35,9 +37,16 @@
 
             <template #item.title="{ item }">
                 <div style="min-width: max-content;">
-                    <span class="text-primary text-capitalize" :title="item.title">
-                        {{ item.title }}
-                    </span>
+                    <div class="d-flex align-center">
+                        <div style="height: 50px; width: 50px;">
+                            <v-img :src="item.banner_url" height="50" width="50" contain></v-img>
+                        </div>
+                        <div class="ml-4">
+                            <span class="text-primary text-capitalize" :title="item.title">
+                                {{ item.title }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </template>
 
@@ -138,9 +147,19 @@ function addBlog(item = {}) {
     });
 }
 
+const fetching_data = ref(false);
+
 const fetchBlogs = async () => {
-    const resp = await axios.get('admin/blogs')
-    blogList.value = resp.data
+    try {
+        fetching_data.value = true;
+        const resp = await axios.get('admin/blogs')
+        fetching_data.value = false;
+        blogList.value = resp.data
+        
+    } catch (error) {
+        console.log(error);
+        fetching_data.value = false;    
+    }
 }
 
 const deleteItem = (item) => {
