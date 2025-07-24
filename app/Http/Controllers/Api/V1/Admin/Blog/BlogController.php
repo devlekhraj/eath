@@ -18,11 +18,11 @@ class BlogController extends Controller
     public function index()
     {
         // Logic to retrieve travel packages
-        $packages = Blog::all();
+        $blogs = Blog::orderBy('created_at','desc')->get();
 
         return response()->json([
             'success' => true,
-            'data' => $packages
+            'data' => BlogResource::collection($blogs)
         ], 200);
     }
     public function show(Request $request, $id)
@@ -46,14 +46,14 @@ class BlogController extends Controller
         $rules = [
             'id'                => 'nullable|exists:blogs,id',
             'title'             => 'required|string|max:255',
-            'slug'              => [
-                'required',
-                'string',
-                'max:255',
-                $isUpdate
-                    ? Rule::unique('blogs', 'slug')->ignore($request->id)
-                    : Rule::unique('blogs', 'slug'),
-            ],
+            // 'slug'              => [
+            //     'required',
+            //     'string',
+            //     'max:255',
+            //     $isUpdate
+            //         ? Rule::unique('blogs', 'slug')->ignore($request->id)
+            //         : Rule::unique('blogs', 'slug'),
+            // ],
             'sub_title'         => 'nullable|string|max:255',
             'content'           => 'required|string',
             'cover_image'       => 'nullable|string',

@@ -17,6 +17,7 @@ class BlogResource extends JsonResource
             'banner_url'     => $this->banner_url,
             'author'          => $this->author,  // can be a relationship or string depending on your model
             'is_published'    => (bool) $this->is_published,
+            'published_at'    => $this->published_at,
             'is_active'       => (bool) $this->is_active,
             'meta_title'      => $this->meta_title,
             'meta_description' => $this->meta_description,

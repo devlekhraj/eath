@@ -11,7 +11,7 @@
 
 						<!-- Slug -->
 						<v-text-field v-model="form.slug" label="Slug" density="comfortable" variant="outlined"
-							:rules="[rules.required, rules.slug]" class="mb-4"
+							class="mb-4"
 							hint="URL-friendly string with lowercase letters, numbers, and hyphens"
 							persistent-hint></v-text-field>
 

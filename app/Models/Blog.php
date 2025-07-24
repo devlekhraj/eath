@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,6 +39,26 @@ class Blog extends Model
         'deleted_at',
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($blog) {
+            if (empty($blog->slug) && !empty($blog->title)) {
+                $slug = Str::slug($blog->title);
+
+                // Ensure uniqueness if needed (optional but recommended)
+                $originalSlug = $slug;
+                $count = 1;
+
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = "{$originalSlug}-{$count}";
+                    $count++;
+                }
+
+                $blog->slug = $slug;
+            }
+        });
+    }
+    
     public function getBannerUrlAttribute(): string
     {
         $galleryImage = Gallery::where('filename', $this->cover_image)->first();
