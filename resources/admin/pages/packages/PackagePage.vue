@@ -112,11 +112,9 @@ async function toggleActive(item) {
             is_active: item.is_active
         });
         console.log({resp});
-        this.$toast?.success?.('Status updated successfully'); // Optional toast
     } catch (error) {
         item.is_active = !item.is_active; // Revert back if failed
         console.error('Failed to update status:', error);
-        this.$toast?.error?.('Failed to update status');
     }
 }
 
