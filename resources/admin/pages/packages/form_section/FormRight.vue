@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <v-card class="elevation-0">
+            <!-- <v-card class="elevation-0">
                 <v-card-title class="d-flex align-center justify-space-between py-4">
                     <h2 class="font-medium">Itineraries</h2>
                     <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()"><v-icon>mdi-plus</v-icon></v-btn>
@@ -27,7 +27,7 @@
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
-            </v-card>
+            </v-card> -->
         </div>
         <div v-if="travelPackageId">
             <div class="mt-4">

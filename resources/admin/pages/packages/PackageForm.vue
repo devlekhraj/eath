@@ -97,24 +97,6 @@
 										required</span>
 								</div>
 
-								<!-- <v-col cols="12">
-									<v-textarea v-model="form.terms_conditions" label="Terms & Conditions" rows="3"
-										variant="outlined" auto-grow class="mt-4"
-										:error-messages="errors.terms_conditions" />
-								</v-col>
-
-								<v-col cols="12">
-									<v-textarea v-model="form.cancellation_policy" label="Cancellation Policy" rows="3"
-										variant="outlined" auto-grow class="mt-2"
-										:error-messages="errors.cancellation_policy" />
-								</v-col> -->
-
-								<!-- <div>
-									<v-textarea v-model="form.additional_info" label="Additional Info" rows="3"
-										variant="outlined" auto-grow class="mt-4" :error-messages="errors.additional_info" />
-								</div> -->
-
-
 
 								<div class="mt-6 text-center">
 									<v-btn size="large" color="primary" rounded :loading="submitting"
