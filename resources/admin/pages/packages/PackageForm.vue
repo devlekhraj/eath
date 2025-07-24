@@ -155,10 +155,10 @@
 				</v-col>
 
 				<v-col cols="12" md="5" v-if="package_id">
-					<div class="mb-4">
+					<!-- <div class="mb-4">
 						<FormRight @close="fetchPackage" :travelPackage="travel_package"
 							:travelPackageId="package_id" />
-					</div>
+					</div> -->
 				</v-col>
 			</v-row>
 		</v-form>
