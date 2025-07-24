@@ -25,7 +25,7 @@
                     </v-col>
 
                     <v-col cols="6" md="6">
-                        <v-text-field v-model="form.seq_no" label="Sequence Number" type="number" variant="outlined"
+                        <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" variant="outlined"
                             density="comfortable" />
                     </v-col>
 
@@ -59,7 +59,7 @@ const form = reactive({
     parent_id: null,
     description: '',
     is_active: false,
-    seq_no: null,
+    sort_order: 0,
 })
 
 const parentOptions = ref([])
@@ -90,7 +90,7 @@ onMounted(() => {
             parent_id: props.item.parent_id || null,
             description: props.item.description || '',
             is_active: props.item.is_active ?? true,
-            seq_no: props.item.seq_no || null,
+            sort_order: props.item.sort_order || 0,
         });
     } else {
         console.log("Add mode");
@@ -119,6 +119,9 @@ async function submitForm() {
 
 async function handleSubmit() {
     try {
+
+        form.sort_order = parseInt(form.sort_order) || 0
+
         loading.value = true; // ✅ correct way
         const resp = await axios.post('admin/package-categories', form);
         showSuccess(resp.message || "Category created successfully");

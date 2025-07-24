@@ -101,6 +101,8 @@ const headers = [
 	{ title: 'S.N.', key: 'sn', sortable: false },
 	{ title: 'Category Name', key: 'name', sortable: false },
 	{ title: 'Hierarchy', key: 'hierarchy', sortable: false },
+	{ title: 'URL Slug', key: 'slug', sortable: false },
+	{ title: 'Seq#', key: 'sort_order', sortable: false },
 	{ title: 'Active', key: 'is_active', sortable: false },
 	{ title: 'Action', key: 'actions', sortable: false },
 ];

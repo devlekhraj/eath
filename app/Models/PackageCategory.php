@@ -15,6 +15,7 @@ class PackageCategory extends Model
         'name',
         'slug',
         'is_active',
+        'sort_order',
         'description',
     ];
 

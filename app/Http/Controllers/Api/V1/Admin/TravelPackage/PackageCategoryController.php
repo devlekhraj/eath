@@ -17,15 +17,16 @@ class PackageCategoryController extends Controller
     public function saveCategory(Request $request)
     {
         $request->validate([
-            'name'        => 'required|string|max:255',
+            'name'        => 'required|string|max:255|unique:package_categories,name,' . $request->id,
             'description' => 'nullable|string',
             'parent_id'   => 'nullable|exists:package_categories,id',
-            'seq_no' => 'nullable|integer',
+            'sort_order'  => 'nullable|integer',
             'id'          => 'nullable|exists:package_categories,id',
-            'is_active' => 'nullable|boolean',
+            'is_active'   => 'nullable|boolean',
         ]);
 
-        $data = $request->only(['name', 'description', 'parent_id']);
+
+        $data = $request->only(['name', 'description', 'parent_id', 'sort_order']);
 
         $data["is_active"] = $request->boolean("is_active") ? 1 : 0;
         $category = PackageCategory::updateOrCreate(
@@ -48,7 +49,7 @@ class PackageCategoryController extends Controller
             $query->whereNull('parent_id');
         }
 
-        $categories = $query->get();
+        $categories = $query->orderBy('sort_order', 'asc')->get();
 
         return response()->json([
             'success' => true,
