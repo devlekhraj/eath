@@ -97,7 +97,9 @@
 									<span v-if="descriptionError" class="text-error text-caption">Content is
 										required</span>
 								</div>
-                       
+                       <div class="my-4">
+						<VuetifyViewer :value="form.description" />
+					   </div>
 
 								<div class="mt-6 text-center">
 									<v-btn size="large" color="primary" rounded :loading="submitting"

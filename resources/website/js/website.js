@@ -20,6 +20,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
 import 'bootstrap';
+import 'vuetify-pro-tiptap/style.css'
 
 // When DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {

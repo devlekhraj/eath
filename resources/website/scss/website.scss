@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
-
+*{
+  font-family: 'Poppins', sans-serif !important;
+}
+.vuetify-pro-tiptap-editor__content.markdown-theme-default p {
+    margin: 0 !important;
+}
 $secondary: #ec9214;
 
 // Bootstrap import
