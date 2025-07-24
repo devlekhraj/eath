@@ -90,10 +90,10 @@ class TravelPackageController extends Controller
 
      public function packageDelete($id, Request $request)
     {
-        $category = TravelPackage::findOrFail($id);
-        $category->delete(); // This will perform a soft delete
+        $package = TravelPackage::findOrFail($id);
+        $package->delete(); // This will perform a soft delete
 
-        return response()->json(['message' => 'Category deleted successfully.']);
+        return response()->json(['message' => $package->name.' deleted successfully.']);
     }
 
 
@@ -105,9 +105,9 @@ class TravelPackageController extends Controller
 
     public function toggleActive($id, Request $request)
     {
-        $category = TravelPackage::findOrFail($id);
-        $category->is_active = $request->boolean('is_active');
-        $category->save();
+        $travelPackage = TravelPackage::findOrFail($id);
+        $travelPackage->is_active = $request->boolean('is_active');
+        $travelPackage->save();
 
         return response()->json(['success' => true, 'message' => 'Status updated']);
     }

@@ -4,45 +4,48 @@
             <h4>Are you sure?</h4>
         </v-card-text>
         <v-card-actions>
-            <v-btn variant="text" @click="handleClose()">No</v-btn>
+            <v-btn variant="text" @click="handleClose">No</v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="error" :loading="submitting" @click="deleteCategory()">Yes</v-btn>
+            <v-btn color="error" :loading="submitting" @click="deleteCategory">Yes</v-btn>
         </v-card-actions>
     </v-card>
 </template>
 
-<script>
-export default {
-    props: {
-        item: {
-            type: Object,
-            required: true,  // Vue enforces this now
-        }
+<script setup>
+import { ref } from 'vue'
+import { useSnackbar } from '@/composables/snackbar'
+
+const { showSuccess, showError } = useSnackbar()
+
+const emit = defineEmits(['close'])
+
+const props = defineProps({
+    item: {
+        type: Object,
+        required: true,
     },
-    data() {
-        return {
-            submitting: false,
-        }
-    },  
-    methods: {
-        handleClose() {
-            this.$emit('close');
-        },
-        async deleteCategory() {
-            this.submitting = true;
-            try {
-                const resp = await axios.delete('/admin/travel-packages/'+this.item.id+"/delete");
-                console.log(resp);
-                this.submitting = false;
-                this.handleClose();
-            } catch (error) {
-                console.log(error);
-                this.submitting = false;
-            }
-        }
-    }
+})
+
+const submitting = ref(false)
+
+const handleClose = () => {
+    emit('close')
 }
 
+const deleteCategory = async () => {
+    submitting.value = true
+    try {
+        const resp = await axios.delete(`/admin/travel-packages/${props.item.id}/delete`)
+        console.log({resp});
+        showSuccess(resp.message || "Deleted successfully");
+        submitting.value = false
+        handleClose()
+    } catch (error) {
+        showError(error?.response?.data?.message || 'Failed to delete');
+        console.error(error)
+        submitting.value = false
+    }
+}
 </script>
 
 <style scoped></style>

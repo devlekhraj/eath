@@ -1,13 +1,32 @@
 <template>
     <v-container>
-        <v-data-table :headers="headers" :items="travelPackages" :items-per-page="20" :sort-by="['name']"
+        <v-data-table :headers="headers" :items="filteredItems" :items-per-page="20" :sort-by="['name']"
             :sort-desc="[false]">
+            <!-- Top slot: search box left, add button right -->
+            <template #top>
+                <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
+                    <v-col cols="12" sm="6" md="4" lg="3" xl="3">
+                        <v-text-field v-model="search" label="Search" density="comfortable" variant="outlined" clearable hide-details
+                            prepend-inner-icon="mdi-magnify" placeholder="Search" />
+                    </v-col>
+
+                    <v-col cols="auto">
+                        <v-btn color="primary" rounded size="large" variant="elevated" @click="addNewItem">
+                            <v-icon left>mdi-plus</v-icon> Add Package
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </template>
+
             <template #item.start_date="{ item }">
                 {{ formatDate(item.start_date) }}
             </template>
 
             <template #item.sn="{ index }">
                 {{ index + 1 }}
+            </template>
+            <template #item.created_at="{ item }">
+                {{ formatDate(item.created_at) }}
             </template>
 
             <template #item.name="{ item }">
@@ -50,11 +69,6 @@
                     </template>
 
                     <v-list density="compact" elevation="1">
-                        <v-list-item @click="viewItem(item)">
-                            <v-list-item-title>
-                                <v-icon start icon="mdi-eye" class="mr-2" /> View Detail
-                            </v-list-item-title>
-                        </v-list-item>
 
                         <v-list-item :to="{ name: 'adminPackageForm', query: { id: item.id } }">
                             <v-list-item-title>
@@ -77,13 +91,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import { formatDate, formatAmount } from '@/utils/format'
 import PackageDelete from './modal/PackageDelete.vue'
 
 const headers = [
     { title: 'SN', key: 'sn', sortable: true },
+    { title: 'Created', key: 'created_at', sortable: false },
     { title: 'Name', key: 'name', sortable: false },
     { title: 'Duration', key: 'duration_days', sortable: true },
     { title: 'Price (USD)', key: 'price', sortable: true },
@@ -96,6 +111,22 @@ const headers = [
 
 const travelPackages = ref([])
 const globalModal = ref(null);
+const search = ref('');
+
+
+const filteredItems = computed(() => {
+  if (!search.value) return travelPackages.value
+  const term = search.value.toLowerCase()
+  return travelPackages.value.filter(item =>
+    item.name.toLowerCase().includes(term)
+  )
+})
+
+
+function addNewItem() {
+  // Your add item logic here
+  console.log('Add clicked')
+}
 
 async function fetchPackages() {
     try {
@@ -111,7 +142,7 @@ async function toggleActive(item) {
         const resp = await axios.patch(`admin/travel-packages/${item.id}/toggle-active`, {
             is_active: item.is_active
         });
-        console.log({resp});
+        console.log({ resp });
     } catch (error) {
         item.is_active = !item.is_active; // Revert back if failed
         console.error('Failed to update status:', error);
@@ -130,15 +161,9 @@ function deleteItem(item) {
 }
 
 
-
-function viewItem(item) {
-    console.log('View item:', item)
-}
-
 onMounted(() => {
     fetchPackages()
 })
 </script>
 
 <style scoped></style>
->

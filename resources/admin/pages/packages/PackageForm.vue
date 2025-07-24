@@ -299,8 +299,7 @@ export default {
 		},
 
 		async submitPackage() {
-			// const isValid = this.formRef.validate()
-			// if (!isValid) return
+
 			this.descriptionError = !this.form.description || this.form.description.trim() === '';
 
 			let { valid, errors } = await this.$refs.formRef.validate();
@@ -315,11 +314,6 @@ export default {
 			this.errors = {}
 
 			try {
-				// const url = this.package_id
-				//   ? `/admin/travel-packages/${this.package_id}`
-				//   : `/admin/travel-packages`
-
-				// const method = this.package_id ? 'put' : 'post'
 
 				// await axios[method](url, this.form)
 				if (this.package_id) {
@@ -334,7 +328,7 @@ export default {
 				}
 
 				const resp = await axios.post('/admin/travel-packages', this.form);
-				this.showSuccess("Package created");
+				this.showSuccess(resp.message|| "Success");
 
 				this.package_id = resp.data.id
 				this.fetchPackage();

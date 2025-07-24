@@ -47,8 +47,9 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
+import { useSnackbar } from '@/composables/snackbar'
 
+const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
 const formRef = ref(null)
 let loading = ref(false);
@@ -57,7 +58,7 @@ const form = reactive({
     name: '',
     parent_id: null,
     description: '',
-    is_active: true,
+    is_active: false,
     seq_no: null,
 })
 
@@ -119,10 +120,11 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true; // ✅ correct way
-        const resp = await axios.post('admin/package-categories', form)
-        console.log(resp);
+        const resp = await axios.post('admin/package-categories', form);
+        showSuccess(resp.message || "Category created successfully");
         emit('close')
     } catch (error) {
+        showError(error?.response?.data?.message || 'Failed to update status');
         console.error('Category creation failed', error)
     } finally {
         loading.value = false; // ✅ always stop loading, even if error

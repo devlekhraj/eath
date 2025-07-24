@@ -117,52 +117,74 @@ class BlogController extends Controller
 
 
 
-    public function saveCategory(Request $request)
-    {
-        $request->validate([
-            'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'parent_id'   => 'nullable|exists:package_categories,id',
-            'seq_no' => 'nullable|integer',
-            'id'          => 'nullable|exists:package_categories,id',
-        ]);
+    // public function saveCategory(Request $request)
+    // {
+    //     $request->validate([
+    //         'name'        => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'parent_id'   => 'nullable|exists:package_categories,id',
+    //         'seq_no' => 'nullable|integer',
+    //         'id'          => 'nullable|exists:package_categories,id',
+    //     ]);
 
-        $data = $request->only(['name', 'description', 'parent_id']);
+    //     $data = $request->only(['name', 'description', 'parent_id']);
 
-        $category = PackageCategory::updateOrCreate(
-            ['id' => $request->id],
-            $data
-        );
+    //     $category = PackageCategory::updateOrCreate(
+    //         ['id' => $request->id],
+    //         $data
+    //     );
 
-        return response()->json([
-            'success' => true,
-            'data'    => $category,
-            'message' => $request->id ? 'Category updated successfully.' : 'Category created successfully.'
-        ]);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'data'    => $category,
+    //         'message' => $request->id ? 'Category updated successfully.' : 'Category created successfully.'
+    //     ]);
+    // }
 
-    public function getCategories(Request $request)
-    {
-        $query = PackageCategory::with(['parent', 'children']);
+    // public function getCategories(Request $request)
+    // {
+    //     $query = PackageCategory::with(['parent', 'children']);
 
-        if ($request->query('type') === 'parent') {
-            $query->whereNull('parent_id');
-        }
+    //     if ($request->query('type') === 'parent') {
+    //         $query->whereNull('parent_id');
+    //     }
 
-        $categories = $query->get();
+    //     $categories = $query->get();
 
-        return response()->json([
-            'success' => true,
-            'data'    => PackageCategoryResource::collection($categories),
-        ]);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'data'    => PackageCategoryResource::collection($categories),
+    //     ]);
+    // }
 
     public function toggleActive($id, Request $request)
     {
-        $category = PackageCategory::findOrFail($id);
-        $category->is_active = $request->boolean('is_active');
-        $category->save();
+        $blog = Blog::findOrFail($id);
+        $isActive = $request->boolean('is_active');
 
-        return response()->json(['success' => true, 'message' => 'Status updated']);
+        $blog->is_active = $isActive ? 1 : 0;
+        $blog->save();
+
+        $message = $isActive ? 'Blog is now active.' : 'Blog is now inactive.';
+
+        return response()->json(['success' => true, 'message' => $message]);
+    }
+
+    public function togglePublish($id, Request $request)
+    {
+        $blog = Blog::findOrFail($id);
+        $isPublished = $request->boolean('is_published');
+
+        $blog->is_published = $isPublished ? 1 : 0;
+
+        if ($isPublished && is_null($blog->published_at)) {
+            $blog->published_at = now();  // Set current datetime if null
+        }
+
+        $blog->save();
+
+        $message = $isPublished ? 'Blog is published now.' : 'Blog is unpublished now.';
+
+        return response()->json(['success' => true, 'message' => $message]);
     }
 }

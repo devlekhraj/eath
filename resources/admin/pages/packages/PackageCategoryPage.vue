@@ -1,13 +1,30 @@
 <template>
 	<v-container>
-		<div class="text-right mb-4">
+		<!-- <div class="text-right mb-4">
 			<v-btn size="large" color="primary" rounded @click="handleOpen">
 				<v-icon>mdi-plus</v-icon> Add Category
 			</v-btn>
-		</div>
+		</div> -->
 
-		<v-data-table :headers="headers" :items="categories" :items-per-page="20" :sort-by="['name']"
+		<v-data-table :headers="headers" :items="filteredItems" :items-per-page="20" :sort-by="['name']"
 			:sort-desc="[false]">
+
+			<template #top>
+				<v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
+					<v-col cols="12" sm="6" md="4" lg="3" xl="3">
+						<v-text-field v-model="search" label="Search" density="comfortable" variant="outlined" clearable
+							hide-details prepend-inner-icon="mdi-magnify" placeholder="Search" />
+					</v-col>
+
+					<v-col cols="auto">
+						<v-btn color="primary" rounded size="large" variant="elevated" @click="handleOpen">
+							<v-icon left>mdi-plus</v-icon> Add Category
+						</v-btn>
+					</v-col>
+				</v-row>
+			</template>
+
+
 			<template #item.sn="{ index }">
 				{{ index + 1 }}
 			</template>
@@ -47,11 +64,11 @@
 					</template>
 
 					<v-list density="compact" elevation="1">
-						<v-list-item @click="viewItem(item)">
+						<!-- <v-list-item @click="viewItem(item)">
 							<v-list-item-title>
 								<v-icon start icon="mdi-eye" class="mr-2" /> View Detail
 							</v-list-item-title>
-						</v-list-item>
+						</v-list-item> -->
 
 						<v-list-item @click="handleOpen(item)">
 							<v-list-item-title>
@@ -75,9 +92,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, onMounted, computed } from 'vue';
+import { useSnackbar } from '@/composables/snackbar'
 
+const { showSuccess, showError } = useSnackbar()
 // Static headers
 const headers = [
 	{ title: 'S.N.', key: 'sn', sortable: false },
@@ -90,6 +108,18 @@ const headers = [
 // Refs
 const categories = ref([]);
 const globalModal = ref(null);
+const search = ref('');
+
+
+const filteredItems = computed(() => {
+  if (!search.value) return categories.value
+  const term = search.value.toLowerCase()
+  return categories.value.filter(item =>
+    item.name.toLowerCase().includes(term)
+  )
+})
+
+
 import CategoryForm from './modal/CategoryForm.vue';
 import CategoryDelete from './modal/CategoryDelete.vue';
 // Method: Open modal
@@ -137,11 +167,12 @@ async function toggleActive(item) {
 		const resp = await axios.patch(`admin/package-categories/${item.id}/toggle-active`, {
 			is_active: item.is_active
 		});
-		this.$toast?.success?.('Status updated successfully'); // Optional toast
+		showSuccess(resp.message);
 	} catch (error) {
+		showError(resp?.response?.data?.message || 'Failed to update status');
 		item.is_active = !item.is_active; // Revert back if failed
 		console.error('Failed to update status:', error);
-		this.$toast?.error?.('Failed to update status');
+
 	}
 }
 // Initial load

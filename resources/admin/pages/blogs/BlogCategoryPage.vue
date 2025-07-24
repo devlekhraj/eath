@@ -1,22 +1,50 @@
 <template>
   <v-container>
-    <div class="text-right mb-4">
+    <!-- <div class="text-right mb-4">
       <v-btn size="large" color="primary" rounded @click="handleOpen">
         <v-icon>mdi-plus</v-icon> Add Category
       </v-btn>
-    </div>
+    </div> -->
 
-    <v-data-table :headers="headers" :items="categories" :items-per-page="20" :sort-by="['name']" :sort-desc="[false]">
+    <v-data-table :headers="headers" :items="filteredItems" :items-per-page="20" :sort-by="['name']" :sort-desc="[false]">
+
+
+      <template #top>
+				<v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
+					<v-col cols="12" sm="6" md="4" lg="3" xl="3">
+						<v-text-field v-model="search" label="Search" density="comfortable" variant="outlined" clearable
+							hide-details prepend-inner-icon="mdi-magnify" placeholder="Search" />
+					</v-col>
+
+					<v-col cols="auto">
+						<v-btn color="primary" rounded size="large" variant="elevated" @click="handleOpen">
+							<v-icon left>mdi-plus</v-icon> Add Category
+						</v-btn>
+					</v-col>
+				</v-row>
+			</template>
+
+
+
       <template #item.sn="{ index }">
         {{ index + 1 }}
       </template>
 
       <template #item.name="{ item }">
-        <span class="text-primary text-capitalize">{{ item.name }}</span>
+        <div style="min-width: 200px;">
+          <span class="text-primary text-capitalize">{{ item.name }}</span>
+        </div>
+      </template>
+      <template #item.slug="{ item }">
+        <div style="min-width: 200px;">
+          <span class="text-primary text-capitalize">{{ item.slug }}</span>
+        </div>
       </template>
 
       <template #item.hierarchy="{ item }">
-        <span class="text-capitalize">{{ item.hierarchy_text }}</span>
+        <div style="min-width: 300px;">
+          <span class="text-capitalize">{{ item.hierarchy_text }}</span>
+        </div>
       </template>
 
       <!-- <template #item.is_active="{ item }">
@@ -26,39 +54,62 @@
       </template> -->
       <template #item.is_active="{ item }">
         <div>
-          <v-switch v-model="item.is_active" density="compact" color="success"
-            hide-details @change="toggleActive(item)" />
+          <v-switch v-model="item.is_active" density="compact" color="success" hide-details
+            @change="toggleActive(item)" />
         </div>
       </template>
 
 
 
-      <template #item.actions="{ item }">
+      <!-- <template #item.actions="{ item }">
         <v-btn icon color="primary" variant="text" @click="handleOpen(item)">
           <v-icon>mdi-eye-circle</v-icon>
         </v-btn>
         <v-btn icon color="error" variant="text" @click="handleDelete(item)">
           <v-icon>mdi-delete-circle</v-icon>
         </v-btn>
+      </template> -->
+      <template #item.actions="{ item }">
+        <v-menu location="bottom end">
+          <template #activator="{ props }">
+            <v-btn v-bind="props" icon variant="text" color="primary">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list density="compact" elevation="1">
+            <v-list-item @click="() => handleOpen(item)">
+              <v-list-item-title>
+                <v-icon start icon="mdi-pencil" class="mr-2" /> Edit Blog
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item @click="() => handleDelete(item)">
+              <v-list-item-title>
+                <v-icon start icon="mdi-delete" class="mr-2" /> Delete Blog
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </template>
     </v-data-table>
 
-    <modal-template ref="globalModal"
-    @saved="fetchCategories"
-    @close="fetchCategories"
-    ></modal-template>
+    <modal-template ref="globalModal" @saved="fetchCategories" @close="fetchCategories"></modal-template>
   </v-container>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useSnackbar } from '@/composables/snackbar'
 
+const { showSuccess, showError } = useSnackbar()
 // Static headers
 const headers = [
   { title: 'S.N.', key: 'sn', sortable: false },
   { title: 'Category Name', key: 'name', sortable: false },
-  { title: 'Slug', key: 'slug', sortable: false },
   { title: 'Hierarchy', key: 'hierarchy', sortable: false },
+  { title: 'URL Slug', key: 'slug', sortable: false },
+  { title: 'Seq#', key: 'sort_order', sortable: false },
   { title: 'Active', key: 'is_active', sortable: false },
   { title: 'Action', key: 'actions', sortable: false },
 ];
@@ -66,6 +117,18 @@ const headers = [
 // Refs
 const categories = ref([]);
 const globalModal = ref(null);
+const search = ref('');
+
+
+const filteredItems = computed(() => {
+  if (!search.value) return categories.value
+  const term = search.value.toLowerCase()
+  return categories.value.filter(item =>
+    item.name.toLowerCase().includes(term)
+  )
+})
+
+
 import CategoryForm from './modal/CategoryForm.vue';
 import CategoryDelete from './modal/CategoryDelete.vue';
 // Method: Open modal
@@ -113,11 +176,12 @@ async function toggleActive(item) {
     const resp = await axios.patch(`admin/blog-categories/${item.id}/toggle-active`, {
       is_active: item.is_active
     });
-    this.$toast?.success?.('Status updated successfully'); // Optional toast
+    showSuccess(resp.message || 'success');
+    fetchCategories();
   } catch (error) {
+    showError(error?.response?.data?.message || 'Failed to update');
     item.is_active = !item.is_active; // Revert back if failed
     console.error('Failed to update status:', error);
-    this.$toast?.error?.('Failed to update status');
   }
 }
 // Initial load

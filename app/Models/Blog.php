@@ -11,7 +11,7 @@ class Blog extends Model
     use SoftDeletes;
 
     protected $table = 'blogs';
-     protected $appends = ['banner_url'];
+    protected $appends = ['banner_url'];
 
     protected $fillable = [
         'title',
@@ -21,6 +21,7 @@ class Blog extends Model
         'cover_image',
         'author',
         'is_published',
+        'published_at', // <-- Make this match the cast
         'is_active',
         'meta_title',
         'meta_description',
@@ -30,6 +31,7 @@ class Blog extends Model
     protected $casts = [
         'is_published' => 'boolean',
         'is_active' => 'boolean',
+        'published_at' => 'datetime', // must match fillable
     ];
 
     protected $dates = [
@@ -44,7 +46,7 @@ class Blog extends Model
         }
 
         $filePath = storage_path($galleryImage->filepath);
-         return file_exists($filePath)
+        return file_exists($filePath)
             ? route('image.view', ['filename' => $this->cover_image])
             : asset('images/logo.png');
     }

@@ -36,7 +36,6 @@
 					<div v-if="blog_id">
 						<!-- Featured Image -->
 						<v-file-input v-model="selected_image" label="Featured Image" accept="image/*" prepend-icon=""
-						
 							variant="outlined" density="comfortable" prepend-inner-icon="mdi-image"
 							@change="onImageChange" class="mb-4 truncate-file-name"></v-file-input>
 					</div>
@@ -78,6 +77,7 @@
 </template>
 
 <script>
+import { useSnackbar } from '@/composables/snackbar'
 export default {
 	data() {
 		return {
@@ -117,6 +117,15 @@ export default {
 
 	},
 
+	setup() {
+		const { showSuccess, showError } = useSnackbar()
+
+		// Return methods to be used in Options API
+		return {
+			showSuccess,
+			showError,
+		}
+	},
 
 	methods: {
 		async fetchBlogCategory() {
@@ -154,11 +163,13 @@ export default {
 					headers: { 'Content-Type': 'multipart/form-data' }
 				})
 					.then(response => {
+						this.showSuccess("Image uploaded");
 						this.form.cover_image = response.data.filename;
 						this.previewImage = response.url;
 						this.form.banner_url = response.url;
 					})
 					.catch(error => {
+						this.showError("Image upload failed");
 						console.error('Image upload failed', error)
 					})
 			} else {
@@ -188,38 +199,13 @@ export default {
 
 			this.submitting = true;
 			try {
-				// const formData = new FormData();
 
-				// if (this.form.id) {
-				// 	formData.append('id', this.form.id);
-				// }
-				// formData.append('title', this.form.title);
-				// formData.append('slug', this.form.slug);
-				// formData.append('sub_title', this.form.sub_title);
-				// formData.append('content', this.form.content);
-				// formData.append('author', this.form.author);
-				// formData.append('meta_title', this.safeTrim(this.form.meta_title ?? ''));
-				// formData.append('meta_description', this.safeTrim(this.form.meta_description ?? ''));
-				// formData.append('meta_keywords', this.safeTrim(this.form.meta_keywords ?? ''));
-				// if (this.form.image) {
-				// 	formData.append(
-				// 		'cover_image',
-				// 		Array.isArray(this.form.image) ? this.form.image[0] : this.form.image
-				// 	);
-				// }
-
-				console.log(this.form);
 				// Submit to API
 				const resp = await axios.post('/admin/blogs', this.form);
-
-				console.log({ resp });
-				// Reset form
-				if (!this.blog_id) {
-					this.$refs.formRef.reset();
-					this.form.content = '';
-					this.previewImage = null;
-				}
+				this.showSuccess(resp.message || "Success");
+			
 			} catch (error) {
+				this.showError(error?.response?.data?.message || 'An error occurred');
 				console.error('Form submission error:', error);
 			} finally {
 				this.submitting = false;

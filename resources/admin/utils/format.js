@@ -10,7 +10,6 @@ export function formatTime12h(time24) {
 
   return `${hour}:${minute} ${ampm}`
 }
-
 export function formatDate(date) {
   if (!date) return 'N/A'
   const d = new Date(date)
@@ -20,6 +19,19 @@ export function formatDate(date) {
   const day = String(d.getDate()).padStart(2, '0')
 
   return `${year}/${month}/${day}`
+}
+
+export function formatDateTime(dateTime) {
+  if (!dateTime) return 'N/A'
+  const d = new Date(dateTime)
+
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  const hours = String(d.getHours()).padStart(2, '0')
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`
 }
 
 export function formatAmount(amount) {

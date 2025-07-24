@@ -25,7 +25,7 @@
                     </v-col>
 
                     <v-col cols="6" md="6">
-                        <v-text-field v-model="form.seq_no" label="Sequence Number" type="number" variant="outlined"
+                        <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" variant="outlined"
                             density="comfortable" />
                     </v-col>
 
@@ -47,7 +47,11 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
+
+import { useSnackbar } from '@/composables/snackbar'
+
+const { showSuccess, showError } = useSnackbar()
+
 
 const emit = defineEmits(['close', 'saved'])
 const formRef = ref(null)
@@ -56,8 +60,8 @@ const form = reactive({
     name: '',
     parent_id: null,
     description: '',
-    is_active: true,
-    seq_no: null,
+    is_active: false,
+    sort_order: 0,
 })
 
 const parentOptions = ref([])
@@ -86,7 +90,7 @@ onMounted(() => {
             parent_id: props.item.parent_id || null,
             description: props.item.description || '',
             is_active: props.item.is_active ?? true,
-            seq_no: props.item.seq_no || null,
+            sort_order: props.item.sort_order || 0,
         });
     } else {
         console.log("Add mode");
@@ -116,13 +120,18 @@ async function submitForm() {
 
 async function handleSubmit() {
     try {
+        // Convert sort_order to integer, default to 0 if empty
+        form.sort_order = parseInt(form.sort_order) || 0
+
         const resp = await axios.post('admin/blog-categories', form)
-        emit('saved')
+        showSuccess(resp.message || 'Success')
         emit('close')
     } catch (error) {
+        showError(error?.response?.data?.message || 'An error occurred')
         console.error('Category creation failed', error)
     }
 }
+
 </script>
 
 <style scoped></style>

@@ -16,16 +16,17 @@ use App\Models\BlogCategory;
 
 class BlogCategoryController extends Controller
 {
-    public function index()
-    {
-        // Logic to retrieve travel packages
-        $packages = BlogCategory::all();
+    // public function index()
+    // {
+    //     // Logic to retrieve travel packages
+    //     $blogCategories = BlogCategory::orderBy('sort_order','asc')->get();
+    //     dd($blogCategories);
 
-        return response()->json([
-            'success' => true,
-            'data' => $packages
-        ], 200);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'data' => $blogCategories
+    //     ], 200);
+    // }
     public function show(Request $request, $id)
     {
         // Logic to retrieve travel packages
@@ -43,7 +44,6 @@ class BlogCategoryController extends Controller
     {
         $isUpdate = $request->has('id');
 
-        dd("here");
         $rules = [
             'id'                => 'nullable|exists:blog_categories,id',
             'title'             => 'required|string|max:255',
@@ -68,7 +68,6 @@ class BlogCategoryController extends Controller
 
         $validated = $request->validate($rules);
 
-        dd($validated);
 
         // Convert empty strings to null to avoid saving "" strings in DB
         foreach ($validated as $key => $value) {
@@ -114,12 +113,13 @@ class BlogCategoryController extends Controller
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
             'parent_id'   => 'nullable|exists:blog_categories,id',
-            'seq_no' => 'nullable|integer',
+            'sort_order' => 'nullable|integer',
             'id'          => 'nullable|exists:blog_categories,id',
             'is_active' => 'nullable|boolean',
         ]);
 
-        $data = $request->only(['name', 'description', 'parent_id']);
+
+        $data = $request->only(['name', 'description', 'parent_id','sort_order']);
 
         $data['is_active'] = $request->boolean('is_active') ? 1 : 0;
 
@@ -131,7 +131,7 @@ class BlogCategoryController extends Controller
         return response()->json([
             'success' => true,
             'data'    => $category,
-            'message' => $request->id ? 'Category updated successfully.' : 'Category created successfully.'
+            'message' => $request->id ? $category->name . ' category updated.' : $category->name . ' category created.'
         ]);
     }
 
@@ -143,7 +143,7 @@ class BlogCategoryController extends Controller
             $query->whereNull('parent_id');
         }
 
-        $categories = $query->get();
+        $categories = $query->orderBy('sort_order','asc')->get();
 
         return response()->json([
             'success' => true,
@@ -155,16 +155,23 @@ class BlogCategoryController extends Controller
     public function toggleActive($id, Request $request)
     {
         $category = BlogCategory::findOrFail($id);
-        $category->is_active = $request->boolean('is_active');
+        $isActive = $request->boolean('is_active');
+
+        $category->is_active = $isActive;
         $category->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated']);
+        $status = $isActive ? 'active' : 'inactive';
+        $message = "{$category->name} is now {$status}.";
+
+        return response()->json(['success' => true, 'message' => $message]);
     }
+
     public function delete($id, Request $request)
     {
         $category = BlogCategory::findOrFail($id);
+        $categoryName = $category->name;
         $category->delete(); // This will perform a soft delete
 
-        return response()->json(['message' => 'Category deleted successfully.']);
+        return response()->json(['message' => "{$categoryName} deleted successfully."]);
     }
 }

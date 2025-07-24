@@ -57,6 +57,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('blogs', [BlogController::class, 'storeUpdate']);
         Route::get('blogs/{id}', [BlogController::class, 'show']);
         Route::patch('blogs/{id}/toggle-active', [BlogController::class, 'toggleActive']);
+        Route::patch('blogs/{id}/toggle-publish', [BlogController::class, 'togglePublish']);
 
         Route::get('blog-categories', [BlogCategoryController::class, 'getCategories']);
         Route::post('blog-categories', [BlogCategoryController::class, 'saveCategory']);
