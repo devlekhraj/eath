@@ -2,7 +2,7 @@
 	<v-container>
 		<v-form ref="formRef" v-model="formValid" lazy-validation>
 			<v-row>
-				<v-col cols="12" md="8" offset-md="2">
+				<v-col cols="12" md="10" offset-md="1">
 					<div class="mb-4">
 						<v-card elevation="0" class="pa-6">
 							<v-card-title class="py-3">
@@ -155,7 +155,7 @@
 					</div>
 				</v-col>
 
-				<v-col cols="12" md="8" offset-md="2" v-if="package_id">
+				<v-col cols="12" md="10" offset-md="1" v-if="package_id">
 					<div>
 						<FormRight @close="fetchPackage" :travelPackage="travel_package"
 							:travelPackageId="package_id" />
