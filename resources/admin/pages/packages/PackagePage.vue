@@ -1,9 +1,7 @@
 <template>
     <v-container>
-        <v-data-table :headers="headers" :items="filteredItems" 
-        :loading="fetching_data"
-        :items-per-page="20" :sort-by="['name']"
-            :sort-desc="[false]">
+        <v-data-table :headers="headers" :items="filteredItems" :loading="fetching_data" :items-per-page="20"
+            :sort-by="['name']" :sort-desc="[false]">
             <!-- Top slot: search box left, add button right -->
             <template #top>
                 <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
@@ -32,7 +30,26 @@
             </template>
 
             <template #item.name="{ item }">
-                <span class="text-primary">{{ item.name }}</span>
+
+                <div style="vertical-align: middle; min-width: max-content;">
+                    <span class="text-primary">{{ item.name }}</span>
+                </div>
+
+            </template>
+            <template #item.category="{ item }">
+
+                <div style="min-width: max-content;">
+                    <div class="d-flex my-2" v-if="item?.categories?.length">
+                        <v-chip v-for="(category, index) in item.categories" size="small" :key="index" color="success"
+                            class="mr-2">
+                            {{ category.name }}
+                        </v-chip>
+                    </div>
+                    <div v-else>
+                        <span>Not Assigned</span>
+                    </div>
+                </div>
+
             </template>
 
             <template #item.end_date="{ item }">
@@ -118,10 +135,11 @@ const headers = [
     { title: 'SN', key: 'sn', sortable: true },
     { title: 'Created', key: 'created_at', sortable: false },
     { title: 'Name', key: 'name', sortable: false },
+    { title: 'Category', key: 'category', sortable: false },
     { title: 'Duration', key: 'duration_days', sortable: true },
-    { title: 'Price (USD)', key: 'price', sortable: true },
-    { title: 'Start Date', key: 'start_date', sortable: false },
-    { title: 'End Date', key: 'end_date', sortable: false },
+    // { title: 'Price (USD)', key: 'price', sortable: true },
+    // { title: 'Start Date', key: 'start_date', sortable: false },
+    // { title: 'End Date', key: 'end_date', sortable: false },
     { title: 'Active', key: 'is_active', sortable: false },
     { title: 'Featured', key: 'is_featured', sortable: false },
     { title: 'Published', key: 'is_published', sortable: false },
@@ -143,7 +161,7 @@ const filteredItems = computed(() => {
 })
 
 
-const fetching_data  = ref(false);
+const fetching_data = ref(false);
 
 async function fetchPackages() {
     try {

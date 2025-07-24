@@ -18,7 +18,7 @@ class PackageInclusionController extends Controller
         $validated = $request->validate([
             "id" => "nullable|exists:package_inclusions,id",
             "title" => "required|string",
-            "description" => "required|string",
+            "description" => "nullable|string",
             "sort_order" => "nullable|integer",
             "is_excluded" => "required|boolean",
             "travel_package_id" => "required|exists:travel_packages,id",

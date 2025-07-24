@@ -46,7 +46,7 @@
                             <v-list density="compact" class="mb-4">
                                 <v-list-item v-for="(item, index) in travelPackage?.inclusions" :key="'inc-' + item.id"
                                     class="py-4 position-relative border mb-4 rounded">
-                                    <div class="position-absolute top-0 right-0 mt-1 mr-1 d-flex">
+                                    <div class="position-absolute top-0 right-0 mr-1 d-flex" :class="item.description ? 'mt-1':''">
                                         <v-btn icon size="x-small" variant="tonal" color="primary"
                                             @click="editItem(item, false)">
                                             <v-icon>mdi-pencil</v-icon>
@@ -54,12 +54,12 @@
                                     </div>
 
                                     <div class="d-flex align-start">
-                                        <v-icon color="success" size="20" class="mt-1 mr-3">
+                                        <v-icon color="success" size="20" class="mr-3" :class="item.description ? 'mt-1':''">
                                             mdi-check-outline
                                         </v-icon>
                                         <div>
                                             <div class="font-weight-medium">{{ item.title }}</div>
-                                            <div class="text-body-2 text-medium-emphasis">{{ item.description }}</div>
+                                            <div class="text-body-2 text-medium-emphasis" v-if="item?.description">{{ item.description }}</div>
                                         </div>
                                     </div>
                                 </v-list-item>
@@ -87,7 +87,7 @@
                             <v-list density="compact" class="mb-4">
                                 <v-list-item v-for="(item, index) in travelPackage?.exclusions" :key="'exc-' + item.id"
                                     class="py-4 position-relative border mb-4 rounded">
-                                    <div class="position-absolute top-0 right-0 mt-1 mr-1 d-flex">
+                                    <div class="position-absolute top-0 right-0 mr-1 d-flex" :class="item.description ? 'mt-1':''">
                                         <v-btn icon size="x-small" variant="tonal" color="primary"
                                             @click="editItem(item, true)">
                                             <v-icon>mdi-pencil</v-icon>
@@ -95,12 +95,12 @@
                                     </div>
 
                                     <div class="d-flex align-start">
-                                        <v-icon color="error" size="20" class="mt-1 mr-3">
+                                        <v-icon color="error" size="20" class="mr-3" :class="item.description ? 'mt-1':''">
                                             mdi-close-outline
                                         </v-icon>
                                         <div>
                                             <div class="font-weight-medium">{{ item.title }}</div>
-                                            <div class="text-body-2 text-medium-emphasis">{{ item.description }}</div>
+                                            <div class="text-body-2 text-medium-emphasis" v-if="item?.description">{{ item.description }}</div>
                                         </div>
                                     </div>
                                 </v-list-item>

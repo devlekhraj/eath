@@ -26,7 +26,7 @@
                 {{ index + 1 }}
             </template>
             <template #item.author="{ item }">
-                <div>   
+                <div style="min-width: max-content;">   
                     <v-avatar><v-icon size="32">mdi-account-circle</v-icon></v-avatar>
                     <span class="text-capitalize">
                         {{ item.author ? item.author : 'Admin' }}
