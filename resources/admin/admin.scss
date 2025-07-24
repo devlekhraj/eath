@@ -59,3 +59,6 @@ label.v-label.v-label--clickable,
 #main-nav .v-list-item__prepend {
     width: 34px !important;
 }
+.v-expansion-panel-text__wrapper ul {
+    padding: revert !important;
+}

@@ -8,7 +8,7 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify-pro-tiptap/style.css'
+
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
@@ -24,10 +24,11 @@ import { useAuthStore } from '@/stores/auth'
 
 // Global components
 import ModalTemplate from '@components/ModalTemplate.vue'
-import RichTextEditor from '@components/RichTextEditor.vue'
 import { VuetifyViewer } from 'vuetify-pro-tiptap' // ✅ import
+import RichTextEditor from '@components/RichTextEditor.vue'
 import { VDateInput } from 'vuetify/labs/VDateInput'
 
+import 'vuetify-pro-tiptap/style.css'
 
 // Vuetify setup
 const vuetify = createVuetify({

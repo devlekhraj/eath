@@ -371,3 +371,9 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.v-expansion-panel-text__wrapper ul {
+    padding: revert !important;
+}
+</style>
