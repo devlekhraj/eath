@@ -1,0 +1,1 @@
+import{r as e,j as t,o as r}from"./main-Don72w1V.js";import"./index-DIycyeiE.js";const l={__name:"FormRight",props:{travelPackage:{type:Object,default:()=>({})},travelPackageId:{type:Number,required:!0}},emits:["close"],setup(a,{emit:o}){return e(null),(c,m)=>(r(),t("div"))}};export{l as default};

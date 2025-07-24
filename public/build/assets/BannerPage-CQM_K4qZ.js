@@ -1,0 +1,1 @@
+import{_ as t,j as n,o,d as r}from"./main-Don72w1V.js";import"./index-DIycyeiE.js";const s={};function a(i,e){return o(),n("div",null,e[0]||(e[0]=[r("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, enim?",-1)]))}const m=t(s,[["render",a]]);export{m as default};

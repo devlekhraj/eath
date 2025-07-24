@@ -1,7 +1,6 @@
 <template>
     <div>
-        <div>
-            <!-- <v-card class="elevation-0">
+        <!-- <v-card class="elevation-0">
                 <v-card-title class="d-flex align-center justify-space-between py-4">
                     <h2 class="font-medium">Itineraries</h2>
                     <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()"><v-icon>mdi-plus</v-icon></v-btn>
@@ -28,8 +27,8 @@
                     </v-expansion-panel>
                 </v-expansion-panels>
             </v-card> -->
-        </div>
-        <!-- <div v-if="travelPackageId">
+    </div>
+    <!-- <div v-if="travelPackageId">
             <div class="mt-4">
                 <v-card class="elevation-0">
                     <v-card-title class="d-flex align-center justify-space-between py-4">
@@ -126,7 +125,6 @@
             </div>
             <modal-template ref="globalModal" @saved="handleSaved" @close="handleClose"></modal-template>
         </div> -->
-    </div>
 </template>
 
 <script setup>
@@ -201,24 +199,23 @@ async function handleSaved(param) {
     console.log("save", { param });
 }
 </script>
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
 .position-absolute {
     position: absolute;
 }
 
-// .top-0 {
-//     top: 0;
-// }
+.top-0 {
+    top: 0;
+}
 
-// .right-0 {
-//     right: 0;
-// }
+.right-0 {
+    right: 0;
+}
 
-// .mt-1 {
-//     margin-top: 4px;
-// }
+.mt-1 {
+    margin-top: 4px;
+}
 
-// .mr-1 {
-//     margin-right: 4px;
-// }
-</style>
+.mr-1 {
+    margin-right: 4px;
+}</style> -->
