@@ -23,7 +23,10 @@
                                     <v-icon>mdi-pencil-box</v-icon> Edit Item
                                 </v-btn>
                             </div>
-                            <div v-html="itinerary.description" class="text-body-2"></div>
+                            <div v-if="itinerary.description" class="text-body-2">
+                               
+                                <VuetifyViewer :value="itinerary.description" />
+                            </div>
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>

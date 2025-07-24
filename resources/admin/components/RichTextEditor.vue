@@ -91,6 +91,6 @@ const extensions = [
 </script>
 
 <template>
-    <VuetifyTiptap v-model="content" :min-height="200" style="max-height: calc(100vh - 290px)" class="p-4"
+    <VuetifyTiptap v-model="content" :min-height="200" class="p-4"
         :placeholder="'Type here...'" :toolbar="true" :toolbar-position="'top'" :extensions="extensions" />
 </template>

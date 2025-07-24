@@ -97,7 +97,7 @@
 									<span v-if="descriptionError" class="text-error text-caption">Content is
 										required</span>
 								</div>
-
+                       
 
 								<div class="mt-6 text-center">
 									<v-btn size="large" color="primary" rounded :loading="submitting"
@@ -155,8 +155,8 @@
 					</div>
 				</v-col>
 
-				<v-col cols="12" md="10" offset-md="1" v-if="package_id">
-					<div>
+				<v-col cols="12" md="10" offset-md="1" v-if="package_id">		
+                    <div>
 						<FormRight @close="fetchPackage" :travelPackage="travel_package"
 							:travelPackageId="package_id" />
 					</div>
