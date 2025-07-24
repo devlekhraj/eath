@@ -63,7 +63,7 @@ const menuGroups = ref([
 		groupName: 'Packages',
 		items: [
 			{ name: 'All Packages', icon: 'mdi-package-variant-closed', route_name: 'adminPackagePage' },
-			{ name: 'Create Package', icon: 'mdi-plus-box-outline', route_name: 'adminPackageForm' },
+			// { name: 'Create Package', icon: 'mdi-plus-box-outline', route_name: 'adminPackageForm' },
 			{ name: 'Categories', icon: 'mdi-tag-multiple-outline', route_name: 'adminPackageCategoryPage' },
 		],
 	},

@@ -1,7 +1,11 @@
 <template>
     <v-card flat>
-        <v-card-title>
-            <span class="font-medium">Include/Exclude Item Form</span>
+        <v-card-title class="py-0">
+            <div class="d-flex align-center">
+                <span class="font-medium">Include/Exclude Item Form</span>
+                <v-spacer></v-spacer>
+                <v-btn variant="text" icon @click="handleCancel"><v-icon>mdi-close</v-icon></v-btn>
+            </div>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -84,7 +88,7 @@ const form = reactive({
     title: '',
     description: '',
     is_excluded: false,
-    sort_order:0,
+    sort_order: 0,
     travel_package_id: props.travelPackageId,
 })
 
@@ -121,11 +125,11 @@ async function handleDelete() {
 }
 
 async function submitForm() {
-    const {valid} = await formRef.value.validate()
+    const { valid } = await formRef.value.validate()
 
     if (!valid) return
 
-    console.log({form});
+    console.log({ form });
     // descriptionError.value = !form.description || form.description.trim() === ''
     // if (descriptionError.value) return
 
@@ -133,7 +137,7 @@ async function submitForm() {
         loading.value = true
 
         const resp = await axios.post(`/admin/travel-packages/${props.travelPackageId}/inlusions`, form)
-        console.log({resp});
+        console.log({ resp });
         emit('close')
     } catch (err) {
         console.error('Failed to save:', err)

@@ -118,4 +118,22 @@ class TravelPackageController extends Controller
             'is_active' => $travelPackage->is_active,
         ]);
     }
+
+    public function togglePublish($id, Request $request)
+    {
+        $package = TravelPackage::findOrFail($id);
+        $isPublished = $request->boolean('is_published');
+
+        $package->is_published = $isPublished ? 1 : 0;
+
+        if ($isPublished && is_null($package->published_at)) {
+            $package->published_at = now();  // Set current datetime if null
+        }
+
+        $package->save();
+
+        $message = $isPublished ? $package->name.' is published now.' : $package->name.' is unpublished now.';
+
+        return response()->json(['success' => true, 'message' => $message]);
+    }
 }

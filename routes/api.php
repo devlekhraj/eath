@@ -37,6 +37,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('travel-packages', [TravelPackageController::class, 'storeUpdate']);
         Route::get('travel-packages/{id}', [TravelPackageController::class, 'show']);
         Route::patch('travel-packages/{id}/toggle-active', [TravelPackageController::class, 'toggleActive']);
+        Route::patch('travel-packages/{id}/toggle-publish', [TravelPackageController::class, 'togglePublish']);
         Route::delete('travel-packages/{id}/delete', [TravelPackageController::class, 'packageDelete']);
 
         Route::post('travel-packages/{id}/itinerary', [PackageItinareryController::class, 'storeItinerary']);

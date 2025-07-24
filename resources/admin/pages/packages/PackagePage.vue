@@ -6,12 +6,12 @@
             <template #top>
                 <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
                     <v-col cols="12" sm="6" md="4" lg="3" xl="3">
-                        <v-text-field v-model="search" label="Search" density="comfortable" variant="outlined" clearable hide-details
-                            prepend-inner-icon="mdi-magnify" placeholder="Search" />
+                        <v-text-field v-model="search" label="Search" density="comfortable" variant="outlined" clearable
+                            hide-details prepend-inner-icon="mdi-magnify" placeholder="Search" />
                     </v-col>
 
                     <v-col cols="auto">
-                        <v-btn color="primary" rounded size="large" variant="elevated" @click="addNewItem">
+                        <v-btn color="primary" rounded size="large" variant="elevated" @click="addPackage">
                             <v-icon left>mdi-plus</v-icon> Add Package
                         </v-btn>
                     </v-col>
@@ -59,6 +59,16 @@
                     {{ item.is_featured ? 'Featured' : 'No' }}
                 </v-chip>
             </template>
+            <template #item.is_published="{ item }">
+                <v-switch v-model="item.is_published" density="compact" color="success" hide-details
+                    @change="() => togglePublished(item)" />
+            </template>
+            <template #item.published_at="{ item }">
+                <div style="min-width: 140px;">
+                    {{ formatDateTime(item.published_at) }}
+                </div>
+            </template>
+
 
             <template #item.actions="{ item }">
                 <v-menu location="bottom end">
@@ -93,8 +103,9 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
-import { formatDate, formatAmount } from '@/utils/format'
+import { formatDate, formatAmount, formatDateTime } from '@/utils/format'
 import PackageDelete from './modal/PackageDelete.vue'
+import PackageAdd from './modal/PackageAdd.vue'
 
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -111,6 +122,8 @@ const headers = [
     { title: 'End Date', key: 'end_date', sortable: false },
     { title: 'Active', key: 'is_active', sortable: false },
     { title: 'Featured', key: 'is_featured', sortable: false },
+    { title: 'Published', key: 'is_published', sortable: false },
+    { title: 'Published On', key: 'published_at', sortable: false },
     { title: 'Actions', key: 'actions', sortable: false },
 ]
 
@@ -120,18 +133,12 @@ const search = ref('');
 
 
 const filteredItems = computed(() => {
-  if (!search.value) return travelPackages.value
-  const term = search.value.toLowerCase()
-  return travelPackages.value.filter(item =>
-    item.name.toLowerCase().includes(term)
-  )
+    if (!search.value) return travelPackages.value
+    const term = search.value.toLowerCase()
+    return travelPackages.value.filter(item =>
+        item.name.toLowerCase().includes(term)
+    )
 })
-
-
-function addNewItem() {
-  // Your add item logic here
-  console.log('Add clicked')
-}
 
 async function fetchPackages() {
     try {
@@ -149,6 +156,7 @@ async function toggleActive(item) {
         });
         console.log({ resp });
         showSuccess(resp.message || 'success');
+        fetchPackages();
     } catch (error) {
         showError(error?.response?.data?.message || 'Failed to update');
         item.is_active = !item.is_active; // Revert back if failed
@@ -156,6 +164,30 @@ async function toggleActive(item) {
     }
 }
 
+const togglePublished = async (item) => {
+    try {
+        const resp = await axios.patch(`admin/travel-packages/${item.id}/toggle-publish`, {
+            is_published: item.is_published
+        });
+        showSuccess(resp.message || 'success');
+        fetchPackages();
+    } catch (error) {
+        showError(error?.response?.data?.message || 'Failed to update');
+        item.is_published = !item.is_published; // Revert back if failed
+        console.error('Failed to update status:', error);
+    }
+}
+
+function addPackage(item) {
+    globalModal.value.open({
+        title: 'Add New Package',
+        component: PackageAdd,
+        size: 'md',
+        props: {
+            item, // <-- correctly passed as a prop
+        },
+    });
+}
 function deleteItem(item) {
     globalModal.value.open({
         title: 'Delete Category',

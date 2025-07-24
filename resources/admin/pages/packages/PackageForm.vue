@@ -26,7 +26,8 @@
 										<div>
 											<v-text-field v-model="form.slug" label="URL" :rules="[rules.required]"
 												:error-messages="errors.slug" density="comfortable" variant="outlined"
-												:disabled="submitting" required />
+										
+												:disabled="submitting || form.published_at" required />
 										</div>
 
 									</v-col>

@@ -1,7 +1,7 @@
 <template>
     <v-card flat>
         <v-card-title>
-            <span class="font-medium">Add New Blog</span>
+            <span class="font-medium">Add New Package</span>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -10,7 +10,7 @@
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
                 <v-row>
                     <v-col cols="12">
-                        <v-text-field v-model="form.title" label="Title" density="comfortable" variant="outlined"
+                        <v-text-field v-model="form.name" label="Package Name" density="comfortable" variant="outlined"
                             :rules="[rules.required]" />
                     </v-col>
 
@@ -44,7 +44,7 @@ const emit = defineEmits(['close', 'saved'])
 const formRef = ref(null)
 
 const form = reactive({
-    title: '',
+    name: '',
     slug: '',
 })
 
@@ -65,9 +65,9 @@ function slugify(text) {
 }
 
 // Auto-update slug only if user hasn't edited it manually
-watch(() => form.title, (newTitle) => {
+watch(() => form.name, (newName) => {
     if (!slugEdited.value) {
-        form.slug = slugify(newTitle)
+        form.slug = slugify(newName)
     }
 })
 
@@ -98,11 +98,11 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true;
-        const resp = await axios.post('/admin/blogs', form)
+        const resp = await axios.post('/admin/travel-packages', form)
         loading.value = false;
         showSuccess(resp.data?.message || 'Blog created successfully')
         // emit('close')
-        router.push({ name: 'adminBlogForm', query: { id: resp.blog.id } })
+        router.push({ name: 'adminPackageForm', query: { id: resp.data.id } })
     } catch (error) {
         loading.value = false;
         showError(error?.response?.data?.message || 'An error occurred')
