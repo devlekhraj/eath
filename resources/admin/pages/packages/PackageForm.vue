@@ -155,6 +155,9 @@
 				</v-col>
 
 				<v-col cols="12" md="5" v-if="package_id">
+					<div>
+						<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos, corrupti?</p>
+					</div>
 					<!-- <div class="mb-4">
 						<FormRight @close="fetchPackage" :travelPackage="travel_package"
 							:travelPackageId="package_id" />
