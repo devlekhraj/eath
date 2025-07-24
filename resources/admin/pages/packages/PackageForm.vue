@@ -111,9 +111,46 @@
 						</v-card>
 					</div>
 					<div class="mt-4" v-if="package_id">
-						<div>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, ullam?</p>
-						</div>
+						<v-card elevation="0" class="pa-6">
+							<v-card-title class="py-3">
+								<div>
+									<h5>Package Images
+									</h5>
+								</div>
+							</v-card-title>
+							<v-divider></v-divider>
+							<v-card-text class="pt-10">
+								<v-row>
+									<v-col cols="12" v-if="package_id">
+										<h4>Slider Images</h4>
+										<v-file-input prepend-icon="" v-model="selected_file" accept="image/*"
+											@change="handleUploadImage()" prepend-inner-icon="mdi-image"
+											label="File input"></v-file-input>
+										<div>
+											<v-row>
+												<v-col cols="6" md="4" v-for="(image, index) in form.images"
+													:key="index">
+													<div class="position-relative">
+														<img :src="image.url" alt="Image"
+															style="width: 100%; object-fit: contain;">
+
+														<!-- Delete icon -->
+														<v-icon color="red" small class="position-absolute"
+															style="top: 8px; right: 8px; cursor: pointer; padding: 2px;"
+															@click="handleDelete(image)" title="Delete Image">
+															mdi-close-thick
+														</v-icon>
+													</div>
+												</v-col>
+
+											</v-row>
+										</div>
+									</v-col>
+
+
+								</v-row>
+							</v-card-text>
+						</v-card>
 					</div>
 				</v-col>
 
