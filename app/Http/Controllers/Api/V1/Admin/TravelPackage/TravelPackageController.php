@@ -88,12 +88,12 @@ class TravelPackageController extends Controller
         ]);
     }
 
-     public function packageDelete($id, Request $request)
+    public function packageDelete($id, Request $request)
     {
         $package = TravelPackage::findOrFail($id);
         $package->delete(); // This will perform a soft delete
 
-        return response()->json(['message' => $package->name.' deleted successfully.']);
+        return response()->json(['message' => $package->name . ' deleted successfully.']);
     }
 
 
@@ -109,7 +109,13 @@ class TravelPackageController extends Controller
         $travelPackage->is_active = $request->boolean('is_active');
         $travelPackage->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated']);
-    }
+        $statusText = $travelPackage->is_active ? 'activated' : 'deactivated';
 
+        return response()->json([
+            'success' => true,
+            'message' => "{$travelPackage->name} has been {$statusText}.",
+            'name' => $travelPackage->name,
+            'is_active' => $travelPackage->is_active,
+        ]);
+    }
 }

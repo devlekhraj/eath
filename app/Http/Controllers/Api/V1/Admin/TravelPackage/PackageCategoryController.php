@@ -12,7 +12,7 @@ use App\Http\Resources\TravelPackageResource;
 
 class PackageCategoryController extends Controller
 {
-   
+
 
     public function saveCategory(Request $request)
     {
@@ -62,13 +62,33 @@ class PackageCategoryController extends Controller
         $category->is_active = $request->boolean('is_active');
         $category->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated']);
+        $statusText = $category->is_active ? 'activated' : 'deactivated';
+
+        return response()->json([
+            'success' => true,
+            'message' => "{$category->name} has been {$statusText}.",
+            'name' => $category->name,
+            'is_active' => $category->is_active,
+        ]);
     }
+
+    // public function delete($id, Request $request)
+    // {
+    //     $category = PackageCategory::findOrFail($id);
+    //     $category->delete(); // This will perform a soft delete
+
+    //     return response()->json(['message' => 'Category deleted successfully.']);
+    // }
     public function delete($id, Request $request)
     {
         $category = PackageCategory::findOrFail($id);
-        $category->delete(); // This will perform a soft delete
+        $name = $category->name;
+        $category->delete(); // Performs a soft delete
 
-        return response()->json(['message' => 'Category deleted successfully.']);
+        return response()->json([
+            'success' => true,
+            'message' => "{$name} has been deleted.",
+            'name' => $name,
+        ]);
     }
 }

@@ -96,6 +96,11 @@ import axios from 'axios'
 import { formatDate, formatAmount } from '@/utils/format'
 import PackageDelete from './modal/PackageDelete.vue'
 
+import { useSnackbar } from '@/composables/snackbar'
+
+const { showSuccess, showError } = useSnackbar()
+
+
 const headers = [
     { title: 'SN', key: 'sn', sortable: true },
     { title: 'Created', key: 'created_at', sortable: false },
@@ -143,7 +148,9 @@ async function toggleActive(item) {
             is_active: item.is_active
         });
         console.log({ resp });
+        showSuccess(resp.message || 'success');
     } catch (error) {
+        showError(error?.response?.data?.message || 'Failed to update');
         item.is_active = !item.is_active; // Revert back if failed
         console.error('Failed to update status:', error);
     }

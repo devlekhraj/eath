@@ -31,7 +31,7 @@
 
 			<template #item.name="{ item }">
 				<div style="min-width: 250px;">
-					<span class="text-primary">{{ item.name }}</span>
+					<span class="text-primary text-capitalize">{{ item.name }}</span>
 				</div>
 			</template>
 
