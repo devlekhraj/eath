@@ -33,8 +33,20 @@ class BlogController extends Controller
         return response()->json([
             'success' => true,
             'data' => new BlogResource($blog),  // Use `new` here
-            'message' => 'Blog retrieved successfully.'
+            'message' => 'Blog retrieved.'
         ], 200);
+    }
+    public function delete(Request $request, $id)
+    {
+        // Retrieve the travel package by ID or fail with 404
+        $blog = Blog::findOrFail($id);
+        $blog->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $blog->title.' deleted.'
+        ], 200);
+
     }
 
 
@@ -55,9 +67,9 @@ class BlogController extends Controller
             //         : Rule::unique('blogs', 'slug'),
             // ],
             'sub_title'         => 'nullable|string|max:255',
-            'content'           => 'required|string',
+            'content'           => 'nullable|string',
             'cover_image'       => 'nullable|string',
-            'author'            => 'required|string|max:100',
+            'author'            => 'nullable|string|max:100',
             'is_published'      => 'nullable|boolean',
             'is_active'         => 'nullable|boolean',
             'meta_title'        => 'nullable|string|max:255',
@@ -66,7 +78,7 @@ class BlogController extends Controller
         ];
 
         $validated = $request->validate($rules);
-
+        $validated["author"] = isset($request->author) ? $request->author : 'admin';
 
         // Convert empty strings to null to avoid saving "" strings in DB
         foreach ($validated as $key => $value) {

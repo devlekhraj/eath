@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('sub_title')->nullable();
-            $table->longText('content');
+            $table->longText('content')->nullable();
             $table->string('cover_image')->nullable();
-            $table->string('author');
+            $table->string('author')->nullable();
             $table->boolean('is_published')->default(false);
             $table->dateTime('published_at')->nullable();
             $table->boolean('is_active')->default(false);

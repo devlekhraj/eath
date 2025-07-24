@@ -11,7 +11,7 @@
                     </v-col>
 
                     <v-col cols="auto">
-                        <v-btn color="primary" rounded size="large" variant="elevated">
+                        <v-btn color="primary" rounded size="large" variant="elevated" @click="addBlog()">
                             <v-icon left>mdi-plus</v-icon> Add Blog
                         </v-btn>
                     </v-col>
@@ -23,6 +23,15 @@
             <template #item.sn="{ index }">
                 {{ index + 1 }}
             </template>
+            <template #item.author="{ item }">
+                <div>   
+                    <v-avatar><v-icon size="32">mdi-account-circle</v-icon></v-avatar>
+                    <span class="text-capitalize">
+                        {{ item.author ? item.author : 'Admin' }}
+                    </span>
+                </div>
+            </template>
+
 
             <template #item.title="{ item }">
                 <div style="min-width: max-content;">
@@ -31,6 +40,7 @@
                     </span>
                 </div>
             </template>
+
 
 
 
@@ -80,6 +90,7 @@
                 </v-menu>
             </template>
         </v-data-table>
+        <modal-template ref="globalModal" @close="fetchBlogs"></modal-template>
     </v-container>
 </template>
 
@@ -104,7 +115,7 @@ const headers = [
 
 const blogList = ref([])
 const search = ref('');
-
+const globalModal= ref(null);
 
 const filteredItems = computed(() => {
     if (!search.value) return blogList.value
@@ -114,7 +125,18 @@ const filteredItems = computed(() => {
     )
 })
 
-
+import BlogAdd from './modal/BlogAdd.vue'
+import BlogDelete from './modal/BlogDelete.vue'
+function addBlog(item = {}) {
+    globalModal.value.open({
+        title: 'Add New Blog',
+        component: BlogAdd,
+        size: 'md',
+        props: {
+            item, // <-- correctly passed as a prop
+        },
+    });
+}
 
 const fetchBlogs = async () => {
     const resp = await axios.get('admin/blogs')
@@ -122,7 +144,16 @@ const fetchBlogs = async () => {
 }
 
 const deleteItem = (item) => {
-    console.log({ item })
+
+    globalModal.value.open({
+        title: 'Delete '+item.title,
+        component: BlogDelete,
+        size: 'sm',
+        props: {
+            item, // <-- correctly passed as a prop
+        },
+    });
+
 }
 
 async function toggleActive(item) {

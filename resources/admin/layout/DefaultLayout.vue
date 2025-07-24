@@ -54,7 +54,7 @@ const menuGroups = ref([
 	{
 		groupName: 'Our Blogs',
 		items: [
-			{ name: 'Create Blog', icon: 'mdi-note-plus-outline', route_name: 'adminBlogForm' },
+			// { name: 'Create Blog', icon: 'mdi-note-plus-outline', route_name: 'adminBlogForm' },
 			{ name: 'All Blogs', icon: 'mdi-note-text-outline', route_name: 'adminBlogPage' },
 			{ name: 'Categories', icon: 'mdi-note-text-outline', route_name: 'adminBlogCategorypage' },
 		],
