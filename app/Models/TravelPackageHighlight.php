@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TravelPackageHighlight extends Model
 {
+    use SoftDeletes;
     protected $guarded = [];
 
     protected $appends = ['icon_url', 'highlight_name'];

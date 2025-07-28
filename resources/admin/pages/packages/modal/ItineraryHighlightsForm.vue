@@ -192,8 +192,8 @@ async function handleDelete() {
 
     loading_delete.value = true
     try {
-        await axios.delete(`/admin/itinerary-highlights/${form.id}`)
-        showSuccess('Deleted successfully')
+        const resp = await axios.delete(`/admin/itinerary-highlights/${form.id}/delete`)
+        showSuccess(resp.message || 'Deleted successfully')
         emit('saved')
         emit('close')
     } catch (err) {

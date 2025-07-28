@@ -43,9 +43,13 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::patch('travel-packages/{id}/toggle-publish', [TravelPackageController::class, 'togglePublish']);
         Route::delete('travel-packages/{id}/delete', [TravelPackageController::class, 'packageDelete']);
 
+        Route::delete('travel-package-highlight/{id}/delete', [TravelPackageController::class, 'packageHighlightDelete']);
+
         Route::post('travel-packages/{id}/itinerary', [PackageItinareryController::class, 'storeItinerary']);
         Route::delete('package-itineraries/{id}/delete', [PackageItinareryController::class, 'deleteItinerary']);
         Route::post('package-itineraries/{id}/highlight', [PackageItinareryController::class, 'itineraryHighight']);
+
+        Route::delete('itinerary-highlights/{id}/delete', [PackageItinareryController::class, 'itineraryHighightDelete']);
 
         Route::get('lookups', [LookupController::class, 'getLookups']);
         Route::post('lookups', [LookupController::class, 'storeUpdate']);
@@ -53,7 +57,6 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::post('travel-packages/{id}/inlusions', [PackageInclusionController::class, 'storeInclusion']);
         Route::delete('package-inclusions/{id}/delete', [PackageInclusionController::class, 'deleteInclusion']);
-
 
 
         Route::get('package-categories', [PackageCategoryController::class, 'getCategories']);

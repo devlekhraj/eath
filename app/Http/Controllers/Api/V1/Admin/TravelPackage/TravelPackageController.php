@@ -137,6 +137,14 @@ class TravelPackageController extends Controller
         return response()->json(['message' => $package->name . ' deleted successfully.']);
     }
 
+    public function packageHighlightDelete($id, Request $request)
+    {
+        $highlight = TravelPackageHighlight::findOrFail($id);
+        $highlight->delete(); // This will perform a soft delete
+
+        return response()->json(['message' => $highlight->highlight_name . ' deleted successfully.']);
+    }
+
 
 
 

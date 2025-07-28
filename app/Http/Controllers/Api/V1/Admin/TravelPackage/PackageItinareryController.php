@@ -127,7 +127,6 @@ class PackageItinareryController extends Controller
         $category = PackageItierary::findOrFail($id);
         $category->delete();
 
-
         return response()->json(['success' => true, 'message' => 'Itinerary Deleted']);
     }
 
@@ -166,5 +165,12 @@ class PackageItinareryController extends Controller
             'data' => $highlight,
             'message' => $message,
         ]);
+    }
+
+    public function itineraryHighightDelete($id, Request $request)
+    {
+        $highlight = ItineraryHighlight::findOrFail($id);
+        $highlight->delete(); // This will perform a soft delete
+        return response()->json(['message' => $highlight->highlight_name . ' deleted successfully.']);
     }
 }

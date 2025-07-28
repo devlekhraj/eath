@@ -188,12 +188,12 @@ async function submitForm() {
 }
 
 async function handleDelete() {
-    if (!form.id) return
 
     loading_delete.value = true
     try {
-        await axios.delete(`/admin/travel-packages/${props.travelPackage.id}/delete`)
-        showSuccess('Deleted successfully')
+        const resp = await axios.delete(`/admin/travel-package-highlight/${props.item.id}/delete`)
+
+        showSuccess(resp.message || 'Deleted successfully');
         emit('saved')
         emit('close')
     } catch (err) {
