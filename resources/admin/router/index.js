@@ -159,9 +159,19 @@ const routes = [
 				},
 			},
 			{
-				path: 'itinerary-lookups',
-				name: 'adminItineraryLookupPage',
-				component: () => import('@pages/packages/ItineraryLookupPage.vue'),
+				path: 'package-lookups',
+				name: 'adminPackageLookupPage',
+				component: () => import('@pages/packages/PackageLookupPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Package Lookup Page',
+					subtitle: 'Lookup with icon',
+				},
+			},
+			{
+				path: 'lookups',
+				name: 'adminLookupPage',
+				component: () => import('@pages/lookups/LookupPage.vue'),
 				meta: {
 					requireAuth: true,
 					title: 'Itinerary Lookup Page',

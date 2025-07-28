@@ -14,7 +14,7 @@
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
                 <v-row>
                     <v-col cols="12">
-                        <v-text-field
+                        <v-textarea
                             v-model="form.title"
                             label="Title"
                             variant="outlined"

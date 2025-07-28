@@ -4,10 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Auth\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
+use App\Http\Controllers\Api\V1\Admin\Lookup\LookupController;
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
-use App\Http\Controllers\Api\V1\Admin\TravelPackage\ItinareryLookupController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageCategoryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageInclusionController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageItinareryController;
@@ -37,6 +37,8 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::get('travel-packages', [TravelPackageController::class, 'index']);
         Route::post('travel-packages', [TravelPackageController::class, 'storeUpdate']);
         Route::get('travel-packages/{id}', [TravelPackageController::class, 'show']);
+        Route::post('travel-packages/{id}/highlight', [TravelPackageController::class, 'packageHighlight']);
+
         Route::patch('travel-packages/{id}/toggle-active', [TravelPackageController::class, 'toggleActive']);
         Route::patch('travel-packages/{id}/toggle-publish', [TravelPackageController::class, 'togglePublish']);
         Route::delete('travel-packages/{id}/delete', [TravelPackageController::class, 'packageDelete']);
@@ -45,9 +47,9 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::delete('package-itineraries/{id}/delete', [PackageItinareryController::class, 'deleteItinerary']);
         Route::post('package-itineraries/{id}/highlight', [PackageItinareryController::class, 'itineraryHighight']);
 
-        Route::get('itinerary-lookups', [ItinareryLookupController::class, 'itineraryLookups']);
-        Route::post('itinerary-lookups', [ItinareryLookupController::class, 'storeUpdate']);
-        Route::delete('itinerary-lookups/{id}/delete', [ItinareryLookupController::class, 'deleteItem']);
+        Route::get('lookups', [LookupController::class, 'getLookups']);
+        Route::post('lookups', [LookupController::class, 'storeUpdate']);
+        Route::delete('lookups/{id}/delete', [LookupController::class, 'deleteItem']);
 
         Route::post('travel-packages/{id}/inlusions', [PackageInclusionController::class, 'storeInclusion']);
         Route::delete('package-inclusions/{id}/delete', [PackageInclusionController::class, 'deleteInclusion']);

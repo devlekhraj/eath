@@ -40,6 +40,16 @@ class TravelPackageResource extends JsonResource
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
 
+            "highlights" => $this->highlights->map(function ($highlight) {
+                return [
+                    'id' => $highlight->id,
+                    'description' => $highlight->description,
+                    'sort_order' => $highlight->sort_order,
+                    'highlight_name' => $highlight->highlight_name,
+                    'icon_url' => $highlight->icon_url,
+                    'travel_package_id' => $highlight->travel_package_id,
+                ];
+            }),
             // Categories relationship as nested resources or just array
             'categories'        => PackageCategoryResource::collection($this->whenLoaded('categories')),
             'category_ids'        => $this->categories()->pluck('id'),

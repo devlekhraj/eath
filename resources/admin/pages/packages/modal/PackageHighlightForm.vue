@@ -1,7 +1,7 @@
 <template>
     <v-card flat>
         <v-card-title>
-            <span class="font-medium">Itinerary Highlights</span>
+            <span class="font-medium">Package Highlights</span>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -87,7 +87,7 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    itinerary: {
+    travelPackage: {
         type: Object,
         default: () => ({}),
     },
@@ -109,7 +109,7 @@ const rules = {
 
 const form = reactive({
     lookup_id: null,
-    itinerary_id: null,
+    travel_package_id: null,
     description: '',
     sort_order: null,
 })
@@ -121,17 +121,17 @@ onMounted(() => {
             id: props.item.id,
             description: props.item.description || '',
             lookup_id: props.item.lookup_id || null,
-            itinerary_id: props.item.itinerary_id || null,
+            travel_package_id: props.item.travel_package_id || null,
             sort_order: props.item.sort_order || null,
         })
     } else {
-        form.itinerary_id = props.itinerary.id
+        form.travel_package_id = props.travelPackage.id
     }
 })
 
 async function fetchHighlights() {
     try {
-        const resp = await axios.get('/admin/lookups?code=itinerary_highlights')
+        const resp = await axios.get('/admin/lookups?code=package_highlights')
         lookupItems.value = resp.data
     } catch (err) {
         showError('Failed to load highlights')
@@ -167,7 +167,7 @@ async function submitForm() {
 
     loading.value = true
     try {
-        const response = await axios.post(`/admin/package-itineraries/${props.itinerary.id}/highlight`, form)
+        const response = await axios.post(`/admin/travel-packages/${props.travelPackage.id}/highlight`, form)
         showSuccess(response.message || 'Saved successfully')
         emit('close')
     } catch (err) {
@@ -192,7 +192,7 @@ async function handleDelete() {
 
     loading_delete.value = true
     try {
-        await axios.delete(`/admin/itinerary-highlights/${form.id}`)
+        await axios.delete(`/admin/travel-packages/${props.travelPackage.id}/delete`)
         showSuccess('Deleted successfully')
         emit('saved')
         emit('close')

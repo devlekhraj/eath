@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('itinerary_highlights', function (Blueprint $table) {
-            
+        Schema::create('lookups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('itinerary_id')->constrained('package_itieraries')->onDelete('cascade'); 
-            $table->foreignId('lookup_id')->constrained('lookups')->onDelete('cascade'); 
-            $table->string('description')->nullable();
-            $table->integer('sort_order')->default(0);
+            $table->string('code');
+            $table->string('name');
+            $table->string('icon')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('itinerary_highlights');
+        Schema::dropIfExists('lookups');
     }
 };

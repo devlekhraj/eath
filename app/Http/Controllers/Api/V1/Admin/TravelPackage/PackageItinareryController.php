@@ -137,7 +137,7 @@ class PackageItinareryController extends Controller
         $validated = $request->validate([
             "id" => "nullable|exists:itinerary_highlights,id",
             "itinerary_id" => "required|exists:package_itieraries,id",
-            "itinerary_lookup_id" => "required|exists:itinerary_lookups,id",
+            "lookup_id" => "required|exists:lookups,id",
             "description" => "required|string",
             "sort_order" => "nullable|integer",
         ]);

@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('itinerary_highlights', function (Blueprint $table) {
-            
+        Schema::create('travel_package_highlights', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('itinerary_id')->constrained('package_itieraries')->onDelete('cascade'); 
-            $table->foreignId('lookup_id')->constrained('lookups')->onDelete('cascade'); 
+            $table->foreignId('travel_package_id')->constrained('travel_packages')->onDelete('cascade');
+            $table->foreignId('lookup_id')->constrained('lookups')->onDelete('cascade');
             $table->string('description')->nullable();
             $table->integer('sort_order')->default(0);
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('itinerary_highlights');
+        Schema::dropIfExists('travel_package_highlights');
     }
 };

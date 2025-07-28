@@ -9,6 +9,7 @@ use App\Models\PackageCategory;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PackageCategoryResource;
 use App\Http\Resources\TravelPackageResource;
+use App\Models\TravelPackageHighlight;
 
 class TravelPackageController extends Controller
 {
@@ -88,6 +89,46 @@ class TravelPackageController extends Controller
         ]);
     }
 
+
+    public function packageHighlight($id, Request $request)
+    {
+
+        $validated = $request->validate([
+            "id" => "nullable|exists:travel_package_highlights,id",
+            "travel_package_id" => "required|exists:travel_packages,id",
+            "lookup_id" => "required|exists:lookups,id",
+            "description" => "required|string",
+            "sort_order" => "nullable|integer",
+        ]);
+
+        $validated["sort_order"] = $validated["sort_order"] ?? 0;
+
+
+        if (!empty($validated['id'])) {
+
+            // UPDATE existing highlight
+            // $highlight = $itinerary->highlights()->findOrFail($validated['id']);
+            $highlight = TravelPackageHighlight::find($validated['id']);
+            $highlight->update($validated);
+            $message = 'Itinerary highlight updated successfully.';
+        } else {
+
+            // unset($validated['itinerary_id']);
+            // CREATE new highlight
+            $highlight = TravelPackageHighlight::create($validated);
+            // $highlight = $itinerary->highlights()->create($validated);
+            $message = 'Itinerary highlight created successfully.';
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $highlight,
+            'message' => $message,
+        ]);
+    }
+
+
+
     public function packageDelete($id, Request $request)
     {
         $package = TravelPackage::findOrFail($id);
@@ -132,7 +173,7 @@ class TravelPackageController extends Controller
 
         $package->save();
 
-        $message = $isPublished ? $package->name.' is published now.' : $package->name.' is unpublished now.';
+        $message = $isPublished ? $package->name . ' is published now.' : $package->name . ' is unpublished now.';
 
         return response()->json(['success' => true, 'message' => $message]);
     }

@@ -20,8 +20,48 @@
                             :disabled="submitting || Boolean(form.published_at)" required />
                     </v-col>
 
+                    <v-col cols="6">
+                        <v-text-field v-model="form.duration_days" label="Duration (Days)" type="number"
+                            density="comfortable" prepend-inner-icon="mdi-clock" variant="outlined"
+                            :rules="[rules.required, rules.numeric, rules.positive]"
+                            :error-messages="errors.duration_days" :disabled="submitting" />
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-text-field v-model="form.duration_nights" label="Duration (Nights)" type="number"
+                            density="comfortable" prepend-inner-icon="mdi-clock" variant="outlined"
+                            :rules="[rules.required, rules.numeric, rules.positive]"
+                            :error-messages="errors.duration_nights" :disabled="submitting" />
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-text-field v-model="form.price" label="Price (USD)" type="number" density="comfortable"
+                            prepend-inner-icon="mdi-currency-usd" variant="outlined"
+                            :rules="[rules.required, rules.numeric, rules.positive]" :error-messages="errors.price"
+                            :disabled="submitting" />
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-text-field v-model="form.altitude" label="Altitude (meter)" type="number"
+                            density="comfortable" prepend-inner-icon="mdi-image-filter-hdr" variant="outlined"
+                            :rules="[rules.numeric, rules.positive]" :error-messages="errors.altitude"
+                            :disabled="submitting" />
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-date-input v-model="form.start_date" label="Start Date" prepend-icon=""
+                            prepend-inner-icon="mdi-calendar" variant="outlined" density="comfortable"
+                            :error-messages="errors.start_date" :disabled="submitting" />
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-date-input v-model="form.end_date" label="End Date" prepend-icon=""
+                            prepend-inner-icon="mdi-calendar" variant="outlined" density="comfortable"
+                            :error-messages="errors.end_date" :disabled="submitting" />
+                    </v-col>
+
                     <v-col cols="12">
-                        <v-select v-model="form.category_ids" :items="package_categories" item-title="name"
+                        <v-select v-model="form.category_ids" :items="packageCategories" item-title="name"
                             item-value="id" label="Select Categories" multiple chips clearable />
                     </v-col>
 
@@ -60,7 +100,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch, onMounted } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
 const { showSuccess, showError } = useSnackbar()
@@ -76,7 +116,7 @@ const emit = defineEmits(['submit'])
 
 const submitting = ref(false)
 const descriptionError = ref(false)
-const package_categories = ref([]) // You can fetch or pass this as prop if needed
+const packageCategories = ref([]) // You can fetch or pass this as prop if needed
 const errors = ref({})
 
 const form = reactive({
@@ -113,22 +153,7 @@ const rules = {
     positive: (v) => !v || Number(v) >= 0 || 'Must be positive',
 }
 
-onMounted(() => {
-    fetchPackageCategories();
-})
-
 const packageId = ref(form.id || null)
-
-async function fetchPackageCategories() {
-    try {
-        const resp = await axios.get(`/admin/package-categories`)
-        console.log(resp.data);
-        package_categories.value = resp.data;
-    } catch (error) {
-        console.error('Failed to fetch package', error)
-    }
-}
-
 
 const submitPackage = async () => {
     descriptionError.value = !form.description || form.description.trim() === ''

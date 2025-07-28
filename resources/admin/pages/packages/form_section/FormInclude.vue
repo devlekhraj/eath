@@ -15,7 +15,7 @@
                         <div class="w-100">
                             <div>
                                 <v-text-field label="Item name" v-model="form.title" hide-details density="comfortable"
-                                    :rules="[rules.required]" variant="outlined"></v-text-field>
+                                    :rules="[rules.required]"></v-text-field>
                             </div>
                             <div>
                                 <v-switch label="Is Excluded?" v-model="form.is_excluded" inset

@@ -66,6 +66,10 @@ class TravelPackage extends Model
         return $this->hasMany(PackageItierary::class)->orderBy('sort_order','asc');
     }
 
+     public function highlights(){
+        return $this->hasMany(TravelPackageHighlight::class,'travel_package_id','id')->orderBy('sort_order','asc');
+    }
+
 
     public function inclusions()
     {
