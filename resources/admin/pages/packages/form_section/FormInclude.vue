@@ -65,14 +65,13 @@
                             </v-list-item>
                         </v-list>
                     </div>
-                    <div v-else class="pl-4">
-                        <p>No include items</p>
-                    </div>
                 </div>
 
                 <div>
-                    <p>Excluded Items</p>
                     <div v-if="travelPackage?.exclusions?.length">
+                        <div>
+                            <p>Excluded Items</p>
+                        </div>
                         <v-list density="compact">
                             <v-list-item v-for="(item, index) in travelPackage?.exclusions" :key="'inc-' + item.id"
                                 class="px-0">
@@ -102,9 +101,6 @@
                                 </div>
                             </v-list-item>
                         </v-list>
-                    </div>
-                    <div v-else class="pl-4">
-                        <p>No exclude items</p>
                     </div>
                 </div>
             </v-card-text>
@@ -185,6 +181,7 @@ async function handleSubmit() {
 // const globalModal = ref(null)
 
 import DeleteIncludeItem from '../modal/DeleteIncludeItem.vue'
+import IncludeExcludeForm from '../modal/IncludeExcludeForm.vue'
 
 function deleteItem(item) {
     globalModal.value.open({
@@ -197,10 +194,13 @@ function deleteItem(item) {
     })
 }
 function editItem(item) {
-    Object.assign(form, {
-        id: item.id,
-        title: item.title,
-        is_excluded: item.is_excluded,
+    globalModal.value.open({
+        title: 'Edit ' + item.title,
+        component: IncludeExcludeForm,
+        size: 'md',
+        props: {
+            item,
+        },
     })
 }
 

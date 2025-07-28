@@ -75,7 +75,8 @@ class TravelPackageResource extends JsonResource
                     'title' => $item->title,
                     'description' => $item->description,
                     'sort_order' => $item->sort_order,
-                    "is_excluded" => $item->is_excluded
+                    "is_excluded" => $item->is_excluded,
+                    "travel_package_id" => $item->travel_package_id,
                 ];
             }),
             'exclusions'            => $this->exclusions->map(function ($item) {
@@ -84,7 +85,8 @@ class TravelPackageResource extends JsonResource
                     'title' => $item->title,
                     'description' => $item->description,
                     'sort_order' => $item->sort_order,
-                    "is_excluded" => $item->is_excluded
+                    "is_excluded" => $item->is_excluded,
+                    "travel_package_id" => $item->travel_package_id,
                 ];
             }),
             'category_ids'        => $this->categories()->pluck('id')

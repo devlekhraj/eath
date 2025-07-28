@@ -27,7 +27,7 @@
                         />
                     </v-col>
 
-                    <v-col cols="12">
+                    <!-- <v-col cols="12">
                         <v-textarea
                             label="Description"
                             variant="outlined"
@@ -36,7 +36,7 @@
                             :error="!!serverErrors.description"
                             :error-messages="serverErrors.description"
                         />
-                    </v-col>
+                    </v-col> -->
 
                     <v-col cols="6" md="6">
                         <v-text-field
@@ -81,7 +81,7 @@
             </div>
             <div>
                 <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">
-                    Save
+                    Update
                 </v-btn>
             </div>
         </v-card-actions>
@@ -96,14 +96,6 @@ const props = defineProps({
     item: {
         type: Object,
         default: () => ({}),
-    },
-    travelPackageId: {
-        type: Number,
-        required: true,
-    },
-    isExcluded: {
-        type: Boolean,
-        required: true,
     },
 })
 
@@ -133,10 +125,8 @@ onMounted(() => {
             sort_order: props.item.sort_order || 0,
             description: props.item.description || '',
             is_excluded: props.item.is_excluded || false,
+            travel_package_id: props.item.travel_package_id || 0,
         })
-    } else {
-        form.is_excluded = props.isExcluded
-        form.travel_package_id = props.travelPackageId
     }
 })
 
@@ -168,7 +158,7 @@ async function submitForm() {
     try {
         loading.value = true
         const resp = await axios.post(
-            `/admin/travel-packages/${props.travelPackageId}/inlusions`,
+            `/admin/travel-packages/${props.item.travel_package_id}/inlusions`,
             form
         )
         emit('close')
