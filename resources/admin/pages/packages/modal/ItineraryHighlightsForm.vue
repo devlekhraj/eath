@@ -1,7 +1,7 @@
 <template>
     <v-card flat>
         <v-card-title>
-            <span class="font-medium">Itinerary Highlights</span>
+            <span class="font-medium">Itinerary Highlights </span>
         </v-card-title>
 
         <v-divider></v-divider>
