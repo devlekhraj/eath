@@ -12,7 +12,7 @@
                 <v-expansion-panel v-for="(itinerary, index) in travelPackage?.itineraries" :key="index">
                     <v-expansion-panel-title>
                         <div class="font-weight-medium">
-                            Day {{ index + 1 }} - {{ itinerary.title }}
+                            {{ itinerary.title }}
                         </div>
                     </v-expansion-panel-title>
 

@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class ItineraryHighlight extends Model
+{
+    protected $guarded = [];
+
+    protected $appends = ['icon_url', 'highlight_name'];
+
+    public function lookup()
+    {
+        return $this->belongsTo(ItineraryLookup::class, 'itinerary_lookup_id');
+    }
+
+    public function getHighlightNameAttribute()
+    {
+        return $this->lookup?->name ?? '';
+    }
+
+    public function getIconUrlAttribute(): string
+    {
+        return $this->lookup?->icon_url ?? asset('images/default.jpg');
+    }
+}

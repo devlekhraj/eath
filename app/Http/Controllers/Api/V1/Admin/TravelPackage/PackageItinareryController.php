@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\TravelPackage;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TravelPackageResource;
+use App\Models\ItineraryHighlight;
 use App\Models\PackageItierary;
 
 class PackageItinareryController extends Controller
@@ -128,5 +129,42 @@ class PackageItinareryController extends Controller
 
 
         return response()->json(['success' => true, 'message' => 'Itinerary Deleted']);
+    }
+
+    public function itineraryHighight($id, Request $request)
+    {
+
+        $validated = $request->validate([
+            "id" => "nullable|exists:itinerary_highlights,id",
+            "itinerary_id" => "required|exists:package_itieraries,id",
+            "itinerary_lookup_id" => "required|exists:itinerary_lookups,id",
+            "description" => "required|string",
+            "sort_order" => "nullable|integer",
+        ]);
+
+        $validated["sort_order"] = $validated["sort_order"] ?? 0;
+
+
+        if (!empty($validated['id'])) {
+
+            // UPDATE existing highlight
+            // $highlight = $itinerary->highlights()->findOrFail($validated['id']);
+            $highlight = ItineraryHighlight::find($validated['id']);
+            $highlight->update($validated);
+            $message = 'Itinerary highlight updated successfully.';
+        } else {
+
+            // unset($validated['itinerary_id']);
+            // CREATE new highlight
+            $highlight = ItineraryHighlight::create($validated);
+            // $highlight = $itinerary->highlights()->create($validated);
+            $message = 'Itinerary highlight created successfully.';
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $highlight,
+            'message' => $message,
+        ]);
     }
 }

@@ -22,7 +22,7 @@
                         <RichTextEditor v-model="form.description" />
                         <span v-if="descriptionError" class="text-error text-caption">Content is required</span>
                     </v-col>
-
+          
 
                 </v-row>
             </v-form>

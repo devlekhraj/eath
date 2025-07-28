@@ -55,6 +55,17 @@ class TravelPackageResource extends JsonResource
                     'title' => $item->title,
                     'description' => $item->description,
                     'sort_order' => $item->sort_order,
+                    "highlights" => $item->highlights->map(function ($highlight) {
+                        return [
+                            'id' => $highlight->id,
+                            'description' => $highlight->description,
+                            'sort_order' => $highlight->sort_order,
+                            'itinerary_lookup_id' => $highlight->itinerary_lookup_id,
+                            'highlight_name' => $highlight->highlight_name,
+                            'icon_url' => $highlight->icon_url,
+                            'itinerary_id' => $highlight->itinerary_id,
+                        ];
+                    })
 
                 ];
             }),

@@ -159,6 +159,16 @@ const routes = [
 				},
 			},
 			{
+				path: 'itinerary-lookups',
+				name: 'adminItineraryLookupPage',
+				component: () => import('@pages/packages/ItineraryLookupPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Itinerary Lookup Page',
+					subtitle: 'Itinerary Highlights lookup with icon',
+				},
+			},
+			{
 				path: 'inquiries',
 				name: 'adminInquiryPage',
 				component: () => import('@pages/customers/CustomerInquiryPage.vue'),
