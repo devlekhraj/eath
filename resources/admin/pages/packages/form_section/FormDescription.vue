@@ -1,6 +1,6 @@
 <template>
     <div class="mb-4">
-        <v-card elevation="0" class="pa-6">
+        <v-card elevation="0" class="pa-2">
             <v-card-title class="py-3">
                 <h5>Package Detail</h5>
             </v-card-title>

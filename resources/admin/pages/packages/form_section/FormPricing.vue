@@ -17,7 +17,8 @@
                                 <v-col cols="7">
                                     <div>
                                         <v-text-field variant="outlined" label="Item name" v-model="form.title"
-                                            hide-details density="comfortable" :rules="[rules.required]"></v-text-field>
+                                            prepend-inner-icon="mdi-invoice-list" hide-details density="comfortable"
+                                            :rules="[rules.required]"></v-text-field>
                                     </div>
 
                                 </v-col>
@@ -25,8 +26,8 @@
                                     <div class="d-flex align-center">
                                         <div class="w-100">
                                             <v-text-field label="Price" variant="outlined" v-model="form.price"
-                                                type="number" hide-details density="comfortable"
-                                                :rules="[rules.required]"></v-text-field>
+                                                prepend-inner-icon="mdi-currency-usd" type="number" hide-details
+                                                density="comfortable" :rules="[rules.required]"></v-text-field>
                                         </div>
                                         <v-spacer></v-spacer>
                                         <div class="text-right ml-4">
@@ -55,16 +56,18 @@
                                 <tr>
                                     <th class="text-left text-primary">Price Title</th>
                                     <th class="text-left text-primary">Price</th>
-                                    <th class="text-left">Actions</th>
+                                    <th class="text-left text-primary">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in travelPackage.prices" :key="index">
-                                    <td>
+                                    <td class="py-2">
                                         <p class="text-capitalize font-weight-medium">{{ item.title }}</p>
                                     </td>
-                                    <td><p class="text-capitalize">{{ formatAmount(item.price) }}</p></td>
-                                    <td>
+                                    <td class="py-2">
+                                        <p class="text-capitalize font-weight-medium">{{ formatAmount(item.price) }}</p>
+                                    </td>
+                                    <td class="py-2">
                                         <v-btn icon size="x-small" variant="tonal" color="primary"
                                             @click="editItem(item, false)">
                                             <v-icon>mdi-pencil</v-icon>
@@ -165,7 +168,7 @@ import PackagePriceDelete from '../modal/PackagePriceDelete.vue'
 import PackagePriceForm from '../modal/PackagePriceForm.vue'
 
 function deleteItem(item) {
-    console.log({item});
+    console.log({ item });
     globalModal.value.open({
         title: 'Delete Item',
         component: PackagePriceDelete,
