@@ -7,7 +7,7 @@
     </div>
     <div>
       <v-row>
-        <v-col v-for="(gallery,index) in galleries" :key="index" cols="4" md="2" class="d-flex justify-center">
+        <v-col v-for="(gallery,index) in galleries" :key="index" cols="2" md="1" class="d-flex justify-center">
           <v-tooltip location="top">
             <template #activator="{ props }">
               <div class="image-wrapper" v-bind="props">
@@ -25,7 +25,7 @@
                   <!-- View Button -->
                   <v-tooltip location="top">
                     <template #activator="{ on, attrs }">
-                      <v-btn v-bind="attrs" v-on="on" icon color="blue" size="small" @click.stop="viewImage(n)">
+                      <v-btn v-bind="attrs" v-on="on" icon variant="text" color="blue" size="x-small" @click.stop="viewImage(n)">
                         <v-icon>mdi-eye</v-icon>
                       </v-btn>
                     </template>
@@ -35,7 +35,7 @@
                   <!-- Delete Button -->
                   <v-tooltip location="top">
                     <template #activator="{ on, attrs }">
-                      <v-btn v-bind="attrs" v-on="on" icon color="red" size="small" @click.stop="deleteImage(n)">
+                      <v-btn v-bind="attrs" v-on="on" icon color="red" variant="text" size="x-small" @click.stop="deleteImage(n)">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </template>

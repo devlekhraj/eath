@@ -9,6 +9,9 @@
 				<div>
 					<FormHighlights v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
 				</div>
+				<div>
+					<FormPricing v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
+				</div>
 
 				<div>
 					<FormPackageItinery v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
@@ -34,6 +37,7 @@ import FormPackageItinery from './form_section/FormPackageItinery.vue'
 import FormPackageInclude from './form_section/FormInclude.vue'
 import FormHighlights from './form_section/FormHighlights.vue'
 import FormPackageGallery from './form_section/FormPackageGallery.vue'
+import FormPricing from './form_section/FormPricing.vue'
 
 // Get package ID from route
 const route = useRoute()

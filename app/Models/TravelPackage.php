@@ -24,11 +24,11 @@ class TravelPackage extends Model
             }
         });
 
-        static::updating(function ($trvelPackage) {
-            if (empty($trvelPackage->slug) || $trvelPackage->isDirty('name')) {
-                $trvelPackage->slug = Str::slug($trvelPackage->name);
-            }
-        });
+        // static::updating(function ($trvelPackage) {
+        //     if (empty($trvelPackage->slug) || $trvelPackage->isDirty('name')) {
+        //         $trvelPackage->slug = Str::slug($trvelPackage->name);
+        //     }
+        // });
 
     }
     protected $casts = [
@@ -74,6 +74,10 @@ class TravelPackage extends Model
     public function inclusions()
     {
         return $this->hasMany(PackageInclusion::class)->where('is_excluded',false)->orderBy('sort_order','asc');
+    }
+    public function prices()
+    {
+        return $this->hasMany(PackagePrice::class,'travel_package_id','id')->orderBy('sort_order','asc');
     }
     public function exclusions()
     {

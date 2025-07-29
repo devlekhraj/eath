@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
 use App\Http\Controllers\Api\V1\Admin\Lookup\LookupController;
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
+use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackagePriceController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageCategoryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageInclusionController;
@@ -57,6 +58,9 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::post('travel-packages/{id}/inlusions', [PackageInclusionController::class, 'storeInclusion']);
         Route::delete('package-inclusions/{id}/delete', [PackageInclusionController::class, 'deleteInclusion']);
+
+        Route::post('travel-packages/{id}/prices', [PackagePriceController::class, 'storeUpdatePrice']);
+        Route::delete('package-prices/{id}/delete', [PackagePriceController::class, 'deletePrice']);
 
 
         Route::get('package-categories', [PackageCategoryController::class, 'getCategories']);

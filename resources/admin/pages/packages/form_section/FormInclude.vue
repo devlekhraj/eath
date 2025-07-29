@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <v-card elevation="0" class="mt-4">
+    <div class="mb-4">
+        <v-card elevation="0">
             <v-card-title class="d-flex align-center justify-space-between py-4">
                 <h2 class="font-medium">Include / Exclude Items</h2>
                 <!-- <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()">

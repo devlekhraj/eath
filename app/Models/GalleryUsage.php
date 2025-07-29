@@ -16,6 +16,10 @@ class GalleryUsage extends Model
 
     // Append virtual attribute
     protected $appends = ['url'];
+    protected $casts = [
+        'custom_attributes' => 'array',
+    ];
+
 
     public function gallery(): BelongsTo
     {

@@ -1,5 +1,4 @@
 <template>
-
     <div class="mb-4">
         <v-card elevation="0" class="pa-6">
             <v-card-title class="py-3">
@@ -42,10 +41,6 @@
                     <span v-if="descriptionError" class="text-error text-caption">Content is required</span>
                 </div>
 
-                <!-- <div class="my-4">
-                            <VuetifyViewer :value="form.description" />
-                        </div> -->
-
                 <div class="mt-6 text-center">
                     <v-btn size="large" color="primary" rounded :loading="submitting" :disabled="submitting"
                         @click="submitPackage">
@@ -56,7 +51,6 @@
             </v-card-text>
         </v-card>
     </div>
-
 </template>
 
 <script setup>
@@ -76,7 +70,7 @@ const emit = defineEmits(['submit'])
 
 const submitting = ref(false)
 const descriptionError = ref(false)
-const package_categories = ref([]) // You can fetch or pass this as prop if needed
+const package_categories = ref([])
 const errors = ref({})
 
 const form = reactive({
@@ -96,41 +90,42 @@ const form = reactive({
     published_at: null,
 })
 
-// Update form when prop travelPackage changes
-watch(
-    () => props.travelPackage,
-    (newVal) => {
-        if (newVal && Object.keys(newVal).length) {
-            Object.assign(form, newVal)
-        }
-    },
-    { immediate: true }
-)
-
 const rules = {
     required: (v) => !!v || 'This field is required',
     numeric: (v) => !v || !isNaN(v) || 'Must be a number',
     positive: (v) => !v || Number(v) >= 0 || 'Must be positive',
 }
 
-onMounted(() => {
-    fetchPackageCategories();
-})
+const packageId = ref(null)
 
-const packageId = ref(form.id || null)
+watch(
+    () => props.travelPackage,
+    (newVal) => {
+        if (newVal && Object.keys(newVal).length) {
+            Object.assign(form, {
+                ...newVal,
+                description: newVal.description ?? '', // fix null warning
+            })
+            packageId.value = newVal.id
+        }
+    },
+    { immediate: true }
+)
+
+onMounted(() => {
+    fetchPackageCategories()
+})
 
 async function fetchPackageCategories() {
     try {
         const resp = await axios.get(`/admin/package-categories`)
-        console.log(resp.data);
-        package_categories.value = resp.data;
+        package_categories.value = resp.data
     } catch (error) {
-        console.error('Failed to fetch package', error)
+        console.error('Failed to fetch package categories', error)
     }
 }
 
-
-const submitPackage = async () => {
+async function submitPackage() {
     descriptionError.value = !form.description || form.description.trim() === ''
     if (descriptionError.value) return
 
@@ -148,28 +143,14 @@ const submitPackage = async () => {
                 : '',
         }
 
-        console.log({ payload });
+        const resp = await axios.post('/admin/travel-packages', payload)
 
-        const resp = await axios.post('/admin/travel-packages', payload);
-        console.log(resp.message);
-        showSuccess(resp.message || "Success");
+        showSuccess(resp.message || 'Package saved successfully')
 
-        // this.package_id = resp.data.id
-        // this.fetchPackage();
-        // this.$router.push({
-        //     name: 'adminPackageForm',
-        //     query: {
-        //         id: this.package_id
-        //     }
-        // })
-        // if (this.package_id) return;
-
-
-        // Emit submit event with payload to parent
-        // emit('submit', payload)
+        // emit('submit', payload) // Uncomment if needed
     } catch (error) {
-        showError(error?.response?.data?.message || 'An error occurred');
-        // handle errors here if needed
+        showError(error?.response?.data?.message || 'An error occurred')
+        errors.value = error?.response?.data?.errors || {}
     } finally {
         submitting.value = false
     }
