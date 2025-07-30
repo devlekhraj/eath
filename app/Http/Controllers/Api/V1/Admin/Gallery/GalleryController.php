@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\GalleryUsage;
+use App\Models\Guide;
 use Illuminate\Support\Facades\File;
 
 
@@ -93,6 +94,11 @@ class GalleryController extends Controller
                 case 'blogs':
                     $blog = Blog::find($request->usage_id);
                     $blog->cover_image = $filename;
+                    $blog->save();
+                    break;
+                case 'guides':
+                    $blog = Guide::find($request->usage_id);
+                    $blog->photo = $filename;
                     $blog->save();
                     break;
                 default:

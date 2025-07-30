@@ -12,6 +12,7 @@ class GuideResource extends JsonResource
     {
         return [
             'id'              => $this->id,
+            'avatar'          => $this->avatar,
             'name'            => $this->name,
             'username'        => $this->username,
             'bio'             => $this->bio,

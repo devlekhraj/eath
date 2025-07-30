@@ -24,8 +24,11 @@
 
                 <template #item.name="{ item }">
                     <div>
-                        <v-avatar size="36"><v-icon size="32">mdi-account-circle</v-icon></v-avatar>
-                        <span class="text-capitalize">{{ item.name }}</span>
+                        <v-avatar size="36" shadow-sm>
+                            <v-img :src="item.avatar" contain></v-img>
+                        </v-avatar>
+
+                        <span class="text-capitalize pl-2">{{ item.name }}</span>
 
                     </div>
                 </template>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('username')->nullable()->unique();
             $table->string('email')->nullable()->unique();
             $table->string('phone_no')->nullable();
+            $table->string('photo')->nullable();
             $table->longText('bio')->nullable();
             $table->json('language_spoken')->nullable();
             $table->string('license_number')->nullable();

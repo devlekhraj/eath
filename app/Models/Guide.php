@@ -30,6 +30,7 @@ class Guide extends Model
         });
     }
 
+    protected $appends = ['avatar'];
     protected $casts = [
         'language_spoken' => 'array',
     ];
@@ -44,15 +45,26 @@ class Guide extends Model
         return $this->hasMany(GuideTrip::class, 'guide_id', 'id')->orderBy('created_at', 'desc');
     }
 
-    public function images()
+    public function image()
     {
-        return $this->hasMany(GalleryUsage::class, 'usage_id', 'id')->where('usage_type', 'guides')->with('gallery');
+        return $this->hasOne(GalleryUsage::class, 'usage_id', 'id')->where('usage_type', 'guides')->with('gallery');
     }
-    public function getImagesUrlsAttribute(): array
+    // public function getAvatarAttribute(): ?string
+    // {
+    //     return $this->image && $this->image->gallery
+    //         ? $this->image->gallery->url
+    //         : asset('images/logo.png');
+    // }
+    public function getAvatarAttribute(): string
     {
-        return $this->images
-            ->filter(fn($usage) => $usage->gallery) // in case gallery is null
-            ->map(fn($usage) => $usage->gallery->url)
-            ->toArray();
+        $photo = Gallery::where('filename', $this->photo)->first();
+        if (!$photo) {
+            return asset('images/logo.png');
+        }
+
+        $filePath = storage_path($photo->filepath);
+        return file_exists($filePath)
+            ? route('image.view', ['filename' => $this->photo])
+            : asset('images/logo.png');
     }
 }

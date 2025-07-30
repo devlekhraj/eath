@@ -1,13 +1,26 @@
 <template>
-    <v-container class="py-8">
+    <div class="">
         <div v-if="guide">
             <!-- Guide Header -->
-            <v-card elevation="0" class="pa-6 mb-6">
+            <v-card elevation="0" class="pa-6 mb-4">
                 <div class="d-flex flex-column flex-md-row align-center gap-6">
-                    <v-avatar size="120">
-                        <v-img :src="guide.photo || '/images/default-user.jpg'" />
-                    </v-avatar>
-                    <div>
+                    <!-- Avatar Upload -->
+                    <div class="avatar-upload-wrapper" @click="triggerPhotoUpload">
+                        <v-avatar size="120" class="position-relative hoverable-avatar">
+                            <v-img :src="guide.avatar" contain />
+                            <!-- Overlay on hover -->
+                            <div class="avatar-overlay d-flex align-center justify-center">
+                                <v-icon color="white" size="28" class="me-2">mdi-camera</v-icon>
+                                <span class="text-white text-caption">Change Photo</span>
+                            </div>
+                        </v-avatar>
+
+                        <!-- Hidden File Input -->
+                        <input ref="photoInput" type="file" accept="image/*" @change="handlePhotoChange"
+                            style="display: none" />
+                    </div>
+                    <!-- Guide Info -->
+                    <div class="pl-4">
                         <h2 class="mb-1 text-uppercase">{{ guide.name }}</h2>
                         <p class="text-subtitle-1 text-grey">{{ guide.username }}</p>
                         <v-chip :color="statusColor(guide.status)" size="small" label class="text-capitalize mt-2">
@@ -16,6 +29,7 @@
                     </div>
                 </div>
             </v-card>
+
 
             <!-- Tabs Section -->
             <v-card elevation="0" class="mb-6">
@@ -37,44 +51,8 @@
                 <v-divider></v-divider>
 
                 <v-card-text>
-                    <!-- Bio Tab -->
-                    <div v-if="activeTab === 'bio'">
-                        <v-row dense>
-                            <v-col cols="12" md="6">
-                                <strong>Email:</strong><br />{{ guide.email || 'N/A' }}
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <strong>Phone:</strong><br />{{ guide.phone_no || 'N/A' }}
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <strong>License Number:</strong><br />{{ guide.license_number || 'N/A' }}
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <strong>Languages Spoken:</strong>
-                                <div class="mt-2 d-flex flex-wrap">
-                                    <v-chip v-for="lang in guide.language_spoken" :key="lang" class="ma-1"
-                                        color="primary" label>
-                                        {{ lang }}
-                                    </v-chip>
-                                </div>
-                            </v-col>
-                            <v-col cols="12">
-                                <strong>Bio:</strong>
-                                <p class="mt-1 text-grey-darken-1">{{ guide.bio || 'No bio available.' }}</p>
-                            </v-col>
-                        </v-row>
-                    </div>
-
-                    <!-- Ratings Tab -->
-                    <div v-else-if="activeTab === 'ratings'">
-                        <p>Total Reviews: <strong>{{ guide.rating_count }}</strong></p>
-                        <v-alert type="info" variant="tonal">Ratings list goes here.</v-alert>
-                    </div>
-
-                    <!-- Trips Tab -->
-                    <div v-else-if="activeTab === 'trips'">
-                        <p>Total Trips: <strong>{{ guide.trip_count }}</strong></p>
-                        <v-alert type="info" variant="tonal">Trip history goes here.</v-alert>
+                    <div>
+                        <component :is="currentTabComponent" :guide="guide" />
                     </div>
                 </v-card-text>
             </v-card>
@@ -82,17 +60,61 @@
 
         <!-- Loading State -->
         <v-skeleton-loader v-else type="card" />
-    </v-container>
+    </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineAsyncComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { useSnackbar } from '@/composables/snackbar'
+
+const { showSuccess, showError } = useSnackbar()
 
 const guide = ref(null)
 const activeTab = ref('bio')
 const route = useRoute()
+
+const photoInput = ref(null)
+
+const triggerPhotoUpload = () => {
+    photoInput.value?.click()
+}
+
+const handlePhotoChange = async (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('image', file);
+    formData.append('usage_id', route.params.id);
+    formData.append('usage_type', 'guides');
+
+
+    try {
+        const { url, filename } = await axios.post(`/admin/gallery-upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+
+        // Assuming `data.photo` is the new image URL
+        guide.value.avatar = url;
+        guide.value.photo = filename;
+    } catch (error) {
+        showError(error?.response?.data?.message || 'Photo upload failed');
+        console.error('Photo upload failed:', error)
+    }
+}
+
+// Dynamically resolve component based on activeTab
+const tabComponents = {
+    bio: defineAsyncComponent(() => import('./tabs/TabBio.vue')),
+    ratings: defineAsyncComponent(() => import('./tabs/TabRating.vue')),
+    trips: defineAsyncComponent(() => import('./tabs/TabTrip.vue'))
+}
+
+const currentTabComponent = computed(() => tabComponents[activeTab.value])
 
 onMounted(async () => {
     try {
@@ -114,3 +136,35 @@ const statusColor = (status) => {
     }
 }
 </script>
+<style scoped>
+.avatar-upload-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.hoverable-avatar {
+  transition: box-shadow 0.3s ease;
+}
+
+.hoverable-avatar:hover {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(33, 33, 33, 0.55);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.avatar-upload-wrapper:hover .avatar-overlay {
+  opacity: 1;
+}
+</style>
