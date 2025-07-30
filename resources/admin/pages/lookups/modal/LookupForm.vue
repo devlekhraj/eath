@@ -22,7 +22,7 @@
                         ></v-select>
                     </v-col>
                     <v-col cols="12">
-                        <v-text-field v-model="form.name" label="Category Name" variant="outlined" density="comfortable"
+                        <v-text-field v-model="form.name" label="Item Name" variant="outlined" density="comfortable"
                             :rules="[rules.required]" :error-messages="serverErrors.name" required />
                     </v-col>
 

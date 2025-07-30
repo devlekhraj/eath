@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <v-data-table :headers="headers" :items="filteredItems" :loading="fetching_data" :items-per-page="20"
             :sort-by="['name']" :sort-desc="[false]">
             <!-- Top slot: search box left, add button right -->
@@ -116,7 +116,7 @@
         </v-data-table>
 
         <modal-template ref="globalModal" @saved="fetchPackages" @close="fetchPackages" />
-    </v-container>
+    </div>
 </template>
 
 <script setup>

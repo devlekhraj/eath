@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Auth\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
+use App\Http\Controllers\Api\V1\Admin\Guide\GuideController;
 use App\Http\Controllers\Api\V1\Admin\Lookup\LookupController;
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
@@ -87,5 +88,11 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('gallery-upload', [GalleryController::class, 'uploadImage']);
         Route::get('galleries/{id}', [GalleryController::class, 'show']);
         Route::delete('galleries/{id}/delete', [GalleryController::class, 'delete']);
+        
+        
+        Route::get('guides', [GuideController::class, 'index']);
+        Route::get('guides/{id}', [GuideController::class, 'show']);
+        Route::delete('guides/{id}/delete', [GuideController::class, 'deleteGuide']);
+        Route::post('guides', [GuideController::class, 'storeUpdate']);
     });
 });

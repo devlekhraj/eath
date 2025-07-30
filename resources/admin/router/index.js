@@ -179,6 +179,26 @@ const routes = [
 				},
 			},
 			{
+				path: 'guides',
+				name: 'adminGuidePage',
+				component: () => import('@pages/guides/GuidePage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Guide Profiles',
+					subtitle: 'Tour & Trekking Guides',
+				},
+			},
+			{
+				path: 'guides/:id',
+				name: 'adminGuideDetailPage',
+				component: () => import('@pages/guides/GuideDetailPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Guide Profiles',
+					subtitle: 'Tour & Trekking Guides',
+				},
+			},
+			{
 				path: 'inquiries',
 				name: 'adminInquiryPage',
 				component: () => import('@pages/customers/CustomerInquiryPage.vue'),

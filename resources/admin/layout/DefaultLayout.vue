@@ -60,12 +60,14 @@ const menuGroups = ref([
 		],
 	},
 	{
-		groupName: 'Packages',
+		groupName: 'Travel',
 		items: [
-			{ name: 'All Packages', icon: 'mdi-package-variant-closed', route_name: 'adminPackagePage' },
+			{ name: 'Packages', icon: 'mdi-package-variant-closed', route_name: 'adminPackagePage' },
 			// { name: 'Create Package', icon: 'mdi-plus-box-outline', route_name: 'adminPackageForm' },
 			{ name: 'Categories', icon: 'mdi-tag-multiple-outline', route_name: 'adminPackageCategoryPage' },
 			{ name: 'Lookups', icon: 'mdi-format-list-bulleted-type', route_name: 'adminLookupPage' },
+			{ name: 'Guide Profile', icon: 'mdi-account-cowboy-hat-outline', route_name: 'adminGuidePage' }
+
 		],
 	},
 	{
