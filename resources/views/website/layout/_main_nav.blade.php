@@ -269,6 +269,9 @@
                         <a class="nav-link fw-semibold" href="#">Travel Guides</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="#">Blogs</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link fw-semibold" href="#">FAQs</a>
                     </li>
                 </ul>
