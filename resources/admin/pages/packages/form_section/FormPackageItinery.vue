@@ -2,12 +2,12 @@
     <div class="mb-4">
         <v-card class="elevation-0">
             <v-card-title class="d-flex align-center justify-space-between py-4">
-                <h2 class="font-medium">Itineraries</h2>
-                <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()">
-                    <v-icon>mdi-plus</v-icon>
+                <!-- <h2 class="font-medium">Itineraries</h2> -->
+                <v-btn color="primary" size="large" title="Add Itinerary" rounded @click="handleOpen()">
+                    <v-icon>mdi-plus</v-icon> Add Itinerary
                 </v-btn>
             </v-card-title>
-            <v-divider></v-divider>
+            <!-- <v-divider></v-divider> -->
             <v-expansion-panels multiple elevation="1">
                 <v-expansion-panel v-for="(itinerary, index) in travelPackage?.itineraries" :key="index">
                     <v-expansion-panel-title>

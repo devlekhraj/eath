@@ -6,23 +6,68 @@
 				<div>
 					<FormDescription v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
 				</div>
-				<div>
-					<FormHighlights v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
-				</div>
-				<div>
-					<FormPricing v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
-				</div>
+				<!-- Tabs Section -->
+				<v-card elevation="0" class="mb-6">
+					<v-tabs v-model="activeTab" color="primary">
+						<v-tab value="highlight">
+							<v-icon color="primary" start>mdi-lightbulb-outline</v-icon>
+							Highlights
+						</v-tab>
+						<v-tab value="itinerary">
+							<v-icon color="primary" start>mdi-map-check-outline</v-icon>
+							Itinerary
+						</v-tab>
+						<v-tab value="price_list">
+							<v-icon color="primary" start>mdi-currency-usd</v-icon>
+							Price List
+						</v-tab>
+						<v-tab value="includes">
+							<v-icon color="primary" start>mdi-checkbox-marked-circle-outline</v-icon>
+							Includes
+						</v-tab>
+						<v-tab value="gallery">
+							<v-icon color="primary" start>mdi-image-multiple</v-icon>
+							Gallery
+						</v-tab>
+					</v-tabs>
 
-				<div>
-					<FormPackageItinery v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
-				</div>
-				
-				<div>
-					<FormPackageInclude v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
-				</div>
-				<div>
-					<FormPackageGallery v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
-				</div>
+
+					<v-divider></v-divider>
+
+					<v-card-text>
+						<!-- Bio Tab -->
+						<div v-if="activeTab === 'highlight'">
+							<div>
+								<FormHighlights v-if="formReady" :travelPackage="travelPackage"
+									@refresh="fetchPackage" />
+							</div>
+						</div>
+						<div v-if="activeTab === 'itinerary'">
+							<div>
+								<FormPackageItinery v-if="formReady" :travelPackage="travelPackage"
+									@refresh="fetchPackage" />
+							</div>
+						</div>
+						<div v-if="activeTab === 'price_list'">
+							<div>
+								<FormPricing v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
+							</div>
+						</div>
+						<div v-if="activeTab === 'includes'">
+							<div>
+								<FormPackageInclude v-if="formReady" :travelPackage="travelPackage"
+									@refresh="fetchPackage" />
+							</div>
+						</div>
+						<div v-if="activeTab === 'gallery'">
+							<div>
+								<FormPackageGallery v-if="formReady" :travelPackage="travelPackage"
+									@refresh="fetchPackage" />
+							</div>
+						</div>
+					</v-card-text>
+				</v-card>
+
 			</v-col>
 		</v-row>
 	</v-container>
@@ -46,6 +91,7 @@ const packageId = route.query.id
 // Reactive state
 const travelPackage = reactive({})
 const formReady = ref(false)
+const activeTab = ref('highlight')
 
 // Fetch single travel package
 async function fetchPackage() {

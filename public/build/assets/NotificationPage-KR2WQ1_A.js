@@ -1,0 +1,1 @@
+import{_ as o,j as t,o as i,d as r}from"./main-B7yAy_GV.js";import"./index-CdODa-Gu.js";const s={};function n(a,e){return i(),t("div",null,e[0]||(e[0]=[r("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, ipsa.",-1)]))}const p=o(s,[["render",n]]);export{p as default};

@@ -1,13 +1,13 @@
 <template>
     <div class="mb-4">
-        <v-card elevation="0" class="pa-6">
-            <v-card-title class="py-3">
+        <v-card elevation="0">
+            <!-- <v-card-title class="py-3">
                 <div>
                     <h5>Package Images</h5>
                 </div>
             </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text class="pt-10">
+            <v-divider></v-divider> -->
+            <v-card-text>
                 <v-row>
                     <v-col cols="12">
                         <v-file-input prepend-icon="" v-model="selected_file" accept="image/*" variant="outlined"

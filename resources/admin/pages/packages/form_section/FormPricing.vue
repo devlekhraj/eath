@@ -1,13 +1,11 @@
 <template>
     <div class="mb-4">
         <v-card elevation="0">
-            <v-card-title class="d-flex align-center justify-space-between py-4">
+            <!-- <v-card-title class="d-flex align-center justify-space-between py-4">
                 <h2 class="font-medium">Pricing Form</h2>
-                <!-- <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()">
-                    <v-icon>mdi-plus</v-icon>
-                </v-btn> -->
+
             </v-card-title>
-            <v-divider></v-divider>
+            <v-divider></v-divider> -->
             <v-card-text>
                 <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation class="mb-6">
                     <div>
