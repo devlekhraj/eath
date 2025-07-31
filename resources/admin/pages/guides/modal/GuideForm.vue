@@ -17,61 +17,29 @@
         <v-row>
           <!-- Name -->
           <v-col cols="12" md="12">
-            <v-text-field
-              v-model="form.name"
-              prepend-inner-icon="mdi-account"
-              label="Full Name"
-              variant="outlined"
-              density="comfortable"
-              :rules="[rules.required]"
-              :error-messages="serverErrors.name"
-              required
-            />
+            <v-text-field v-model="form.name" prepend-inner-icon="mdi-account" label="Full Name" variant="outlined"
+              density="comfortable" :rules="[rules.required]" :error-messages="serverErrors.name" required />
           </v-col>
 
           <!-- Email -->
           <v-col cols="12" md="6">
-            <v-text-field
-              v-model="form.email"
-              label="Email"
-              prepend-inner-icon="mdi-email"
-              variant="outlined"
-              density="comfortable"
-              :rules="[rules.required, rules.email]"
-              :error-messages="serverErrors.email"
-              required
-            />
+            <v-text-field v-model="form.email" label="Email" prepend-inner-icon="mdi-email" variant="outlined"
+              density="comfortable" :rules="[rules.required, rules.email]" :error-messages="serverErrors.email"
+              required />
           </v-col>
 
           <!-- Phone -->
           <v-col cols="12" md="6">
-            <v-text-field
-              v-model="form.phone_no"
-              prepend-inner-icon="mdi-phone"
-              label="Phone"
-              variant="outlined"
-              density="comfortable"
-              :rules="[rules.required, rules.phone]"
-              :error-messages="serverErrors.phone_no"
-              required
-            />
+            <v-text-field v-model="form.phone_no" prepend-inner-icon="mdi-phone" label="Phone" variant="outlined"
+              density="comfortable" :rules="[rules.required, rules.phone]" :error-messages="serverErrors.phone_no"
+              required />
           </v-col>
 
           <!-- Language Spoken -->
           <v-col cols="12" md="12">
-            <v-select
-              v-model="form.language_spoken"
-              :items="languageOptions"
-              label="Language Spoken"
-              prepend-inner-icon="mdi-translate"
-              multiple
-              variant="outlined"
-              density="comfortable"
-              :rules="[rules.required]"
-              :error-messages="serverErrors.language_spoken"
-              required
-              chips
-            />
+            <v-select v-model="form.language_spoken" :items="languageOptions" label="Language Spoken"
+              prepend-inner-icon="mdi-translate" multiple variant="outlined" density="comfortable"
+              :rules="[rules.required]" :error-messages="serverErrors.language_spoken" required chips />
           </v-col>
         </v-row>
       </v-form>
@@ -131,6 +99,7 @@ const props = defineProps({
 onMounted(() => {
   if (props.item?.id) {
     Object.assign(form, {
+      id: props.item.id || '',
       name: props.item.name || '',
       email: props.item.email || '',
       phone_no: props.item.phone_no || '',

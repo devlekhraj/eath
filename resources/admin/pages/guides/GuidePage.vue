@@ -41,20 +41,53 @@
                 </template>
                 <template #item.status="{ item }">
                     <div>
-                        <v-chip :color="getStatusColor(item.status)" size="small" class="ml-2 text-capitalize">{{ item.status }}</v-chip>
+                        <v-chip :color="getStatusColor(item.status)" size="small" class="ml-2 text-capitalize">{{
+                            item.status }}</v-chip>
 
                     </div>
                 </template>
 
-                <template #item.actions="{ item }">
+                <!-- <template #item.actions="{ item }">
                     <div style="min-width: 200px;">
                         <v-btn icon variant="text" :to="{ name: 'adminGuideDetailPage', params: { id: item.id } }">
+                            <v-icon icon="mdi-eye" />
+                        </v-btn>
+                        <v-btn icon variant="text" @click="openForm(item)">
                             <v-icon icon="mdi-pencil" />
                         </v-btn>
                         <v-btn icon variant="text" color="error" @click="deleteItem(item)">
                             <v-icon icon="mdi-delete" />
                         </v-btn>
                     </div>
+                </template> -->
+                <template #item.actions="{ item }">
+                    <v-menu location="bottom end">
+                        <template #activator="{ props }">
+                            <v-btn v-bind="props" icon variant="text" color="primary">
+                                <v-icon>mdi-dots-vertical</v-icon>
+                            </v-btn>
+                        </template>
+
+                        <v-list density="compact" elevation="1">
+
+                            <v-list-item :to="{ name: 'adminGuideDetailPage', params: { id: item.id } }">
+                                <v-list-item-title>
+                                    <v-icon start icon="mdi-eye" class="mr-2" /> View <span class="text-capitalize">{{item.name}}</span>
+                                </v-list-item-title>
+                            </v-list-item>
+                            <v-list-item @click="openForm(item)">
+                                <v-list-item-title>
+                                    <v-icon start icon="mdi-pencil" class="mr-2" /> Edit <span class="text-capitalize">{{item.name}}</span>
+                                </v-list-item-title>
+                            </v-list-item>
+
+                            <v-list-item @click="deleteItem(item)">
+                                <v-list-item-title>
+                                    <v-icon start icon="mdi-delete" class="mr-2" /> Delete <span class="text-capitalize">{{item.name}}</span>
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                 </template>
             </v-data-table>
         </div>

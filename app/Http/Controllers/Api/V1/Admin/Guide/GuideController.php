@@ -27,12 +27,14 @@ class GuideController extends Controller
         ], 200);
     }
 
-    public function storeUpdate(Request $request, $id = null)
+    public function storeUpdate(Request $request)
     {
+        $id = $request->id;
+
         // Validation rules
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:guides,email' . ($id ? ",$id" : ''),
+            'email' => 'required|email|max:255|unique:guides,email' . ($id ? ',' . $id . ',id' : ''),
             'phone_no' => 'required|string|max:20',
             'language_spoken' => 'required|array',
             'language_spoken.*' => 'string|max:50', // each language must be string max 50 chars
@@ -54,6 +56,7 @@ class GuideController extends Controller
             'data' => $guide,
         ]);
     }
+
 
     public function show(Request $request, $id)
     {
@@ -167,6 +170,6 @@ class GuideController extends Controller
 
         $guide->delete();
 
-        return response()->json(['message' => $guide->name. ' deleted successfully']);
+        return response()->json(['message' => $guide->name . ' deleted successfully']);
     }
 }
