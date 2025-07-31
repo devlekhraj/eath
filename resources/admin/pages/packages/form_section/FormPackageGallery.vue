@@ -11,7 +11,7 @@
                 <v-row>
                     <v-col cols="12">
                         <v-file-input prepend-icon="" v-model="selected_file" accept="image/*" variant="outlined"
-                            @change="handleUploadImage" prepend-inner-icon="mdi-image" label="File input"
+                            @change="handleUploadImage" prepend-inner-icon="mdi-image" label="Select Image"
                             :error="Boolean(imageError)" :error-messages="imageError"></v-file-input>
 
                         <div>

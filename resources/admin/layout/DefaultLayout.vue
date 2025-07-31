@@ -41,7 +41,7 @@ const menuGroups = ref([
 		groupName: 'Dashboard',
 		items: [
 			{ name: 'Dashboard', icon: 'mdi-view-dashboard-outline', route_name: 'adminDashboardPage' },
-			{ name: 'Banners', icon: 'mdi-image-area', route_name: 'adminBannerImages' },
+			{ name: 'Banners', icon: 'mdi-image-area', route_name: 'adminBannerPage' },
 		],
 	},
 	{

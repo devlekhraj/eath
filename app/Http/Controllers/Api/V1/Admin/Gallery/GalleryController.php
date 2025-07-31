@@ -7,6 +7,7 @@ use App\Models\Gallery;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Blog;
 use App\Models\GalleryUsage;
 use App\Models\Guide;
@@ -85,7 +86,7 @@ class GalleryController extends Controller
         if ($request->has('usage_type') && $request->has('usage_id')) {
             $usageType = $request->input('usage_type');
             $usageId = $request->input('usage_id');
-            $gallery->usages()->create([
+            $galleryUsage = $gallery->usages()->create([
                 "usage_type" => $usageType,
                 "usage_id" => $usageId
             ]);
@@ -110,6 +111,7 @@ class GalleryController extends Controller
             'success' => true,
             "filename" => $filename,
             'data' => $gallery,
+            "gallery_usage" => $galleryUsage,
             'url'=>route('image.view', ['filename' => $filename]),
         ], 201);
     }
