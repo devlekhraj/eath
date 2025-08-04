@@ -50,7 +50,7 @@
 								{{ errors.content || 'Content is required' }}
 							</span>
 						</div>
-						<VuetifyViewer :value="form.content"></VuetifyViewer>
+						<!-- <VuetifyViewer :value="form.content"></VuetifyViewer> -->
 					</v-form>
 				</v-card>
 			</v-col>
