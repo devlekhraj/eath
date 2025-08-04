@@ -1,20 +1,3 @@
-{{-- <div id="home-banner">
-  <div class="swiper mySwiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img src="/images/banners/1.png" alt="Banner 1" class="img-fluid w-100 banner-img" />
-      </div>
-      <div class="swiper-slide">
-        <img src="/images/banners/2.png" alt="Banner 2" class="img-fluid w-100 banner-img" />
-      </div>
-      <div class="swiper-slide">
-        <img src="/images/banners/3.png" alt="Banner 3" class="img-fluid w-100 banner-img" />
-      </div>
-    </div>
-    <div class="swiper-pagination"></div>
-  </div>
-</div> --}}
-
 <style>
     /* Aspect Ratio Wrapper */
     .main-swiper {
@@ -40,19 +23,25 @@
         object-fit: cover;
         display: block;
     }
+
     .swiper-pagination-bullet-active {
         width: 24px;
         /* longer than others */
         background: #f5811c;
     }
-
-   
 </style>
 
 
 
 @php
-    $banners = ['/images/banners/1.png', '/images/banners/2.png', '/images/banners/3.png'];
+    $banners = $mainBanner->images;
+    if (!$banners) {
+        $banners = [
+            ['url' => '/images/banners/1.png'],
+            ['url' => '/images/banners/2.png'],
+            ['url' => '/images/banners/3.png'],
+        ];
+    }
 @endphp
 
 
@@ -60,22 +49,14 @@
     <!-- Swiper HTML markup -->
     <div class="swiper main-swiper">
         <div class="swiper-wrapper">
-
             @foreach ($banners as $banner)
                 <div class="swiper-slide">
-
-                    <img src="{{ $banner }}" alt="Slide 1" class="img-fluid w-100" />
-
+                    <img src="{{ $banner->url }}" alt="Slide 1" class="img-fluid w-100" />
                 </div>
             @endforeach
         </div>
 
-        <!-- Pagination -->
         <div class="swiper-pagination"></div>
-        <!-- Navigation buttons -->
-        {{-- <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div> --}}
-
     </div>
 </div>
 

@@ -15,11 +15,16 @@ Route::prefix('auth')->group(function () {
 });
 
 // Optional: Welcome page
-Route::get('/', function () {
-    // return view('website.index');
-    return view('website.index');
-});
+// Route::get('/', function () {
+
+//     return view('website.index');
+// });
+Route::get('/',[WebsiteController::class,'index']);
 
 
-Route::get('/packages/{id}', [WebsiteController::class,'show']);
+Route::get('/packages/{slug}', [WebsiteController::class,'show']);
+Route::get('/guide-profiles', [WebsiteController::class,'guideProfile']);
+Route::get('/faq', [WebsiteController::class,'faq']);
+Route::get('/blogs', [WebsiteController::class,'blogs']);
+Route::get('/blogs/{slug}', [WebsiteController::class,'blogDetail'])->name('blog.show');
 Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');

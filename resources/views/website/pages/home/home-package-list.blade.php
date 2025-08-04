@@ -6,108 +6,111 @@
         </div>
 
         @php
-            $packages = [
-                [
-                    'title' => 'Everest Base Camp Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '15 Days',
-                    'price' => '$1200',
-                    'people' => 12,
-                    'reviews' => 45,
-                    'rating' => 4.5,
-                ],
-                [
-                    'title' => 'Annapurna Circuit Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '15 Days',
-                    'price' => '$1400',
-                    'people' => 10,
-                    'reviews' => 39,
-                    'rating' => 4.0,
-                ],
-                [
-                    'title' => 'Langtang Valley Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '15 Days',
-                    'price' => '$900',
-                    'people' => 8,
-                    'reviews' => 21,
-                    'rating' => 3.5,
-                ],
-                [
-                    'title' => 'Ghorepani Poon Hill Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '7 Days',
-                    'price' => '$700',
-                    'people' => 15,
-                    'reviews' => 30,
-                    'rating' => 4.2,
-                ],
-                [
-                    'title' => 'Upper Mustang Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '14 Days',
-                    'price' => '$1300',
-                    'people' => 6,
-                    'reviews' => 12,
-                    'rating' => 3.8,
-                ],
-                [
-                    'title' => 'Manaslu Circuit Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '18 Days',
-                    'price' => '$1500',
-                    'people' => 9,
-                    'reviews' => 22,
-                    'rating' => 4.3,
-                ],
-                [
-                    'title' => 'Makalu Base Camp Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '15 Days',
-                    'price' => '$1600',
-                    'people' => 7,
-                    'reviews' => 18,
-                    'rating' => 4.1,
-                ],
-                [
-                    'title' => 'Kanchenjunga Base Camp Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '21 Days',
-                    'price' => '$1800',
-                    'people' => 5,
-                    'reviews' => 14,
-                    'rating' => 4.7,
-                ],
-                [
-                    'title' => 'Rara Lake Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '9 Days',
-                    'price' => '$850',
-                    'people' => 11,
-                    'reviews' => 20,
-                    'rating' => 4.0,
-                ],
-                [
-                    'title' => 'Helambu Trek',
-                    'image' =>
-                        'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
-                    'duration' => '15 Days',
-                    'price' => '$750',
-                    'people' => 13,
-                    'reviews' => 25,
-                    'rating' => 4.4,
-                ],
-            ];
+            if(empty($packages)){
+                $packages = [
+                    [
+                        'title' => 'Everest Base Camp Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '15 Days',
+                        'price' => '$1200',
+                        'people' => 12,
+                        'reviews' => 45,
+                        'rating' => 4.5,
+                    ],
+                    [
+                        'title' => 'Annapurna Circuit Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '15 Days',
+                        'price' => '$1400',
+                        'people' => 10,
+                        'reviews' => 39,
+                        'rating' => 4.0,
+                    ],
+                    [
+                        'title' => 'Langtang Valley Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '15 Days',
+                        'price' => '$900',
+                        'people' => 8,
+                        'reviews' => 21,
+                        'rating' => 3.5,
+                    ],
+                    [
+                        'title' => 'Ghorepani Poon Hill Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '7 Days',
+                        'price' => '$700',
+                        'people' => 15,
+                        'reviews' => 30,
+                        'rating' => 4.2,
+                    ],
+                    [
+                        'title' => 'Upper Mustang Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '14 Days',
+                        'price' => '$1300',
+                        'people' => 6,
+                        'reviews' => 12,
+                        'rating' => 3.8,
+                    ],
+                    [
+                        'title' => 'Manaslu Circuit Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '18 Days',
+                        'price' => '$1500',
+                        'people' => 9,
+                        'reviews' => 22,
+                        'rating' => 4.3,
+                    ],
+                    [
+                        'title' => 'Makalu Base Camp Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '15 Days',
+                        'price' => '$1600',
+                        'people' => 7,
+                        'reviews' => 18,
+                        'rating' => 4.1,
+                    ],
+                    [
+                        'title' => 'Kanchenjunga Base Camp Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '21 Days',
+                        'price' => '$1800',
+                        'people' => 5,
+                        'reviews' => 14,
+                        'rating' => 4.7,
+                    ],
+                    [
+                        'title' => 'Rara Lake Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '9 Days',
+                        'price' => '$850',
+                        'people' => 11,
+                        'reviews' => 20,
+                        'rating' => 4.0,
+                    ],
+                    [
+                        'title' => 'Helambu Trek',
+                        'image' =>
+                            'https://media.istockphoto.com/id/2201384385/photo/construction-worker-spraying-house-insulation.jpg?s=2048x2048&w=is&k=20&c=MOfZtDnvINtEiSszK-5J2dB31XL9HgoWIHwzHmBEJtg=',
+                        'duration' => '15 Days',
+                        'price' => '$750',
+                        'people' => 13,
+                        'reviews' => 25,
+                        'rating' => 4.4,
+                    ],
+                ];
+            }
+      
         @endphp
 
 
@@ -116,15 +119,15 @@
                 @foreach ($packages as $package)
                     <div class="swiper-slide">
                         <div class="card border-0 bg-white h-100">
-                            <img src="{{ $package['image'] }}" class="card-img-top" alt="{{ $package['title'] }}"
+                            <img src="{{ $package['image'] }}" class="card-img-top" alt="{{ $package['name'] }}"
                                 style="height: 210px; object-fit: cover;">
                             <div class="card-body p-3 d-flex flex-column">
                                 <div class="mb-3">
-                                    <strong class="d-block mb-1">{{ $package['title'] }}</strong>
+                                    <strong class="d-block mb-1">{{ $package['name'] }}</strong>
                                 </div>
                                 <!-- Price and reviews on same row -->
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <p class="fw-bold text-primary mb-0">USD {{ $package['price'] }}</p>
+                                    <p class="fw-bold text-primary mb-0">{{ format_price($package['min_price']) }}</p>
                                     <div class="d-flex align-items-center text-muted mb-0">
                                         @php
                                             $fullStars = floor($package['rating']);
@@ -142,7 +145,7 @@
                                             <i class="fa-regular fa-star text-warning me-1"></i>
                                         @endfor
 
-                                        <span class="small ms-2">({{ $package['reviews'] }})</span>
+                                        {{-- <span class="small ms-2">({{ $package['reviews'] }})</span> --}}
                                     </div>
                                 </div>
 

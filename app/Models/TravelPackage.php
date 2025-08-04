@@ -12,30 +12,30 @@ class TravelPackage extends Model
     use SoftDeletes;
     protected $guarded = [];
 
-    protected $appends = ['images_urls'];
-    
+    protected $appends = ['images_urls', 'image', 'rating', 'min_price','highlight_name'];
+
+
     protected static function boot()
     {
-        
+
         parent::boot();
         static::creating(function ($trvelPackage) {
             if (empty($trvelPackage->slug)) {
                 $trvelPackage->slug = Str::slug($trvelPackage->name);
             }
         });
-
-        // static::updating(function ($trvelPackage) {
-        //     if (empty($trvelPackage->slug) || $trvelPackage->isDirty('name')) {
-        //         $trvelPackage->slug = Str::slug($trvelPackage->name);
-        //     }
-        // });
-
     }
     protected $casts = [
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
     ];
+
+
+    public function getHighlightNameAttribute()
+    {
+        return $this->lookup?->name ?? '';
+    }
 
     public function images(): HasMany
     {
@@ -51,6 +51,22 @@ class TravelPackage extends Model
             ->toArray();
     }
 
+    // ✅ New accessor for 'image'
+    public function getImageAttribute(): string
+    {
+        return $this->images
+            ->filter(fn($usage) => $usage->gallery)
+            ->first()
+            ?->gallery
+            ?->url ?? '/images/logo.png'; // fallback if gallery exists but URL is null
+    }
+    public function getRatingAttribute(): float
+    {
+        $ratings = [3.5, 4.0, 4.5, 5.0];
+        return $ratings[array_rand($ratings)];
+    }
+
+
     public function categories()
     {
         return $this->belongsToMany(
@@ -63,24 +79,30 @@ class TravelPackage extends Model
 
     public function itineraries()
     {
-        return $this->hasMany(PackageItierary::class)->orderBy('sort_order','asc');
+        return $this->hasMany(PackageItierary::class)->orderBy('sort_order', 'asc');
     }
 
-     public function highlights(){
-        return $this->hasMany(TravelPackageHighlight::class,'travel_package_id','id')->orderBy('sort_order','asc');
+    public function highlights()
+    {
+        return $this->hasMany(TravelPackageHighlight::class, 'travel_package_id', 'id')->orderBy('sort_order', 'asc');
     }
 
 
     public function inclusions()
     {
-        return $this->hasMany(PackageInclusion::class)->where('is_excluded',false)->orderBy('sort_order','asc');
+        return $this->hasMany(PackageInclusion::class)->where('is_excluded', false)->orderBy('sort_order', 'asc');
     }
     public function prices()
     {
-        return $this->hasMany(PackagePrice::class,'travel_package_id','id')->orderBy('sort_order','asc');
+        return $this->hasMany(PackagePrice::class, 'travel_package_id', 'id')->orderBy('sort_order', 'asc');
     }
+    public function getMinPriceAttribute(): ?float
+    {
+        return $this->prices->min('price');
+    }
+
     public function exclusions()
     {
-        return $this->hasMany(PackageInclusion::class)->where('is_excluded',true)->orderBy('sort_order','asc');
+        return $this->hasMany(PackageInclusion::class)->where('is_excluded', true)->orderBy('sort_order', 'asc');
     }
 }

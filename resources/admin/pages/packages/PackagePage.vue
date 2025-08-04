@@ -90,11 +90,13 @@
 
 
             <template #item.actions="{ item }">
-                <v-menu location="bottom end">
+                <v-menu location="bottom">
                     <template #activator="{ props }">
-                        <v-btn v-bind="props" icon variant="text" color="primary">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
+                        <div style="width: max-content;">
+                            <v-btn v-bind="props" icon variant="text" color="primary">
+                                <v-icon>mdi-dots-vertical</v-icon>
+                            </v-btn>
+                        </div>
                     </template>
 
                     <v-list density="compact" elevation="1">

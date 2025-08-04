@@ -1,0 +1,1 @@
+import{_ as o,j as r,o as n,d as t}from"./main-C4PWpGs1.js";import"./index-CdODa-Gu.js";const s={};function a(i,e){return n(),r("div",null,e[0]||(e[0]=[t("p",null,"tab trip",-1),t("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, aut.",-1)]))}const p=o(s,[["render",a]]);export{p as default};

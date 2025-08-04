@@ -17,6 +17,8 @@ class Banner extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $appends = ["image_urls"];
+    
     protected static function booted()
     {
         static::creating(function ($banner) {

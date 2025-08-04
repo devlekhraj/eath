@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-lg py-0"
         style="background: radial-gradient(circle at center, #ffffff 40%, #e9faff 100%);">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary fs-4" href="#">
+            <a class="navbar-brand fw-bold text-primary fs-4" href="/">
                 <img src="/images/logo.png" alt="" height="70">
             </a>
             {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -39,7 +39,38 @@
                             <div class="container px-4">
                                 <div class="py-4">
                                     <div class="row g-4">
-                                        <!-- Everest Region -->
+                                        @if (count($trekkingInNepal->children) > 0)
+                                            @foreach ($trekkingInNepal->children as $region)
+                                                <div class="col-md-3">
+                                                    <h6 class="text-uppercase  mb-2 fw-bold">
+                                                        {{ $region->name }}
+                                                    </h6>
+                                                    <ul class="list-unstyled">
+                                                        @foreach ($region->travelPackages as $pack)
+                                                            <li><a href="/packages/{{ $pack->slug }}"
+                                                                    class="dropdown-item">
+                                                                    {{ $pack->name }}</a></li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="col-md-3">
+                                                <h6 class="text-uppercase  mb-2 fw-bold">
+                                                    Manaslu Region
+                                                </h6>
+                                                <ul class="list-unstyled">
+                                                    <li><a href="#" class="dropdown-item">Manaslu Circuit & Tsum
+                                                            Valley Trek - 21 Days</a></li>
+                                                    <li><a href="#" class="dropdown-item">Tsum Valley Trek - 14
+                                                            Days</a></li>
+                                                    <li><a href="#" class="dropdown-item">Manaslu Circuit Trek -
+                                                            15
+                                                            Days</a></li>
+                                                </ul>
+                                            </div>
+                                        @endif
+                                        {{-- <!-- Everest Region -->
                                         <div class="col-md-3">
                                             <h6 class="text-uppercase  mb-2 fw-bold">
                                                 Everest Region
@@ -117,10 +148,10 @@
                                                         Biking
                                                         Trek - 14 Days</a></li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
 
                                         <!-- Manaslu & Langtang Region -->
-                                        <div class="col-md-3">
+                                        {{-- <div class="col-md-3">
                                             <h6 class="text-uppercase  mb-2 fw-bold">
                                                 Manaslu Region
                                             </h6>
@@ -150,8 +181,8 @@
                                                         Trek
                                                         - 16 Days</a></li>
                                             </ul>
-                                        </div>
-
+                                        </div> --}}
+                                        {{-- 
                                         <!-- Western & Eastern Region -->
                                         <div class="col-md-3">
                                             <h6 class="text-uppercase  mb-2 fw-bold">
@@ -189,7 +220,7 @@
                                                         Circuit/Base
                                                         Camp Trek - 20 Days</a></li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +234,20 @@
                             Helicopter Tours
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="helicopterDropdown" id="helicopter-tours">
-                            <li>
+                            @if (count($helicopterTour->travelPackages) > 0)
+                                @foreach ($region->travelPackages as $pack)
+                                    <li>
+                                        <a href="/packages/{{ $pack->slug }}" class="dropdown-item d-flex align-items-center py-2">
+                                            <div style="width: 20px;">
+                                                <i class="fas fa-mountain text-info"></i>
+                                            </div>
+                                            <span class="ps-2"> {{ $pack->name }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @else
+                            @endif
+                            {{-- <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center" href="#">
                                     <div style="width: 20px;">
                                         <i class="fas fa-mountain "></i>
@@ -258,7 +302,7 @@
                                     </div>
                                     <span class="ms-2">Annapurna Heli Tour</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
 
 
@@ -266,13 +310,13 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="#">Travel Guides</a>
+                        <a class="nav-link fw-semibold" href="/guide-profiles">Travel Guides</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="#">Blogs</a>
+                        <a class="nav-link fw-semibold" href="/blogs">Blogs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="#">FAQs</a>
+                        <a class="nav-link fw-semibold" href="/faq">FAQs</a>
                     </li>
                 </ul>
             </div>
@@ -283,16 +327,15 @@
 
                 </div> --}}
                 <!-- Navbar Toggler -->
-      
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                        style="border: 0"
-                        data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-label="Toggle navigation">
-                        <i class="fa-solid fa-bars" style="font-size: 28px;"></i>
-                    </button>
-           
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" style="border: 0"
+                    data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars" style="font-size: 28px;"></i>
+                </button>
+
 
                 <!-- Offcanvas Sidebar -->
-               
+
 
             </div>
 
