@@ -34,25 +34,48 @@
             <p class="section-subtitle">Stay updated with our latest travel stories and tips</p>
         </div> --}}
         <div class="text-center mb-5">
-            <h2 class="fw-bold display-7 text-primary mb-2">Travel Guides</h2>
+            <h2 class="fw-bold display-7 text-primary mb-2">Our Blogs</h2>
             <p class="text-muted fs-5">Stay updated with our latest travel stories and tips</p>
         </div>
         <div class="row g-4">
-            @foreach ($articles as $article)
+            @foreach ($blogs as $blog)
                 <div class="col-md-4">
                     <div class="card h-100 article-card">
-                        <a href="{{ $article['url'] }}" class="text-decoration-none text-dark d-block h-100">
-                            <img src="{{ $article['image'] }}" class="card-img-top" alt="{{ $article['title'] }}">
+                        <a href="{{ url('blogs/' . $blog['slug']) }}"
+                            class="text-decoration-none text-dark d-block h-100">
+                            <img src="{{ $blog['banner_url'] }}" class="card-img-top" alt="{{ $blog['title'] }}">
                             <div class="card-body">
                                 <p class="text-muted small mb-1">
-                                    {{ \Carbon\Carbon::parse($article['date'])->format('M d, Y') }}</p>
-                                <h5 class="card-title text-primary">{{ $article['title'] }}</h5>
-                                <p class="card-text">{{ $article['description'] }}</p>
+                                    {{ \Carbon\Carbon::parse($blog['published_at'])->format('M d, Y') }}</p>
+                                <h5 class="card-title text-primary">{{ $blog['title'] }}</h5>
+                                <p class="card-text">{{ $blog['sub_title'] }}</p>
                             </div>
                         </a>
                     </div>
                 </div>
             @endforeach
+            @if (count($blogs) > 2)
+                <div class="text-center">
+                    <style>
+                        .btn-gradient {
+                            background: linear-gradient(45deg, #40b8ff, #2774f7);
+                            border: none;
+                            color: white;
+                            padding: 13px 23px;
+                        }
+
+                        .btn-gradient:hover {
+                              background: linear-gradient(45deg, #2ea6ec, #3e81f6);
+                            color: white;
+                        }
+                    </style>
+
+                    <a href="/blogs" class="btn btn-gradient">
+                        See All Blogs <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                </div>
+            @endif
         </div>
     </div>
 </section>

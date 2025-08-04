@@ -16,8 +16,12 @@ class WebsiteController extends Controller
 
         $mainBanner = Banner::where('is_active', 1)->first();
 
-
-        return view('website.index', compact('packages', 'mainBanner'));
+        $blogs = Blog::where([
+            "is_active" =>1,
+            "is_published" => 1,
+        ])->orderByDesc('created_at')->limit(3)->get();
+    
+        return view('website.index', compact('packages', 'mainBanner','blogs'));
     }
     public function show($slug)
     {

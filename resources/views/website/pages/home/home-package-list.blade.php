@@ -119,50 +119,52 @@
                 @foreach ($packages as $package)
                     <div class="swiper-slide">
                         <div class="card border-0 bg-white h-100">
-                            <img src="{{ $package['image'] }}" class="card-img-top" alt="{{ $package['name'] }}"
-                                style="height: 210px; object-fit: cover;">
-                            <div class="card-body p-3 d-flex flex-column">
-                                <div class="mb-3">
-                                    <strong class="d-block mb-1">{{ $package['name'] }}</strong>
-                                </div>
-                                <!-- Price and reviews on same row -->
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <p class="fw-bold text-primary mb-0">{{ format_price($package['min_price']) }}</p>
-                                    <div class="d-flex align-items-center text-muted mb-0">
-                                        @php
-                                            $fullStars = floor($package['rating']);
-                                            $halfStar = $package['rating'] - $fullStars >= 0.5 ? 1 : 0;
-                                            $emptyStars = 5 - $fullStars - $halfStar;
-                                        @endphp
-
-                                        @for ($i = 0; $i < $fullStars; $i++)
-                                            <i class="fa-solid fa-star text-warning me-1"></i>
-                                        @endfor
-                                        @if ($halfStar)
-                                            <i class="fa-solid fa-star-half-stroke text-warning me-1"></i>
-                                        @endif
-                                        @for ($i = 0; $i < $emptyStars; $i++)
-                                            <i class="fa-regular fa-star text-warning me-1"></i>
-                                        @endfor
-
-                                        {{-- <span class="small ms-2">({{ $package['reviews'] }})</span> --}}
+                            <a href="/packages/{{$package->slug}}">
+                                <img src="{{ $package['image'] }}" class="card-img-top" alt="{{ $package['name'] }}"
+                                    style="height: 210px; object-fit: cover;">
+                                <div class="card-body p-3 d-flex flex-column">
+                                    <div class="mb-3">
+                                        <strong class="d-block mb-1">{{ $package['name'] }}</strong>
                                     </div>
-                                </div>
-
-                                <!-- Duration and people on next row -->
-                                <div class="d-flex justify-content-start gap-3 mb-2 text-muted small mt-3">
-                                    <div><i class="fa-regular fa-clock me-1"></i> {{ $package['duration'] }}</div>
-                                    <div><i class="fa-solid fa-user-group me-1"></i> {{ $package['people'] }} People
+                                    <!-- Price and reviews on same row -->
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <p class="fw-bold text-primary mb-0">{{ format_price($package['min_price']) }}</p>
+                                        <div class="d-flex align-items-center text-muted mb-0">
+                                            @php
+                                                $fullStars = floor($package['rating']);
+                                                $halfStar = $package['rating'] - $fullStars >= 0.5 ? 1 : 0;
+                                                $emptyStars = 5 - $fullStars - $halfStar;
+                                            @endphp
+    
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="fa-solid fa-star text-warning me-1"></i>
+                                            @endfor
+                                            @if ($halfStar)
+                                                <i class="fa-solid fa-star-half-stroke text-warning me-1"></i>
+                                            @endif
+                                            @for ($i = 0; $i < $emptyStars; $i++)
+                                                <i class="fa-regular fa-star text-warning me-1"></i>
+                                            @endfor
+    
+                                            {{-- <span class="small ms-2">({{ $package['reviews'] }})</span> --}}
+                                        </div>
                                     </div>
+    
+                                    <!-- Duration and people on next row -->
+                                    <div class="d-flex justify-content-start gap-3 mb-2 text-muted small mt-3">
+                                        <div><i class="fa-regular fa-clock me-1"></i> {{ $package['duration'] }}</div>
+                                        <div><i class="fa-solid fa-user-group me-1"></i> {{ $package['people'] }} People
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="position-absolute top-0 end-0 bg-success text-white small px-2 py-1 rounded-bottom-start"
+                                        style="font-weight:600;">
+                                        Popular
+                                    </span>
+    
+    
                                 </div>
-                                <span
-                                    class="position-absolute top-0 end-0 bg-success text-white small px-2 py-1 rounded-bottom-start"
-                                    style="font-weight:600;">
-                                    Popular
-                                </span>
-
-
-                            </div>
+                            </a>
                         </div>
                     </div>
                 @endforeach
