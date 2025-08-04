@@ -111,7 +111,7 @@ class GalleryController extends Controller
             'success' => true,
             "filename" => $filename,
             'data' => $gallery,
-            "gallery_usage" => $galleryUsage,
+            "gallery_usage" => isset($galleryUsage) ? $galleryUsage:null,
             'url'=>route('image.view', ['filename' => $filename]),
         ], 201);
     }
