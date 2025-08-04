@@ -17,8 +17,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Now it's safe to run Eloquent queries here
         $trekkingInNepal = PackageCategory::where('slug', 'trekking-in-nepal')
-            ->with('children.travelPackages')
+            ->with(['children' => function ($query) {
+                $query->whereHas('travelPackages');
+            }, 'children.travelPackages'])
             ->first();
+
 
         $helicopterTour = PackageCategory::where('slug', 'helicopter-tour')
             ->with('travelPackages')

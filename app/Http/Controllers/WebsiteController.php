@@ -17,11 +17,6 @@ class WebsiteController extends Controller
         $mainBanner = Banner::where('is_active', 1)->first();
 
 
-        // $trekkingInNepal = PackageCategory::where('slug', 'trekking-in-nepal')->with('children.travelPackages')->first();
-
-
-        // $helicopterTour = PackageCategory::where('slug', 'helicopter-tour')->with('travelPackages')->first();
-
         return view('website.index', compact('packages', 'mainBanner'));
     }
     public function show($slug)
