@@ -234,7 +234,7 @@
                             Helicopter Tours
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="helicopterDropdown" id="helicopter-tours">
-                            @if (count($helicopterTour->travelPackages) > 0)
+                            @if ($helicopterTour && count($helicopterTour->travelPackages) > 0)
                                 @foreach ($region->travelPackages as $pack)
                                     <li>
                                         <a href="/packages/{{ $pack->slug }}" class="dropdown-item d-flex align-items-center py-2">
