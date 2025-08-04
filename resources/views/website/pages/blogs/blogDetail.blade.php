@@ -10,7 +10,7 @@
                     alt="{{ $blog['title'] }}"
                     title="{{ $blog['title'] }}"
                     class="img-fluid rounded-4 w-100"
-                    style="object-fit: cover; max-height: 460px;">
+                    style="object-fit: contain; max-height: 460px;">
             </div>
 
             <h1 class="fw-bold mb-3" style="font-size: 2rem;">{{ $blog['title'] }}</h1>
