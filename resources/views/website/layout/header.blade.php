@@ -9,7 +9,7 @@
     {{-- Meta SEO --}}
     <meta name="title" content="EATH Travel - Explore Adventure Tourism & Hospitality in Nepal">
     <meta name="description"
-        content="Experience immersive adventure tours and cultural journeys across Nepal with EATH Travel. Trusted since 2008. Book trekking, heritage, and custom travel packages now.">
+        content="Experience immersive adventure tours and cultural journeys across Nepal with EATH Travel. Trusted since 2024. Book trekking, heritage, and custom travel packages now.">
     <meta name="keywords"
         content="Nepal travel, adventure tours, cultural trips, trekking in Nepal, EATH Travel, Himalayan tours, travel agency in Kathmandu, tourism in Nepal, Annapurna trek, Everest base camp">
     <meta name="author" content="EATH Travel">
