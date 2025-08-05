@@ -7,6 +7,42 @@
         background-repeat: no-repeat;
         box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0 var(--bs-accordion-border-color);
     }
+
+
+
+    .trip-highlights-wrapper {
+        background: linear-gradient(135deg, #00bcd4 0%, #7e57c2 100%);
+        color: white;
+    }
+
+    .highlight-card {
+        background: #ffffff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .highlight-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon-circle {
+        background: #f1f1f1;
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-circle img {
+        height: 28px;
+        width: 28px;
+        object-fit: contain;
+    }
 </style>
 @section('content')
     {{-- Banner Section --}}
@@ -29,33 +65,33 @@
                                 </div>
 
                                 {{-- Highlights Section --}}
-                                <div class="mb-5">
-                                    @if (!empty($package->highlights))
-                                        <div class="p-4 rounded shadow-sm text-dark"
-                                            style="background: linear-gradient(359deg, #f9fbff 10%, #d7eaff 100%); border: 1px solid #a7c7ff;">
-                                            <h5 class="mb-4 fw-bold text-info d-flex align-items-center"
+                                @if (!empty($package->highlights))
+                                    <div class="mb-5 trip-highlights-wrapper rounded-3 overflow-hidden shadow">
+                                        <div class="p-4 p-md-5">
+                                            <!-- Section Heading -->
+                                            <h4 class="mb-4 fw-bold text-white d-flex align-items-center"
                                                 style="letter-spacing: 0.05em;">
-                                                <i class="fas fa-mountain-sun me-3 fs-4 text-info"></i>
+                                                <i class="fas fa-mountain-sun me-3 fs-4 text-warning"></i>
                                                 Trip Highlights
-                                            </h5>
+                                            </h4>
 
+                                            <!-- Highlights Grid -->
                                             <div class="row gy-4">
                                                 @foreach ($package->highlights as $highlight)
-                                                    <div class="col-12 col-md-4">
-                                                        <div class="d-flex align-items-start gap-3">
-                                                            <div class="bg-white rounded-circle shadow-sm d-flex justify-content-center align-items-center"
-                                                                style="height: 50px; width: 50px; overflow: hidden; flex-shrink: 0;">
+                                                    <div class="col-12 col-md-6 col-lg-4">
+                                                        <div
+                                                            class="highlight-card h-100 p-3 d-flex align-items-start gap-3 rounded-3">
+                                                            <div class="icon-circle">
                                                                 <img src="{{ $highlight->icon_url }}"
-                                                                    alt="{{ $highlight->highlight_name }}"
-                                                                    style="height: 30px; width: 30px; object-fit: contain;">
+                                                                    alt="{{ $highlight->highlight_name }}">
                                                             </div>
                                                             <div>
-                                                                <p class="mb-1 text-info fw-semibold"
-                                                                    style="font-size: 15px; letter-spacing: 0.4px;">
+                                                                <p class="mb-1 text-dark fw-semibold"
+                                                                    style="font-size: 16px;">
                                                                     {{ $highlight->highlight_name }}
                                                                 </p>
-                                                                <p class="mb-0"
-                                                                    style="font-size: 14.5px; font-weight: 400; line-height: 1.6;">
+                                                                <p class="mb-0 text-muted"
+                                                                    style="font-size: 14px; line-height: 1.6;">
                                                                     {{ $highlight->description }}
                                                                 </p>
                                                             </div>
@@ -64,8 +100,9 @@
                                                 @endforeach
                                             </div>
 
-                                            <!-- Review summary -->
-                                            <div class="mt-5 d-flex align-items-center flex-wrap gap-3 border-top pt-3">
+                                            <!-- Review Summary -->
+                                            <div
+                                                class="mt-5 pt-4 d-flex align-items-center flex-wrap gap-3 border-top border-white">
                                                 <span class="badge bg-warning text-dark fs-6 px-3 py-2 shadow-sm">4.5</span>
                                                 <div class="text-warning fs-5 d-flex gap-1" aria-label="Star rating">
                                                     <i class="fas fa-star"></i>
@@ -74,13 +111,15 @@
                                                     <i class="fas fa-star-half-alt"></i>
                                                     <i class="far fa-star"></i>
                                                 </div>
-                                                <p class="mb-0 text-muted" style="font-size: 14px;">
+                                                <p class="mb-0 text-white-30" style="font-size: 14px;">
                                                     Based on <strong>73</strong> verified reviews
                                                 </p>
                                             </div>
                                         </div>
-                                    @endif
-                                </div>
+                                    </div>
+                                @endif
+
+
 
 
 
@@ -267,8 +306,8 @@
                                                     </div>
                                                     <div>
                                                         <h5 class="mb-1 fw-semibold text-dark">
-                                                            Economy Price: <p
-                                                                class="text-success">{{ format_price($package->economyPrice->price) }}</p>
+                                                            Economy Price: <p class="text-success">
+                                                                {{ format_price($package->economyPrice->price) }}</p>
                                                         </h5>
                                                         <p class="mb-0 text-muted small">
                                                             {{ $package->economyPrice->description }}</p>
