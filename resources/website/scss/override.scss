@@ -93,25 +93,22 @@ a {
     color: inherit;
 }
 
-// ol,
-// ul {
-//     padding: 0;
-//     list-style-type: none;
-
-//     li {
-//         list-style-type: none;
-//     }
-// }
-/* Apply reset globally EXCEPT inside the Vuetify tiptap editor content */
-:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ol,
-:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ul {
+ol,
+ul {
     padding: 0;
     list-style-type: none;
-}
 
-:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ol li,
-:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ul li {
-    list-style-type: none;
+    li {
+        list-style-type: none;
+    }
+}
+.vuetify-pro-tiptap-editor__content{
+    ol,ul{
+        list-style-type: inherit;
+        li{
+            list-style-type: inherit;
+        }
+    }
 }
 
 .swiper {
