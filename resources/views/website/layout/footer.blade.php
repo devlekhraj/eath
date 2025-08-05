@@ -1,8 +1,23 @@
-<!-- Professional Travel Company Footer with Gradient Background -->
-<footer class="pt-5 pb-4 position-relative"
-    style="background: radial-gradient(circle at center, #e9f3ff 40%, #ffffff 100%);">
+<style>
+    .footer-clean {
+        background: radial-gradient(circle at center, #e3f2fd 20%, #ffffff 100%);
+        color: #333;
+    }
+
+    .footer-link {
+        color: #6c757d;
+        text-decoration: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .footer-link:hover {
+        color: #0d6efd;
+        text-decoration: underline;
+    }
+</style>
+<footer class="pt-5 pb-4 position-relative footer-clean text-dark">
     <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/9860220454" target="_blank"
+    <a href="https://wa.me/9841927372" target="_blank"
         class="position-fixed bottom-0 end-0 m-4 bg-success text-white rounded-circle d-flex justify-content-center align-items-center shadow-lg"
         style="width: 52px; height: 52px; z-index: 1050;" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp fs-4"></i>
@@ -13,79 +28,78 @@
             <!-- Logo and About -->
             <div class="col-lg-4 col-md-6">
                 <a class="navbar-brand fw-bold text-primary fs-4" href="#">
-                    <img src="/images/logo.png" alt="" height="70">
+                    <img src="/images/logo.png" alt="E.A.T.H Travel Logo" height="70">
                 </a>
-                <h5 class="fw-bold text-dark mb-3">E.A.T.H Travel</h5>
+                <h5 class="fw-bold text-dark mb-3 mt-2">E.A.T.H Travel</h5>
                 <p class="text-muted small">
-                    At E.A.T.H Travel, we specialize in immersive adventure and cultural experiences across Nepal.
-                    Trusted by global travelers since 2008, our mission is to make your journey unforgettable.
+                    We specialize in immersive adventures and cultural experiences across Nepal. Trusted since 2008 by
+                    global explorers.
                 </p>
                 <div class="d-flex gap-3 mt-3">
-                    <a href="#" class="text-dark" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-dark" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-dark" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="text-dark" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
+                    <a href="#" class="text-dark fs-5"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-dark fs-5"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-dark fs-5"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="text-dark fs-5"><i class="fab fa-tripadvisor"></i></a>
                 </div>
             </div>
 
             <!-- Quick Links -->
             <div class="col-lg-2 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3" style="font-weight: 600">Quick Links</h6>
+                <h6 class="text-uppercase text-dark mb-3 fw-semibold">Quick Links</h6>
                 <ul class="list-unstyled small">
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Home</a></li>
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Packages</a></li>
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Destinations</a></li>
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Blog</a></li>
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Contact</a></li>
+                    <li><a href="#" class="footer-link">Home</a></li>
+                    <li><a href="#" class="footer-link">Packages</a></li>
+                    <li><a href="#" class="footer-link">Destinations</a></li>
+                    <li><a href="#" class="footer-link">Blog</a></li>
+                    <li><a href="#" class="footer-link">Contact</a></li>
                 </ul>
             </div>
 
             <!-- Customer Service -->
             <div class="col-lg-3 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3" style="font-weight: 600">Customer Service</h6>
+                <h6 class="text-uppercase text-dark mb-3 fw-semibold">Customer Service</h6>
                 <ul class="list-unstyled small">
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Terms & Conditions</a>
-                    </li>
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Privacy Policy</a></li>
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">Travel Insurance</a></li>
-                    <li><a href="#" class="text-muted text-decoration-none d-block mb-2">FAQs</a></li>
-                    <li><a href="#contact" class="text-muted text-decoration-none d-block mb-2">Support</a></li>
+                    <li><a href="#" class="footer-link">Terms & Conditions</a></li>
+                    <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="#" class="footer-link">Travel Insurance</a></li>
+                    <li><a href="#" class="footer-link">FAQs</a></li>
+                    <li><a href="#contact" class="footer-link">Support</a></li>
                 </ul>
             </div>
 
             <!-- Contact Info -->
             <div class="col-lg-3 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3" style="font-weight: 600">Contact Us</h6>
+                <h6 class="text-uppercase text-dark mb-3 fw-semibold">Contact Us</h6>
                 <p class="text-muted small mb-2">
-                    <i class="fas fa-map-marker-alt me-2 text-info"></i>Thamel, Kathmandu, Nepal
+                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>Thamel, Kathmandu, Nepal
                 </p>
                 <p class="text-muted small mb-2">
-                    <i class="fas fa-phone me-2 text-info"></i>
-                    <a href="tel:+9779800000000" class="text-muted text-decoration-none">+977 9800000000</a>
+                    <i class="fas fa-phone me-2 text-primary"></i>
+                    <a href="tel:+9779841927372" class="footer-link">+977 9841927372</a>
                 </p>
                 <p class="text-muted small mb-2">
-                    <i class="fas fa-envelope me-2 text-info"></i>
-                    <a href="mailto:support@eathtravel.com"
-                        class="text-muted text-decoration-none">support@eathtravel.com</a>
+                    <i class="fas fa-envelope me-2 text-primary"></i>
+                    <a href="mailto:support@eathtravel.com" class="footer-link">support@eathtravel.com</a>
                 </p>
                 <p class="text-muted small">
-                    <i class="fas fa-globe me-2 text-info"></i>
+                    <i class="fas fa-globe me-2 text-primary"></i>
                     <a href="https://www.eathways.com" target="_blank" rel="noopener noreferrer"
-                        class="text-muted text-decoration-none">www.eathways.com</a>
+                        class="footer-link">www.eathways.com</a>
                 </p>
             </div>
-
         </div>
 
-        <hr class="border-info my-4">
+        <hr class="my-4 border-light">
 
         <!-- Bottom Bar -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted">
             <span>&copy; {{ date('Y') }} E.A.T.H Travel. All rights reserved.</span>
-            <span>Develop by <a class="text-primary" href="https://lekhrajrai.com.np">Lekh Raj Rai</a></span>
+            <span>Developed by <a class="text-primary fw-medium" target="_blank" href="https://lekhrajrai.com.np">Lekh Raj
+                    Rai</a></span>
         </div>
     </div>
 </footer>
+
 
 
 

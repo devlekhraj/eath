@@ -3,7 +3,7 @@
     <div class="bg-info">
         <div class="text-light py-2 px-3 d-flex justify-content-between small container">
             <div>
-                <i class="fas fa-phone-alt"></i> +977 (986) 098-9998
+                <i class="fas fa-phone-alt"></i> +977 (984) 192-7372
                 <i class="fas fa-envelope ms-3"></i> info@eathtravel.com
             </div>
             <div>
