@@ -93,20 +93,33 @@ a {
     color: inherit;
 }
 
-ol,
-ul {
+// ol,
+// ul {
+//     padding: 0;
+//     list-style-type: none;
+
+//     li {
+//         list-style-type: none;
+//     }
+// }
+/* Apply reset globally EXCEPT inside the Vuetify tiptap editor content */
+:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ol,
+:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ul {
     padding: 0;
     list-style-type: none;
-
-    li {
-        list-style-type: none;
-    }
 }
-.swiper{
-    border-radius: 0!important;
+
+:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ol li,
+:where(body) :not(.vuetify-pro-tiptap-editor__content.view.markdown-theme-default) ul li {
+    list-style-type: none;
+}
+
+.swiper {
+    border-radius: 0 !important;
     max-height: none !important;
 }
-p{
+
+p {
     padding: 0;
     margin: 0;
 }
