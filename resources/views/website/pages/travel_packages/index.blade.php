@@ -217,11 +217,14 @@
                                     <div class="">
 
                                         {{-- Price From --}}
-                                        <div class="bg-light p-4 rounded shadow-sm mb-4">
-                                            <p class="mb-1 text-secondary fw-medium">Price From:</p>
-                                            <h3 class="text-success fw-bold">
-                                                {{ format_price($package->priceStart->price) }}</h3>
+                                        <div class="p-4 rounded shadow-sm mb-4"
+                                            style="background: linear-gradient(90deg, #0d6efd, #0dcaf0);">
+                                            <p class="mb-1 text-white fw-medium">Price From:</p>
+                                            <h2 class="text-white fw-bold">
+                                                {{ format_price($package->priceStart->price) }}
+                                            </h2>
                                         </div>
+
 
                                         {{-- Group Pricing Table --}}
                                         <div class="table-responsive">
@@ -229,12 +232,12 @@
                                                 style="border-collapse: separate; border-spacing: 0 1rem;">
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col" class="py-3 px-4 text-white"
-                                                            style="background: linear-gradient(90deg, #0d6efd, #6610f2); font-weight: 600; font-size: 1.05rem; border-radius: 0.5rem 0 0 0.5rem;">
+                                                        <th scope="col" class="py-3 px-4 text-primary"
+                                                            style="font-weight: 600; font-size: 1.05rem; border-radius: 0.5rem 0 0 0.5rem;">
                                                             No. of People
                                                         </th>
-                                                        <th scope="col" class="py-3 px-4 text-white"
-                                                            style="background: linear-gradient(90deg, #0d6efd, #6610f2); font-weight: 600; font-size: 1.05rem; border-radius: 0 0.5rem 0.5rem 0;">
+                                                        <th scope="col" class="py-3 px-4 text-primary"
+                                                            style="font-weight: 600; font-size: 1.05rem; border-radius: 0 0.5rem 0.5rem 0;">
                                                             Price / Person
                                                         </th>
                                                     </tr>
@@ -264,8 +267,8 @@
                                                     </div>
                                                     <div>
                                                         <h5 class="mb-1 fw-semibold text-dark">
-                                                            Economy Price: <span
-                                                                class="text-success">{{ format_price($package->economyPrice->price) }}</span>
+                                                            Economy Price: <p
+                                                                class="text-success">{{ format_price($package->economyPrice->price) }}</p>
                                                         </h5>
                                                         <p class="mb-0 text-muted small">
                                                             {{ $package->economyPrice->description }}</p>
