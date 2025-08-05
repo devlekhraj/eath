@@ -1,1 +1,0 @@
-import{_ as o,j as r,o as n,d as t}from"./main-DYeP-Ojm.js";import"./index-CdODa-Gu.js";const a={};function s(i,e){return n(),r("div",null,e[0]||(e[0]=[t("p",null,"rating",-1),t("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, aut.",-1)]))}const p=o(a,[["render",s]]);export{p as default};

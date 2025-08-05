@@ -89,15 +89,21 @@ class TravelPackageResource extends JsonResource
                     "travel_package_id" => $item->travel_package_id,
                 ];
             }),
-            'prices'            => $this->prices->map(function ($item) {
+            'prices'            => $this->allPrices->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
                     'price' => $item->price,
                     'sort_order' => $item->sort_order,
                     "travel_package_id" => $item->travel_package_id,
+                    "is_default" => $item->is_default,
+                    "is_economy" => $item->is_economy,
+                    "is_active" => $item->is_active,
+                    "description" => $item->description,
                 ];
             }),
+            'economy_price' => $this->economyPrice,
+
             'exclusions'            => $this->exclusions->map(function ($item) {
                 return [
                     'id' => $item->id,

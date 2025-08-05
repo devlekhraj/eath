@@ -17,13 +17,15 @@ class PackagePriceController extends Controller
         $validated = $request->validate([
             "id" => "nullable|exists:package_inclusions,id",
             "title" => "required|string",
+            "is_economy" => "nullable|boolean",
+            "is_default" => "nullable|boolean",
+            "description" => "nullable|string",
             'price' => ['required', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'],
             "sort_order" => "nullable|integer",
             "travel_package_id" => "required|exists:travel_packages,id",
         ]);
         $validated["sort_order"] = $validated["sort_order"] ?? 0;
 
-        // dd($validated);
         // Retrieve the travel package
         $package = TravelPackage::findOrFail($id);
 

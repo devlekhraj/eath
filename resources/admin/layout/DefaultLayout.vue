@@ -113,7 +113,7 @@ const menuGroups = ref([
 					<v-list-item v-for="item in group.items" :key="item.name" :to="{ name: item.route_name }" link
 						class="rounded py-2">
 						<template #prepend>
-							<v-icon class="mr-0" style="font-size: 1.5rem;" color="primary">{{ item.icon }}</v-icon>
+							<v-icon class="mr-0" style="font-size: 1.5rem;" color="">{{ item.icon }}</v-icon>
 						</template>
 						<v-list-item-title style="font-size: 0.9rem !important; color: #5a5a5a;">{{ item.name
 						}}</v-list-item-title>

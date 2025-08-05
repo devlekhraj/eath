@@ -12,7 +12,7 @@ class TravelPackage extends Model
     use SoftDeletes;
     protected $guarded = [];
 
-    protected $appends = ['images_urls', 'image', 'rating', 'min_price','highlight_name'];
+    protected $appends = ['images_urls', 'image', 'rating', 'min_price', 'highlight_name'];
 
 
     protected static function boot()
@@ -94,8 +94,24 @@ class TravelPackage extends Model
     }
     public function prices()
     {
+        return $this->hasMany(PackagePrice::class, 'travel_package_id', 'id')->where('is_economy', 0)->orderBy('sort_order', 'asc');
+    }
+    public function priceStart()
+    {
+        return $this->hasOne(PackagePrice::class, 'travel_package_id', 'id')
+            ->where('is_economy', 0)
+            ->orderBy('price', 'asc'); // Gets the smallest price
+    }
+
+    public function allPrices()
+    {
         return $this->hasMany(PackagePrice::class, 'travel_package_id', 'id')->orderBy('sort_order', 'asc');
     }
+    public function economyPrice()
+    {
+        return $this->hasOne(PackagePrice::class, 'travel_package_id', 'id')->where('is_economy', 1);
+    }
+
     public function getMinPriceAttribute(): ?float
     {
         return $this->prices->min('price');

@@ -19,17 +19,6 @@
                             :error="!!serverErrors.title" :error-messages="serverErrors.title" required />
                     </v-col>
 
-                    <!-- <v-col cols="12">
-                        <v-textarea
-                            label="Description"
-                            variant="outlined"
-                            v-model="form.description"
-                            density="comfortable"
-                            :error="!!serverErrors.description"
-                            :error-messages="serverErrors.description"
-                        />
-                    </v-col> -->
-
                     <v-col cols="6" md="6">
                         <v-text-field v-model="form.price" type="number" label="Price" variant="outlined"
                             density="comfortable" :error="!!serverErrors.price"
@@ -40,6 +29,24 @@
                             density="comfortable" :error="!!serverErrors.sort_order"
                             :error-messages="serverErrors.sort_order" />
                     </v-col>
+                    <v-col cols="6" md="6">
+                        <v-switch inset color="primary" v-model="form.is_economy" label="Is Economy Price ?" density="comfortable"></v-switch>
+                    </v-col>
+                    <v-col cols="6" md="6">
+                        <v-switch inset color="primary" v-model="form.is_default" label="Is Default ?" density="comfortable"></v-switch>
+                    </v-col>
+                    
+                    <v-col cols="12">
+                        <v-textarea
+                            label="Price Description"
+                            variant="outlined"
+                            v-model="form.description"
+                            density="comfortable"
+                            :error="!!serverErrors.description"
+                            :error-messages="serverErrors.description"
+                        />
+                    </v-col>
+
 
                 </v-row>
             </v-form>
@@ -84,6 +91,9 @@ const rules = {
 const form = reactive({
     title: '',
     price: '',
+    is_economy:false,
+    is_default:false,
+    description:'',
     sort_order: 0,
     travel_package_id: props.travelPackageId,
 })
@@ -96,6 +106,9 @@ onMounted(() => {
             id: props.item.id,
             title: props.item.title || '',
             price: props.item.price || '',
+            is_economy: props.item.is_economy || false,
+            is_default: props.item.is_default || false,
+            description: props.item.description || '',
             sort_order: props.item.sort_order || 0,
             travel_package_id: props.item.travel_package_id || 0,
         })

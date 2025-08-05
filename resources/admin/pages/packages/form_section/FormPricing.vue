@@ -54,6 +54,8 @@
                                 <tr>
                                     <th class="text-left text-primary">Price Title</th>
                                     <th class="text-left text-primary">Price</th>
+                                    <th class="text-left text-primary">Is Economy ?</th>
+                                    <th class="text-left text-primary">Description</th>
                                     <th class="text-left text-primary">Actions</th>
                                 </tr>
                             </thead>
@@ -64,6 +66,12 @@
                                     </td>
                                     <td class="py-2">
                                         <p class="text-capitalize font-weight-medium">{{ formatAmount(item.price) }}</p>
+                                    </td>
+                                    <td class="py-2">
+                                        <v-chip size="small" :color="item.is_economy?'primary':'error'">{{ item.is_economy ? 'Yes':'No' }}</v-chip>
+                                    </td>
+                                    <td class="py-2">
+                                        <p class="text-capitalize">{{ item.description ||'n/a' }}</p>
                                     </td>
                                     <td class="py-2">
                                         <v-btn icon size="x-small" variant="tonal" color="primary"

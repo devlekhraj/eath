@@ -26,7 +26,7 @@ class WebsiteController extends Controller
     public function show($slug)
     {
         $package = TravelPackage::where('slug', $slug)->first();
-        $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories');
+        $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories','economyPrice','priceStart');
 
         return view('website.pages.travel_packages.index', compact('package'));
     }

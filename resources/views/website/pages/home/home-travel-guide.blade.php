@@ -56,19 +56,6 @@
             @endforeach
             @if (count($blogs) > 2)
                 <div class="text-center">
-                    <style>
-                        .btn-gradient {
-                            background: linear-gradient(45deg, #40b8ff, #2774f7);
-                            border: none;
-                            color: white;
-                            padding: 13px 23px;
-                        }
-
-                        .btn-gradient:hover {
-                              background: linear-gradient(45deg, #2ea6ec, #3e81f6);
-                            color: white;
-                        }
-                    </style>
 
                     <a href="/blogs" class="btn btn-gradient">
                         See All Blogs <i class="fa-solid fa-arrow-right"></i>
