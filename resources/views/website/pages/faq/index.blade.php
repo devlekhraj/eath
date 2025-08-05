@@ -1,7 +1,7 @@
 @extends('website.layout.master')
 @section('content')
 
-<div class="container py-5">
+<div class="container-fluid py-5">
     <h2 class="mb-4 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
         Frequently Asked Questions
     </h2>
@@ -35,26 +35,31 @@
         ];
     @endphp
 
-    <div class="accordion" id="faqAccordion">
-        @foreach($faqs as $key => $faq)
-            <div class="accordion-item mb-3 shadow-sm rounded">
-                <h2 class="accordion-header" id="heading{{ $key }}">
-                    <button class="accordion-button collapsed fw-semibold text-primary"
-                            type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapse{{ $key }}" aria-expanded="false"
-                            aria-controls="collapse{{ $key }}"
-                            style="font-size: 1.1rem;">
-                        <i class="fas fa-question-circle me-3"></i> {{ $faq['question'] }}
-                    </button>
-                </h2>
-                <div id="collapse{{ $key }}" class="accordion-collapse collapse"
-                     aria-labelledby="heading{{ $key }}" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body text-muted" style="font-size: 1rem; line-height: 1.5;">
-                        {!! nl2br(e($faq['answer'])) !!}
+
+    <div class="row">
+        <div class="col-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
+            <div class="accordion" id="faqAccordion">
+                @foreach($faqs as $key => $faq)
+                    <div class="accordion-item mb-3 shadow-sm rounded">
+                        <h2 class="accordion-header" id="heading{{ $key }}">
+                            <button class="accordion-button collapsed fw-semibold text-primary"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse{{ $key }}" aria-expanded="false"
+                                    aria-controls="collapse{{ $key }}"
+                                    style="font-size: 1.1rem;">
+                                <i class="fas fa-question-circle me-3"></i> {{ $faq['question'] }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ $key }}" class="accordion-collapse collapse"
+                             aria-labelledby="heading{{ $key }}" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted" style="font-size: 1rem; line-height: 1.5;">
+                                {!! nl2br(e($faq['answer'])) !!}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-        @endforeach
+        </div>
     </div>
 </div>
 
