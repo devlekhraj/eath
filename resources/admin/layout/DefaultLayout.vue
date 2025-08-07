@@ -44,13 +44,13 @@ const menuGroups = ref([
 			{ name: 'Banners', icon: 'mdi-image-area', route_name: 'adminBannerPage' },
 		],
 	},
-	{
-		groupName: 'Bookings',
-		items: [
-			{ name: 'Manage Bookings', icon: 'mdi-calendar-check-outline', route_name: 'adminBookingPage' },
-			{ name: 'New Booking', icon: 'mdi-plus-circle-outline', route_name: 'adminBookingForm' },
-		],
-	},
+	// {
+	// 	groupName: 'Bookings',
+	// 	items: [
+	// 		{ name: 'Manage Bookings', icon: 'mdi-calendar-check-outline', route_name: 'adminBookingPage' },
+	// 		{ name: 'New Booking', icon: 'mdi-plus-circle-outline', route_name: 'adminBookingForm' },
+	// 	],
+	// },
 	{
 		groupName: 'Our Blogs',
 		items: [
@@ -77,13 +77,13 @@ const menuGroups = ref([
 			{ name: 'Inquiries', icon: 'mdi-message-question-outline', route_name: 'adminInquiryPage' },
 		],
 	},
-	{
-		groupName: 'Finance',
-		items: [
-			{ name: 'Invoices', icon: 'mdi-file-document-outline', route_name: 'adminInvoicePage' },
-			{ name: 'Reports', icon: 'mdi-chart-box-outline', route_name: 'adminReportPage' },
-		],
-	},
+	// {
+	// 	groupName: 'Finance',
+	// 	items: [
+	// 		{ name: 'Invoices', icon: 'mdi-file-document-outline', route_name: 'adminInvoicePage' },
+	// 		{ name: 'Reports', icon: 'mdi-chart-box-outline', route_name: 'adminReportPage' },
+	// 	],
+	// },
 	// {
 	// 	groupName: 'Gallery',
 	// 	items: [
@@ -93,10 +93,11 @@ const menuGroups = ref([
 	{
 		groupName: 'Settings',
 		items: [
-			{ name: 'All Images', icon: 'mdi-file-document-outline', route_name: 'adminGalleryPage' },
+			{ name: 'Pages', icon: 'mdi-file-document-outline', route_name: 'adminWebPage' },
+			{ name: 'All Images', icon: 'mdi-image', route_name: 'adminGalleryPage' },
 			{ name: 'Notifications', icon: 'mdi-bell-outline', route_name: 'adminNotificationPage' },
-			{ name: 'General Settings', icon: 'mdi-cog-outline', route_name: 'adminGeneralSettingPage' },
-			{ name: 'User Management', icon: 'mdi-account-cog-outline', route_name: 'adminUserManagementPage' },
+			// { name: 'General Settings', icon: 'mdi-cog-outline', route_name: 'adminGeneralSettingPage' },
+			// { name: 'User Management', icon: 'mdi-account-cog-outline', route_name: 'adminUserManagementPage' },
 		],
 	},
 ])

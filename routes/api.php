@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Auth\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
+use App\Http\Controllers\Api\V1\Admin\Page\PageController;
 use App\Http\Controllers\Api\V1\Admin\Guide\GuideController;
 use App\Http\Controllers\Api\V1\Admin\Banner\BannerController;
 use App\Http\Controllers\Api\V1\Admin\Lookup\LookupController;
@@ -105,5 +106,12 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('banners', [BannerController::class, 'storeUpdate']);
         Route::patch('banners/{id}/toggle-active', [BannerController::class, 'toggleActive']);
         Route::delete('banners/{id}/delete', [BannerController::class, 'deleteBanner']);
+     
+     
+        Route::get('pages', [PageController::class, 'index']);
+        Route::get('pages/{id}', [PageController::class, 'show']);
+        Route::post('pages', [PageController::class, 'storeUpdate']);
+        Route::patch('pages/{id}/toggle-active', [PageController::class, 'toggleActive']);
+        Route::delete('pages/{id}/delete', [PageController::class, 'pageDelete']);
     });
 });

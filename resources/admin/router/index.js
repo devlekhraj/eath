@@ -291,6 +291,26 @@ const routes = [
 					subtitle: 'Application-wide configurations',
 				},
 			},
+			{
+				path: 'webpages',
+				name: 'adminWebPage',
+				component: () => import('@pages/webpage/WebPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Pages',
+					subtitle: 'Web Pages',
+				},
+			},
+			{
+				path: 'webpages/:id',
+				name: 'adminWebPageDetail',
+				component: () => import('@pages/webpage/WebPageDetail.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Pages',
+					subtitle: 'Web Page Detail',
+				},
+			},
 
 			// demo page
 			{
