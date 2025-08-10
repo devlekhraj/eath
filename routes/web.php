@@ -24,7 +24,12 @@ Route::get('/',[WebsiteController::class,'index']);
 
 Route::get('/packages/{slug}', [WebsiteController::class,'show']);
 Route::get('/guide-profiles', [WebsiteController::class,'guideProfile']);
-Route::get('/faq', [WebsiteController::class,'faq']);
 Route::get('/blogs', [WebsiteController::class,'blogs']);
 Route::get('/blogs/{slug}', [WebsiteController::class,'blogDetail'])->name('blog.show');
 Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');
+
+Route::get('/faq', [WebsiteController::class,'faq']);
+Route::get('/privacy-policy', [WebsiteController::class,'privacyPolicy']);
+Route::get('/terms-and-conditions', [WebsiteController::class,'termsConditions']);
+Route::get('/about-us', [WebsiteController::class,'aboutUs']);
+Route::get('/contact-us', [WebsiteController::class,'contactUs']);

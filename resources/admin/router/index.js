@@ -210,7 +210,7 @@ const routes = [
 			{
 				path: 'inquiries',
 				name: 'adminInquiryPage',
-				component: () => import('@pages/customers/CustomerInquiryPage.vue'),
+				component: () => import('@pages/customers/InquiryPage.vue'),
 				meta: {
 					requireAuth: true,
 					title: 'Inquiries',
@@ -309,6 +309,16 @@ const routes = [
 					requireAuth: true,
 					title: 'Pages',
 					subtitle: 'Web Page Detail',
+				},
+			},
+			{
+				path: 'faqs',
+				name: 'adminFAQPage',
+				component: () => import('@pages/faq/FaqPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'FAQ',
+					subtitle: 'FAQ Page',
 				},
 			},
 

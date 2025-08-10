@@ -35,7 +35,7 @@ class Guide extends Model
         'language_spoken' => 'array',
     ];
 
-    public function ratings()
+    public function reviews()
     {
         return $this->hasMany(GuideReview::class, 'guide_id', 'id')->orderBy('created_at', 'desc');
     }
@@ -49,12 +49,7 @@ class Guide extends Model
     {
         return $this->hasOne(GalleryUsage::class, 'usage_id', 'id')->where('usage_type', 'guides')->with('gallery');
     }
-    // public function getAvatarAttribute(): ?string
-    // {
-    //     return $this->image && $this->image->gallery
-    //         ? $this->image->gallery->url
-    //         : asset('images/logo.png');
-    // }
+
     public function getAvatarAttribute(): string
     {
         $photo = Gallery::where('filename', $this->photo)->first();

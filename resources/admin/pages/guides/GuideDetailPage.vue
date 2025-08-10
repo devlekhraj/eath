@@ -2,7 +2,7 @@
     <div class="">
         <div v-if="guide">
             <!-- Guide Header -->
-            <v-card elevation="0" class="pa-6 mb-4">
+            <v-card elevation="0" class="pa-6 mb-4 position-relative">
                 <div class="d-flex flex-column flex-md-row align-center gap-6">
                     <!-- Avatar Upload -->
                     <div class="avatar-upload-wrapper" @click="triggerPhotoUpload">
@@ -28,6 +28,8 @@
                         </v-chip>
                     </div>
                 </div>
+                <v-btn icon size="small" variant="tonal" color="primary"
+                    style="position: absolute;top:10px; right: 10px;" @click="openForm(guide)"><v-icon>mdi-pencil</v-icon></v-btn>
             </v-card>
 
 
@@ -38,9 +40,9 @@
                         <v-icon color="primary" start>mdi-account</v-icon>
                         Bio
                     </v-tab>
-                    <v-tab value="ratings">
+                    <v-tab value="reviews">
                         <v-icon color="primary" start>mdi-star</v-icon>
-                        Ratings
+                        Reviews
                     </v-tab>
                     <v-tab value="trips">
                         <v-icon color="primary" start>mdi-map-marker</v-icon>
@@ -52,10 +54,11 @@
 
                 <v-card-text>
                     <div>
-                        <component :is="currentTabComponent" :guide="guide" />
+                        <component :is="currentTabComponent" @close="fetchData" :guide="guide" />
                     </div>
                 </v-card-text>
             </v-card>
+            <modal-template ref="globalModal" @close="fetchData"></modal-template>
         </div>
 
         <!-- Loading State -->
@@ -68,6 +71,7 @@ import { ref, onMounted, defineAsyncComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import { useSnackbar } from '@/composables/snackbar'
+import GuideForm from './modal/GuideForm.vue'
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -110,20 +114,36 @@ const handlePhotoChange = async (event) => {
 // Dynamically resolve component based on activeTab
 const tabComponents = {
     bio: defineAsyncComponent(() => import('./tabs/TabBio.vue')),
-    ratings: defineAsyncComponent(() => import('./tabs/TabRating.vue')),
+    reviews: defineAsyncComponent(() => import('./tabs/TabReviews.vue')),
     trips: defineAsyncComponent(() => import('./tabs/TabTrip.vue'))
 }
 
 const currentTabComponent = computed(() => tabComponents[activeTab.value])
 
 onMounted(async () => {
+    await fetchData();
+})
+async function fetchData(){
     try {
         const { data } = await axios.get(`/admin/guides/${route.params.id}`)
         guide.value = data
     } catch (error) {
         console.error('Error fetching guide details:', error)
     }
-})
+}
+const globalModal = ref(null);
+
+function openForm(item = {}) {
+    console.log({ item });
+    globalModal.value.open({
+        title: item?.id ? 'Edit Item' : 'Add New Item',
+        component: GuideForm,
+        size: 'md',
+        props: {
+            item,
+        },
+    })
+}
 
 const statusColor = (status) => {
     switch (status) {
@@ -138,33 +158,33 @@ const statusColor = (status) => {
 </script>
 <style scoped>
 .avatar-upload-wrapper {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
 }
 
 .hoverable-avatar {
-  transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .hoverable-avatar:hover {
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
 }
 
 .avatar-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(33, 33, 33, 0.55);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 50%;
-  z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(33, 33, 33, 0.55);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+    z-index: 2;
 }
 
 .avatar-upload-wrapper:hover .avatar-overlay {
-  opacity: 1;
+    opacity: 1;
 }
 </style>

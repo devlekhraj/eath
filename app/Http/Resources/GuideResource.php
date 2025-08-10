@@ -4,6 +4,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\GuideTripResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GuideResource extends JsonResource
@@ -20,9 +21,11 @@ class GuideResource extends JsonResource
             'email'           => $this->email,
             'license_number'  => $this->license_number,
             'language_spoken' => $this->language_spoken,
-            'rating_count'    => $this->ratings()->count(),
+            'rating_count'    => $this->reviews()->count(),
             'trip_count'      => $this->trips()->count(),
             'status'          => $this->status,
+            'reviews'         => GuideReviewResource::collection($this->whenLoaded('reviews')),
+            'trips'         => GuideTripResource::collection($this->whenLoaded('trips')),
             'created_at'      => $this->created_at,
             'updated_at'      => $this->updated_at,
         ];

@@ -47,11 +47,10 @@
             <div class="col-lg-2 col-md-6">
                 <h6 class="text-uppercase text-dark mb-3 fw-semibold">Quick Links</h6>
                 <ul class="list-unstyled small">
-                    <li><a href="#" class="footer-link">Home</a></li>
-                    <li><a href="#" class="footer-link">Packages</a></li>
-                    <li><a href="#" class="footer-link">Destinations</a></li>
-                    <li><a href="#" class="footer-link">Blog</a></li>
-                    <li><a href="#" class="footer-link">Contact</a></li>
+                    <li><a href="/" class="footer-link">Home</a></li>
+                    <li><a href="/guide-profiles" class="footer-link">Guide Profile</a></li>
+                    <li><a href="/about-us" class="footer-link">About Us</a></li>
+                    <li><a href="/contact-us" class="footer-link">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -59,11 +58,9 @@
             <div class="col-lg-3 col-md-6">
                 <h6 class="text-uppercase text-dark mb-3 fw-semibold">Customer Service</h6>
                 <ul class="list-unstyled small">
-                    <li><a href="#" class="footer-link">Terms & Conditions</a></li>
-                    <li><a href="#" class="footer-link">Privacy Policy</a></li>
-                    <li><a href="#" class="footer-link">Travel Insurance</a></li>
-                    <li><a href="#" class="footer-link">FAQs</a></li>
-                    <li><a href="#contact" class="footer-link">Support</a></li>
+                    <li><a href="/terms-and-conditions" class="footer-link">Terms & Conditions</a></li>
+                    <li><a href="/privacy-policy" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="/faq" class="footer-link">FAQs</a></li>
                 </ul>
             </div>
 

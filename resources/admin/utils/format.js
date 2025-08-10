@@ -42,3 +42,19 @@ export function formatAmount(amount) {
     currency: 'USD',
   }).format(amount)
 }
+
+export function formatPhoneNumber(phone) {
+  if (!phone) return 'N/A'
+
+  // Remove all non-numeric characters
+  const cleaned = phone.toString().replace(/\D/g, '')
+
+  // Must be exactly 10 digits for standard US format
+  if (cleaned.length !== 10) return phone
+
+  const areaCode = cleaned.slice(0, 3)
+  const centralOffice = cleaned.slice(3, 6)
+  const lineNumber = cleaned.slice(6)
+
+  return `(${areaCode}) ${centralOffice}-${lineNumber}`
+}

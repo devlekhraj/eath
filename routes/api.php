@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Admin\FAQ\FaqController;
 use App\Http\Controllers\Api\V1\Auth\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
@@ -9,6 +10,9 @@ use App\Http\Controllers\Api\V1\Admin\Guide\GuideController;
 use App\Http\Controllers\Api\V1\Admin\Banner\BannerController;
 use App\Http\Controllers\Api\V1\Admin\Lookup\LookupController;
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
+use App\Http\Controllers\Api\V1\Admin\Inquiry\InquiryController;
+use App\Http\Controllers\Api\V1\Admin\Settings\SettingController;
+use App\Http\Controllers\Api\V1\Admin\Customers\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackagePriceController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
@@ -96,6 +100,10 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::get('guides/{id}', [GuideController::class, 'show']);
         Route::delete('guides/{id}/delete', [GuideController::class, 'deleteGuide']);
         Route::post('guides', [GuideController::class, 'storeUpdate']);
+        Route::patch('guides/{id}/bio', [GuideController::class, 'updateBio']);
+
+        Route::post('guides/{id}/review', [GuideController::class, 'guideReview']);
+        Route::post('guides/{id}/trip', [GuideController::class, 'guideTrip']);
 
 
         //  banners
@@ -113,5 +121,27 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('pages', [PageController::class, 'storeUpdate']);
         Route::patch('pages/{id}/toggle-active', [PageController::class, 'toggleActive']);
         Route::delete('pages/{id}/delete', [PageController::class, 'pageDelete']);
+        
+        
+        Route::get('settings', [SettingController::class, 'index']);
+        Route::post('settings', [SettingController::class, 'storeUpdate']);
+        Route::get('settings/{id}', [SettingController::class, 'show']);
+        Route::delete('settings/{id}/delete', [SettingController::class, 'deleteSetting']);
+        
+        Route::get('faqs', [FaqController::class, 'index']);
+        Route::post('faqs', [FaqController::class, 'storeUpdate']);
+        Route::get('faqs/{id}', [FaqController::class, 'show']);
+        Route::delete('faqs/{id}/delete', [FaqController::class, 'delete']);
+       
+        Route::get('inquiries', [InquiryController::class, 'index']);
+        Route::post('inquiries', [InquiryController::class, 'storeUpdate']);
+        Route::get('inquiries/{id}', [InquiryController::class, 'show']);
+        Route::delete('inquiries/{id}/delete', [InquiryController::class, 'delete']);
+        
+        Route::get('customers', [CustomerController::class, 'index']);
+        Route::post('customers', [CustomerController::class, 'storeUpdate']);
+        Route::get('customers/{id}', [CustomerController::class, 'show']);
+        Route::delete('customers/{id}/delete', [CustomerController::class, 'delete']);
+
     });
 });

@@ -94,9 +94,10 @@ const menuGroups = ref([
 		groupName: 'Settings',
 		items: [
 			{ name: 'Pages', icon: 'mdi-file-document-outline', route_name: 'adminWebPage' },
+			{ name: 'FAQs', icon: 'mdi-file-document-outline', route_name: 'adminFAQPage' },
 			{ name: 'All Images', icon: 'mdi-image', route_name: 'adminGalleryPage' },
 			{ name: 'Notifications', icon: 'mdi-bell-outline', route_name: 'adminNotificationPage' },
-			// { name: 'General Settings', icon: 'mdi-cog-outline', route_name: 'adminGeneralSettingPage' },
+			{ name: 'General Settings', icon: 'mdi-cog-outline', route_name: 'adminGeneralSettingPage' },
 			// { name: 'User Management', icon: 'mdi-account-cog-outline', route_name: 'adminUserManagementPage' },
 		],
 	},

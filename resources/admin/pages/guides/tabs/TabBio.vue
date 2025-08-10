@@ -1,12 +1,11 @@
 <template>
     <div>
-        <div class="text-right">
-            <v-btn icon variant="tonal" color="primary" @click="editBio()"> <v-icon>mdi-pencil</v-icon> </v-btn>
+        <div class="text-right pt-4">
+            <v-btn variant="tonal" color="primary" @click="editBio()"> <v-icon>mdi-pencil</v-icon> Update </v-btn>
         </div>
-        <p>bio</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, aut.</p>
-
-
+        <div>
+            <VuetifyViewer :value="guide.bio"/>
+        </div>
         <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
@@ -15,7 +14,7 @@ import { ref, onMounted } from 'vue'
 import ModalBioForm from './modal/ModalBioForm.vue'
 
 import { useSnackbar } from '@/composables/snackbar'
-
+const emit = defineEmits(['close', 'saved'])
 const { showSuccess, showError } = useSnackbar()
 
 const props = defineProps({
@@ -39,7 +38,10 @@ function editBio() {
         },
     });
 }
-
+function handleClose() {
+    // You can refresh data or show a message here after modal closes
+    emit('close')
+}   
 
 onMounted(() => {
 })

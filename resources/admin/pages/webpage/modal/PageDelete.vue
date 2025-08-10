@@ -1,12 +1,12 @@
 <template>
     <v-card>
         <v-card-text class="text-center pt-4 mt-4">
-            <h4>Delete Blog Item?</h4>
+            <h4>Delete Item?</h4>
         </v-card-text>
         <v-card-actions>
             <v-btn variant="text" @click="handleClose">No</v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="error" :loading="submitting" @click="deleteBlog">Yes</v-btn>
+            <v-btn color="error" :loading="submitting" @click="handleDelete">Yes</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -33,10 +33,10 @@ function handleClose() {
     emit('close')
 }
 
-async function deleteBlog() {
+async function handleDelete() {
     submitting.value = true
     try {
-        const resp = await axios.delete(`/admin/blogs/${props.item.id}/delete`)
+        const resp = await axios.delete(`/admin/pages/${props.item.id}/delete`)
         showSuccess(resp.message || 'success');
         submitting.value = false
         handleClose()

@@ -10,8 +10,8 @@
             <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation>
                 <div class="mb-4">
                     <label class="text-sm font-medium">Bio</label>
-                    <RichTextEditor v-model="form.description" />
-                    <div v-if="!form.description" class="text-red text-sm mt-1">This field is required</div>
+                    <RichTextEditor v-model="form.bio" />
+                    <div v-if="!form.bio" class="text-red text-sm mt-1">This field is required</div>
                 </div>
             </v-form>
         </v-card-text>
@@ -33,7 +33,7 @@ const formRef = ref(null)
 const loading = ref(false)
 
 const form = reactive({
-    description: '',
+    bio: '',
 })
 
 const serverErrors = reactive({})
@@ -52,7 +52,7 @@ const props = defineProps({
 onMounted(() => {
     if (props.item?.id) {
         Object.assign(form, {
-            description: props.item.description || '',
+            bio: props.item.bio || '',
         })
     }
 })
@@ -64,7 +64,7 @@ function handleCancel() {
 
 async function submitForm() {
     // Simple validation
-    if (!form.description) return
+    if (!form.bio) return
 
     handleSubmit()
 }
@@ -72,7 +72,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await axios.post(`admin/guides/${props.item.id}/bio`, form)
+        const resp = await axios.patch(`admin/guides/${props.item.id}/bio`, form)
         showSuccess(resp.message || 'Bio updated successfully')
         emit('close')
     } catch (error) {

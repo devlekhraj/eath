@@ -41,6 +41,12 @@
               prepend-inner-icon="mdi-translate" multiple variant="outlined" density="comfortable"
               :rules="[rules.required]" :error-messages="serverErrors.language_spoken" required chips />
           </v-col>
+          <v-col cols="12" md="12">
+            <v-select v-model="form.status" :items="status_list" item-title="label" item-value="id"
+              class="text-capitalize" label="Status" prepend-inner-icon="mdi-translate" variant="outlined"
+              density="comfortable" :rules="[rules.required]" :error-messages="serverErrors.status" required />
+
+          </v-col>
         </v-row>
       </v-form>
     </v-card-text>
@@ -76,6 +82,15 @@ const serverErrors = reactive({
   language_spoken: '',
 })
 
+const status_list = [
+  { id: 'active', label: 'Active' },
+  { id: 'inactive', label: 'Inactive' },
+  { id: 'deleted', label: 'Deleted' },
+  { id: 'pending', label: 'Pending' },
+  { id: 'suspended', label: 'Suspended' },
+]
+
+
 const rules = {
   required: (v) => !!v || 'This field is required',
   email: (v) =>
@@ -103,6 +118,7 @@ onMounted(() => {
       name: props.item.name || '',
       email: props.item.email || '',
       phone_no: props.item.phone_no || '',
+      status: props.item.status || '',
       language_spoken: props.item.language_spoken || [],
     })
   }
@@ -128,7 +144,6 @@ async function handleSubmit() {
     const resp = await axios.post('/admin/guides', form)
 
     showSuccess(resp.data.message || 'Guide saved successfully')
-    emit('saved', resp.data.data)
     emit('close')
   } catch (error) {
     if (error.response?.status === 422) {

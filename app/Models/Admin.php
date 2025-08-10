@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable; // 👈 extend this, not Model
+use App\Models\GuideReview;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable; // 👈 extend this, not Model
 
 class Admin extends Authenticatable implements JWTSubject
 {
@@ -93,5 +94,10 @@ class Admin extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function guideReviews()
+    {
+        return $this->morphMany(GuideReview::class, 'reviewer');
     }
 }

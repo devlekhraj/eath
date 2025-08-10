@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Api\V1\Admin\Guide;
 
 
-use App\Models\Gallery;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\GuideResource;
 use App\Models\Blog;
-use App\Models\GalleryUsage;
 use App\Models\Guide;
+use App\Models\Gallery;
+use App\Models\GuideTrip;
+use App\Models\GuideReview;
+use Illuminate\Support\Str;
+use App\Models\GalleryUsage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use App\Http\Resources\GuideResource;
 
 
 class GuideController extends Controller
@@ -61,12 +64,122 @@ class GuideController extends Controller
     public function show(Request $request, $id)
     {
         // Logic to retrieve travel packages
-        $package = Guide::find($id);
+        $guide = Guide::find($id);
+        $guide->load('reviews', 'trips');
 
         return response()->json([
             'success' => true,
-            'data' => $package
+            'data' => new GuideResource($guide),
         ], 200);
+    }
+
+    public function updateBio(Request $request, $id)
+    {
+        // Logic to retrieve travel packages
+        $guide = Guide::find($id);
+        $guide->bio = $request->bio;
+        $guide->save();
+
+
+        return response()->json([
+            'success' => true,
+            'data' => $guide,
+            "message" => "Bio updated",
+        ], 200);
+    }
+
+
+    public function guideReview(Request $request, $guideId)
+    {
+        $request->validate([
+            'comment' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+            'id' => 'sometimes|integer|exists:guide_reviews,id',
+        ]);
+
+        $reviewer = auth()->user();
+
+        if ($request->filled('id')) {
+            // Update existing review
+            $review = GuideReview::where('id', $request->id)
+                ->where('reviewer_id', $reviewer->id)
+                ->where('reviewer_type', get_class($reviewer))
+                ->firstOrFail();
+
+            $review->rating = $request->input('rating');
+            $review->comment = $request->input('comment');
+            $review->is_approved = false; // reset approval on update
+            $review->save();
+
+            $message = 'Review updated successfully';
+        } else {
+            // Create new review
+            $review = GuideReview::create([
+                'guide_id' => $guideId,
+                'reviewer_id' => $reviewer->id,
+                'reviewer_type' => get_class($reviewer),
+                'rating' => $request->input('rating'),
+                'comment' => $request->input('comment'),
+                'is_approved' => false,
+            ]);
+
+            $message = 'Review submitted successfully';
+        }
+
+        return response()->json([
+            'message' => $message,
+            'review' => $review,
+        ]);
+    }
+
+    public function guideTrip(Request $request, $guideId)
+    {
+        $validated = $request->validate([
+            'id' => 'nullable|exists:guide_trips,id',
+            'travel_package_id' => 'nullable|exists:travel_packages,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'group_size' => 'required|integer|min:1',
+            'notes' => 'nullable|string',
+        ]);
+
+
+        $validated['start_date'] = Carbon::parse($validated['start_date'])->format('Y-m-d');
+        $validated['end_date'] = Carbon::parse($validated['end_date'])->format('Y-m-d');
+
+        if (isset($validated['id'])) {
+            // Update existing trip
+            $trip = GuideTrip::where('id', $validated['id'])
+                ->where('guide_id', $guideId)
+                ->firstOrFail();
+
+            $trip->update([
+                'travel_package_id' => $validated['travel_package_id'] ?? null,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'group_size' => $validated['group_size'],
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            $message = 'Guide trip updated successfully';
+        } else {
+            // Create new trip
+            $trip = GuideTrip::create([
+                'guide_id' => $guideId,
+                'travel_package_id' => $validated['travel_package_id'] ?? null,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'group_size' => $validated['group_size'],
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            $message = 'Guide trip added successfully';
+        }
+
+        return response()->json([
+            'message' => $message,
+            'trip' => $trip,
+        ]);
     }
 
 
