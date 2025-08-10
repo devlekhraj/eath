@@ -109,16 +109,16 @@ class WebsiteController extends Controller
     }
     public function contactUs()
     {
-        $slug = 'contact-us';
+        // $slug = 'contact-us';
 
-        $page = Page::firstOrCreate(
-            ['slug' => $slug],
-            [
-                'title' => 'Contact Us',
-                'content' => 'Contact Us', // You can put default content here or leave empty
-            ]
-        );
+        // $page = Page::firstOrCreate(
+        //     ['slug' => $slug],
+        //     [
+        //         'title' => 'Contact Us',
+        //         'content' => 'Contact Us', // You can put default content here or leave empty
+        //     ]
+        // );
 
-        return view('website.pages.static_page.contact-us', compact('page'));
+        return view('website.pages.static_page.contact-us');
     }
 }
