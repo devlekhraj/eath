@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Blog;
+use App\Models\FeaturedPackage;
 use App\Models\GalleryUsage;
 use App\Models\Guide;
 use Illuminate\Support\Facades\File;
@@ -61,12 +62,15 @@ class GalleryController extends Controller
             File::makeDirectory($fullPath, 0755, true);
         }
 
-        $filename = $safeName . '.' . $extension;
+        $timeString = date('His'); // e.g., 143205 for 2:32:05 PM
+        $filename = $safeName . '-' . $timeString . '.' . $extension;
         $counter = 0;
+
         while (File::exists($fullPath . '/' . $filename)) {
             $counter++;
-            $filename = $safeName . '-' . $counter . '.' . $extension;
+            $filename = $safeName . '-' . $timeString . '-' . $counter . '.' . $extension;
         }
+
 
         $mimeType = $image->getMimeType();
         $image->move($fullPath, $filename);
@@ -79,7 +83,7 @@ class GalleryController extends Controller
             'mime_type' => $mimeType,
             'file_size' => $fileSize,
             'alt_text' => null,
-            'image_url'=>route('image.view', ['filename' => $filename]),
+            'image_url' => route('image.view', ['filename' => $filename]),
         ]);
 
 
@@ -91,7 +95,7 @@ class GalleryController extends Controller
                 "usage_id" => $usageId
             ]);
 
-            switch($request->usage_type){
+            switch ($request->usage_type) {
                 case 'blogs':
                     $blog = Blog::find($request->usage_id);
                     $blog->cover_image = $filename;
@@ -102,6 +106,11 @@ class GalleryController extends Controller
                     $blog->photo = $filename;
                     $blog->save();
                     break;
+                case 'featured_packages':
+                    $data = FeaturedPackage::find($request->usage_id);
+                    $data->banner = $filename;
+                    $data->save();
+                    break;
                 default:
                     break;
             }
@@ -111,8 +120,8 @@ class GalleryController extends Controller
             'success' => true,
             "filename" => $filename,
             'data' => $gallery,
-            "gallery_usage" => isset($galleryUsage) ? $galleryUsage:null,
-            'url'=>route('image.view', ['filename' => $filename]),
+            "gallery_usage" => isset($galleryUsage) ? $galleryUsage : null,
+            'url' => route('image.view', ['filename' => $filename]),
         ], 201);
     }
 

@@ -23,6 +23,7 @@ Route::get('/',[WebsiteController::class,'index']);
 
 
 Route::get('/packages/{slug}', [WebsiteController::class,'show']);
+Route::get('/categories/{slug}', [WebsiteController::class,'categoryShow'])->name('category.show');
 Route::get('/guide-profiles', [WebsiteController::class,'guideProfile']);
 Route::get('/blogs', [WebsiteController::class,'blogs']);
 Route::get('/blogs/{slug}', [WebsiteController::class,'blogDetail'])->name('blog.show');

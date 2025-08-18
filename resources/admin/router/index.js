@@ -128,6 +128,16 @@ const routes = [
 
 			// packages routes
 			{
+				path: 'featured-packages',
+				name: 'adminFeaturedPackagePage',
+				component: () => import('@pages/featured-packages/FeaturedPackagePage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Available Packages',
+					subtitle: 'All the available packages',
+				},
+			},
+			{
 				path: 'packages',
 				name: 'adminPackagePage',
 				component: () => import('@pages/packages/PackagePage.vue'),

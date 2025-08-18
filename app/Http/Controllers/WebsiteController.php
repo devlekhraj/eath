@@ -6,8 +6,11 @@ use App\Models\Faq;
 use App\Models\Blog;
 use App\Models\Page;
 use App\Models\Banner;
+use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 use App\Models\TravelPackage;
+use App\Models\FeaturedPackage;
+use App\Models\PackageCategory;
 
 class WebsiteController extends Controller
 {
@@ -23,15 +26,57 @@ class WebsiteController extends Controller
             "is_published" => 1,
         ])->orderByDesc('created_at')->limit(3)->get();
 
-        return view('website.index', compact('packages', 'mainBanner', 'blogs'));
+        $featuredPackages = FeaturedPackage::where('is_active', 1)
+            ->orderBy('sort_order', 'asc')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->get();
+
+            
+
+        return view('website.index', compact('packages', 'mainBanner', 'blogs','featuredPackages'));
     }
     public function show($slug)
     {
         $package = TravelPackage::where('slug', $slug)->first();
         $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories', 'economyPrice', 'priceStart');
 
-        return view('website.pages.travel_packages.index', compact('package'));
+
+        $relatedPackages = TravelPackage::where('id', '!=', $package->id)
+            ->where('is_active', 1)
+            ->where('is_published', 1)
+            ->with('categories')
+            ->take(6) // Limit to 3 related packages
+            ->get();
+
+        // dd($relatedPackages);
+
+        $parentCategories = PackageCategory::whereNull('parent_id')
+            ->withCount('travelPackages')              // count for parent
+            ->with(['children' => function ($q) {
+                $q->withCount('travelPackages');       // count for children
+            }])
+            ->get();
+
+
+        return view('website.pages.travel_packages.index', compact('package', 'relatedPackages', 'parentCategories'));
     }
+
+    public function categoryShow($slug)
+    {
+        $category = PackageCategory::where('slug', $slug)->firstOrFail();
+        $category->load('travelPackages');
+
+        $parentCategories = PackageCategory::whereNull('parent_id')
+            ->withCount('travelPackages')              // count for parent
+            ->with(['children' => function ($q) {
+                $q->withCount('travelPackages');       // count for children
+            }])
+            ->get();
+
+        return view('website.pages.travel_packages.category', compact('category', 'parentCategories'));
+    }
+
     public function guideProfile()
     {
         return view('website.pages.guide.index');
@@ -48,14 +93,22 @@ class WebsiteController extends Controller
     public function blogDetail($slug)
     {
         try {
-            $blog = Blog::where('slug', $slug)->first();
+            $blog = Blog::where('slug', $slug)->firstOrFail();
 
-            return view('website.pages.blogs.blogDetail', compact('blog'));
+            // Fetch related blogs (same category, excluding current blog)
+            $relatedBlogs = Blog::latest()
+                ->take(4)
+                ->get();
+
+            // Fetch all blog categories
+            $blogCategories = BlogCategory::orderBy('name', 'asc')->get();
+
+            return view('website.pages.blogs.blogDetail', compact('blog', 'relatedBlogs', 'blogCategories'));
         } catch (\Throwable $th) {
             dd($th->getMessage());
-            //throw $th;
         }
     }
+
 
 
     public function faq()
@@ -109,16 +162,6 @@ class WebsiteController extends Controller
     }
     public function contactUs()
     {
-        // $slug = 'contact-us';
-
-        // $page = Page::firstOrCreate(
-        //     ['slug' => $slug],
-        //     [
-        //         'title' => 'Contact Us',
-        //         'content' => 'Contact Us', // You can put default content here or leave empty
-        //     ]
-        // );
-
         return view('website.pages.static_page.contact-us');
     }
 }

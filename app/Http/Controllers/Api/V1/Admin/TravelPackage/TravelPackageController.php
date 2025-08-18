@@ -28,10 +28,13 @@ class TravelPackageController extends Controller
         // Retrieve the travel package by ID or fail with 404
         $package = TravelPackage::with('categories')->findOrFail($id);
 
+      
+
         return response()->json([
             'success' => true,
             'data' => new TravelPackageResource($package),  // Use `new` here
-            'message' => 'Travel package retrieved successfully.'
+            'message' => 'Travel package retrieved successfully.',
+
         ], 200);
     }
 

@@ -43,7 +43,7 @@ class Banner extends Model
             ->where('usage_type', 'banners')
             ->with('gallery');
     }
-    public function getImagesUrlsAttribute(): array
+    public function getImageUrlsAttribute(): array
     {
         return $this->images
             ->filter(fn($usage) => $usage->gallery) // in case gallery is null

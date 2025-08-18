@@ -45,24 +45,25 @@
 
             <!-- Quick Links -->
             <div class="col-lg-2 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3 fw-semibold">Quick Links</h6>
+                <h6 class="text-uppercase text-dark mb-3 fw-semibold">Explore</h6>
                 <ul class="list-unstyled small">
                     <li><a href="/" class="footer-link">Home</a></li>
-                    <li><a href="/guide-profiles" class="footer-link">Guide Profile</a></li>
+                    <li><a href="/guide-profiles" class="footer-link">Our Guides</a></li>
                     <li><a href="/about-us" class="footer-link">About Us</a></li>
                     <li><a href="/contact-us" class="footer-link">Contact Us</a></li>
                 </ul>
             </div>
 
-            <!-- Customer Service -->
+            <!-- Customer Support -->
             <div class="col-lg-3 col-md-6">
-                <h6 class="text-uppercase text-dark mb-3 fw-semibold">Customer Service</h6>
+                <h6 class="text-uppercase text-dark mb-3 fw-semibold">Help & Support</h6>
                 <ul class="list-unstyled small">
                     <li><a href="/terms-and-conditions" class="footer-link">Terms & Conditions</a></li>
                     <li><a href="/privacy-policy" class="footer-link">Privacy Policy</a></li>
                     <li><a href="/faq" class="footer-link">FAQs</a></li>
                 </ul>
             </div>
+
 
             <!-- Contact Info -->
             <div class="col-lg-3 col-md-6">
@@ -91,7 +92,8 @@
         <!-- Bottom Bar -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted">
             <span>&copy; {{ date('Y') }} E.A.T.H Travel. All rights reserved.</span>
-            <span>Developed by <a class="text-primary fw-medium" target="_blank" href="https://lekhrajrai.com.np">Lekh Raj
+            <span>Developed by <a class="text-primary fw-medium" target="_blank" href="https://lekhrajrai.com.np">Lekh
+                    Raj
                     Rai</a></span>
         </div>
     </div>

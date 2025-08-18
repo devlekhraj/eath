@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\Admin\Inquiry\InquiryController;
 use App\Http\Controllers\Api\V1\Admin\Settings\SettingController;
 use App\Http\Controllers\Api\V1\Admin\Customers\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
+use App\Http\Controllers\Api\V1\Admin\FeaturedPackage\FeaturedPackageController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackagePriceController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageCategoryController;
@@ -114,34 +115,39 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('banners', [BannerController::class, 'storeUpdate']);
         Route::patch('banners/{id}/toggle-active', [BannerController::class, 'toggleActive']);
         Route::delete('banners/{id}/delete', [BannerController::class, 'deleteBanner']);
-     
-     
+
+
+        Route::get('settings', [SettingController::class, 'index']);
+        Route::post('settings', [SettingController::class, 'storeUpdate']);
+        Route::get('settings/{id}', [SettingController::class, 'show']);
+        Route::delete('settings/{id}/delete', [SettingController::class, 'deleteSetting']);
+
         Route::get('pages', [PageController::class, 'index']);
         Route::get('pages/{id}', [PageController::class, 'show']);
         Route::post('pages', [PageController::class, 'storeUpdate']);
         Route::patch('pages/{id}/toggle-active', [PageController::class, 'toggleActive']);
         Route::delete('pages/{id}/delete', [PageController::class, 'pageDelete']);
-        
-        
-        Route::get('settings', [SettingController::class, 'index']);
-        Route::post('settings', [SettingController::class, 'storeUpdate']);
-        Route::get('settings/{id}', [SettingController::class, 'show']);
-        Route::delete('settings/{id}/delete', [SettingController::class, 'deleteSetting']);
-        
+
+
         Route::get('faqs', [FaqController::class, 'index']);
         Route::post('faqs', [FaqController::class, 'storeUpdate']);
         Route::get('faqs/{id}', [FaqController::class, 'show']);
         Route::delete('faqs/{id}/delete', [FaqController::class, 'delete']);
-       
+
         Route::get('inquiries', [InquiryController::class, 'index']);
         Route::post('inquiries', [InquiryController::class, 'storeUpdate']);
         Route::get('inquiries/{id}', [InquiryController::class, 'show']);
         Route::delete('inquiries/{id}/delete', [InquiryController::class, 'delete']);
-        
+
         Route::get('customers', [CustomerController::class, 'index']);
         Route::post('customers', [CustomerController::class, 'storeUpdate']);
         Route::get('customers/{id}', [CustomerController::class, 'show']);
         Route::delete('customers/{id}/delete', [CustomerController::class, 'delete']);
-
+      
+        Route::get('featured-packages', [FeaturedPackageController::class, 'index']);
+        Route::post('featured-packages', [FeaturedPackageController::class, 'storeUpdate']);
+        Route::get('featured-packages/{id}', [FeaturedPackageController::class, 'show']);
+        Route::patch('featured-packages/{id}/toggle-active', [FeaturedPackageController::class, 'toggleActive']);
+        Route::delete('featured-packages/{id}/delete', [FeaturedPackageController::class, 'delete']);
     });
 });

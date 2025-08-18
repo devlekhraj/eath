@@ -62,8 +62,8 @@
 					<v-file-input
 						v-if="blog_id"
 						v-model="selected_image"
-						label="Featured Image"
 						accept="image/*"
+						label="Featured Image"
 						variant="outlined"
 						density="comfortable"
 						prepend-inner-icon="mdi-image"

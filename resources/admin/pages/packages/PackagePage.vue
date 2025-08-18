@@ -90,7 +90,15 @@
 
 
             <template #item.actions="{ item }">
-                <v-menu location="bottom">
+                <div class="width-max-content d-flex align-center">
+                    <v-btn variant="tonal" icon size="x-small" color="primary" :to="{ name: 'adminPackageForm', query: { id: item.id } }">
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn variant="tonal" class="ml-2" icon size="x-small" color="error" @click="deleteItem(item)">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                </div>
+                <!-- <v-menu location="bottom">
                     <template #activator="{ props }">
                         <div style="width: max-content;">
                             <v-btn v-bind="props" icon variant="text" color="primary">
@@ -113,7 +121,7 @@
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </template>
         </v-data-table>
 
@@ -135,11 +143,11 @@ const { showSuccess, showError } = useSnackbar()
 
 const headers = [
     { title: 'SN', key: 'sn', sortable: true },
-    { title: 'Created', key: 'created_at', sortable: false },
+    // { title: 'Created', key: 'created_at', sortable: false },
     { title: 'Name', key: 'name', sortable: false },
     { title: 'Category', key: 'category', sortable: false },
-    { title: 'Active', key: 'is_active', sortable: false },
-    { title: 'Featured', key: 'is_featured', sortable: false },
+    // { title: 'Active', key: 'is_active', sortable: false },
+    // { title: 'Featured', key: 'is_featured', sortable: false },
     { title: 'Published', key: 'is_published', sortable: false },
     { title: 'Published On', key: 'published_at', sortable: false },
     { title: 'Actions', key: 'actions', sortable: false },

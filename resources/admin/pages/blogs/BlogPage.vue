@@ -76,7 +76,7 @@
             </template>
 
             <template #item.actions="{ item }">
-                <v-menu location="bottom end">
+                <!-- <v-menu location="bottom end">
                     <template #activator="{ props }">
                         <v-btn v-bind="props" icon variant="text" color="primary">
                             <v-icon>mdi-dots-vertical</v-icon>
@@ -96,7 +96,16 @@
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
+                <div class="width-max-content d-flex align-center">
+                    <v-btn variant="tonal" icon size="x-small" color="primary" :to="{ name: 'adminBlogForm', query: { id: item.id } }">
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn variant="tonal" class="ml-2" icon size="x-small" color="error" @click="deleteItem(item)">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+
+                </div>
             </template>
         </v-data-table>
         <modal-template ref="globalModal" @close="fetchBlogs"></modal-template>

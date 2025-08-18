@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inquiry extends Model
 {
-    //
+    protected $guarded = [];
+    protected $casts = [
+        "is_active" => "boolean"
+    ];
 }

@@ -37,6 +37,11 @@ class TravelPackage extends Model
         return $this->lookup?->name ?? '';
     }
 
+    public function inquiries()
+    {
+        return $this->morphMany(Inquiry::class, 'inquirable');
+    }
+
     public function images(): HasMany
     {
         return $this->hasMany(GalleryUsage::class, 'usage_id')
