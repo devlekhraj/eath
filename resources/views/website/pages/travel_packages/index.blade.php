@@ -462,8 +462,8 @@
         @if ($parentCategories->count() > 0)
             <div class="container my-5">
                 <div class="text-center mb-4 py-4">
-                    <h2 class="mb-2"><strong>Browse by Category</strong></h2>
-                    <p class="text-muted">Find packages by category and subcategory.</p>
+                    <h2 class="mb-2"><strong>Browse by Region</strong></h2>
+                    <p class="text-muted">Explore destinations across different regions.</p>
                 </div>
 
                 <div class="row g-4">

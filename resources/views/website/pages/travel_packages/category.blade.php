@@ -126,9 +126,9 @@
         @if ($parentCategories->count() > 0)
             <div class="container my-5">
                 <div class="text-center mb-4 py-4">
-                    <h2 class="mb-2"><strong>Other Categories</strong></h2>
+                    <h2 class="mb-2"><strong>Other Regions</strong></h2>
                     <p class="text-muted">
-                        Explore a variety of travel categories and discover packages tailored to your interests.
+                        Explore a variety of travel regions and discover packages tailored to your interests.
                     </p>
                 </div>
 
