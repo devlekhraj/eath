@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use App\Models\PackageCategory;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,19 +17,31 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Now it's safe to run Eloquent queries here
-        $trekkingInNepal = PackageCategory::where('slug', 'trekking-in-nepal')
-            ->with(['children' => function ($query) {
-                $query->whereHas('travelPackages');
-            }, 'children.travelPackages'])
-            ->first();
+        if (Schema::hasTable('package_categories') && Schema::hasTable('travel_packages')) {
 
+            $trekkingInNepal = PackageCategory::where('slug', 'trekking-in-nepal')
+                ->with(['children' => function ($query) {
+                    $query->whereHas('travelPackages');
+                }, 'children.travelPackages'])
+                ->first();
 
-        $helicopterTour = PackageCategory::where('slug', 'helicopter-tour')
-            ->with('travelPackages')
-            ->first();
+            $helicopterTour = PackageCategory::where('slug', 'helicopter-tour')
+                ->with('travelPackages')
+                ->first();
+        } else {
+            // Default empty values
+            $trekkingInNepal = null;
+            $helicopterTour = null;
+        }
+
+        if (Schema::hasTable('settings')) {
+            $settings = Setting::pluck('value', 'code')->toArray();
+        } else {
+            $settings = [];
+        }
 
         View::share('trekkingInNepal', $trekkingInNepal);
         View::share('helicopterTour', $helicopterTour);
+        View::share('settings', $settings);
     }
 }

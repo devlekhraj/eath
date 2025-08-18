@@ -10,6 +10,7 @@ use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 use App\Models\TravelPackage;
 use App\Models\FeaturedPackage;
+use App\Models\Inquiry;
 use App\Models\PackageCategory;
 
 class WebsiteController extends Controller
@@ -32,9 +33,9 @@ class WebsiteController extends Controller
             ->where('end_date', '>=', now())
             ->get();
 
-            
 
-        return view('website.index', compact('packages', 'mainBanner', 'blogs','featuredPackages'));
+
+        return view('website.index', compact('packages', 'mainBanner', 'blogs', 'featuredPackages'));
     }
     public function show($slug)
     {
@@ -163,5 +164,68 @@ class WebsiteController extends Controller
     public function contactUs()
     {
         return view('website.pages.static_page.contact-us');
+    }
+    public function getInquiryForm(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'type' => 'required|string',
+            'id' => 'nullable|integer',
+        ]);
+        $type = $request->type;
+        $id = $request->id;
+        return view('website.pages.inquiry.inquiry-form', compact('type', 'id'));
+    }
+
+    public function store(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'mobile_no' => 'nullable|string|max:20',
+            'country' => 'nullable|string|max:100',
+            'description' => 'nullable|string|max:500',
+            'travel_date' => 'nullable|date',
+            'number_of_people' => 'nullable|integer|min:1',
+            'message' => 'nullable|string|max:1000',
+            'type' => 'required|in:travel_packages,featured_packages',
+            'id' => 'required|integer',
+        ]);
+
+        $package = null;
+        switch ($request->type) {
+            case 'travel_packages':
+                $package = TravelPackage::findOrFail($request->id);
+
+                break;
+            case 'featured_packages':
+                $package = FeaturedPackage::findOrFail($request->id); // Assuming featured packages also use the same ID
+                break;
+            default:
+                return response()->json(['error' => 'Invalid inquiry type'], 400);
+        }
+
+        $inquiry = $package->inquiries()->create([
+            'fname' => $request->input('fname'),
+            'lname' => $request->input('lname'),
+            'email' => $request->input('email'),
+            'mobile_no' => $request->input('mobile_no'),
+            'country' => $request->input('country'),
+            'custom_destination' => $request->input('custom_destination'),
+            'description' => $request->input('description'),
+            'travel_date' => $request->input('travel_date'),
+            'number_of_people' => $request->input('number_of_people'),
+            'message' => $request->input('message'),
+            'status' => 'new',
+        ]);
+
+        $temp = view('website.pages.inquiry.inquiry-success')->render();
+        return response()->json([
+            'message' => 'Inquiry submitted successfully.',
+            'inquiry' => $inquiry,
+            "template" => $temp
+        ], 201);
     }
 }

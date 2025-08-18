@@ -371,10 +371,15 @@
 
                                         {{-- CTA Button --}}
                                         <div>
-                                            <a href="javascript:void(0)" class="btn w-100 text-white fw-semibold py-3"
+                                            {{-- <button class="btn btn-gradient btnOpenModal" data-type="featured_packages" data-id="{{ $package['id'] }}">
+                            Join Now <i class="fa-solid fa-arrow-right"></i>
+                        </button> --}}
+
+                                            <button class="btn w-100 text-white fw-semibold py-3 btnOpenModal"
+                                                data-type="travel_packages" data-id="{{ $package['id'] }}"
                                                 style="background: linear-gradient(90deg, #0d6efd, #6610f2); border: none; border-radius: 0.5rem;">
                                                 Inquire Now <i class="fa-solid fa-arrow-right ms-2"></i>
-                                            </a>
+                                            </button>
                                         </div>
 
                                     </div>

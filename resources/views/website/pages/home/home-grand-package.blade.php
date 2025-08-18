@@ -96,9 +96,14 @@
                         <span class="ms-2 text-light small">{{ $grandPackage['reviews'] }} Reviews</span>
                     </div> --}}
 
-                    <a href="{{ $grandPackage['url'] }}" class="btn btn-primary btn-lg fw-semibold shadow-sm">
+                    {{-- <button class="btn btn-primary btn-lg fw-semibold shadow-sm btnOpenModal" data-type="featured_packages" data-id="{{ $package['id'] }}">
                         Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
-                    </a>
+                    </button> --}}
+                    <div>
+                        <button class="btn btn-gradient btnOpenModal" data-type="featured_packages" data-id="{{ $package['id'] }}">
+                            Join Now <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         @endforeach

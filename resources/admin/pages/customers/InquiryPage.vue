@@ -154,7 +154,7 @@ const headers = [
     { title: 'SN', key: 'sn', width: '60px' },
     { title: 'Name', key: 'name' },
     { title: 'Travel Date', key: 'travel_date' },
-    { title: 'Package', key: 'travel_package' },
+    // { title: 'Package', key: 'travel_package' },
     { title: 'No. of People', key: 'number_of_people' },
     { title: 'Actions', key: 'actions', sortable: false, align: 'end' },
 ]
