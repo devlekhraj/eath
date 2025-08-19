@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <v-data-table :headers="headers" 
         :loading="fetching_data"
         :items="filteredItems" :items-per-page="20" :sort-by="['name']"
@@ -109,7 +109,7 @@
             </template>
         </v-data-table>
         <modal-template ref="globalModal" @close="fetchBlogs"></modal-template>
-    </v-container>
+    </div>
 </template>
 
 <script setup>
