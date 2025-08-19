@@ -44,7 +44,7 @@
                         <span class="badge bg-light text-primary me-2">{{ $package['duration'] }}</span>
                         <span class="badge bg-light text-primary me-2">{{ $package['group_size'] }} People</span>
                         <span
-                            class="badge bg-light text-primary">{{ \Carbon\Carbon::parse($package['start_date'])->format('M d, Y') }}</span>
+                            class="badge bg-light text-primary">{{ \Carbon\Carbon::parse($package['end_date'])->format('M d, Y') }}</span>
                     </div>
 
                     <!-- Countdown boxes -->
