@@ -100,7 +100,7 @@
     </style>
     <div class="container py-5">
         <h2 class="mb-3 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
-            Our Expert Travel Guides
+            Our Expert Guide Profiles
         </h2>
 
         <p class="text-center text-muted mb-5"

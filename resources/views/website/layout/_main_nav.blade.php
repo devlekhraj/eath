@@ -310,7 +310,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="/guide-profiles">Travel Guides</a>
+                        <a class="nav-link fw-semibold" href="/guide-profiles">Guide Profiles</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-semibold" href="/blogs">Blogs</a>

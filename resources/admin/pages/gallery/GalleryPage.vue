@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <div class="pb-6 text-right">
       <v-btn size="large" rounded color="primary">
         <v-icon>mdi-upload</v-icon> Upload Image
@@ -60,7 +60,7 @@
         </v-col>
       </v-row>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>

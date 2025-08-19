@@ -400,7 +400,7 @@
         @if ($relatedPackages->count() > 0)
             <div class="container py-5" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
                 <div class="text-center mb-4 py-4">
-                    <h2 class="mb-2"><strong>Related Packages</strong></h2>
+                    <h2 class="mb-2"><strong>Discover Other Treks</strong></h2>
                     <p class="text-muted">
                         Discover more travel experiences you may like, carefully curated for you.
                     </p>
@@ -464,7 +464,7 @@
             </div>
         @endif
 
-        @if ($parentCategories->count() > 0)
+        {{-- @if ($parentCategories->count() > 0)
             <div class="container my-5">
                 <div class="text-center mb-4 py-4">
                     <h2 class="mb-2"><strong>Browse by Region</strong></h2>
@@ -476,13 +476,6 @@
                         <div class="col-12">
                             <div class="border-0 h-100 category-parent">
                                 <div class="">
-                                    <!-- Parent category -->
-                                    {{-- <h5 class="fw-bold d-flex justify-content-between align-items-center mb-3">
-                                        <a href="/categories/{{ $parent->slug }}" class="text-dark text-decoration-none">
-                                            {{ $parent->name }}
-                                        </a>
-                                        <span class="badge bg-primary">{{ $parent->packages_count }}</span>
-                                    </h5> --}}
 
                                     <!-- Children -->
                                     @if ($parent->children->count())
@@ -519,7 +512,7 @@
                     @endforeach
                 </div>
             </div>
-        @endif
+        @endif --}}
 
     </div>
 
