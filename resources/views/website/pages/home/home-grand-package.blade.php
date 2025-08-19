@@ -34,7 +34,7 @@
                     <h2 class="fw-bold mb-3 text-primary">{{ $package['title'] }}</h2>
                     <div class="pb-0">
                         <h3 class="fw-bold text-primary">
-                            ${{ number_format((float) trim($grandPackage['price'], '$'), 2) }}</h3>
+                            ${{ number_format((float) trim($package['price'], '$'), 2) }}</h3>
                     </div>
                     <div style="text-align: justify">
                         <p class="mb-3">{{ $package['description'] }}</p>
