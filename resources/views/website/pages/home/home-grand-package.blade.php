@@ -32,8 +32,13 @@
                 <!-- Details -->
                 <div class="col-md-6">
                     <h2 class="fw-bold mb-3 text-primary">{{ $package['title'] }}</h2>
-
-                    <p class="mb-3 fs-5">{{ $package['description'] }}</p>
+                    <div class="pb-0">
+                        <h3 class="fw-bold text-primary">
+                            ${{ number_format((float) trim($grandPackage['price'], '$'), 2) }}</h3>
+                    </div>
+                    <div style="text-align: justify">
+                        <p class="mb-3">{{ $package['description'] }}</p>
+                    </div>
 
                     <div class="mb-3">
                         <span class="badge bg-light text-primary me-2">{{ $package['duration'] }}</span>
@@ -80,6 +85,7 @@
                         </div>
                     </div>
 
+
                     {{-- <div class="d-flex align-items-center mb-3">
                         <h3 class="fw-bold me-4">${{ number_format((float) trim($grandPackage['price'], '$'), 2) }}</h3>
                         <div class="text-warning fs-5">
@@ -100,7 +106,8 @@
                         Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
                     </button> --}}
                     <div>
-                        <button class="btn btn-gradient btnOpenModal" data-type="featured_packages" data-id="{{ $package['id'] }}">
+                        <button class="btn btn-gradient btnOpenModal" data-type="featured_packages"
+                            data-id="{{ $package['id'] }}">
                             Join Now <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
