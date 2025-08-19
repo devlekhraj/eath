@@ -124,7 +124,7 @@
                                     style="height: 210px; object-fit: cover;">
                                 <div class="card-body p-3 d-flex flex-column">
                                     <div class="mb-3">
-                                        <strong class="d-block mb-1">{{ $package['name'] }}</strong>
+                                        <strong class="d-block text-secondary mb-1">{{ $package['name'] }}</strong>
                                     </div>
                                     <!-- Price and reviews on same row -->
                                     <div class="d-flex justify-content-between align-items-center mb-2">
