@@ -1,0 +1,1 @@
+import{_ as t,j as o,o as r,d as s}from"./main-lNHER__5.js";import"./index-CdODa-Gu.js";const n={data(){return{}}};function a(i,e,c,p,d,l){return r(),o("div",null,e[0]||(e[0]=[s("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, quidem.",-1)]))}const _=t(n,[["render",a]]);export{_ as default};
