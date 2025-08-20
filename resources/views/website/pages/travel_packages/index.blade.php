@@ -353,17 +353,23 @@
                                 <div class="mb-5">
                                     <div class="exclusive-card mb-4">
                                         <div class="ribbon">Fixed Departure</div>
-                                        <div class="card-inner">
+                                        <div class="card-inner mt-3">
 
                                             @php
                                                 $departure = $package->fixedDeparture;
                                             @endphp
                                             <!-- Title & Price -->
                                             <div class="section">
-                                                <h5 class="fw-semibold mb-1">{{ $departure->title }}</h5>
-                                                <h5 class="fw-bold mb-0">{{ format_price($departure->price) }}</h5>
+                                                <div class="mb-3">
+                                                    <h5 class="fw-semibold mb-1">{{ $departure->title }}</h5>
+                                                    <h2 class="fw-bold mb-0 text-white"
+                                                        >
+                                                        {{ format_price($departure->price) }}
+                                                    </h2>
+
+                                                </div>
                                                 <p class="small mb-0 mt-1">
-                                                    {{$departure->description}}
+                                                    {{ $departure->description }}
                                                 </p>
                                             </div>
 
@@ -386,7 +392,7 @@
                                                     </div>
                                                     <div>
                                                         <span class="fw-semibold">Group Size:</span>
-                                                        <span>{{$departure->group_size}} people</span>
+                                                        <span>{{ $departure->group_size }} people</span>
                                                     </div>
                                                 </div>
 
@@ -396,7 +402,7 @@
                                                     </div>
                                                     <div>
                                                         <span class="fw-semibold">Duration:</span>
-                                                        <span>{{$departure->duration}}</span>
+                                                        <span>{{ $departure->duration }}</span>
                                                     </div>
                                                 </div>
 
