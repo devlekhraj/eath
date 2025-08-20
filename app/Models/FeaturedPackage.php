@@ -14,6 +14,7 @@ class FeaturedPackage extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'package_id' => 'integer',
     ];
     protected $appends = ['banner_url'];
 

@@ -27,7 +27,6 @@
                 </v-row>
             </template>
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation v-else>
-                <pre>{{ form }}</pre>
                 <v-row>
                     <!-- Package Name -->
                     <v-col cols="12">
@@ -179,7 +178,7 @@ function fetchPackages() {
                     title: props.item.title || '',
                     slug: props.item.slug || '',
                     description: props.item.description || '',
-                    package_id: Number(props.item.package_id) || null,
+                    package_id: props.item.package_id || null,
                     start_date: props.item.start_date || '',
                     end_date: props.item.end_date || '',
                     group_size: props.item.group_size || '',
