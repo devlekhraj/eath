@@ -37,10 +37,10 @@
 
                     <!-- Slug -->
                     <v-col cols="12">
-                        <v-text-field v-model="form.slug" label="Slug" density="comfortable" variant="outlined"
+                        <v-text-field v-model="form.slug" label="Slug URL" density="comfortable" variant="outlined"
                             :rules="[rules.required, rules.slug]" :error-messages="serverErrors.slug"
                             hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint
-                            @input="onSlugInput" prepend-inner-icon="mdi-link-variant" />
+                            prepend-inner-icon="mdi-link-variant" />
                     </v-col>
                     <!-- Slug -->
                     <v-col cols="12">
@@ -232,21 +232,21 @@ const slugEdited = ref(false)
 const { showSuccess, showError } = useSnackbar()
 
 // Auto-generate slug from name
-function slugify(text) {
-    return text
-        .toLowerCase()
-        .trim()
-        .replace(/[\s_]+/g, '-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-')
-        .replace(/^-+|-+$/g, '')
-}
+// function slugify(text) {
+//     return text
+//         .toLowerCase()
+//         .trim()
+//         .replace(/[\s_]+/g, '-')
+//         .replace(/[^\w\-]+/g, '')
+//         .replace(/\-\-+/g, '-')
+//         .replace(/^-+|-+$/g, '')
+// }
 
-watch(() => form.title, (newTitle) => {
-    if (!slugEdited.value) {
-        form.slug = slugify(newTitle)
-    }
-})
+// watch(() => form.title, (newTitle) => {
+//     if (!slugEdited.value) {
+//         form.slug = slugify(newTitle)
+//     }
+// })
 
 function onSlugInput() {
     slugEdited.value = true
