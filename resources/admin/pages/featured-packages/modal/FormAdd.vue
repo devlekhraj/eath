@@ -12,7 +12,21 @@
         <v-divider></v-divider>
 
         <v-card-text>
-            <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
+              <!-- Skeleton Loader -->
+            <template v-if="fetching_data">
+                <v-row>
+                <v-col cols="12" v-for="n in 6" :key="n">
+                    <v-skeleton-loader type="text"></v-skeleton-loader>
+                </v-col>
+                <v-col cols="12" md="6" v-for="n in 2" :key="'date-' + n">
+                    <v-skeleton-loader type="text"></v-skeleton-loader>
+                </v-col>
+                <v-col cols="12" md="12">
+                    <v-skeleton-loader type="image"></v-skeleton-loader>
+                </v-col>
+                </v-row>
+            </template>
+            <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation v-else>
                 <v-row>
                     <!-- Package Name -->
                     <v-col cols="12">
@@ -74,8 +88,7 @@
                     <!-- Price -->
                     <v-col cols="12" md="12">
                         <v-text-field v-model="form.duration" label="Duration" density="comfortable"
-                        placeholder="eg. 3 Days, 2 Nights" 
-                            variant="outlined" :rules="[rules.required]" hide-details
+                            placeholder="eg. 3 Days, 2 Nights" variant="outlined" :rules="[rules.required]" hide-details
                             :error-messages="serverErrors.duration" prepend-inner-icon="mdi-clock" />
                     </v-col>
                     <v-col cols="12" md="12">
@@ -85,15 +98,15 @@
                                 prepend-inner-icon="mdi-image" @change="onImageChange"
                                 class="mb-4 truncate-file-name" />
 
-                            <v-img v-if="item?.banner_url || form?.banner_url" :src="form.banner_url" height="200" contain
-                                class="rounded mb-4" />
+                            <v-img v-if="item?.banner_url || form?.banner_url" :src="form.banner_url" height="200"
+                                contain class="rounded mb-4" />
                         </div>
                     </v-col>
                 </v-row>
             </v-form>
         </v-card-text>
 
-        <v-card-actions class="">
+        <v-card-actions class="" v-if="!fetching_data">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             <v-spacer></v-spacer>
             <v-btn color="primary" :loading="loading" @click="submitForm">Save</v-btn>
@@ -109,6 +122,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const loading = ref(false)
+const fetching_data = ref(false)
 const formRef = ref(null)
 const package_list = ref([])
 const selected_image = ref(null)
@@ -123,9 +137,9 @@ const form = reactive({
     end_date: '',
     group_size: '',
     price: '',
-    duration:'',
+    duration: '',
     sort_order: 0,
-    banner_url: '', 
+    banner_url: '',
 })
 
 const serverErrors = reactive({
@@ -149,30 +163,36 @@ const props = defineProps({
 onMounted(() => {
     fetchPackages()
 
-    if (props.item?.id) {
-        Object.assign(form, {
-            id: props.item.id,
-            title: props.item.title || '',
-            slug: props.item.slug || '',
-            description: props.item.description || '',
-            package_id: props.item.package_id || null,
-            start_date: props.item.start_date || '',
-            end_date: props.item.end_date || '',
-            group_size: props.item.group_size || '',
-            price: props.item.price || '',
-            duration: props.item.duration || '',
-            sort_order: props.item.sort_order || 0,
-            banner_url: props.item.banner_url ?? true,
-            is_active: props.item.is_active ?? true,
-        })
-    }
+
 })
 function fetchPackages() {
+
+    fetching_data.value = true;
     axios.get('/admin/travel-packages')
         .then(response => {
             package_list.value = response.data;
+
+            if (props.item?.id) {
+                Object.assign(form, {
+                    id: props.item.id,
+                    title: props.item.title || '',
+                    slug: props.item.slug || '',
+                    description: props.item.description || '',
+                    package_id: props.item.package_id || null,
+                    start_date: props.item.start_date || '',
+                    end_date: props.item.end_date || '',
+                    group_size: props.item.group_size || '',
+                    price: props.item.price || '',
+                    duration: props.item.duration || '',
+                    sort_order: props.item.sort_order || 0,
+                    banner_url: props.item.banner_url ?? true,
+                    is_active: props.item.is_active ?? true,
+                })
+            }
+            fetching_data.value = false;
         })
         .catch(error => {
+            fetching_data.value = false;
             console.error('Error fetching packages:', error);
         });
 }
