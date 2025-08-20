@@ -253,13 +253,15 @@
                                                                 data-bs-target="#collapse{{ $key }}"
                                                                 aria-expanded="false"
                                                                 aria-controls="collapse{{ $key }}"
-                                                                style="font-size: 1.15rem; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 0.5rem;">
-                                                                <span
-                                                                    class="d-flex justify-content-center align-items-center bg-info text-white rounded-circle"
-                                                                    style="width: 38px; height: 38px;">
-                                                                    <i class="fas fa-map-marker-alt fs-5"></i>
-                                                                </span>
-                                                                {{ $itinery->title }}
+                                                                style="">
+                                                       
+                                                                    <div
+                                                                        class="d-flex justify-content-center align-items-center bg-info text-white"
+                                                                        style="min-width: 38px; height: 38px; border-radius: 50%;">
+                                                                        <i class="fas fa-map-marker-alt fs-5"></i>
+                                                                    </div>
+                                                            
+                                                               <span class="ms-2"> {{ $itinery->title }}</span>
                                                             </button>
                                                         </h2>
 
