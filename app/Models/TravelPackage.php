@@ -126,4 +126,12 @@ class TravelPackage extends Model
     {
         return $this->hasMany(PackageInclusion::class)->where('is_excluded', true)->orderBy('sort_order', 'asc');
     }
+
+    public function fixedDeparture()
+    {
+        return $this->hasOne(FeaturedPackage::class, 'package_id', 'id')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->where('is_active', 1);
+    }
 }

@@ -40,8 +40,7 @@ class WebsiteController extends Controller
     public function show($slug)
     {
         $package = TravelPackage::where('slug', $slug)->first();
-        $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories', 'economyPrice', 'priceStart');
-
+        $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories', 'economyPrice', 'priceStart','fixedDeparture');
 
         $relatedPackages = TravelPackage::where('id', '!=', $package->id)
             ->where('is_active', 1)

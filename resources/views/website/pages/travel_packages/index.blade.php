@@ -92,10 +92,56 @@
         padding: 1rem;
     }
 
-    /* .category-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-    } */
+    .exclusive-card {
+        position: relative;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        /* Premium main gradient */
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        /* purple → blue gradient */
+        color: #ffffff;
+    }
+
+    .card-inner {
+        padding: 1.5rem;
+    }
+
+    /* Sections */
+    .section {
+        margin-bottom: 1.25rem;
+    }
+
+    .section:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Extra info blocks with subtle gradients */
+    .info-block {
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-block i {
+        margin-right: 0.5rem;
+        color: #ffd700;
+        /* gold accent icon */
+    }
+
+    .ribbon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(90deg, #ff9800, #f44336);
+        border-bottom-left-radius: 0.5rem;
+    }
 </style>
 @section('content')
     {{-- Banner Section --}}
@@ -304,6 +350,70 @@
                         </div>
                         <div class="col-12 col-md-4">
                             <div style="position: sticky; top:0" class="border rounded p-4">
+                                <div class="mb-5">
+                                    <div class="exclusive-card mb-4">
+                                        <div class="ribbon">Fixed Departure</div>
+                                        <div class="card-inner">
+
+                                            @php
+                                                $departure = $package->fixedDeparture;
+                                            @endphp
+                                            <!-- Title & Price -->
+                                            <div class="section">
+                                                <h5 class="fw-semibold mb-1">{{ $departure->title }}</h5>
+                                                <h5 class="fw-bold mb-0">{{ format_price($departure->price) }}</h5>
+                                                <p class="small mb-0 mt-1">
+                                                    {{$departure->description}}
+                                                </p>
+                                            </div>
+
+                                            <!-- Extra Info -->
+                                            <div class="section">
+                                                <div class="info-block">
+                                                    <div style="width:30px">
+                                                        <i class="fa-solid fa-calendar-check"></i>
+                                                    </div>
+                                                    <div>
+
+                                                        <span class="fw-semibold">Departure Date:</span>
+                                                        <span>12 Oct 2025</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="info-block">
+                                                    <div style="width:30px">
+                                                        <i class="fa-solid fa-users"></i>
+                                                    </div>
+                                                    <div>
+                                                        <span class="fw-semibold">Group Size:</span>
+                                                        <span>{{$departure->group_size}} people</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="info-block">
+                                                    <div style="width:30px">
+                                                        <i class="fa-solid fa-clock"></i>
+                                                    </div>
+                                                    <div>
+                                                        <span class="fw-semibold">Duration:</span>
+                                                        <span>{{$departure->duration}}</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <!-- Button -->
+                                            <div class="section">
+                                                <button class="btn w-100 text-white fw-semibold py-3 btnOpenModal"
+                                                    data-type="travel_packages" data-id="{{ $package['id'] }}"
+                                                    style="background: linear-gradient(90deg, #ff9800, #f44336); border: none; border-radius: 0.5rem;">
+                                                    Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
 
                                 @if ($package->prices->count() > 0)
                                     <div class="">
@@ -351,7 +461,7 @@
 
                                         {{-- Economy Price --}}
                                         @if ($package->economyPrice)
-                                            <div class="card border-0 shadow-sm mb-4"
+                                            <div class="card border-0 shadow-sm mb-2"
                                                 style="background: linear-gradient(90deg, #e3f2fd, #f1f8e9);">
                                                 <div class="card-body d-flex align-items-start">
                                                     <div class="me-3">
@@ -368,22 +478,21 @@
                                                 </div>
                                             </div>
                                         @endif
+                                        <div class="mb-4">
+                                            <div class="">
+                                                <button class="btn w-100 text-white fw-semibold py-3 btnOpenModal"
+                                                    data-type="travel_packages" data-id="{{ $package['id'] }}"
+                                                    style="background: linear-gradient(90deg, #0d6efd, #6610f2); border: none; border-radius: 0.5rem;">
+                                                    Check Availability <i class="fa-solid fa-arrow-right ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
 
                                         {{-- CTA Button --}}
-                                        <div>
-                                            {{-- <button class="btn btn-gradient btnOpenModal" data-type="featured_packages" data-id="{{ $package['id'] }}">
-                            Join Now <i class="fa-solid fa-arrow-right"></i>
-                        </button> --}}
-
-                                            <button class="btn w-100 text-white fw-semibold py-3 btnOpenModal"
-                                                data-type="travel_packages" data-id="{{ $package['id'] }}"
-                                                style="background: linear-gradient(90deg, #0d6efd, #6610f2); border: none; border-radius: 0.5rem;">
-                                                Inquire Now <i class="fa-solid fa-arrow-right ms-2"></i>
-                                            </button>
-                                        </div>
 
                                     </div>
                                 @endif
+
 
                             </div>
                         </div>
