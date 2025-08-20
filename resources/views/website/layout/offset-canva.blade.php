@@ -31,7 +31,7 @@
                 </a>
                 @if (count($trekkingInNepal->children) > 0)
                     <div class="collapse" id="trekkingSubmenu">
-                        <ul class="nav flex-column ms-3">
+                        <ul class="nav flex-column ps-2">
                             @foreach ($trekkingInNepal->children as $region)
                                 <li class="mb-3 ms-2">
                                     <a class="text-primary" href="#"
@@ -39,9 +39,9 @@
                                     @if ($region->travelPackages->count() > 0)
                                         <ul class="nav flex-column">
                                             @foreach ($region->travelPackages as $pack)
-                                                <li class="d-flex">
+                                                <li class="d-flex mb-1">
                                                     <div style="widows: 20px">
-                                                        <i class="fas fa-angle-right text-secondary me-2"></i>
+                                                        <i class="fas fa-angle-right text-primary me-2"></i>
                                                     </div>
                                                     <div>
                                                         <a style="font-weight: 500; font-size:0.9rem"
