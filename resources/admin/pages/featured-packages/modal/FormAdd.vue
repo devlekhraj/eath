@@ -12,18 +12,18 @@
         <v-divider></v-divider>
 
         <v-card-text>
-              <!-- Skeleton Loader -->
+            <!-- Skeleton Loader -->
             <template v-if="fetching_data">
                 <v-row>
-                <v-col cols="12" v-for="n in 6" :key="n">
-                    <v-skeleton-loader type="text"></v-skeleton-loader>
-                </v-col>
-                <v-col cols="12" md="6" v-for="n in 2" :key="'date-' + n">
-                    <v-skeleton-loader type="text"></v-skeleton-loader>
-                </v-col>
-                <v-col cols="12" md="12">
-                    <v-skeleton-loader type="image"></v-skeleton-loader>
-                </v-col>
+                    <v-col cols="12" v-for="n in 6" :key="n">
+                        <v-skeleton-loader type="text"></v-skeleton-loader>
+                    </v-col>
+                    <v-col cols="12" md="6" v-for="n in 2" :key="'date-' + n">
+                        <v-skeleton-loader type="text"></v-skeleton-loader>
+                    </v-col>
+                    <v-col cols="12" md="12">
+                        <v-skeleton-loader type="image"></v-skeleton-loader>
+                    </v-col>
                 </v-row>
             </template>
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation v-else>
@@ -51,7 +51,7 @@
 
                     <!-- Description -->
                     <v-col cols="12">
-                        <v-textarea v-model="form.description" label="Description" density="comfortable"
+                        <v-textarea v-model="form.description" label="Description" density="comfortable" auto-grow
                             variant="outlined" :rules="[rules.required]" :error-messages="serverErrors.description"
                             prepend-inner-icon="mdi-text" />
                     </v-col>
