@@ -412,7 +412,7 @@
                                             <!-- Button -->
                                             <div class="section">
                                                 <button class="btn w-100 text-white fw-semibold py-3 btnOpenModal"
-                                                    data-type="travel_packages" data-id="{{ $package['id'] }}"
+                                                    data-type="featured_packages" data-id="{{ $departure['id'] }}"
                                                     style="background: linear-gradient(90deg, #ff9800, #f44336); border: none; border-radius: 0.5rem;">
                                                     Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
                                                 </button>
