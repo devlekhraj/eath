@@ -350,6 +350,7 @@
                         </div>
                         <div class="col-12 col-md-4">
                             <div style="position: sticky; top:0" class="border rounded p-4">
+                                @if($package->fixedDeparture)
                                 <div class="mb-5">
                                     <div class="exclusive-card mb-4">
                                         <div class="ribbon">Fixed Departure</div>
@@ -420,6 +421,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif 
 
                                 @if ($package->prices->count() > 0)
                                     <div class="">
