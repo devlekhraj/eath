@@ -27,6 +27,7 @@
                 </v-row>
             </template>
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation v-else>
+                <pre>{{ form }}</pre>
                 <v-row>
                     <!-- Package Name -->
                     <v-col cols="12">
