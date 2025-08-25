@@ -82,7 +82,7 @@
                 <h6 class="text-uppercase text-dark mb-3 fw-semibold">Contact Us</h6>
                 <p class="text-muted small mb-2">
                     <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                    {{ isset($settings['footer_text']) ? $settings['footer_text'] : 'Bode-6, Bhaktapur' }}
+                    {{ isset($settings['address']) ? $settings['address'] : 'Bode-6, Bhaktapur' }}
                 </p>
                 <p class="text-muted small mb-2">
                     <i class="fas fa-phone me-2 text-primary"></i>
