@@ -49,6 +49,9 @@
                     @if (!empty($settings['youtube']))
                         <a href="{{$settings['youtube']}}" target="_blank" class="text-dark fs-5"><i class="fab fa-youtube"></i></a>
                     @endif
+                    @if (!empty($settings['twitter']))
+                        <a href="{{$settings['twitter']}}" target="_blank" class="text-dark fs-5"><i class="fab fa-twitter"></i></a>
+                    @endif
                     @if (!empty($settings['tiktok']))
                         <a href="{{$settings['tiktok']}}" target="_blank" class="text-dark fs-5"><i class="fab fa-tripadvisor"></i></a>
                     @endif
