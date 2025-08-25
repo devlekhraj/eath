@@ -80,7 +80,7 @@
                             <img src="{{ $blog['banner_url'] }}" class="card-img-top" alt="{{ $blog['title'] }}"
                                 title="{{ $blog['title'] }}" loading="lazy" style="height: 220px; object-fit: cover;">
 
-                            <div class="card-body d-flex flex-column px-4 py-4">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="fw-bold text-info mb-2 title-truncate-2"
                                     style="font-size: 1.2rem; line-height: 1.6;">
                                     {{ $blog['title'] }}
