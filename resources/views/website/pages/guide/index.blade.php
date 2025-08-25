@@ -130,7 +130,7 @@
                             <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
                                 {{ $guide['bio'] }}
                             </p>
-                            {{-- <a href="#" class="btn btn-primary mt-auto align-self-start">View Profile</a> --}}
+           
                         </div>
                     </div>
                 </div>

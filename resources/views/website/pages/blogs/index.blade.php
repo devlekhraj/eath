@@ -25,9 +25,10 @@
         }
     </style>
 
-@php 
-$pageSubTitle = "Discover inspiring stories, expert travel tips, and hidden treasures of Nepal shared by our seasoned explorers. Start your journey through words.";
-@endphp
+    @php
+        $pageSubTitle =
+            'Discover inspiring stories, expert travel tips, and hidden treasures of Nepal shared by our seasoned explorers. Start your journey through words.';
+    @endphp
 
     <div class="container py-5">
         <h2 class="mb-3 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
@@ -91,16 +92,18 @@ $pageSubTitle = "Discover inspiring stories, expert travel tips, and hidden trea
 
                                 <p class="text-muted mb-3 flex-grow-1"
                                     style="
-                                        font-size: 0.95rem;
-                                        line-height: 1.5;
-                                        display: -webkit-box;
-                                        -webkit-line-clamp: 3;   /* number of lines */
-                                        -webkit-box-orient: vertical;
-                                        overflow: hidden;
-                                        text-overflow: ellipsis;
-                                    ">
+                                    font-size: 0.95rem;
+                                    line-height: 1.5;
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 3;  
+                                    -webkit-box-orient: vertical;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    max-height: calc(1.5em * 3);
+                                ">
                                     {{ $blog['sub_title'] }}
                                 </p>
+
 
                             </div>
                         </div>
