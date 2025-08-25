@@ -6,7 +6,7 @@
 
                 <div class="mb-4">
                     <img src="{{ $blog['banner_url'] }}" alt="{{ $blog['title'] }}" title="{{ $blog['title'] }}"
-                        class="img-fluid rounded-4 w-100" style="object-fit: contain;">
+                        class="img-fluid w-100" style="object-fit: contain;">
                 </div>
 
                 <div class="px-5">
