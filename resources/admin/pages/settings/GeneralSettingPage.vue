@@ -2,7 +2,7 @@
     <div>
         <div>
             <v-data-table :headers="headers" :items="data_list" hide-default-footer="" class="elevation-0"
-            :loading="is_fetching">
+                :items-per-page="-1" :loading="is_fetching">
                 <template #top>
                     <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
                         <!-- <v-col cols="12" sm="6" md="4" lg="3" xl="3">
@@ -16,26 +16,26 @@
                         </v-col>
                     </v-row>
                 </template>
-                 <template #item.name="{ item }">
+                <template #item.name="{ item }">
                     <div style="min-width: max-content;">
                         <span>{{ item.name }}</span>
                     </div>
-                 </template>
-                 <template #item.code="{ item }">
+                </template>
+                <template #item.code="{ item }">
                     <div style="min-width: max-content;">
                         <span>{{ item.code }}</span>
                     </div>
-                 </template>
+                </template>
                 <template #item.value="{ item }">
-                 
+
                     <div style="min-width: max-content;">
-                        <div v-if="item.type=='image'">
+                        <div v-if="item.type == 'image'">
                             <div class="d-flex align-center">
                                 <div>
                                     <v-img :src="item.value" height="40" width="40"></v-img>
                                 </div>
                                 <div class="ml-3">
-                                    <span> {{item.value}}</span>
+                                    <span> {{ item.value }}</span>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                             <p>{{ item.value }}</p>
                         </div>
                     </div>
-       
+
 
                 </template>
                 <!-- Actions slot -->
@@ -105,7 +105,7 @@ function deleteItem(item = {}) {
 }
 async function fetchData() {
     try {
-        
+
         is_fetching.value = true;
         const resp = await axios.get(`/admin/settings`)
         is_fetching.value = false;

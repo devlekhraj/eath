@@ -30,16 +30,28 @@
                 <a class="navbar-brand fw-bold text-primary fs-4" href="#">
                     <img src="/images/logo.png" alt="E.A.T.H Travel Logo" height="70">
                 </a>
-                <h5 class="fw-bold text-dark mb-3 mt-2">E.A.T.H Travel</h5>
+                <h5 class="fw-bold text-dark mb-3 mt-2">
+                    {{ isset($settings['company_name']) ? $settings['company_name'] : 'EATH TRAVEL CO. LTD' }}</h5>
                 <p class="text-muted small">
-                    We specialize in immersive adventures and cultural experiences across Nepal. Trusted since 2008 by
-                    global explorers.
+                    {{ isset($settings['footer_text'])
+                        ? $settings['footer_text']
+                        : 'We specialize in immersive adventures and cultural experiences across Nepal. Trusted since 2008 by
+                                        global explorers.' }}
+
                 </p>
                 <div class="d-flex gap-3 mt-3">
-                    <a href="#" class="text-dark fs-5"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-dark fs-5"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-dark fs-5"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="text-dark fs-5"><i class="fab fa-tripadvisor"></i></a>
+                    @if (!empty($settings['facebook']))
+                        <a href="{{$settings['facebook']}}" target="_blank" class="text-dark fs-5"><i class="fab fa-facebook-f"></i></a>
+                    @endif
+                    @if (!empty($settings['instagram']))
+                        <a href="{{$settings['instagram']}}" target="_blank" class="text-dark fs-5"><i class="fab fa-instagram"></i></a>
+                    @endif
+                    @if (!empty($settings['youtube']))
+                        <a href="{{$settings['youtube']}}" target="_blank" class="text-dark fs-5"><i class="fab fa-youtube"></i></a>
+                    @endif
+                    @if (!empty($settings['tiktok']))
+                        <a href="{{$settings['tiktok']}}" target="_blank" class="text-dark fs-5"><i class="fab fa-tripadvisor"></i></a>
+                    @endif
                 </div>
             </div>
 
@@ -69,20 +81,26 @@
             <div class="col-lg-3 col-md-6">
                 <h6 class="text-uppercase text-dark mb-3 fw-semibold">Contact Us</h6>
                 <p class="text-muted small mb-2">
-                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>Thamel, Kathmandu, Nepal
+                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                    {{ isset($settings['footer_text']) ? $settings['footer_text'] : 'Bode-6, Bhaktapur' }}
                 </p>
                 <p class="text-muted small mb-2">
                     <i class="fas fa-phone me-2 text-primary"></i>
-                    <a href="tel:+9779841927372" class="footer-link">+977 9841927372</a>
+                    <a href="tel:{{ isset($settings['mobile']) ? $settings['mobile'] : '9841927372' }}"
+                        class="footer-link">
+                        {{ isset($settings['mobile']) ? $settings['mobile'] : '+9779841927372' }}</a>
                 </p>
                 <p class="text-muted small mb-2">
                     <i class="fas fa-envelope me-2 text-primary"></i>
-                    <a href="mailto:support@eathtravel.com" class="footer-link">support@eathtravel.com</a>
+                    <a href="mailto:{{ isset($settings['email']) ? $settings['email'] : 'info@eathways.com' }}"
+                        class="footer-link">
+                        {{ isset($settings['email']) ? $settings['email'] : 'support@eathtravel.com' }}</a>
                 </p>
                 <p class="text-muted small">
                     <i class="fas fa-globe me-2 text-primary"></i>
-                    <a href="https://www.eathways.com" target="_blank" rel="noopener noreferrer"
-                        class="footer-link">www.eathways.com</a>
+                    <a href="{{ isset($settings['website']) ? $settings['website'] : 'https://www.eathways.com' }}"
+                        target="_blank" rel="noopener noreferrer"
+                        class="footer-link">{{ isset($settings['website']) ? $settings['website'] : 'https://www.eathways.com' }}</a>
                 </p>
             </div>
         </div>
@@ -91,10 +109,11 @@
 
         <!-- Bottom Bar -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted">
-            <span>&copy; {{ date('Y') }} E.A.T.H Travel. All rights reserved.</span>
+            <span>&copy; {{ date('Y') }}
+                {{ isset($settings['company_name']) ? $settings['company_name'] : 'EATH TRAVEL CO. LTD' }}. All rights
+                reserved.</span>
             <span>Developed by <a class="text-primary fw-medium" target="_blank" href="https://lekhrajrai.com.np">Lekh
-                    Raj
-                    Rai</a></span>
+                    Raj Rai</a></span>
         </div>
     </div>
 </footer>

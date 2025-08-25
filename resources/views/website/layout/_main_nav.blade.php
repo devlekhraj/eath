@@ -3,13 +3,27 @@
     <div class="bg-info">
         <div class="text-light py-2 px-3 d-flex justify-content-between small container">
             <div>
-                <i class="fas fa-phone-alt"></i> +977 (984) 192-7372
-                <i class="fas fa-envelope ms-3"></i> info@eathtravel.com
+                <i class="fas fa-phone-alt"></i>
+                {{ isset($settings['mobile']) ? $settings['mobile'] : '+977 (984) 192-7372' }}
+                <i class="fas fa-envelope ms-3"></i>
+                {{ isset($settings['email']) ? $settings['email'] : 'info@eathtravel.com' }}
             </div>
             <div>
-                <a href="#" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="text-light me-2"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+                @if (!empty($settings['facebook']))
+                    <a href="{{$settings['facebook']}}" target="_blank" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
+                @endif
+                @if (!empty($settings['instagram']))
+                    <a href="{{$settings['instagram']}}" target="_blank" class="text-light me-2"><i class="fab fa-instagram"></i></a>
+                @endif
+                @if (!empty($settings['youtube']))
+                    <a href="{{$settings['youtube']}}" target="_blank" class="text-light me-2"><i class="fab fa-youtube"></i></a>
+                @endif
+                @if (!empty($settings['tiktok']))
+                    <a href="{{$settings['tiktok']}}" target="_blank" class="text-light me-2"><i class="fab fa-tiktok"></i></a>
+                @endif
+                @if (!empty($settings['twitter']))
+                    <a href="{{$settings['twitter']}}" target="_blank" class="text-light me-2"><i class="fab fa-twitter"></i></a>
+                @endif
             </div>
         </div>
     </div>
@@ -87,7 +101,8 @@
                             @if ($helicopterTour && count($helicopterTour->travelPackages) > 0)
                                 @foreach ($region->travelPackages as $pack)
                                     <li>
-                                        <a href="/packages/{{ $pack->slug }}" class="dropdown-item d-flex align-items-center py-2">
+                                        <a href="/packages/{{ $pack->slug }}"
+                                            class="dropdown-item d-flex align-items-center py-2">
                                             <div style="width: 20px;">
                                                 <i class="fas fa-mountain text-info"></i>
                                             </div>
@@ -97,7 +112,7 @@
                                 @endforeach
                             @else
                             @endif
-                            
+
                         </ul>
 
 
@@ -116,7 +131,7 @@
                 </ul>
             </div>
             <div>
-             
+
                 <!-- Navbar Toggler -->
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" style="border: 0"

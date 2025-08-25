@@ -1,8 +1,8 @@
 <div style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
     <div class="container py-5">
         <div class="text-center mb-5">
-            <h2 class="fw-bold display-7 text-primary mb-2">Our Trekking Packages</h2>
-            <p class="text-muted fs-5">Discover handpicked adventures crafted for unforgettable experiences.</p>
+            <h2 class="fw-bold display-7 text-primary mb-2"> {{ isset($settings['title_1']) ? $settings['title_1'] : 'Our Trekking Packages' }} </h2>
+            <p class="text-muted fs-5">  {{ isset($settings['sub_title_1']) ? $settings['sub_title_1'] : 'Discover handpicked adventures crafted for unforgettable experiences' }}</p>
         </div>
 
         @php

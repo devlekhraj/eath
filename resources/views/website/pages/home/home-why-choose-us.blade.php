@@ -2,8 +2,8 @@
     style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
     <div class="container py-5">
         <div class="text-center mb-5">
-            <h2 class="fw-bold display-7 text-primary mb-2">Why Choose Us?</h2>
-            <p class="text-muted fs-5">Discover the advantages that make E.A.T.H Travel your perfect adventure partner
+            <h2 class="fw-bold display-7 text-primary mb-2">{{ isset($settings['title_3']) ? $settings['title_3'] : 'Why Choose Us?' }}  </h2>
+            <p class="text-muted fs-5">{{ isset($settings['sub_title_3']) ? $settings['title_3'] : 'Discover the advantages that make E.A.T.H Travel your perfect adventure partner' }}  
             </p>
         </div>
         <div class="row g-4">
