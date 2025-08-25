@@ -25,15 +25,17 @@
         }
     </style>
 
+@php 
+$pageSubTitle = "Discover inspiring stories, expert travel tips, and hidden treasures of Nepal shared by our seasoned explorers. Start your journey through words.";
+@endphp
 
     <div class="container py-5">
         <h2 class="mb-3 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
-            Latest Travel Blogs
+            {{ isset($settings['blog_page_title']) ? $settings['blog_page_title'] : 'Our Latest Blogs' }}
         </h2>
 
         <p class="text-center text-muted mb-5" style="max-width: 720px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
-            Discover inspiring stories, expert travel tips, and hidden treasures of Nepal shared by our seasoned explorers.
-            Start your journey through words.
+            {{ isset($settings['blog_page_sub_title']) ? $settings['blog_page_sub_title'] : $pageSubTitle }}
         </p>
 
         {{-- @php

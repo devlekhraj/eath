@@ -19,6 +19,12 @@ return [
     ['name' => 'Contact Page Title', 'code' => 'contact_page_title', 'value' => 'Contact Us', 'type' => 'text'],
     ['name' => 'Contact Page Sub Title', 'code' => 'contact_page_sub_title', 'value' => 'We would love to hear from you! Whether you have questions, need assistance, or want to plan your next adventure with us, feel free to reach out.', 'type' => 'textarea'],
     
+    ['name' => 'Blog Page Title', 'code' => 'blog_page_title', 'value' => 'Our Latest Blogs', 'type' => 'text'],
+    ['name' => 'Blog Page Sub Title', 'code' => 'blog_page_sub_title', 'value' => 'Discover inspiring stories, expert travel tips, and hidden treasures of Nepal shared by our seasoned explorers. Start your journey through words.', 'type' => 'textarea'],
+   
+    ['name' => 'Guide Profile Page Title', 'code' => 'guide_profile_page_title', 'value' => 'Our Guide Profiles', 'type' => 'text'],
+    ['name' => 'Guide Profile Page Sub Title', 'code' => 'guide_profile_page_sub_title', 'value' => 'Meet our highly skilled and experienced travel guides who will make your Nepal journey unforgettable. They are passionate about sharing the beauty, culture, and adventure of Nepal with you.', 'type' => 'textarea'],
+    
 
     // Contact information
     ['name' => 'Phone', 'code' => 'phone', 'value' => '01-4602932', 'type' => 'text'],

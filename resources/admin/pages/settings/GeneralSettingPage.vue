@@ -28,7 +28,7 @@
                 </template>
                 <template #item.value="{ item }">
 
-                    <div style="min-width: max-content;">
+                    <div style="max-width: 500px;">
                         <div v-if="item.type == 'image'">
                             <div class="d-flex align-center">
                                 <div>
@@ -48,12 +48,14 @@
                 </template>
                 <!-- Actions slot -->
                 <template #item.actions="{ item }">
-                    <v-btn icon size="x-small" color="primary" variant="tonal" @click="openForm(item)">
-                        <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-btn icon size="x-small" color="error" class="ml-2" variant="tonal" @click="deleteItem(item)">
-                        <v-icon>mdi-delete</v-icon>
-                    </v-btn>
+                    <div style="min-width: max-content;">
+                        <v-btn icon size="x-small" color="primary" variant="tonal" @click="openForm(item)">
+                            <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                        <v-btn icon size="x-small" color="error" class="ml-2" variant="tonal" @click="deleteItem(item)">
+                            <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                    </div>
                 </template>
             </v-data-table>
         </div>

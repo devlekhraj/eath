@@ -98,15 +98,18 @@
             object-fit: cover;
         }
     </style>
+    @php 
+    $pageSubtitle = "Meet our highly skilled and experienced travel guides who will make your Nepal journey unforgettable. They are
+            passionate about sharing the beauty, culture, and adventure of Nepal with you.";
+    @endphp 
     <div class="container py-5">
         <h2 class="mb-3 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
-            Our Expert Guide Profiles
+           {{ isset($settings['guide_profile_page_title']) ? $settings['guide_profile_page_title'] : 'Contact Us' }}
         </h2>
 
         <p class="text-center text-muted mb-5"
             style="max-width: 700px; margin-left: auto; margin-right: auto; font-size: 1.1rem; line-height: 1.5;">
-            Meet our highly skilled and experienced travel guides who will make your Nepal journey unforgettable. They are
-            passionate about sharing the beauty, culture, and adventure of Nepal with you.
+            {{ isset($settings['guide_profile_page_sub_title']) ? $settings['guide_profile_page_sub_title'] : $pageSubtitle }}
         </p>
 
         <div class="row g-4">
