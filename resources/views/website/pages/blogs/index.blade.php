@@ -73,8 +73,7 @@
             @foreach ($blogs as $blog)
                 <div class="col-12 col-md-6 col-lg-4">
                     <a href="{{ url('blogs/' . $blog['slug']) }}" class="text-decoration-none text-reset">
-                        <div class="card h-100 shadow-sm border-0 overflow-hidden transition"
-                            style="transition: transform 0.3s ease;">
+                        <div class="card h-100 border-0 overflow-hidden transition" style="transition: transform 0.3s ease;">
                             <img src="{{ $blog['banner_url'] }}" class="card-img-top" alt="{{ $blog['title'] }}"
                                 title="{{ $blog['title'] }}" loading="lazy" style="height: 220px; object-fit: cover;">
 
@@ -88,10 +87,19 @@
                                     By {{ $blog['author'] }} | {{ format_date($blog['published_at']) }}
                                 </small>
 
-                                <p class="text-muted mb-3 flex-grow-1 text-truncate-3"
-                                    style="font-size: 0.95rem; line-height: 1.5;">
+                                <p class="text-muted mb-3 flex-grow-1"
+                                    style="
+                                        font-size: 0.95rem;
+                                        line-height: 1.5;
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 3;   /* number of lines */
+                                        -webkit-box-orient: vertical;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    ">
                                     {{ $blog['sub_title'] }}
                                 </p>
+
                             </div>
                         </div>
                     </a>
