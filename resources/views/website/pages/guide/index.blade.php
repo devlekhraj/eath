@@ -1,5 +1,6 @@
 @extends('website.layout.master')
 @section('content')
+
     @php
         $guides = [
             [
@@ -97,6 +98,15 @@
             /* responsive width */
             object-fit: cover;
         }
+
+        .bio-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* limits to 3 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
     @php
         $pageSubtitle = "Meet our highly skilled and experienced travel guides who will make your Nepal journey unforgettable. They are
@@ -136,8 +146,10 @@
                                     <strong>Languages:</strong> {{ implode(', ', $guide['language_spoken']) }}
                                 </p>
 
-                                 <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
-                                    {!! $guide['bio'] !!}
+                                <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                    <div class="bio-text">
+                                        {!! $guide['bio'] !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
