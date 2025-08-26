@@ -160,9 +160,12 @@
                                     <small class="text-muted">({{ $guide['reviews'] }} reviews)</small>
                                 </div>
                                 <p class="mb-2"><strong>Languages:</strong> {{ implode(', ', $guide['languages']) }}</p>
-                                <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
+                                {{-- <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
                                     {{ $guide['bio'] }}
-                                </p>
+                                </p> --}}
+                                <div>
+                                    {!! $guide['bio'] !!}
+                                </div>
 
                             </div>
                         </div>
