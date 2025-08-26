@@ -134,7 +134,7 @@
                             <img src="{{ $guide['avatar'] }}" class="card-img-top" alt="Guide Photo"
                                 style="height: 280px; object-fit: cover; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-semibold mb-2">{{ $guide['name'] }}</h5>
+                                <h5 class="card-title fw-semibold mb-2 text-capitalize">{{ $guide['name'] }}</h5>
                                 <div class="mb-3 d-flex align-items-center">
                                     <div class="text-warning me-2" aria-label="Rating: {{ $randomRating }} out of 5 stars">
                                         {!! renderStars($randomRating) !!}
