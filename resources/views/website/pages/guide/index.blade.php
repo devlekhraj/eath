@@ -136,10 +136,9 @@
                                     <strong>Languages:</strong> {{ implode(', ', $guide['language_spoken']) }}
                                 </p>
 
-                                <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
-                                    {{ $guide['bio'] }}
-                                </p>
-
+                                 <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                    {!! $guide['bio'] !!}
+                                </div>
                             </div>
                         </div>
                     </div>
