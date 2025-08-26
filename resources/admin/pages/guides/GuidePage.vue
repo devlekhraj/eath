@@ -61,7 +61,7 @@
                     </div>
                 </template> -->
                 <template #item.actions="{ item }">
-                    <v-menu location="bottom end">
+                    <!-- <v-menu location="bottom end">
                         <template #activator="{ props }">
                             <v-btn v-bind="props" icon variant="text" color="primary">
                                 <v-icon>mdi-dots-vertical</v-icon>
@@ -87,7 +87,12 @@
                                 </v-list-item-title>
                             </v-list-item>
                         </v-list>
-                    </v-menu>
+                    </v-menu> -->
+                    <div style="width: max-content;">
+                        <v-btn size="x-small" color="primary" icon variant="tonal" :to="{ name: 'adminGuideDetailPage', params: { id: item.id } }"><v-icon>mdi-eye</v-icon></v-btn>
+                        <v-btn size="x-small" class="ml-2" color="warning" icon variant="tonal" @click="openForm(item)"><v-icon>mdi-pencil</v-icon></v-btn>
+                        <v-btn size="x-small" class="ml-2" color="error" icon variant="tonal" @click="deleteItem(item)"><v-icon>mdi-delete</v-icon></v-btn>
+                    </div>
                 </template>
             </v-data-table>
         </div>
@@ -131,7 +136,7 @@ const headers = [
     { title: 'Ratings', key: 'rating_count' },
     { title: 'Trips', key: 'trip_count' },
     { title: 'Status', key: 'status' },
-    { title: 'Actions', key: 'actions', sortable: false, align: 'end' },
+    { title: 'Actions', key: 'actions', sortable: false },
 ]
 
 function getStatusColor(status) {

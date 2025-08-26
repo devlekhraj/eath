@@ -10,6 +10,7 @@ use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 use App\Models\TravelPackage;
 use App\Models\FeaturedPackage;
+use App\Models\Guide;
 use App\Models\Inquiry;
 use App\Models\PackageCategory;
 
@@ -79,7 +80,8 @@ class WebsiteController extends Controller
 
     public function guideProfile()
     {
-        return view('website.pages.guide.index');
+        $guideList = Guide::all();
+        return view('website.pages.guide.index',compact('guideList'));
     }
 
     public function blogs()

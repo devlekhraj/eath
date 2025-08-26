@@ -98,13 +98,13 @@
             object-fit: cover;
         }
     </style>
-    @php 
-    $pageSubtitle = "Meet our highly skilled and experienced travel guides who will make your Nepal journey unforgettable. They are
+    @php
+        $pageSubtitle = "Meet our highly skilled and experienced travel guides who will make your Nepal journey unforgettable. They are
             passionate about sharing the beauty, culture, and adventure of Nepal with you.";
-    @endphp 
+    @endphp
     <div class="container py-5">
         <h2 class="mb-3 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
-           {{ isset($settings['guide_profile_page_title']) ? $settings['guide_profile_page_title'] : 'Contact Us' }}
+            {{ isset($settings['guide_profile_page_title']) ? $settings['guide_profile_page_title'] : 'Contact Us' }}
         </h2>
 
         <p class="text-center text-muted mb-5"
@@ -112,29 +112,63 @@
             {{ isset($settings['guide_profile_page_sub_title']) ? $settings['guide_profile_page_sub_title'] : $pageSubtitle }}
         </p>
 
+        @php
+            $randomRating = rand(1, 5); // random rating between 1 and 5
+            $randomReviews = rand(0, 200); // random number of reviews
+        @endphp
         <div class="row g-4">
-            @foreach ($guides as $guide)
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card shadow-sm border-0 h-100">
-                        <img src="{{ $guide['photo'] }}" class="card-img-top" alt="Guide Photo"
-                            style="height: 280px; object-fit: cover; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-semibold mb-2">{{ $guide['name'] }}</h5>
-                            <div class="mb-3 d-flex align-items-center">
-                                <div class="text-warning me-2" aria-label="Rating: {{ $guide['rating'] }} out of 5 stars">
-                                    {!! renderStars($guide['rating']) !!}
+            @if (count($guideList) > 0)
+                @foreach ($guideList as $guide)
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card shadow-sm border-0 h-100">
+                            <img src="{{ $guide['avatar'] }}" class="card-img-top" alt="Guide Photo"
+                                style="height: 280px; object-fit: cover; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-semibold mb-2">{{ $guide['name'] }}</h5>
+                                <div class="mb-3 d-flex align-items-center">
+                                    <div class="text-warning me-2" aria-label="Rating: {{ $randomRating }} out of 5 stars">
+                                        {!! renderStars($randomRating) !!}
+                                    </div>
+                                    <small class="text-muted">({{ $randomReviews }} reviews)</small>
                                 </div>
-                                <small class="text-muted">({{ $guide['reviews'] }} reviews)</small>
+
+                                <p class="mb-2">
+                                    <strong>Languages:</strong> {{ implode(', ', $guide['language_spoken']) }}
+                                </p>
+
+                                <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
+                                    {{ $guide['bio'] }}
+                                </p>
+
                             </div>
-                            <p class="mb-2"><strong>Languages:</strong> {{ implode(', ', $guide['languages']) }}</p>
-                            <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
-                                {{ $guide['bio'] }}
-                            </p>
-           
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @else
+                @foreach ($guides as $guide)
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card shadow-sm border-0 h-100">
+                            <img src="{{ $guide['photo'] }}" class="card-img-top" alt="Guide Photo"
+                                style="height: 280px; object-fit: cover; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-semibold mb-2">{{ $guide['name'] }}</h5>
+                                <div class="mb-3 d-flex align-items-center">
+                                    <div class="text-warning me-2"
+                                        aria-label="Rating: {{ $guide['rating'] }} out of 5 stars">
+                                        {!! renderStars($guide['rating']) !!}
+                                    </div>
+                                    <small class="text-muted">({{ $guide['reviews'] }} reviews)</small>
+                                </div>
+                                <p class="mb-2"><strong>Languages:</strong> {{ implode(', ', $guide['languages']) }}</p>
+                                <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
+                                    {{ $guide['bio'] }}
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
 @endsection

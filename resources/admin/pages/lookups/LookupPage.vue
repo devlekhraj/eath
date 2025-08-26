@@ -41,10 +41,10 @@
 
                 <template #item.actions="{ item }">
                     <div style="min-width: 200px;">
-                        <v-btn icon variant="text" @click="openForm(item)">
+                        <v-btn size="x-small" class="mr-2" color="primary" icon variant="tonal" @click="openForm(item)">
                             <v-icon icon="mdi-pencil" />
                         </v-btn>
-                        <v-btn icon variant="text" color="error" @click="deleteItem(item)">
+                        <v-btn size="x-small" icon variant="tonal" color="error" @click="deleteItem(item)">
                             <v-icon icon="mdi-delete" />
                         </v-btn>
                     </div>
