@@ -150,6 +150,11 @@
                                     <div class="bio-text">
                                         {!! $guide['bio'] !!}
                                     </div>
+                                    {{-- <div>
+                                        <a href="/guide-profiles/{{ $guide->slug }}" class="btn btn-gradient"> See Profile
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </a>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -177,6 +182,7 @@
                                 <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                     {!! $guide['bio'] !!}
                                 </div>
+
 
                             </div>
                         </div>

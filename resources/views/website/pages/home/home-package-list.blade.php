@@ -172,7 +172,7 @@
             <div class="swiper-pagination travel-package-pagination mt-3"></div>
         </div>
 
-        <div class="py-5 my-5">
+        {{-- <div class="py-5 my-5">
             <div class="rounded-2 p-4  border border-primary-subtle bg-white">
                 <h5 class="fw-bold mb-4 text-primary">
                     <i class="fa-solid fa-plane-departure me-2"></i> Know Before You Go
@@ -213,7 +213,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> --}}
 
 
 

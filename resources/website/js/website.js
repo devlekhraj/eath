@@ -73,6 +73,7 @@ $(document).ready(() => {
 	new Swiper('#travel-packages', {
 		slidesPerView: 5,
 		spaceBetween: 20,
+		autoplay: { delay: 2000, disableOnInteraction: false },
 		loop: true,
 		pagination: { el: '.travel-package-pagination', clickable: true },
 		breakpoints: {
