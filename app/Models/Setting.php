@@ -23,11 +23,11 @@ class Setting extends Model
             $setting->code = $setting->generateUniqueCode($setting->name);
         });
 
-        static::updating(function ($setting) {
-            if ($setting->isDirty('name')) {
-                $setting->code = $setting->generateUniqueCode($setting->name, $setting->id);
-            }
-        });
+        // static::updating(function ($setting) {
+        //     if ($setting->isDirty('name')) {
+        //         $setting->code = $setting->generateUniqueCode($setting->name, $setting->id);
+        //     }
+        // });
 
         static::deleting(function ($setting) {
             if ($setting->code && !str_ends_with($setting->code, '_deleted')) {
