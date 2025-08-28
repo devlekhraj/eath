@@ -269,8 +269,7 @@
                                                             class="accordion-collapse collapse"
                                                             aria-labelledby="heading{{ $key }}"
                                                             data-bs-parent="#itineraryAccordion">
-                                                            <div class="accordion-body px-4 pb-4 pt-3 vuetify-pro-tiptap-editor__content view markdown-theme-default"
-                                                                style="font-size: 1rem; line-height: 1.6;">
+                                                            <div class="accordion-body px-4 pb-4 pt-3 vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                                                 {!! $itinery->description !!}
 
                                                                 @if ($itinery->highlights->isNotEmpty())
