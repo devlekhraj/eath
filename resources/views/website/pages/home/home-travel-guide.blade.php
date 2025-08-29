@@ -35,7 +35,7 @@
         </div> --}}
         <div class="text-center mb-5">
             <h2 class="fw-bold display-7 text-primary mb-2">{{ isset($settings['title_2']) ? $settings['title_2'] : 'Our Blogs' }}</h2>
-            <p class="text-muted fs-5">{{ isset($settings['sub_title_1']) ? $settings['sub_title_1'] : 'Stay updated with our latest travel stories and tips' }} </p>
+            <p class="text-muted fs-5">{{ isset($settings['sub_title_2']) ? $settings['sub_title_2'] : 'Stay updated with our latest travel stories and tips' }} </p>
         </div>
         <div class="row g-4">
             @foreach ($blogs as $blog)
