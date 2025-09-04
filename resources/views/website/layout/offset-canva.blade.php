@@ -62,28 +62,22 @@
             </li>
 
             <!-- Heli Tours -->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
                     href="#heliToursSubmenu" role="button" aria-expanded="false" aria-controls="heliToursSubmenu">
                     Heli Tours
                     <i class="fa-solid fa-chevron-down ms-2 toggle-icon" data-target="#heliToursSubmenu"></i>
                 </a>
-                {{-- <div class="collapse" id="heliToursSubmenu">
-                    <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a class="nav-link text-secondary" href="#">Everest Heli Tour</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link text-secondary" href="#">Annapurna Heli Tour</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link text-secondary" href="#">Gosaikunda Heli Tour</a>
-                        </li>
-                    </ul>
-                </div> --}}
-            </li>
+
+            </li> --}}
             <li class="nav-item">
                 <a href="/guide-profiles">Guide Profiles</a>
             </li>
             <li class="nav-item">
                 <a href="/blogs">Blogs</a>
+            </li>
+            <li class="nav-item">
+                <a href="/about-us">About Us</a>
             </li>
             <li class="nav-item">
                 <a href="/faq">FAQs</a>

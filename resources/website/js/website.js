@@ -103,58 +103,86 @@ $(document).ready(() => {
 
 		let isValid = true;
 
-		// Reset error states
+		// Reset errors
 		$('#inquiryForm input, #inquiryForm textarea, #inquiryForm select').removeClass('is-invalid');
 
-		// Validate fields
-		if (!$('#fname').val().trim()) {
-			isValid = false;
-			$('#fname').addClass('is-invalid');
-		}
+		// Get structured form data
+		const formDataArray = $('#inquiryForm').serializeArray();
+		const formDataObject = {};
 
-		if (!$('#lname').val().trim()) {
-			isValid = false;
-			$('#lname').addClass('is-invalid');
-		}
+		formDataArray.forEach(item => {
+			formDataObject[item.name] = item.value.trim();
 
-		let email = $('#email').val().trim();
-		let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		if (!email || !emailRegex.test(email)) {
-			isValid = false;
-			$('#email').addClass('is-invalid');
-		}
+			const $field = $(`[name="${item.name}"]`);
 
-		let mobile = $('#mobile_no').val().trim();
-		if (!mobile || mobile.length < 7) {
-			isValid = false;
-			$('#mobile_no').addClass('is-invalid');
-		}
+			switch (item.name) {
+				case 'fname':
+				case 'lname':
+					if (!item.value.trim()) {
+						$field.addClass('is-invalid');
+						isValid = false;
+					}
+					break;
 
-		let people = $('#number_of_people').val();
-		if (!people || people <= 0) {
-			isValid = false;
-			$('#number_of_people').addClass('is-invalid');
-		}
+				case 'email':
+					let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+					if (!item.value.trim() || !emailRegex.test(item.value.trim())) {
+						$field.addClass('is-invalid');
+						isValid = false;
+					}
+					break;
 
+				case 'mobile_no':
+					let mobileRegex = /^[0-9]{7,15}$/;
+					if (!item.value.trim() || !mobileRegex.test(item.value.trim())) {
+						$field.addClass('is-invalid');
+						isValid = false;
+					}
+					break;
+
+				case 'country':
+					if (!item.value.trim()) {
+						$field.addClass('is-invalid');
+						isValid = false;
+					}
+					break;
+
+				case 'service_id':
+				case 'category_id':
+					if (!item.value.trim()) {
+						$field.addClass('is-invalid');
+						isValid = false;
+					}
+					break;
+
+				case 'description':
+					if (!item.value.trim() || item.value.trim().length < 10) {
+						$field.addClass('is-invalid');
+						isValid = false;
+					}
+					break;
+
+				case 'number_of_people':
+					if (!item.value.trim() || parseInt(item.value, 10) <= 0) {
+						$field.addClass('is-invalid');
+						isValid = false;
+					}
+					break;
+			}
+		});
+
+		// Stop if invalid
 		if (!isValid) {
 			console.warn("Validation failed.");
 			return;
 		}
 
-		// ✅ Get structured form data
-		const formDataArray = $('#inquiryForm').serializeArray();
-		const formDataObject = {};
-		formDataArray.forEach(item => {
-			formDataObject[item.name] = item.value;
-		});
-
-
-		// Target your button (adjust selector as needed)
+		// Submit button loading state
 		const $btn = $("#inquirySubmitBtn");
-		const originalText = $btn.html(); // store original text (with icon)
-
+		const originalText = $btn.html();
 		$btn.prop("disabled", true).html(`Wait... <span class="spinner-border spinner-border-sm ms-2 text-white"></span>`);
 
+		// Send Ajax
 		sendAjax(
 			{
 				url: '/inquiry',
@@ -163,21 +191,16 @@ $(document).ready(() => {
 				headers: { 'Content-Type': 'application/json' }
 			},
 			(response) => {
-				// Success
 				$("#globalModal").find('.modal-content').empty().append(response.template);
-
-				// revert button
 				$btn.prop("disabled", false).html(originalText);
 			},
 			(error) => {
 				console.error('Error submitting inquiry:', error);
-
-				// revert button
 				$btn.prop("disabled", false).html(originalText);
 			}
 		);
-
 	});
+
 
 
 	$(document).off('click', '.btnOpenModal').on('click', '.btnOpenModal', function (e) {

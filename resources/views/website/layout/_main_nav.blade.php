@@ -10,19 +10,24 @@
             </div>
             <div>
                 @if (!empty($settings['facebook']))
-                    <a href="{{$settings['facebook']}}" target="_blank" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ $settings['facebook'] }}" target="_blank" class="text-light me-2"><i
+                            class="fab fa-facebook-f"></i></a>
                 @endif
                 @if (!empty($settings['instagram']))
-                    <a href="{{$settings['instagram']}}" target="_blank" class="text-light me-2"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ $settings['instagram'] }}" target="_blank" class="text-light me-2"><i
+                            class="fab fa-instagram"></i></a>
                 @endif
                 @if (!empty($settings['youtube']))
-                    <a href="{{$settings['youtube']}}" target="_blank" class="text-light me-2"><i class="fab fa-youtube"></i></a>
+                    <a href="{{ $settings['youtube'] }}" target="_blank" class="text-light me-2"><i
+                            class="fab fa-youtube"></i></a>
                 @endif
                 @if (!empty($settings['tiktok']))
-                    <a href="{{$settings['tiktok']}}" target="_blank" class="text-light me-2"><i class="fab fa-tiktok"></i></a>
+                    <a href="{{ $settings['tiktok'] }}" target="_blank" class="text-light me-2"><i
+                            class="fab fa-tiktok"></i></a>
                 @endif
                 @if (!empty($settings['twitter']))
-                    <a href="{{$settings['twitter']}}" target="_blank" class="text-light me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="{{ $settings['twitter'] }}" target="_blank" class="text-light me-2"><i
+                            class="fab fa-twitter"></i></a>
                 @endif
             </div>
         </div>
@@ -41,6 +46,8 @@
 
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav gap-3">
+
+
 
 
                     <!-- Mega Menu -->
@@ -92,7 +99,7 @@
                     </li>
 
 
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="helicopterDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Helicopter Tours
@@ -117,13 +124,16 @@
 
 
 
-                    </li>
+                    </li> --}}
 
                     <li class="nav-item">
                         <a class="nav-link fw-semibold" href="/guide-profiles">Guide Profiles</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-semibold" href="/blogs">Blogs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="/about-us">About Us</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-semibold" href="/faq">FAQs</a>
