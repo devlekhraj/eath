@@ -56,6 +56,7 @@ class FeaturedPackageController extends Controller
                 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
                 'unique:featured_packages,slug,' . ($request->id ?? 'NULL') // ignore current ID
             ],
+            'highlight' => 'required|string',
             'description' => 'required|string',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',

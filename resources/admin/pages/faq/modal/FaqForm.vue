@@ -1,7 +1,14 @@
 <template>
     <v-card flat>
         <v-card-title>
-            <span class="font-medium">{{item.id ? "Update":"Add New"}} Question</span>
+            <div class="d-flex align-center justify-space-between">
+                <div>
+                    <span class="font-medium">{{item.id ? "Update":"Add New"}} Question</span>
+                </div>
+                <div>
+                      <v-btn variant="text" icon @click="handleCancel" color="error"><v-icon>mdi-close</v-icon></v-btn>
+                </div>
+            </div>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -18,6 +25,12 @@
                         <v-textarea v-model="form.answer" label="Answer" density="comfortable" variant="outlined"
                             :rules="[rules.required]"
                           />
+                    </v-col>
+                    <v-col cols="6">
+                        <v-text-field type="number" label="Sequence No#" variant="outlined" density="comfortable" v-model="form.sort_order"></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-switch color="primary" inset label="Active" v-model="form.is_active"></v-switch>
                     </v-col>
                 </v-row>
             </v-form>
@@ -64,6 +77,8 @@ onMounted(() => {
             id: props.item.id,
             question: props.item.question || '',
             answer: props.item.answer || '',
+            sort_order: props.item.sort_order || 0,
+            is_active: props.item.is_active || false,
         })
     }
 })

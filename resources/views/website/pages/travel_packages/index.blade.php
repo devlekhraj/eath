@@ -252,16 +252,14 @@
                                                                 type="button" data-bs-toggle="collapse"
                                                                 data-bs-target="#collapse{{ $key }}"
                                                                 aria-expanded="false"
-                                                                aria-controls="collapse{{ $key }}"
-                                                                style="">
-                                                       
-                                                                    <div
-                                                                        class="d-flex justify-content-center align-items-center bg-info text-white"
-                                                                        style="min-width: 38px; height: 38px; border-radius: 50%;">
-                                                                        <i class="fas fa-map-marker-alt fs-5"></i>
-                                                                    </div>
-                                                            
-                                                               <span class="ms-2"> {{ $itinery->title }}</span>
+                                                                aria-controls="collapse{{ $key }}" style="">
+
+                                                                <div class="d-flex justify-content-center align-items-center bg-info text-white"
+                                                                    style="min-width: 38px; height: 38px; border-radius: 50%;">
+                                                                    <i class="fas fa-map-marker-alt fs-5"></i>
+                                                                </div>
+
+                                                                <span class="ms-2"> {{ $itinery->title }}</span>
                                                             </button>
                                                         </h2>
 
@@ -269,7 +267,8 @@
                                                             class="accordion-collapse collapse"
                                                             aria-labelledby="heading{{ $key }}"
                                                             data-bs-parent="#itineraryAccordion">
-                                                            <div class="accordion-body px-4 pb-4 pt-3 vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                                            <div
+                                                                class="accordion-body px-4 pb-4 pt-3 vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                                                 {!! $itinery->description !!}
 
                                                                 @if ($itinery->highlights->isNotEmpty())
@@ -351,78 +350,77 @@
                         </div>
                         <div class="col-12 col-md-4">
                             <div style="position: sticky; top:0" class="border rounded p-4">
-                                @if($package->fixedDeparture)
-                                <div class="mb-5">
-                                    <div class="exclusive-card mb-4">
-                                        <div class="ribbon">Fixed Departure</div>
-                                        <div class="card-inner mt-3">
+                                @if ($package->fixedDeparture)
+                                    <div class="mb-5">
+                                        <div class="exclusive-card mb-4">
+                                            <div class="ribbon">Fixed Departure</div>
+                                            <div class="card-inner mt-3">
 
-                                            @php
-                                                $departure = $package->fixedDeparture;
-                                            @endphp
-                                            <!-- Title & Price -->
-                                            <div class="section">
-                                                <div class="mb-3">
-                                                    <h5 class="fw-semibold mb-1">{{ $departure->title }}</h5>
-                                                    <h2 class="fw-bold mb-0 text-white"
-                                                        >
-                                                        {{ format_price($departure->price) }}
-                                                    </h2>
+                                                @php
+                                                    $departure = $package->fixedDeparture;
+                                                @endphp
+                                                <!-- Title & Price -->
+                                                <div class="section">
+                                                    <div class="mb-3">
+                                                        <h5 class="fw-semibold mb-1">{{ $departure->title }}</h5>
+                                                        <h2 class="fw-bold mb-0 text-white">
+                                                            {{ format_price($departure->price) }}
+                                                        </h2>
+
+                                                    </div>
+                                                    <p class="small mb-0 mt-1">
+                                                        {{ $departure->description }}
+                                                    </p>
+                                                </div>
+
+                                                <!-- Extra Info -->
+                                                <div class="section">
+                                                    <div class="info-block">
+                                                        <div style="width:30px">
+                                                            <i class="fa-solid fa-calendar-check"></i>
+                                                        </div>
+                                                        <div>
+
+                                                            <span class="fw-semibold">Departure Date:</span>
+                                                            <span>12 Oct 2025</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-block">
+                                                        <div style="width:30px">
+                                                            <i class="fa-solid fa-users"></i>
+                                                        </div>
+                                                        <div>
+                                                            <span class="fw-semibold">Group Size:</span>
+                                                            <span>{{ $departure->group_size }} people</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-block">
+                                                        <div style="width:30px">
+                                                            <i class="fa-solid fa-clock"></i>
+                                                        </div>
+                                                        <div>
+                                                            <span class="fw-semibold">Duration:</span>
+                                                            <span>{{ $departure->duration }}</span>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
-                                                <p class="small mb-0 mt-1">
-                                                    {{ $departure->description }}
-                                                </p>
+
+                                                <!-- Button -->
+                                                <div class="section">
+                                                    <button class="btn w-100 text-white fw-semibold py-3 btnOpenModal"
+                                                        data-type="featured_packages" data-id="{{ $departure['id'] }}"
+                                                        style="background: linear-gradient(90deg, #ff9800, #f44336); border: none; border-radius: 0.5rem;">
+                                                        Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
+                                                    </button>
+                                                </div>
+
                                             </div>
-
-                                            <!-- Extra Info -->
-                                            <div class="section">
-                                                <div class="info-block">
-                                                    <div style="width:30px">
-                                                        <i class="fa-solid fa-calendar-check"></i>
-                                                    </div>
-                                                    <div>
-
-                                                        <span class="fw-semibold">Departure Date:</span>
-                                                        <span>12 Oct 2025</span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="info-block">
-                                                    <div style="width:30px">
-                                                        <i class="fa-solid fa-users"></i>
-                                                    </div>
-                                                    <div>
-                                                        <span class="fw-semibold">Group Size:</span>
-                                                        <span>{{ $departure->group_size }} people</span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="info-block">
-                                                    <div style="width:30px">
-                                                        <i class="fa-solid fa-clock"></i>
-                                                    </div>
-                                                    <div>
-                                                        <span class="fw-semibold">Duration:</span>
-                                                        <span>{{ $departure->duration }}</span>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <!-- Button -->
-                                            <div class="section">
-                                                <button class="btn w-100 text-white fw-semibold py-3 btnOpenModal"
-                                                    data-type="featured_packages" data-id="{{ $departure['id'] }}"
-                                                    style="background: linear-gradient(90deg, #ff9800, #f44336); border: none; border-radius: 0.5rem;">
-                                                    Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
-                                                </button>
-                                            </div>
-
                                         </div>
                                     </div>
-                                </div>
-                                @endif 
+                                @endif
 
                                 @if ($package->prices->count() > 0)
                                     <div class="">
@@ -631,6 +629,41 @@
                 </div>
             </div>
         @endif --}}
+
+        @if (count($relatedBlogs) > 0)
+            <section class="recent-articles-section py-5">
+                <div class="container py-5">
+                    {{-- <div class="text-center mb-5">
+            <h2 class="section-title">Recent Articles</h2>
+            <p class="section-subtitle">Stay updated with our latest travel stories and tips</p>
+        </div> --}}
+                    <div class="mb-4">
+                        <h2 class="fw-bold display-7 text-primary mb-2">Blogs</h2>
+                        <p class="text-muted">Stay updated with our latest travel stories and tips</p>
+                    </div>
+                    <div class="row g-4">
+                        @foreach ($relatedBlogs as $blog)
+                            <div class="col-md-4">
+                                <div class="card h-100 article-card">
+                                    <a href="{{ url('blogs/' . $blog['slug']) }}"
+                                        class="text-decoration-none text-dark d-block h-100">
+                                        <img src="{{ $blog['banner_url'] }}" class="card-img-top"
+                                            alt="{{ $blog['title'] }}">
+                                        <div class="card-body">
+                                            <p class="text-muted small mb-1">
+                                                {{ \Carbon\Carbon::parse($blog['published_at'])->format('M d, Y') }}</p>
+                                            <h5 class="card-title text-primary">{{ $blog['title'] }}</h5>
+                                            <p class="card-text">{{ $blog['sub_title'] }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+           
+        @endif
 
     </div>
 

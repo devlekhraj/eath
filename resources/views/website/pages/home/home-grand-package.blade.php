@@ -106,10 +106,12 @@
                         Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
                     </button> --}}
                     <div>
-                        <button class="btn btn-gradient btnOpenModal" data-type="featured_packages"
-                            data-id="{{ $package['id'] }}">
-                            Join Now <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                        <div>
+                            <button class="btn btn-gradient btnOpenModal" data-type="featured_packages"
+                                data-id="{{ $package['id'] }}">
+                                Join Now <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

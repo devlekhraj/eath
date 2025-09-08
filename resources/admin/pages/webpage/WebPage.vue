@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <div>
         <v-data-table :headers="headers" 
         :loading="fetching_data"
         :items="filteredItems" :items-per-page="20" :sort-by="['name']"
@@ -57,7 +57,7 @@
 
 
             <template #item.actions="{ item }">
-                <v-menu location="bottom end">
+                <!-- <v-menu location="bottom end">
                     <template #activator="{ props }">
                         <v-btn v-bind="props" icon variant="text" color="primary">
                             <v-icon>mdi-dots-vertical</v-icon>
@@ -77,11 +77,15 @@
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
+                <div>
+                    <v-btn size="x-small" icon variant="tonal" color="primary" :to="{ name: 'adminWebPageDetail', params: { id: item.id } }"><v-icon>mdi-pencil</v-icon></v-btn>
+                    <v-btn size="x-small" icon variant="tonal" color="error" class="ml-2" @click="deleteItem(item)"><v-icon>mdi-delete</v-icon></v-btn>
+                </div>
             </template>
         </v-data-table>
         <modal-template ref="globalModal" @close="fetchData"></modal-template>
-    </v-container>
+    </div>
 </template>
 
 <script setup>

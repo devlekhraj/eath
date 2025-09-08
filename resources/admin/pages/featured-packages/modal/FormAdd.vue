@@ -49,6 +49,12 @@
                             :error-messages="serverErrors.package_id" prepend-inner-icon="mdi-package-variant" />
                     </v-col>
 
+                    <!-- Highlight -->
+                    <v-col cols="12">
+                        <v-textarea v-model="form.highlight" label="Highlight" density="comfortable" auto-grow
+                            variant="outlined" :rules="[rules.required]" :error-messages="serverErrors.highlight"
+                            prepend-inner-icon="mdi-text" />
+                    </v-col>
                     <!-- Description -->
                     <v-col cols="12">
                         <v-textarea v-model="form.description" label="Description" density="comfortable" auto-grow
@@ -132,6 +138,7 @@ const today = new Date().toISOString().substr(0, 10) // "YYYY-MM-DD"
 const form = reactive({
     title: '',
     slug: '',
+    highlight: '',
     description: '',
     start_date: '',
     end_date: '',
@@ -145,6 +152,7 @@ const form = reactive({
 const serverErrors = reactive({
     title: null,
     slug: null,
+    highlight: null,
     description: null,
     start_date: null,
     end_date: null,
@@ -177,6 +185,7 @@ function fetchPackages() {
                     id: props.item.id,
                     title: props.item.title || '',
                     slug: props.item.slug || '',
+                    highlight: props.item.highlight || '',
                     description: props.item.description || '',
                     package_id: props.item.package_id || null,
                     start_date: props.item.start_date || '',
@@ -286,6 +295,9 @@ async function handleSubmit() {
             end_date: formatToYMD(form.end_date),
 
         };
+
+        console.log({payload});
+
         const resp = await axios.post('/admin/featured-packages', payload)
         showSuccess(resp.data?.message || 'Package created successfully')
         emit('close')

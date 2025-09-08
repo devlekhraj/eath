@@ -41,7 +41,7 @@ class WebsiteController extends Controller
     public function show($slug)
     {
         $package = TravelPackage::where('slug', $slug)->first();
-        $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories', 'economyPrice', 'priceStart','fixedDeparture');
+        $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories', 'economyPrice', 'priceStart', 'fixedDeparture');
 
         $relatedPackages = TravelPackage::where('id', '!=', $package->id)
             ->where('is_active', 1)
@@ -59,8 +59,11 @@ class WebsiteController extends Controller
             }])
             ->get();
 
+        $relatedBlogs = Blog::latest()
+            ->take(4)
+            ->get();
 
-        return view('website.pages.travel_packages.index', compact('package', 'relatedPackages', 'parentCategories'));
+        return view('website.pages.travel_packages.index', compact('package', 'relatedPackages', 'parentCategories','relatedBlogs'));
     }
 
     public function categoryShow($slug)
@@ -81,7 +84,7 @@ class WebsiteController extends Controller
     public function guideProfile()
     {
         $guideList = Guide::all();
-        return view('website.pages.guide.index',compact('guideList'));
+        return view('website.pages.guide.index', compact('guideList'));
     }
 
     public function blogs()

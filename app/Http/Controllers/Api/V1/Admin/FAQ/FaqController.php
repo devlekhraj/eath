@@ -15,7 +15,7 @@ class FaqController extends Controller
     public function index()
     {
         // Logic to retrieve travel packages
-        $faq = Faq::orderBy('created_at', 'desc')->get();
+        $faq = Faq::orderBy('sort_order', 'asc')->get();
 
         return response()->json([
             'success' => true,
@@ -55,6 +55,8 @@ class FaqController extends Controller
             'id' => 'nullable|exists:faqs,id',
             'question' => 'required|string',
             'answer' => 'required|string',
+            'sort_order' => 'required|integer|min:0',
+            'is_active' => 'required|boolean',
         ];
 
         $validated = $request->validate($rules);
