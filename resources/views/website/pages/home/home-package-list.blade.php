@@ -135,7 +135,7 @@
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         @if (isset($package->featured))
                                             <div class="text-danger">
-                                                <del><span style="font-size: 14px" >{{ format_price($package['min_price']) }}</span></del>
+                                                {{-- <del><span style="font-size: 14px" >{{ format_price($package['min_price']) }}</span></del> --}}
                                                 <p class="fw-bold text-primary mb-0">
                                                     {{ format_price($package->featured->price) }}</p>
                                             </div>
