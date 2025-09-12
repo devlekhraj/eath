@@ -30,7 +30,10 @@ class TravelPackage extends Model
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
     ];
-
+    public function featured()
+    {
+        return $this->hasOne(FeaturedPackage::class, 'package_id', 'id');
+    }
 
     public function getHighlightNameAttribute()
     {
@@ -119,8 +122,10 @@ class TravelPackage extends Model
 
     public function getMinPriceAttribute(): ?float
     {
+
         return $this->prices->min('price');
     }
+
 
     public function exclusions()
     {

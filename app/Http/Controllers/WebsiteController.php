@@ -19,7 +19,7 @@ class WebsiteController extends Controller
     public function index(Request $request)
     {
 
-        $packages = TravelPackage::all();
+        $packages = TravelPackage::where('is_active',1)->get();
 
         $mainBanner = Banner::where('is_active', 1)->first();
 
