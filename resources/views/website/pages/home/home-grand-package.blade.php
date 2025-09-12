@@ -1,3 +1,21 @@
+<style>
+    .offer-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, #ff8a00, #e52e71);
+        color: #fff;
+        font-weight: 600;
+        padding: 0.5rem 1.2rem;
+        border-radius: 10px;
+        /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        transition: transform 0.2s ease;
+    }
+
+    .offer-tag:hover {
+        transform: scale(1.08);
+    }
+</style>
 @php
     $grandPackage = [
         'title' => 'Grand Everest Adventure Package',
@@ -32,12 +50,22 @@
                 <!-- Details -->
                 <div class="col-md-6">
                     <h2 class="fw-bold mb-3 text-primary">{{ $package['title'] }}</h2>
-                    <div class="pb-0">
-                        <h3 class="fw-bold text-secondary">
-                            ${{ number_format((float) trim($package['price'], '$'), 2) }}</h3>
+                    <div class="pb-0 mb-3">
+                        <div class="pb-0">
+                            <div>
+                                <h3 class="fw-bold text-secondary">
+                                    ${{ number_format((float) trim($package['price'], '$'), 2) }}
+                                </h3>
+                            </div>
+                            <div class="mt-2">
+                                <span class="offer-tag">
+                                    🌟 All Inclusive
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <div style="text-align: justify">
-                        <p class="mb-3">{{ $package['description'] }}</p>
+                        <p class="mb-3">{{ $package['highlight'] ?? $package['description'] }}</p>
                     </div>
 
                     <div class="mb-3">

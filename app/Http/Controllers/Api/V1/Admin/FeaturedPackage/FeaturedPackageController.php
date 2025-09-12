@@ -47,18 +47,19 @@ class FeaturedPackageController extends Controller
 
     public function storeUpdate(Request $request)
     {
-        // Validation rules
         $rules = [
             'title' => 'required|string|max:255',
             'slug' => [
                 'required',
                 'string',
                 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
-                'unique:featured_packages,slug,' . ($request->id ?? 'NULL') // ignore current ID
+                'unique:featured_packages,slug,' . ($request->id ?? 'NULL'),
             ],
             'highlight' => 'required|string',
             'description' => 'required|string',
-            'start_date' => 'required|date|after_or_equal:today',
+            'start_date' => $request->id
+                ? 'required|date'
+                : 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'group_size' => 'required|integer|min:1',
             'package_id' => 'required|exists:travel_packages,id',
@@ -81,14 +82,6 @@ class FeaturedPackageController extends Controller
             'data' => $package,
         ]);
     }
-
-
-
-
-
-
-
-
 
 
     public function toggleActive($id, Request $request)

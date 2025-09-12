@@ -219,12 +219,7 @@
                                 @endif
 
 
-
-
-
                                 <div>
-
-
 
                                     <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                         {!! $package->description !!}
