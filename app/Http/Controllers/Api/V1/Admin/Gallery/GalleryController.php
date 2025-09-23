@@ -92,7 +92,10 @@ class GalleryController extends Controller
             $usageId = $request->input('usage_id');
             $galleryUsage = $gallery->usages()->create([
                 "usage_type" => $usageType,
-                "usage_id" => $usageId
+                "usage_id" => $usageId,
+                "custom_attributes" =>[
+                    "type" => "gallery"
+                ]
             ]);
 
             switch ($request->usage_type) {

@@ -12,6 +12,7 @@ class GalleryUsage extends Model
         'usage_id',
         'usage_type',
         'alt_text',
+        'custom_attributes',
     ];
 
     // Append virtual attribute

@@ -15,7 +15,7 @@ if (!function_exists('format_date')) {
      * @param  string  $format
      * @return string
      */
-    function format_date($date, $format = 'F j, Y')
+    function format_date($date, $format = 'M j, Y')
     {
         if (!$date) {
             return '';

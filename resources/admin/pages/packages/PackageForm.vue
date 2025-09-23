@@ -25,6 +25,10 @@
 							<v-icon color="primary" start>mdi-checkbox-marked-circle-outline</v-icon>
 							Includes
 						</v-tab>
+						<v-tab value="banners">
+							<v-icon color="primary" start>mdi-image</v-icon>
+							Banners
+						</v-tab>
 						<v-tab value="gallery">
 							<v-icon color="primary" start>mdi-image-multiple</v-icon>
 							Gallery
@@ -59,6 +63,12 @@
 									@refresh="fetchPackage" />
 							</div>
 						</div>
+						<div v-if="activeTab === 'banners'">
+							<div>
+								<FormPackageBanner v-if="formReady" :travelPackage="travelPackage"
+									@refresh="fetchPackage" />
+							</div>
+						</div>
 						<div v-if="activeTab === 'gallery'">
 							<div>
 								<FormPackageGallery v-if="formReady" :travelPackage="travelPackage"
@@ -82,6 +92,7 @@ import FormPackageItinery from './form_section/FormPackageItinery.vue'
 import FormPackageInclude from './form_section/FormInclude.vue'
 import FormHighlights from './form_section/FormHighlights.vue'
 import FormPackageGallery from './form_section/FormPackageGallery.vue'
+import FormPackageBanner from './form_section/FormPackageBanner.vue'
 import FormPricing from './form_section/FormPricing.vue'
 
 // Get package ID from route

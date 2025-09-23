@@ -16,7 +16,7 @@
 
                         <div>
                             <v-row>
-                                <v-col cols="6" md="4" v-for="(image, index) in travelPackage.galleries" :key="index">
+                                <v-col cols="6" md="4" v-for="(image, index) in travelPackage.images" :key="index">
                                     <div class="position-relative">
                                         <img :src="image.url" alt="Image" style="width: 100%; object-fit: contain;" />
                                         <v-icon color="red" small class="position-absolute"
@@ -85,19 +85,18 @@ function handleUploadImage() {
     const objectUrl = URL.createObjectURL(file)
 
     img.onload = () => {
-        // const width = img.naturalWidth
-        // const height = img.naturalHeight
-        // const aspectRatio = width / height
+        const width = img.naturalWidth
+        const height = img.naturalHeight
+        const aspectRatio = width / height
 
         URL.revokeObjectURL(objectUrl)
 
-        // if ((width === 1920 && height === 800) || Math.abs(aspectRatio - 2.4) < 0.01) {
+        if ((width === 1920 && height === 800) || Math.abs(aspectRatio - 2.4) < 0.01) {
             // Passed validation - proceed with upload
             const formData = new FormData()
             formData.append('usage_id', props.travelPackage.id)
             formData.append('usage_type', 'travel_packages')
             formData.append('image', file)
-            formData.append('type','gallery');
 
             axios
                 .post('/admin/gallery-upload', formData)
@@ -114,10 +113,10 @@ function handleUploadImage() {
                     imageError.value = err?.response?.data?.message || 'An error occurred'
                     console.error('Upload error:', err)
                 })
-        // } else {
-        //     imageError.value = 'Image must be exactly 1920x800 pixels or have 2.4:1 aspect ratio'
-        //     selected_file.value = null // reset file input
-        // }
+        } else {
+            imageError.value = 'Image must be exactly 1920x800 pixels or have 2.4:1 aspect ratio'
+            selected_file.value = null // reset file input
+        }
     }
 
     img.onerror = () => {

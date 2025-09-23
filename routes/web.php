@@ -28,6 +28,9 @@ Route::get('/categories/{slug}', [WebsiteController::class,'categoryShow'])->nam
 Route::get('/guide-profiles', [WebsiteController::class,'guideProfile']);
 Route::get('/blogs', [WebsiteController::class,'blogs']);
 Route::get('/blogs/{slug}', [WebsiteController::class,'blogDetail'])->name('blog.show');
+Route::get('/fixed-departures/{slug}', [WebsiteController::class,'fixedDeparture'])->name('fixed.departure.show');
+
+
 Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');
 
 Route::get('inquiry-form', [WebsiteController::class,'getInquiryForm'])->name('inquiry.form');

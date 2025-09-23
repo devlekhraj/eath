@@ -145,9 +145,9 @@
 </style>
 @section('content')
     {{-- Banner Section --}}
-    @include('website.pages.travel_packages.package-banner', [
+    {{-- @include('website.pages.travel_packages.package-banner', [
         'banners' => $package->images_urls,
-    ])
+    ]) --}}
 
     <div>
         <div class="container py-5">
@@ -158,11 +158,128 @@
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div>
-                                {{-- Package Title --}}
-                                <div class="py-4">
-                                    <h1 class="mb-3" style="font-weight: 800">{{ $package->name }}</h1>
-                                </div>
 
+                                <div>
+                                    <div>
+                                        <img src="{{ $departure->banner_url }}" alt="" style="width: 100%" class="rounded-3">
+                                    </div>
+                                </div>
+                                <div class="pt-4">
+                                    <h1 class="mb-3" style="font-weight: 800"> {{ $departure->title }}</h1>
+                                </div>
+                                {{-- Package Title --}}
+                                <div class="">
+
+                                    <div>
+
+                                        <div class="">
+                                            <div class="exclusive-card mb-4">
+                                                {{-- <div class="ribbon">Fixed Departure</div> --}}
+                                                <div class="card-inner mt-3">
+
+
+                                                    <!-- Title & Price -->
+                                                    <div class="section">
+                                                        <div class="mb-3">
+                                                            <h5 class="fw-semibold mb-1">{{ $package->name }}</h5>
+                                                            <h2 class="fw-bold mb-0 text-white">
+                                                                {{ format_price($departure->price) }}
+                                                            </h2>
+
+                                                        </div>
+                                                        <p class="small mb-0 mt-1">
+                                                            {{ $departure->description }}
+                                                        </p>
+                                                    </div>
+
+                                                    <!-- Extra Info -->
+                                                    {{-- <div class="section">
+                                                            <div class="info-block">
+                                                                <div style="width:30px">
+                                                                    <i class="fa-solid fa-calendar-check"></i>
+                                                                </div>
+                                                                <div>
+
+                                                                    <span class="fw-semibold">Departure Date:</span>
+                                                                    <span>{{format_date($departure->start_date)}}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="info-block">
+                                                                <div style="width:30px">
+                                                                    <i class="fa-solid fa-users"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="fw-semibold">Group Size:</span>
+                                                                    <span>{{ $departure->group_size }} people</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="info-block">
+                                                                <div style="width:30px">
+                                                                    <i class="fa-solid fa-clock"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="fw-semibold">Duration:</span>
+                                                                    <span>{{ $departure->duration }}</span>
+                                                                </div>
+                                                            </div>
+
+                                                        </div> --}}
+                                                    <div class="section">
+                                                        <div class="row g-3">
+                                                            <!-- Departure Date -->
+                                                            <div class="col-12 col-md-4 d-flex align-items-center">
+                                                                <div class="me-2" style="width:30px">
+                                                                    <i class="fa-solid fa-calendar-check"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="fw-semibold">Departure:</span>
+                                                                    <span>{{ format_date($departure->start_date) }}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Group Size -->
+                                                            <div class="col-12 col-md-4 d-flex align-items-center">
+                                                                <div class="me-2" style="width:30px">
+                                                                    <i class="fa-solid fa-users"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="fw-semibold">Group Size:</span>
+                                                                    <span>{{ $departure->group_size }} people</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Duration -->
+                                                            <div class="col-12 col-md-4 d-flex align-items-center">
+                                                                <div class="me-2" style="width:30px">
+                                                                    <i class="fa-solid fa-clock"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="fw-semibold">Duration:</span>
+                                                                    <span>{{ $departure->duration }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Button -->
+
+
+                                    </div>
+                                </div>
+                                <div class="section text-center">
+                                    <button class="btn text-white fw-semibold py-3 btnOpenModal px-4"
+                                        data-type="featured_packages" data-id="{{ $departure['id'] }}"
+                                        style="background: linear-gradient(90deg, #ff9800, #f44336); border: none; border-radius: 0.5rem;">
+                                        Join Now <i class="fa-solid fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
                                 {{-- Highlights Section --}}
                                 @if (!empty($package->highlights))
                                     <div class="mb-5 trip-highlights-wrapper rounded-3 overflow-hidden shadow">
@@ -339,34 +456,13 @@
                                             </ul>
                                         </div>
                                     @endif
-                                    {{-- Gallery --}}
-                                    @if (count($package->galleries))
-                                        <section class="mt-5">
-                                            <h3
-                                                class="fw-semibold text-primary mb-4 border-start border-4 border-primary ps-3">
-                                                Gallery
-                                            </h3>
-                                            <div class="row g-4">
-                                                @foreach ($package->galleries as $image)
-                                                    <div class="col-6 col-md-6">
-                                                        <div class="ratio ratio-4x3 rounded overflow-hidden gallery-image"
-                                                            style="cursor: pointer; transition: box-shadow 0.3s ease;"
-                                                            title="Click to enlarge">
-                                                            <img src="{{ $image->url }}" alt="Project Image"
-                                                                class="rounded" />
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </section>
-                                    @endif
 
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div style="position: sticky; top:0" class="border rounded p-4">
-                                @if ($package->fixedDeparture)
+                                {{-- @if ($package->fixedDeparture)
                                     <div class="mb-5">
                                         <div class="exclusive-card mb-4">
                                             <div class="ribbon">Fixed Departure</div>
@@ -436,7 +532,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                                @endif --}}
 
                                 @if ($package->prices->count() > 0)
                                     <div class="">
@@ -529,130 +625,14 @@
             </div>
 
         </div>
-        @if ($relatedPackages->count() > 0)
-            <div class="container py-5" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);">
-                <div class="text-center mb-4 py-4">
-                    <h2 class="mb-2"><strong>Discover Other Treks</strong></h2>
-                    <p class="text-muted">
-                        Discover more travel experiences you may like, carefully curated for you.
-                    </p>
-                </div>
 
-                <div class="row g-4">
-                    @foreach ($relatedPackages as $package)
-                        <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card border-0  h-100 position-relative package-card">
-                                <a href="/packages/{{ $package->slug }}" class="text-decoration-none text-dark">
-                                    <img src="{{ $package['image'] }}" alt="{{ $package['name'] }}"
-                                        class="card-img-top"
-                                        style="height: 200px; object-fit: cover; border-top-left-radius: .75rem; border-top-right-radius: .75rem;">
 
-                                    <div class="card-body p-3 d-flex flex-column">
-                                        <!-- Title -->
-                                        <h6 class="fw-semibold mb-2">{{ $package['name'] }}</h6>
 
-                                        <!-- Price + Rating -->
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <p class="fw-bold text-primary mb-0">
-                                                {{ format_price($package['min_price']) }}
-                                            </p>
-                                            <div class="d-flex align-items-center small text-warning">
-                                                @php
-                                                    $fullStars = floor($package['rating']);
-                                                    $halfStar = $package['rating'] - $fullStars >= 0.5 ? 1 : 0;
-                                                    $emptyStars = 5 - $fullStars - $halfStar;
-                                                @endphp
-                                                @for ($i = 0; $i < $fullStars; $i++)
-                                                    <i class="fa-solid fa-star me-1"></i>
-                                                @endfor
-                                                @if ($halfStar)
-                                                    <i class="fa-solid fa-star-half-stroke me-1"></i>
-                                                @endif
-                                                @for ($i = 0; $i < $emptyStars; $i++)
-                                                    <i class="fa-regular fa-star me-1"></i>
-                                                @endfor
-                                            </div>
-                                        </div>
-
-                                        <!-- Duration + People -->
-                                        {{-- <div class="d-flex gap-3 text-muted small mb-3">
-                                            <div><i class="fa-regular fa-clock me-1"></i> {{ $package['duration'] }}
-                                            </div>
-                                            <div><i class="fa-solid fa-user-group me-1"></i> {{ $package['people'] }}
-                                                People</div>
-                                        </div> --}}
-
-                                        <!-- Popular Tag -->
-                                        <span
-                                            class="badge bg-success position-absolute top-0 end-0 rounded-0 rounded-bottom-start">
-                                            Popular
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
-        {{-- @if ($parentCategories->count() > 0)
-            <div class="container my-5">
-                <div class="text-center mb-4 py-4">
-                    <h2 class="mb-2"><strong>Browse by Region</strong></h2>
-                    <p class="text-muted">Explore destinations across different regions.</p>
-                </div>
-
-                <div class="row g-4">
-                    @foreach ($parentCategories as $parent)
-                        <div class="col-12">
-                            <div class="border-0 h-100 category-parent">
-                                <div class="">
-
-                                    <!-- Children -->
-                                    @if ($parent->children->count())
-                                        <div>
-                                            <div class="row">
-                                                @foreach ($parent->children as $child)
-                                                    <div class="col-6 col-md-4 col-lg-3 mb-4">
-                                                        <div class="">
-                                                            <a href="/categories/{{ $child->slug }}"
-                                                                class="text-decoration-none">
-                                                                <div class="category-card">
-                                                                    <div class="card-body text-center">
-                                                                        <div class="mb-3">
-                                                                            <i
-                                                                                class="fa-solid fa-mountain-sun fa-2x text-primary"></i>
-                                                                        </div>
-                                                                        <h6 class="fw-semibold mb-1">{{ $child->name }}
-                                                                        </h6>
-                                                                        <p class="small mb-0">
-                                                                            {{ $child->travel_packages_count ?? '0' }}
-                                                                            Packages</p>
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @endif --}}
 
         @if (count($relatedBlogs) > 0)
             <section class="recent-articles-section py-5">
                 <div class="container py-5">
-                    {{-- <div class="text-center mb-5">
-            <h2 class="section-title">Recent Articles</h2>
-            <p class="section-subtitle">Stay updated with our latest travel stories and tips</p>
-        </div> --}}
+
                     <div class="mb-4">
                         <h2 class="fw-bold display-7 text-primary mb-2">Blogs</h2>
                         <p class="text-muted">Stay updated with our latest travel stories and tips</p>

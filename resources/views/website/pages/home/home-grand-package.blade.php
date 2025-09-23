@@ -40,16 +40,20 @@
             <div class="row align-items-center mb-4">
                 <!-- Image -->
                 <div class="col-md-6 mb-4 mb-md-0">
-                    <div class="image-wrapper rounded shadow-lg w-100" style="aspect-ratio: 4/3; overflow: hidden;">
+                    <a href="{{ route('fixed.departure.show', $package->slug) }}"
+                        class="d-block image-wrapper rounded shadow-lg w-100"
+                        style="aspect-ratio: 4/3; overflow: hidden;">
                         <img src="{{ $package['banner_url'] }}" alt="{{ $package['title'] }}" class="w-100 h-100"
                             style="object-fit: cover;">
-                    </div>
+                    </a>
                 </div>
 
 
                 <!-- Details -->
                 <div class="col-md-6">
-                    <h2 class="fw-bold mb-3 text-primary">{{ $package['title'] }}</h2>
+                    <a href="{{ route('fixed.departure.show', $package->slug) }}" class="text-decoration-none text-primary">
+                        <h2 class="fw-bold mb-3 text-primary">{{ $package['title'] }}</h2>
+                    </a>
                     <div class="pb-0 mb-3">
                         <div class="pb-0">
                             <div>

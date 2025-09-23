@@ -59,6 +59,13 @@ class TravelPackageResource extends JsonResource
                     'url' => $image->url,
                 ];
             }),
+            'galleries'            => $this->galleries->map(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'url' => $image->url,
+                ];
+            }),
+            
             'itineraries'            => $this->itineraries->map(function ($item) {
                 return [
                     'id' => $item->id,

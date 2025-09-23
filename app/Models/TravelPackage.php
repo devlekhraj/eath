@@ -49,8 +49,17 @@ class TravelPackage extends Model
     {
         return $this->hasMany(GalleryUsage::class, 'usage_id')
             ->where('usage_type', 'travel_packages')
+            ->whereNull('custom_attributes')
             ->with('gallery');
     }
+    public function galleries(): HasMany
+    {
+        return $this->hasMany(GalleryUsage::class, 'usage_id')
+            ->where('usage_type', 'travel_packages')
+            ->whereJsonContains('custom_attributes->type', 'gallery')
+            ->with('gallery');
+    }
+
     public function getImagesUrlsAttribute(): array
     {
         return $this->images

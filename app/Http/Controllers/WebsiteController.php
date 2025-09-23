@@ -19,7 +19,7 @@ class WebsiteController extends Controller
     public function index(Request $request)
     {
 
-        $packages = TravelPackage::where('is_active',1)->get();
+        $packages = TravelPackage::where('is_active', 1)->get();
 
         $mainBanner = Banner::where('is_active', 1)->first();
 
@@ -63,7 +63,41 @@ class WebsiteController extends Controller
             ->take(4)
             ->get();
 
-        return view('website.pages.travel_packages.index', compact('package', 'relatedPackages', 'parentCategories','relatedBlogs'));
+        return view('website.pages.travel_packages.index', compact('package', 'relatedPackages', 'parentCategories', 'relatedBlogs'));
+    }
+
+    public function fixedDeparture($slug)
+    {
+        $departure = FeaturedPackage::where('slug', $slug)->first();
+        $departure->load('package');
+
+        $relatedPackages = FeaturedPackage::where('id', '!=', $departure->id)
+            ->where('is_active', 1)
+            // ->where('is_published', 1)
+            // ->with('categories')
+            ->take(6) // Limit to 3 related packages
+            ->get();
+
+        // dd($relatedPackages);
+
+        // $parentCategories = PackageCategory::whereNull('parent_id')
+        //     ->withCount('travelPackages')              // count for parent
+        //     ->with(['children' => function ($q) {
+        //         $q->withCount('travelPackages');       // count for children
+        //     }])
+        //     ->get();
+
+        $relatedBlogs = Blog::latest()
+            ->take(4)
+            ->get();
+
+
+        $package = $departure->package;
+        $parentCategories = [];
+
+        // dd($departure->banner_url);
+
+        return view('website.pages.fixed_departure.detail', compact('package','departure', 'relatedPackages', 'parentCategories', 'relatedBlogs'));
     }
 
     public function categoryShow($slug)
