@@ -450,7 +450,6 @@
                                             </h2>
                                         </div>
 
-
                                         {{-- Group Pricing Table --}}
                                         <div class="table-responsive">
                                             <table class="table text-center align-middle rounded overflow-hidden"
