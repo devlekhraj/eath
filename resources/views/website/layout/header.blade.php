@@ -65,7 +65,7 @@
       "url": "{{ url('/') }}",
       "logo": "{{ asset('images/logo.png') }}",
       "image": "{{ asset('images/og-image.jpeg') }}",
-      "description": "EATH Travel offers trekking, cultural, and adventure tourism packages in Nepal. Trusted since 2008.",
+      "description": "EATH Travel offers trekking, cultural, and adventure tourism packages in Nepal. Trusted since 2024.",
       "telephone": "+977-9841927372",
       "email": "eathtravelnp@gmail.com",
       "address": {
