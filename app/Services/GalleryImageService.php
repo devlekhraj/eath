@@ -7,7 +7,8 @@ use App\Models\GalleryVariant;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\Encoders\AvifEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\Encoders\WebpEncoder;
@@ -41,7 +42,17 @@ class GalleryImageService
         }
 
         // Read master (Intervention v3.11)
-        $manager = new ImageManager(new Driver);
+        $useImagick = extension_loaded('imagick');
+        $driver = $useImagick ? new ImagickDriver() : new GdDriver();
+        $manager = new ImageManager($driver);
+
+        $supportsAvif = false;
+        if ($useImagick && class_exists(\Imagick::class)) {
+            $formats = \Imagick::queryFormats('AVIF');
+            $supportsAvif = !empty($formats);
+        } elseif (function_exists('imageavif')) {
+            $supportsAvif = true;
+        }
         $master = $manager->read($file);
 
         // Calculate ratio; 16:9 is recommended but other ratios are allowed
@@ -82,6 +93,15 @@ class GalleryImageService
             ['width' => 1920, 'ratio' => '16:9', 'formats' => ['webp', 'avif']],
             ['width' => 1200, 'height' => 630, 'ratio' => '1.91:1', 'formats' => ['jpg'], 'variant' => 'og', 'fit' => 'cover'],
         ];
+        if (!$supportsAvif) {
+            $specs = array_map(function ($spec) {
+                $spec['formats'] = array_values(array_filter(
+                    $spec['formats'],
+                    fn ($format) => $format !== 'avif'
+                ));
+                return $spec;
+            }, $specs);
+        }
 
         $variantRows = [];
         $now = now();
