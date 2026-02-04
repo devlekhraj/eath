@@ -75,8 +75,13 @@
                                         class="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500 sm:hidden">Price</span>
                                     <p class="mt-1 text-sm font-semibold text-slate-900 sm:mt-0">$1125 USD</p>
                                 </div>
-                                <div class="flex sm:justify-end">
+                                {{-- <div class="flex sm:justify-end">
                                     <a href="/contact/inquiry/"
+                                        class="inline-flex items-center rounded-md border border-sky-200 px-4 py-2 text-xs font-semibold text-sky-700 hover:border-sky-300 hover:text-sky-800">View
+                                        Detail</a>
+                                </div> --}}
+                                <div class="flex sm:justify-end">
+                                    <a href="/treks/{{ $item->slug }}"
                                         class="inline-flex items-center rounded-md border border-sky-200 px-4 py-2 text-xs font-semibold text-sky-700 hover:border-sky-300 hover:text-sky-800">View
                                         Detail</a>
                                 </div>
