@@ -178,6 +178,26 @@ const routes = [
 				},
 			},
 			{
+				path: 'destinations',
+				name: 'adminDestinationPage',
+				component: () => import('@pages/destinations/DestinationPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Destinations',
+					subtitle: 'View and manage all destinations',
+				},
+			},
+			{
+				path: 'destinations/:id',
+				name: 'admin.destination.detail',
+				component: () => import('@pages/destinations/DestinationDetailPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Destination Detail',
+					subtitle: 'View and manage destination details',
+				},
+			},
+			{
 				path: 'package-lookups',
 				name: 'adminPackageLookupPage',
 				component: () => import('@pages/packages/PackageLookupPage.vue'),

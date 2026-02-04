@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <!-- <div class="text-right mb-4">
       <v-btn size="large" color="primary" rounded @click="handleOpen">
         <v-icon>mdi-plus</v-icon> Add Category
@@ -102,7 +102,7 @@
     </v-data-table>
 
     <modal-template ref="globalModal" @saved="fetchCategories" @close="fetchCategories"></modal-template>
-  </v-container>
+  </div>
 </template>
 
 <script setup>

@@ -2,30 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Faq;
-use App\Models\Blog;
-use App\Models\Page;
 use App\Models\Banner;
+use App\Models\Blog;
 use App\Models\BlogCategory;
-use Illuminate\Http\Request;
-use App\Models\TravelPackage;
+use App\Models\Destination;
+use App\Models\Faq;
 use App\Models\FeaturedPackage;
 use App\Models\Guide;
-use App\Models\Inquiry;
 use App\Models\PackageCategory;
+use App\Models\Page;
+use App\Models\TravelPackage;
+use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
 {
+    public function demo()
+    {
+        return view('website.landing');
+    }
+
     public function index(Request $request)
     {
 
-        $packages = TravelPackage::where('is_active', 1)->get();
+        $packages = TravelPackage::where('is_active', 1)->limit(6)->get();
+        $hotPackages = TravelPackage::where('is_active', 1)->offset(6)->limit(6)->get();
 
-        $mainBanner = Banner::where('is_active', 1)->first();
+        $mainBanner = Banner::where('slug', 'main-home-banner')->first();
+        $galleryImage = Banner::where('slug', 'gallery-images')->first();
+
+        $destinations = Destination::where('is_active', 1)
+        ->with('treks')
+        ->get();
 
         $blogs = Blog::where([
-            "is_active" => 1,
-            "is_published" => 1,
+            'is_active' => 1,
+            'is_published' => 1,
         ])->orderByDesc('created_at')->limit(3)->get();
 
         $featuredPackages = FeaturedPackage::where('is_active', 1)
@@ -34,10 +45,28 @@ class WebsiteController extends Controller
             ->where('end_date', '>=', now())
             ->get();
 
+        $packageCategories = PackageCategory::where('is_active', 1)->get();
 
 
-        return view('website.index', compact('packages', 'mainBanner', 'blogs', 'featuredPackages'));
+        $menus = Destination::where('is_active', 1)
+            ->select(['id', 'name', 'slug'])
+            ->with(['treks:id,destination_id,name,slug'])
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'name' => $item->name,
+                    'slug' => $item->slug,
+                    'treks' => $item->treks->map(function ($trek) {
+                        return [
+                            'name' => $trek->name,
+                            'slug' => $trek->slug,
+                        ];
+                    })->values(),
+                ];
+            })->toArray();
+        return view('website.index', compact('packages', 'mainBanner', 'destinations', 'blogs', 'featuredPackages', 'packageCategories', 'galleryImage', 'hotPackages','menus'));
     }
+
     public function show($slug)
     {
         $package = TravelPackage::where('slug', $slug)->first();
@@ -91,13 +120,12 @@ class WebsiteController extends Controller
             ->take(4)
             ->get();
 
-
         $package = $departure->package;
         $parentCategories = [];
 
         // dd($departure->banner_url);
 
-        return view('website.pages.fixed_departure.detail', compact('package','departure', 'relatedPackages', 'parentCategories', 'relatedBlogs'));
+        return view('website.pages.fixed_departure.detail', compact('package', 'departure', 'relatedPackages', 'parentCategories', 'relatedBlogs'));
     }
 
     public function categoryShow($slug)
@@ -115,20 +143,31 @@ class WebsiteController extends Controller
         return view('website.pages.travel_packages.category', compact('category', 'parentCategories'));
     }
 
+    public function destinationShow($slug)
+    {
+        $destination = Destination::where('slug', $slug)->firstOrFail();
+        $destination->load('treks');
+
+        return view('website.pages.destination.index', compact('destination'));
+    }
+
     public function guideProfile()
     {
         $guideList = Guide::all();
+
         return view('website.pages.guide.index', compact('guideList'));
     }
 
     public function blogs()
     {
         $blogs = Blog::where([
-            "is_active" => 1,
-            "is_published" => 1,
+            'is_active' => 1,
+            'is_published' => 1,
         ])->orderByDesc('created_at')->get();
+
         return view('website.pages.blogs.index', compact('blogs'));
     }
+
     public function blogDetail($slug)
     {
         try {
@@ -148,14 +187,13 @@ class WebsiteController extends Controller
         }
     }
 
-
-
     public function faq()
     {
         $faqs = Faq::orderBy('sort_order', 'asc')->get();
 
         return view('website.pages.static_page.faq', compact('faqs'));
     }
+
     public function privacyPolicy()
     {
 
@@ -171,6 +209,7 @@ class WebsiteController extends Controller
 
         return view('website.pages.static_page.privacy-policy', compact('page'));
     }
+
     public function termsConditions()
     {
         $slug = 'terms-conditions';
@@ -185,6 +224,7 @@ class WebsiteController extends Controller
 
         return view('website.pages.static_page.terms-conditions', compact('page'));
     }
+
     public function aboutUs()
     {
         $slug = 'about-us';
@@ -199,10 +239,12 @@ class WebsiteController extends Controller
 
         return view('website.pages.static_page.about-us', compact('page'));
     }
+
     public function contactUs()
     {
         return view('website.pages.static_page.contact-us');
     }
+
     public function getInquiryForm(Request $request)
     {
         // dd($request->all());
@@ -212,6 +254,7 @@ class WebsiteController extends Controller
         ]);
         $type = $request->type;
         $id = $request->id;
+
         return view('website.pages.inquiry.inquiry-form', compact('type', 'id'));
     }
 
@@ -260,10 +303,11 @@ class WebsiteController extends Controller
         ]);
 
         $temp = view('website.pages.inquiry.inquiry-success')->render();
+
         return response()->json([
             'message' => 'Inquiry submitted successfully.',
             'inquiry' => $inquiry,
-            "template" => $temp
+            'template' => $temp,
         ], 201);
     }
 }

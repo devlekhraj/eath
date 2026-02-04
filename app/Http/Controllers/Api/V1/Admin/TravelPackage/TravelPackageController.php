@@ -13,20 +13,27 @@ use App\Models\TravelPackageHighlight;
 
 class TravelPackageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Logic to retrieve travel packages
-        $packages = TravelPackage::with('categories')->get();
+        $perPage = (int) $request->input('per_page', 20);
+        $perPage = max(1, min($perPage, 100));
+        $packages = TravelPackage::with('images', 'destination')->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'data' => $packages
+            'data' => $packages->items(),
+            'meta' => [
+                'current_page' => $packages->currentPage(),
+                'last_page' => $packages->lastPage(),
+                'per_page' => $packages->perPage(),
+                'total' => $packages->total(),
+            ],
         ], 200);
     }
     public function show(Request $request, $id)
     {
         // Retrieve the travel package by ID or fail with 404
-        $package = TravelPackage::with('categories')->findOrFail($id);
+        $package = TravelPackage::with('images','destination')->findOrFail($id);
 
       
 
@@ -65,12 +72,14 @@ class TravelPackageController extends Controller
             'seo_image'           => 'nullable|string|max:255',
             'is_published'        => 'nullable|boolean',
             'published_at'        => 'nullable|date',
-            'category_ids'        => 'nullable|array',
-            'category_ids.*'      => 'integer|exists:package_categories,id',
+            'destination_id'      => 'nullable|exists:destinations,id',
+            // 'category_ids'        => 'nullable|array',
+            // 'category_ids.*'      => 'integer|exists:package_categories,id',
         ];
 
         $validated = $request->validate($rules);
-        unset($validated['category_ids']);
+        // dd($validated);
+        // unset($validated['category_ids']);
 
         if ($id) {
             $travelPackage = TravelPackage::findOrFail($id);
@@ -79,11 +88,12 @@ class TravelPackageController extends Controller
             $travelPackage = TravelPackage::create($validated);
         }
 
-        if (isset($request['category_ids'])) {
-            $travelPackage->categories()->sync($request['category_ids']);
-        } else if ($id) {
-            $travelPackage->categories()->detach();
-        }
+        // if (isset($request['category_ids'])) {
+        //     $travelPackage->categories()->sync($request['category_ids']);
+        // } else if ($id) {
+        //     $travelPackage->categories()->detach();
+        // }
+        // $travelPackage->destina
 
         return response()->json([
             'success' => true,

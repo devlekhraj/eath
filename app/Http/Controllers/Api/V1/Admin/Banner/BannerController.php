@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1\Admin\Banner;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\BannerListResource;
+use App\Http\Resources\BannerResource;
 use App\Models\Banner;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\BannerResource;
 
 
 class BannerController extends Controller
@@ -13,11 +14,11 @@ class BannerController extends Controller
     public function index()
     {
         // Logic to retrieve travel packages
-        $guideList = Banner::latest()->get();
+        $bannerList = Banner::withCount('images')->latest()->get();
 
         return response()->json([
             'success' => true,
-            'data' => BannerResource::collection($guideList)
+            'data' => BannerListResource::collection($bannerList)
         ], 200);
     }
 
@@ -55,6 +56,7 @@ class BannerController extends Controller
     {
         // Logic to retrieve travel packages
         $banner = Banner::find($id);
+        $banner->load('images');
 
         return response()->json([
             'success' => true,

@@ -34,7 +34,7 @@ class PackageCategory extends Model
         });
 
         static::updating(function ($category) {
-            if (empty($category->slug) || $category->isDirty('name')) {
+            if (empty($category->slug)) {
                 $category->slug = Str::slug($category->name);
             }
         });

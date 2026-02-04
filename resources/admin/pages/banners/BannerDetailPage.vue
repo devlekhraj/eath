@@ -1,105 +1,207 @@
 <template>
-    <div>
-        <div v-if="banner">
-            <v-card elevation="0" class="pa-6 mb-4">
-                <!-- Upload Button -->
-                <div class="pb-4">
-                    <v-btn size="large" color="primary" rounded @click="uploadImage">
-                        <v-icon>mdi-image-plus-outline</v-icon>
-                        Upload Image
-                    </v-btn>
-                </div>
+	<div>
+		<div class="d-flex align-center justify-space-between mb-4">
 
-                <v-divider></v-divider>
+			<v-btn color="primary" rounded size="large" variant="elevated" @click="openSelectModal">
+				<v-icon start>mdi-plus</v-icon>
+				Add Image
+			</v-btn>
+		</div>
+		<div v-if="galleryItems.length">
+			<v-data-table :headers="tableHeaders" :items="galleryItems" item-key="id">
+				<template #item.image="{ item }">
+					<div class="py-4">
+						<v-img :src="item?.url || item?.image_url || item" height="60" width="100" contain
+							class="rounded" />
+					</div>
+				</template>
+				<template #item.size="{ item }">
+					<div class="text-caption" style="min-width: 100px;">
+						<div>{{ formatDimensions(item) }}</div>
+						<div>{{ formatAspectRatio(item) }}</div>
+					</div>
+				</template>
+				<template #item.alt_text="{ item }">
+					<div class="text-caption" style="min-width: 240px;">
+						{{ resolveMeta(item, 'alt_text') }}
+					</div>
 
-                <!-- Images Grid -->
-                <v-row>
-                    <v-col cols="12" md="3" v-for="(image, index) in banner.images" :key="index">
-                        <div class="py-2">
-                            <div class="image-wrapper position-relative">
-                                <v-img :src="image.url" :lazy-src="image.url" aspect-ratio="2.4"
-                                    class="bg-grey-lighten-2" contain>
-                                    <template #placeholder>
-                                        <v-row align="center" justify="center" class="fill-height ma-0">
-                                            <v-progress-circular color="grey lighten-5" indeterminate />
-                                        </v-row>
-                                    </template>
-                                </v-img>
+				</template>
+				<template #item.caption="{ item }">
+					<div class="text-caption" style="min-width: 290px;">
+						{{ resolveMeta(item, 'caption') }}
+					</div>
+				</template>
+				<template #item.description="{ item }">
+					<div class="text-caption" style="min-width: 350px;">
+						{{ resolveMeta(item, 'description') }}
+					</div>
+				</template>
+				<template #item.actions="{ item }">
+					<div style="min-width: 100px;">
+						<v-btn size="x-small" icon variant="tonal" color="primary"
+							@click="handleEdit(item)"><v-icon>mdi-pencil</v-icon></v-btn>
+						<v-btn size="x-small" icon variant="tonal" color="error" class="ml-2"
+							@click="handleDelete(item)"><v-icon>mdi-delete</v-icon></v-btn>
+					</div>
+				</template>
+			</v-data-table>
+		</div>
+		<div v-else>
+			<p>No gallery items found.</p>
+		</div>
 
-                                <div class="hover-actions position-absolute top-0 right-0">
-                                    <v-btn icon color="red" variant="text" size="x-small"
-                                        @click.stop="deleteImage(image)">
-                                        <v-icon>mdi-delete</v-icon>
-                                    </v-btn>
-                                </div>
-                            </div>
-                        </div>
-                    </v-col>
-                </v-row>
-            </v-card>
-
-            <!-- Global Modal -->
-            <modal-template ref="globalModal" @saved="fetchBanner" @close="fetchBanner" />
-        </div>
-
-        <!-- Loading Skeleton -->
-        <v-skeleton-loader v-else type="card" />
-    </div>
+		<modal-template ref="globalModal" />
+	</div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useSnackbar } from '@/composables/snackbar'
-import axios from 'axios'
+import SelectGalleryImage from './gallery_form/SelectGalleryImage.vue'
+import FormGalleryUpdate from './gallery_form/FormGalleryUpdate.vue'
+import FormImageDelete from './gallery_form/FormImageDelete.vue'
 
-const { showSuccess, showError } = useSnackbar()
-
-const banner = ref(null)
-const globalModal = ref(null);
+const emit = defineEmits(['refresh'])
+const globalModal = ref(null)
 const route = useRoute()
+const bannerId = route.params.id || route.query.id || null
+const banner = ref({})
 
-import BannerImageForm from './modal/BannerImageForm.vue';
-import DeleteImage from './modal/DeleteImage.vue';
+const galleryItems = computed(() => {
+	if (Array.isArray(banner.value?.images)) return banner.value.images
+	return []
+})
 
-function uploadImage(item = {}) {
-    globalModal.value.open({
-        title: item ? 'Edit Banner' : 'Upload Image',
-        component: BannerImageForm,
-        size: 'md',
-        props: {
-            banner,
-            item, // <-- correctly passed as a prop
-        },
-    });
+const tableHeaders = [
+	{ title: 'Image', key: 'image', sortable: false },
+	{ title: 'Size', key: 'size', sortable: false },
+	{ title: 'Alt Text', key: 'alt_text', sortable: false },
+	{ title: 'Caption', key: 'caption', sortable: false },
+	{ title: 'Description', key: 'description', sortable: false },
+	{ title: 'Action', key: 'actions', sortable: false },
+]
+
+function openSelectModal() {
+	globalModal.value.open({
+		title: 'Select Image',
+		component: SelectGalleryImage,
+		size: 'lg',
+		props: {
+			onSelect: handleSelectImage,
+		},
+	})
 }
 
-
-function deleteImage(item) {
-    globalModal.value.open({
-        title: 'Delete Image',
-        component: DeleteImage,
-        size: 'sm',
-        props: {
-            item, // <-- correctly passed as a prop
-        },
-    });
+function handleEdit(item = {}) {
+	globalModal.value.open({
+		title: item ? 'Edit Category' : 'Add New Category',
+		component: FormGalleryUpdate,
+		size: 'lg',
+		props: {
+			imageItem: item,
+			onUpdated: fetchBanner,
+		},
+	});
+}
+function handleDelete(item = {}) {
+	globalModal.value.open({
+		title: 'Delete Photo',
+		component: FormImageDelete,
+		size: 'sm',
+		props: {
+			imageItem: item,
+			onDeleted: () => {
+				removeImage(item)
+				fetchBanner()
+			},
+		},
+	});
 }
 
+async function fetchBanner() {
+	if (!bannerId) return
+	try {
+		const { data } = await axios.get(`/admin/banners/${bannerId}`)
+		banner.value = data?.data ?? data ?? {}
+	} catch (error) {
+		console.error('Failed to fetch banner', error)
+	}
+}
 
-const fetchBanner = async () => {
-    try {
-        const { data } = await axios.get(`/admin/banners/${route.params.id}`)
-        banner.value = data
-    } catch (error) {
-        console.error('Error fetching banner details:', error)
-        showError('Failed to load banner details.')
-    }
+function handleSelectImage(payload) {
+	const image = payload?.image ?? payload
+	const meta = payload?.meta
+	if (!image) return
+
+	const listKey = 'images'
+	if (!Array.isArray(banner.value[listKey])) {
+		banner.value[listKey] = []
+	}
+
+	const imageUrl = image.url || image.image_url || image
+	const exists = banner.value[listKey].some((item) => {
+		const existingUrl = item?.url || item?.image_url || item
+		return item?.id === image?.id || existingUrl === imageUrl
+	})
+
+	if (!exists) {
+		if (meta) {
+			image.custom_attributes = {
+				...(image.custom_attributes || {}),
+				alt_text: meta.alt_text || '',
+				caption: meta.caption || '',
+				description: meta.description || '',
+			}
+		}
+		banner.value[listKey].push(image)
+	}
+
+	fetchBanner()
+	emit('refresh')
+}
+
+function resolveMeta(item, key) {
+	return (
+		item?.[key] ||
+		item?.custom_attributes?.[key] ||
+		item?.meta?.[key] ||
+		'-'
+	)
+}
+
+function formatDimensions(item) {
+	const width = item?.width ?? item?.image_width
+	const height = item?.height ?? item?.image_height
+	if (!width || !height) return '-'
+	return `${width} × ${height}px`
+}
+
+function formatAspectRatio(item) {
+	const width = item?.width ?? item?.image_width
+	const height = item?.height ?? item?.image_height
+	if (!width || !height) return '-'
+	const ratio = width / height
+	const target = 16 / 9
+	const tolerance = 0.02
+	const label = Math.abs(ratio - target) <= tolerance ? '16:9' : `${ratio.toFixed(2)}:1`
+	return `Aspect: ${label}`
+}
+
+function removeImage(item) {
+	const listKey = 'images'
+	if (!Array.isArray(banner.value[listKey])) return
+	banner.value[listKey] = banner.value[listKey].filter((entry) => {
+		if (entry?.id && item?.id) return entry.id !== item.id
+		const entryUrl = entry?.url || entry?.image_url || entry
+		const itemUrl = item?.url || item?.image_url || item
+		return entryUrl !== itemUrl
+	})
+
+	emit('refresh')
 }
 
 onMounted(() => {
-    fetchBanner()
+	fetchBanner()
 })
 </script>
-
-<style scoped></style>

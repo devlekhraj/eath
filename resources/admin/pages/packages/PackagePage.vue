@@ -1,7 +1,17 @@
 <template>
     <div>
-        <v-data-table :headers="headers" :items="filteredItems" :loading="fetching_data" :items-per-page="20"
-            :sort-by="['name']" :sort-desc="[false]">
+        <v-data-table-server
+            :headers="headers"
+            :items="travelPackages"
+            :loading="fetching_data"
+            :items-per-page="itemsPerPage"
+            :items-length="totalItems"
+            :sort-by="['name']"
+            :sort-desc="[false]"
+            v-model:page="page"
+            v-model:items-per-page="itemsPerPage"
+            @update:options="handleOptions"
+        >
             <!-- Top slot: search box left, add button right -->
             <template #top>
                 <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
@@ -23,27 +33,27 @@
             </template>
 
             <template #item.sn="{ index }">
-                {{ index + 1 }}
+                <div style="max-width: 50px;">
+                    {{ index + 1 }}
+                </div>
             </template>
-            <template #item.created_at="{ item }">
+            <!-- <template #item.created_at="{ item }">
                 {{ formatDate(item.created_at) }}
-            </template>
+            </template> -->
 
             <template #item.name="{ item }">
 
                 <div style="vertical-align: middle; min-width: max-content;">
-                    <span class="text-primary">{{ item.name }}</span>
+                    <div class="text-primary">{{ item.name }}</div>
+                    <div class="text-caption text-grey-darken-1">/{{ item.slug }}</div>
                 </div>
 
             </template>
-            <template #item.category="{ item }">
+            <template #item.region="{ item }">
 
                 <div style="min-width: max-content;">
-                    <div class="d-flex my-2" v-if="item?.categories?.length">
-                        <v-chip v-for="(category, index) in item.categories" size="small" :key="index" color="success"
-                            class="mr-2">
-                            {{ category.name }}
-                        </v-chip>
+                    <div class="d-flex my-2 text-capitalize" v-if="item?.destination">
+                        {{ item.destination.name }}
                     </div>
                     <div v-else>
                         <span>Not Assigned</span>
@@ -68,31 +78,49 @@
 
             <template #item.is_active="{ item }">
                 <div>
-                    <v-switch v-model="item.is_active" density="compact" color="success" hide-details
-                        @change="toggleActive(item)" />
+                    <!-- <v-switch v-model="item.is_active" density="compact" color="success" hide-details
+                        @change="toggleActive(item)" /> -->
+                        <v-chip size="small" class="text-capitalize" :color="item.is_active ? 'success':'warning'">
+                            <v-icon start size="16">
+                                {{ item.is_active ? 'mdi-check-circle' : 'mdi-alert-circle' }}
+                            </v-icon>
+                            {{ item.is_active ? 'active' : 'Draft' }}
+                        </v-chip>
+                </div>
+            </template>
+            <template #item.is_featured="{ item }">
+                <div>
+                    <!-- <v-switch v-model="item.is_active" density="compact" color="success" hide-details
+                        @change="toggleActive(item)" /> -->
+                        <v-chip size="small" class="text-capitalize" :color="item.is_featured ? 'success':'warning'">
+                            <v-icon start size="16">
+                                {{ item.is_featured ? 'mdi-check-circle' : 'mdi-alert-circle' }}
+                            </v-icon>
+                            {{ item.is_featured ? 'yes' : 'no' }}
+                        </v-chip>
                 </div>
             </template>
 
-            <template #item.is_featured="{ item }">
+            <!-- <template #item.is_featured="{ item }">
                 <v-chip :color="item.is_featured ? 'blue' : 'grey'" dark size="small">
                     {{ item.is_featured ? 'Featured' : 'No' }}
                 </v-chip>
-            </template>
-            <template #item.is_published="{ item }">
+            </template> -->
+            <!-- <template #item.is_published="{ item }">
                 <v-switch v-model="item.is_published" density="compact" color="success" hide-details
                     @change="() => togglePublished(item)" />
-            </template>
-            <template #item.published_at="{ item }">
+            </template> -->
+            <!-- <template #item.published_at="{ item }">
                 <div style="min-width: 140px;">
                     {{ formatDateTime(item.published_at) }}
                 </div>
-            </template>
+            </template> -->
 
 
             <template #item.actions="{ item }">
                 <div class="width-max-content d-flex align-center">
                     <v-btn variant="tonal" icon size="x-small" color="primary" :to="{ name: 'adminPackageForm', query: { id: item.id } }">
-                        <v-icon>mdi-pencil</v-icon>
+                        <v-icon>mdi-eye</v-icon>
                     </v-btn>
                     <v-btn variant="tonal" class="ml-2" icon size="x-small" color="error" @click="deleteItem(item)">
                         <v-icon>mdi-delete</v-icon>
@@ -123,7 +151,7 @@
                     </v-list>
                 </v-menu> -->
             </template>
-        </v-data-table>
+        </v-data-table-server>
 
         <modal-template ref="globalModal" @saved="fetchPackages" @close="fetchPackages" />
     </div>
@@ -145,26 +173,20 @@ const headers = [
     { title: 'SN', key: 'sn', sortable: true },
     // { title: 'Created', key: 'created_at', sortable: false },
     { title: 'Name', key: 'name', sortable: false },
-    { title: 'Category', key: 'category', sortable: false },
-    // { title: 'Active', key: 'is_active', sortable: false },
-    // { title: 'Featured', key: 'is_featured', sortable: false },
-    { title: 'Published', key: 'is_published', sortable: false },
-    { title: 'Published On', key: 'published_at', sortable: false },
+    { title: 'Region', key: 'region', sortable: false },
+    { title: 'Active', key: 'is_active', sortable: false },
+    { title: 'Featured', key: 'is_featured', sortable: false },
+    // { title: 'Published', key: 'is_published', sortable: false },
+    // { title: 'Published On', key: 'published_at', sortable: false },
     { title: 'Actions', key: 'actions', sortable: false },
 ]
 
 const travelPackages = ref([])
+const page = ref(1)
+const itemsPerPage = ref(20)
+const totalItems = ref(0)
 const globalModal = ref(null);
 const search = ref('');
-
-
-const filteredItems = computed(() => {
-    if (!search.value) return travelPackages.value
-    const term = search.value.toLowerCase()
-    return travelPackages.value.filter(item =>
-        item.name.toLowerCase().includes(term)
-    )
-})
 
 
 const fetching_data = ref(false);
@@ -172,13 +194,22 @@ const fetching_data = ref(false);
 async function fetchPackages() {
     try {
         fetching_data.value = true;
-        const resp = await axios.get('admin/travel-packages')
+        const resp = await axios.get('admin/travel-packages', {
+            params: {
+                page: page.value,
+                per_page: itemsPerPage.value,
+            },
+        })
         fetching_data.value = false;
-        travelPackages.value = resp.data
+        travelPackages.value = resp.data ?? []
+        totalItems.value = resp?.meta?.total ?? travelPackages.value.length
     } catch (error) {
         fetching_data.value = false;
         console.error('Failed to fetch travel packages', error)
     }
+}
+function handleOptions() {
+    fetchPackages()
 }
 
 async function toggleActive(item) {

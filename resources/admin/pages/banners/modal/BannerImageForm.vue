@@ -123,14 +123,14 @@ async function handleUploadImage(event) {
 
   uploading.value = true
 
-  const isValidAspectRatio = await validateAspectRatio(file, props.banner.aspect_ratio)
-  if (!isValidAspectRatio) {
-    const message = `Image must have an aspect ratio of ${props.banner.aspect_ratio} (e.g., 1920x800)`
-    form.image_url = ''
-    serverErrors.image_url = message
-    uploading.value = false
-    return
-  }
+  // const isValidAspectRatio = await validateAspectRatio(file, props.banner.aspect_ratio)
+  // if (!isValidAspectRatio) {
+  //   const message = `Image must have an aspect ratio of ${props.banner.aspect_ratio} (e.g., 1920x800)`
+  //   form.image_url = ''
+  //   serverErrors.image_url = message
+  //   uploading.value = false
+  //   return
+  // }
 
   const formData = new FormData()
   formData.append('image', file)

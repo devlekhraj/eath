@@ -7,13 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GalleryUsage extends Model
 {
-    protected $fillable = [
-        'gallery_id',
-        'usage_id',
-        'usage_type',
-        'alt_text',
-        'custom_attributes',
-    ];
+    protected $guarded = []; 
 
     // Append virtual attribute
     protected $appends = ['url'];

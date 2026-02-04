@@ -40,8 +40,7 @@ class Banner extends Model
     public function images(): HasMany
     {
         return $this->hasMany(GalleryUsage::class, 'usage_id')
-            ->where('usage_type', 'banners')
-            ->with('gallery');
+            ->where('usage_type', 'banners');
     }
     public function getImageUrlsAttribute(): array
     {

@@ -54,11 +54,14 @@ const menuGroups = ref([
 	{
 		groupName: 'Travel',
 		items: [
-			{ name: 'Packages', icon: 'mdi-briefcase-variant', route_name: 'adminPackagePage' },
-			{ name: 'Fixed Departure', icon: 'mdi-calendar-check', route_name: 'adminFeaturedPackagePage' },
+			{ name: 'Regions', icon: 'mdi-tag-multiple-outline', route_name: 'adminDestinationPage' },
 			{ name: 'Categories', icon: 'mdi-tag-multiple-outline', route_name: 'adminPackageCategoryPage' },
+			{ name: 'Tour / Treks', icon: 'mdi-briefcase-variant', route_name: 'adminPackagePage' },
+			
+			{ name: 'Fixed Departure', icon: 'mdi-calendar-check', route_name: 'adminFeaturedPackagePage' },
+			{ name: 'Guide Profile', icon: 'mdi-account-cowboy-hat-outline', route_name: 'adminGuidePage' },
+
 			{ name: 'Lookups', icon: 'mdi-format-list-bulleted-type', route_name: 'adminLookupPage' },
-			{ name: 'Guide Profile', icon: 'mdi-account-cowboy-hat-outline', route_name: 'adminGuidePage' }
 		]
 
 	},

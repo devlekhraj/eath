@@ -1,5 +1,4 @@
 <div>
-    <!-- Top Meta Bar -->
     <div class="bg-info">
         <div class="text-light py-2 px-3 d-flex justify-content-between small container">
             <div>
@@ -32,8 +31,7 @@
             </div>
         </div>
     </div>
-    <!-- Navbar with Mega Menu -->
-    {{-- <nav class="navbar navbar-expand-lg py-0" style="background: radial-gradient(circle at center, #f6faff 40%, #ffffff 100%);"> --}}
+
     <nav class="navbar navbar-expand-lg py-0"
         style="background: linear-gradient(
         135deg,
@@ -46,22 +44,17 @@
             <a class="navbar-brand fw-bold text-primary fs-4" href="/">
                 <img src="/images/logo.png" alt="" height="70">
             </a>
-            {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button> --}}
 
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav gap-3">
+                <ul class="navbar-nav gap-3 text-uppercase">
 
 
 
 
-                    <!-- Mega Menu -->
-                    <li class="nav-item dropdown position-static">
-                        <a class="nav-link dropdown-toggle" href="#" id="megaMenu"
-                            data-bs-toggle="dropdown">Trekking
+                    {{-- <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" href="#" id="megaMenu">Trekking
                             in Nepal</a>
-                        <div class="dropdown-menu mt-0 p-0 border-0 border-radius-0 shadow-sm mega-menu"
+                        <div class="dropdown-menu mt-0 p-0 border-0 border-radius-0 mega-menu"
                             aria-labelledby="megaMenu">
                             <div class="container px-4">
                                 <div class="py-4">
@@ -102,63 +95,29 @@
                                 </div>
                             </div>
                         </div>
-                    </li>
-
-
-                    {{-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="helicopterDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Helicopter Tours
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="helicopterDropdown" id="helicopter-tours">
-                            @if ($helicopterTour && count($helicopterTour->travelPackages) > 0)
-                                @foreach ($region->travelPackages as $pack)
-                                    <li>
-                                        <a href="/packages/{{ $pack->slug }}"
-                                            class="dropdown-item d-flex align-items-center py-2">
-                                            <div style="width: 20px;">
-                                                <i class="fas fa-mountain text-info"></i>
-                                            </div>
-                                            <span class="ps-2"> {{ $pack->name }}</span>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            @else
-                            @endif
-
-                        </ul>
-
-
-
                     </li> --}}
 
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="/guide-profiles">Guide Profiles</a>
-                    </li>
+                    @foreach ($trekkingInNepal->children as $region)
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/guide-profiles">{{ $region->name }}</a>
+                        </li>
+                    @endforeach
                     <li class="nav-item">
                         <a class="nav-link fw-semibold" href="/blogs">Blogs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="/about-us">About Us</a>
+                        <a class="nav-link fw-semibold" href="/faq">FAQs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="/faq">FAQs</a>
+                        <a class="nav-link fw-semibold" href="/about-us">About</a>
                     </li>
                 </ul>
             </div>
             <div>
-
-                <!-- Navbar Toggler -->
-
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" style="border: 0"
                     data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-label="Toggle navigation">
                     <i class="fa-solid fa-bars" style="font-size: 28px;"></i>
                 </button>
-
-
-                <!-- Offcanvas Sidebar -->
-
-
             </div>
 
         </div>

@@ -35,6 +35,9 @@ class TravelPackage extends Model
         return $this->hasOne(FeaturedPackage::class, 'package_id', 'id');
     }
 
+    public function destination(){
+        return $this->belongsTo(Destination::class,'destination_id','id');
+    }
     public function getHighlightNameAttribute()
     {
         return $this->lookup?->name ?? '';
@@ -48,9 +51,7 @@ class TravelPackage extends Model
     public function images(): HasMany
     {
         return $this->hasMany(GalleryUsage::class, 'usage_id')
-            ->where('usage_type', 'travel_packages')
-            ->whereNull('custom_attributes')
-            ->with('gallery');
+            ->where('usage_type', 'travel_packages');
     }
     public function galleries(): HasMany
     {

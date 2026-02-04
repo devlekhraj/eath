@@ -47,6 +47,13 @@ return [
             'report' => false,
         ],
 
+        'cdn' => [
+            'driver' => 'local',
+            'root' => env('CDN_ROOT'),
+            'url' => env('CDN_URL'),
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

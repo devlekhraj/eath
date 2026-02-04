@@ -1,42 +1,9 @@
 <template>
     <div class="mb-4">
         <v-card elevation="0" class="pa-2">
-            <v-card-title class="py-3">
-                <h5>Package Detail</h5>
-            </v-card-title>
-            <v-divider />
-            <v-card-text class="pt-10">
-                <v-row>
-                    <v-col cols="12">
-                        <v-text-field v-model="form.name" label="Package Name" :rules="[rules.required]"
-                            :error-messages="errors.name" density="comfortable" variant="outlined"
-                            :disabled="submitting" required />
-                    </v-col>
-
-                    <v-col cols="12">
-                        <v-text-field v-model="form.slug" label="URL" :rules="[rules.required]"
-                            :error-messages="errors.slug" density="comfortable" variant="outlined"
-                            :disabled="submitting || Boolean(form.published_at)" required />
-                    </v-col>
-
-                    <v-col cols="12">
-                        <v-select v-model="form.category_ids" :items="package_categories" item-title="name"
-                            item-value="id" label="Select Categories" multiple chips clearable />
-                    </v-col>
-
-                    <v-col cols="6">
-                        <v-switch v-model="form.is_active" label="Active" color="success" inset
-                            :disabled="submitting" />
-                    </v-col>
-
-                    <v-col cols="6">
-                        <v-switch v-model="form.is_featured" label="Featured" color="success" inset
-                            :disabled="submitting" />
-                    </v-col>
-                </v-row>
-
+          
+            <v-card-text>
                 <div class="mb-4">
-                    <label class="text-subtitle-1 mb-2 d-block">Description</label>
                     <RichTextEditor v-model="form.description" />
                     <span v-if="descriptionError" class="text-error text-caption">Content is required</span>
                 </div>
@@ -71,6 +38,7 @@ const emit = defineEmits(['submit'])
 const submitting = ref(false)
 const descriptionError = ref(false)
 const package_categories = ref([])
+const destination_list = ref([])
 const errors = ref({})
 
 const form = reactive({
@@ -86,7 +54,7 @@ const form = reactive({
     end_date: '',
     is_active: false,
     is_featured: false,
-    category_ids: [],
+    destination_id: null,
     published_at: null,
 })
 
@@ -113,15 +81,24 @@ watch(
 )
 
 onMounted(() => {
-    fetchPackageCategories()
+    // fetchPackageCategories()
+    fetchDestinations();
 })
 
-async function fetchPackageCategories() {
+// async function fetchPackageCategories() {
+//     try {
+//         const resp = await axios.get(`/admin/package-categories`)
+//         package_categories.value = resp.data
+//     } catch (error) {
+//         console.error('Failed to fetch package categories', error)
+//     }
+// }
+async function fetchDestinations() {
     try {
-        const resp = await axios.get(`/admin/package-categories`)
-        package_categories.value = resp.data
+        const resp = await axios.get(`/admin/destinations`)
+        destination_list.value = resp.data
     } catch (error) {
-        console.error('Failed to fetch package categories', error)
+        console.error('Failed to fetch destinations', error)
     }
 }
 

@@ -1,25 +1,30 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Admin\FAQ\FaqController;
-use App\Http\Controllers\Api\V1\Auth\UserAuthController;
-use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
-use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
-use App\Http\Controllers\Api\V1\Admin\Page\PageController;
-use App\Http\Controllers\Api\V1\Admin\Guide\GuideController;
 use App\Http\Controllers\Api\V1\Admin\Banner\BannerController;
-use App\Http\Controllers\Api\V1\Admin\Lookup\LookupController;
-use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
-use App\Http\Controllers\Api\V1\Admin\Inquiry\InquiryController;
-use App\Http\Controllers\Api\V1\Admin\Settings\SettingController;
-use App\Http\Controllers\Api\V1\Admin\Customers\CustomerController;
+use App\Http\Controllers\Api\V1\Admin\Banner\BannerImageController;
+use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
+use App\Http\Controllers\Api\V1\Admin\Customers\CustomerController;
+use App\Http\Controllers\Api\V1\Admin\Destination\DestinationController;
+use App\Http\Controllers\Api\V1\Admin\Destination\DestinationImageController;
+use App\Http\Controllers\Api\V1\Admin\FAQ\FaqController;
 use App\Http\Controllers\Api\V1\Admin\FeaturedPackage\FeaturedPackageController;
-use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackagePriceController;
-use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
+use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
+use App\Http\Controllers\Api\V1\Admin\Guide\GuideController;
+use App\Http\Controllers\Api\V1\Admin\Inquiry\InquiryController;
+use App\Http\Controllers\Api\V1\Admin\Lookup\LookupController;
+use App\Http\Controllers\Api\V1\Admin\Media\MediaUsageController;
+use App\Http\Controllers\Api\V1\Admin\Page\PageController;
+use App\Http\Controllers\Api\V1\Admin\Settings\SettingController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageCategoryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageInclusionController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageItinareryController;
+use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackagePriceController;
+use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
+use App\Http\Controllers\Api\V1\Admin\TravelPackage\TrekImageController;
+use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
+use App\Http\Controllers\Api\V1\Auth\UserAuthController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware('api')->group(function () {
 
@@ -70,12 +75,23 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('travel-packages/{id}/prices', [PackagePriceController::class, 'storeUpdatePrice']);
         Route::delete('package-prices/{id}/delete', [PackagePriceController::class, 'deletePrice']);
 
+        Route::post('treks/{trekId}/save-image', [TrekImageController::class, 'saveImage']);
+        Route::post('treks/{trekId}/use-image', [TrekImageController::class, 'useImage']);
 
         Route::get('package-categories', [PackageCategoryController::class, 'getCategories']);
         Route::post('package-categories', [PackageCategoryController::class, 'saveCategory']);
         Route::patch('package-categories/{id}/toggle-active', [PackageCategoryController::class, 'toggleActive']);
         Route::delete('package-categories/{id}/delete', [PackageCategoryController::class, 'delete']);
 
+        // destinations
+        Route::get('destinations', [DestinationController::class, 'getDestinations']);
+        Route::post('destinations', [DestinationController::class, 'saveDestination']);
+        Route::get('destinations/{id}', [DestinationController::class, 'show']);
+        Route::patch('destinations/{id}/update', [DestinationController::class, 'updateDestination']);
+
+        Route::post('destinations/{destinationId}/save-image', [DestinationImageController::class, 'saveImage']);
+        Route::post('destinations/{destinationId}/use-image', [DestinationImageController::class, 'useImage']);
+        Route::delete('destinations/{id}/delete', [DestinationController::class, 'delete']);
 
         Route::get('blogs', [BlogController::class, 'index']);
         Route::post('blogs', [BlogController::class, 'storeUpdate']);
@@ -90,12 +106,11 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::patch('blog-categories/{id}/toggle-active', [BlogCategoryController::class, 'toggleActive']);
         Route::delete('blog-categories/{id}/delete', [BlogCategoryController::class, 'delete']);
 
-
         Route::get('galleries', [GalleryController::class, 'index']);
         Route::post('gallery-upload', [GalleryController::class, 'uploadImage']);
+
         Route::get('galleries/{id}', [GalleryController::class, 'show']);
         Route::delete('galleries/{id}/delete', [GalleryController::class, 'delete']);
-
 
         Route::get('guides', [GuideController::class, 'index']);
         Route::get('guides/{id}', [GuideController::class, 'show']);
@@ -106,16 +121,16 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('guides/{id}/review', [GuideController::class, 'guideReview']);
         Route::post('guides/{id}/trip', [GuideController::class, 'guideTrip']);
 
-
         //  banners
 
         Route::get('banners', [BannerController::class, 'index']);
         Route::get('banners/{id}', [BannerController::class, 'show']);
+        Route::post('banners/{bannerId}/save-image', [BannerImageController::class, 'saveImage']);
+        Route::post('banners/{bannerId}/use-image', [BannerImageController::class, 'useImage']);
 
         Route::post('banners', [BannerController::class, 'storeUpdate']);
         Route::patch('banners/{id}/toggle-active', [BannerController::class, 'toggleActive']);
         Route::delete('banners/{id}/delete', [BannerController::class, 'deleteBanner']);
-
 
         Route::get('settings', [SettingController::class, 'index']);
         Route::post('settings', [SettingController::class, 'storeUpdate']);
@@ -127,7 +142,6 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('pages', [PageController::class, 'storeUpdate']);
         Route::patch('pages/{id}/toggle-active', [PageController::class, 'toggleActive']);
         Route::delete('pages/{id}/delete', [PageController::class, 'pageDelete']);
-
 
         Route::get('faqs', [FaqController::class, 'index']);
         Route::post('faqs', [FaqController::class, 'storeUpdate']);
@@ -143,11 +157,14 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::post('customers', [CustomerController::class, 'storeUpdate']);
         Route::get('customers/{id}', [CustomerController::class, 'show']);
         Route::delete('customers/{id}/delete', [CustomerController::class, 'delete']);
-      
+
         Route::get('featured-packages', [FeaturedPackageController::class, 'index']);
         Route::post('featured-packages', [FeaturedPackageController::class, 'storeUpdate']);
         Route::get('featured-packages/{id}', [FeaturedPackageController::class, 'show']);
         Route::patch('featured-packages/{id}/toggle-active', [FeaturedPackageController::class, 'toggleActive']);
         Route::delete('featured-packages/{id}/delete', [FeaturedPackageController::class, 'delete']);
+
+        Route::patch('media-usages/{id}/update', [MediaUsageController::class, 'updateItem']);
+        Route::delete('media-usages/{id}/delete', [MediaUsageController::class, 'delete']);
     });
 });

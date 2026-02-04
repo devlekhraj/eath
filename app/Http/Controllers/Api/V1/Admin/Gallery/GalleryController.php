@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1\Admin\Gallery;
 
-
-use App\Models\Gallery;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Banner;
-use App\Models\Blog;
-use App\Models\FeaturedPackage;
+use App\Models\Gallery;
 use App\Models\GalleryUsage;
-use App\Models\Guide;
-use Illuminate\Support\Facades\File;
-
+use App\Services\GalleryImageService;
+use Illuminate\Http\Request;
 
 class GalleryController extends Controller
 {
@@ -24,9 +17,10 @@ class GalleryController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $packages
+            'data' => $packages,
         ], 200);
     }
+
     public function show(Request $request, $id)
     {
         // Logic to retrieve travel packages
@@ -34,110 +28,43 @@ class GalleryController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $package
+            'data' => $package,
         ], 200);
     }
 
-
-
-
-    public function uploadImage(Request $request)
+     public function uploadImage(Request $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        $data = $request->validate([
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+            'alt_text' => ['required', 'string', 'min:5', 'max:150'],
+            'caption' => ['nullable', 'string', 'max:200'],
+            'description' => ['nullable', 'string', 'max:500'],
         ]);
 
-        $image = $request->file('image');
-
-        $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeName = Str::slug($originalName, '-');
-        $extension = $image->getClientOriginalExtension();
-
-        $year = now()->format('Y');
-        $month = now()->format('m');
-        $relativePath = "gallery/{$year}/{$month}";
-        $fullPath = storage_path($relativePath);
-
-        if (!File::exists($fullPath)) {
-            File::makeDirectory($fullPath, 0755, true);
-        }
-
-        $timeString = date('His'); // e.g., 143205 for 2:32:05 PM
-        $filename = $safeName . '-' . $timeString . '.' . $extension;
-        $counter = 0;
-
-        while (File::exists($fullPath . '/' . $filename)) {
-            $counter++;
-            $filename = $safeName . '-' . $timeString . '-' . $counter . '.' . $extension;
-        }
-
-
-        $mimeType = $image->getMimeType();
-        $image->move($fullPath, $filename);
-
-        $filepath = "{$relativePath}/{$filename}";
-        $fileSize = File::size($fullPath . '/' . $filename); // in bytes
-        $gallery = Gallery::create([
-            'filename' => $filename,
-            'filepath' => $filepath,
-            'mime_type' => $mimeType,
-            'file_size' => $fileSize,
-            'alt_text' => null,
-            'image_url' => route('image.view', ['filename' => $filename]),
-        ]);
-
-
-        if ($request->has('usage_type') && $request->has('usage_id')) {
-            $usageType = $request->input('usage_type');
-            $usageId = $request->input('usage_id');
-            $galleryUsage = $gallery->usages()->create([
-                "usage_type" => $usageType,
-                "usage_id" => $usageId,
-                "custom_attributes" =>[
-                    "type" => "gallery"
-                ]
-            ]);
-
-            switch ($request->usage_type) {
-                case 'blogs':
-                    $blog = Blog::find($request->usage_id);
-                    $blog->cover_image = $filename;
-                    $blog->save();
-                    break;
-                case 'guides':
-                    $blog = Guide::find($request->usage_id);
-                    $blog->photo = $filename;
-                    $blog->save();
-                    break;
-                case 'featured_packages':
-                    $data = FeaturedPackage::find($request->usage_id);
-                    $data->banner = $filename;
-                    $data->save();
-                    break;
-                default:
-                    break;
-            }
-        }
+        $file = $request->file('image');
+        $service = app(GalleryImageService::class);
+        $result = $service->upload($file);
 
         return response()->json([
-            'success' => true,
-            "filename" => $filename,
-            'data' => $gallery,
-            "gallery_usage" => isset($galleryUsage) ? $galleryUsage : null,
-            'url' => route('image.view', ['filename' => $filename]),
-        ], 201);
+            'ok' => true,
+            'deduped' => $result['deduped'],
+            'message' => $result['deduped'] ? 'Image already uploaded.' : null,
+            'data' => $result['gallery'],
+            'paths' => $result['paths'],
+            'warning' => $result['warning'],
+        ], 200);
     }
 
     public function getImage($filename)
     {
         $file = Gallery::where('filename', $filename)->first();
-        if (!$file) {
+        if (! $file) {
             return response()->file(public_path('images/logo.png'));
         }
 
         $filePath = storage_path($file->filepath);
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return response()->file(public_path('images/logo.png'));
         }
 
@@ -150,12 +77,25 @@ class GalleryController extends Controller
     {
         $image = GalleryUsage::find($imageId);
 
-        if (!$image) {
+        if (! $image) {
             return response()->json(['message' => 'Image not found'], 404);
         }
 
         $image->delete();
 
         return response()->json(['message' => 'Image deleted successfully']);
+    }
+
+    private function formatBytes(int $bytes): string
+    {
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2).' MB';
+        }
+
+        if ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2).' KB';
+        }
+
+        return $bytes.' B';
     }
 }

@@ -30,55 +30,40 @@
 					<span class="text-primary text-capitalize">{{ item.name }}</span>
 				</div>
 			</template>
-
-			<template #item.hierarchy="{ item }">
-				<div style="min-width: 400px;">
-					<span>{{ item.hierarchy_text }}</span>
+			<template #item.slug="{ item }">
+				<div style="min-width: 200px;">
+					<span class="text-secondary">{{ item.slug }}</span>
 				</div>
 			</template>
-
-			<!-- <template #item.is_active="{ item }">
-        <v-chip :color="item.is_active ? 'green' : 'red'" dark size="small">
-          {{ item.is_active ? 'Active' : 'Inactive' }}
-        </v-chip>
-      </template> -->
 			<template #item.is_active="{ item }">
 				<div>
-					<v-switch v-model="item.is_active" density="compact" color="success" hide-details
-						@change="toggleActive(item)" />
+						<v-chip :color="item.is_active ? 'green' : 'red'" dark size="small">
+							{{ item.is_active ? 'Active' : 'Inactive' }}
+						</v-chip>
+				</div>
+			</template>
+			<template #item.image_count="{ item }">
+				<div style="min-width: 70px;">
+					<v-chip :color="item.image_count ? 'green' : 'red'" dark size="small">
+						{{ item.image_count ? item.image_count +' images': 'No Images' }}
+					</v-chip>
 				</div>
 			</template>
 
 
 
 			<template #item.actions="{ item }">
-				<v-menu location="bottom end">
-					<template #activator="{ props }">
-						<v-btn v-bind="props" icon variant="text" color="primary">
-							<v-icon>mdi-dots-vertical</v-icon>
-						</v-btn>
-					</template>
-
-					<v-list density="compact" elevation="1">
-						<v-list-item :to="{name:'adminBannerDetailPage', params:{ id: item.id}}">
-							<v-list-item-title>
-								<v-icon start icon="mdi-eye" class="mr-2" /> View Detail
-							</v-list-item-title>
-						</v-list-item>
-
-						<v-list-item @click="handleOpen(item)">
-							<v-list-item-title>
-								<v-icon start icon="mdi-pencil" class="mr-2" /> Edit Banner
-							</v-list-item-title>
-						</v-list-item>
-
-						<v-list-item @click="handleDelete(item)">
-							<v-list-item-title>
-								<v-icon start icon="mdi-delete" class="mr-2" /> Delete Banner
-							</v-list-item-title>
-						</v-list-item>
-					</v-list>
-				</v-menu>
+		
+					<div style="min-width: 120px;">
+						<v-btn size="x-small" icon variant="tonal" color="primary"
+							:to="{name:'adminBannerDetailPage', params:{ id: item.id}}"><v-icon>mdi-eye</v-icon></v-btn>
+						<v-btn size="x-small" icon variant="tonal" color="warning" class="ml-2"
+							@click="handleOpen(item)"><v-icon>mdi-pencil</v-icon></v-btn>
+						<v-btn size="x-small" icon variant="tonal" color="error" class="ml-2"
+							@click="handleDelete(item)"><v-icon>mdi-delete</v-icon></v-btn>
+					</div>
+		
+				
 			</template>
 
 		</v-data-table>
@@ -96,11 +81,9 @@ const { showSuccess, showError } = useSnackbar()
 const headers = [
 	{ title: 'S.N.', key: 'sn', sortable: false },
 	{ title: 'Banner Name', key: 'name', sortable: false },
-	{ title: 'Description', key: 'description', sortable: false },
 	{ title: 'Slug', key: 'slug', sortable: false },
-	{ title: 'Aspect Ratio', key: 'aspect_ratio', sortable: false },
-	
-	{ title: 'Seq#', key: 'sort_order', sortable: false },
+	{ title: 'Images', key: 'image_count', sortable: false },
+
 	{ title: 'Active', key: 'is_active', sortable: false },
 	{ title: 'Action', key: 'actions', sortable: false },
 ];

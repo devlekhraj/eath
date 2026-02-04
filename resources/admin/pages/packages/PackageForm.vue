@@ -1,14 +1,18 @@
 <template>
-	<v-container>
+	<div class="px-0">
 		<v-row>
-			<v-col cols="12" md="10" offset-md="1">
+			<v-col cols="12">
 
 				<div>
-					<FormDescription v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
+					<FormOverview v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
 				</div>
 				<!-- Tabs Section -->
 				<v-card elevation="0" class="mb-6">
 					<v-tabs v-model="activeTab" color="primary">
+						<v-tab value="description">
+							<v-icon color="primary" start>mdi-lightbulb-outline</v-icon>
+							Description
+						</v-tab>
 						<v-tab value="highlight">
 							<v-icon color="primary" start>mdi-lightbulb-outline</v-icon>
 							Highlights
@@ -25,10 +29,10 @@
 							<v-icon color="primary" start>mdi-checkbox-marked-circle-outline</v-icon>
 							Includes
 						</v-tab>
-						<v-tab value="banners">
+						<!-- <v-tab value="banners">
 							<v-icon color="primary" start>mdi-image</v-icon>
 							Banners
-						</v-tab>
+						</v-tab> -->
 						<v-tab value="gallery">
 							<v-icon color="primary" start>mdi-image-multiple</v-icon>
 							Gallery
@@ -39,60 +43,33 @@
 					<v-divider></v-divider>
 
 					<v-card-text>
-						<!-- Bio Tab -->
-						<div v-if="activeTab === 'highlight'">
-							<div>
-								<FormHighlights v-if="formReady" :travelPackage="travelPackage"
-									@refresh="fetchPackage" />
-							</div>
-						</div>
-						<div v-if="activeTab === 'itinerary'">
-							<div>
-								<FormPackageItinery v-if="formReady" :travelPackage="travelPackage"
-									@refresh="fetchPackage" />
-							</div>
-						</div>
-						<div v-if="activeTab === 'price_list'">
-							<div>
-								<FormPricing v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
-							</div>
-						</div>
-						<div v-if="activeTab === 'includes'">
-							<div>
-								<FormPackageInclude v-if="formReady" :travelPackage="travelPackage"
-									@refresh="fetchPackage" />
-							</div>
-						</div>
-						<div v-if="activeTab === 'banners'">
-							<div>
-								<FormPackageBanner v-if="formReady" :travelPackage="travelPackage"
-									@refresh="fetchPackage" />
-							</div>
-						</div>
-						<div v-if="activeTab === 'gallery'">
-							<div>
-								<FormPackageGallery v-if="formReady" :travelPackage="travelPackage"
-									@refresh="fetchPackage" />
-							</div>
-						</div>
+						<KeepAlive v-if="formReady && activeComponent">
+							<component
+								:is="activeComponent"
+								:key="activeTab"
+								:travelPackage="travelPackage"
+								@refresh="fetchPackage"
+							/>
+						</KeepAlive>
 					</v-card-text>
 				</v-card>
 
 			</v-col>
 		</v-row>
-	</v-container>
+	</div>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
+import { computed, reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
+import FormOverview from './form_section/FormOverview.vue'
 import FormDescription from './form_section/FormDescription.vue'
 import FormPackageItinery from './form_section/FormPackageItinery.vue'
 import FormPackageInclude from './form_section/FormInclude.vue'
 import FormHighlights from './form_section/FormHighlights.vue'
 import FormPackageGallery from './form_section/FormPackageGallery.vue'
-import FormPackageBanner from './form_section/FormPackageBanner.vue'
+// import FormPackageBanner from './form_section/FormPackageBanner.vue'
 import FormPricing from './form_section/FormPricing.vue'
 
 // Get package ID from route
@@ -102,7 +79,17 @@ const packageId = route.query.id
 // Reactive state
 const travelPackage = reactive({})
 const formReady = ref(false)
-const activeTab = ref('highlight')
+const activeTab = ref('description')
+const tabComponents = {
+	description: FormDescription,
+	highlight: FormHighlights,
+	itinerary: FormPackageItinery,
+	price_list: FormPricing,
+	includes: FormPackageInclude,
+	// banners: FormPackageBanner,
+	gallery: FormPackageGallery,
+}
+const activeComponent = computed(() => tabComponents[activeTab.value] || null)
 
 // Fetch single travel package
 async function fetchPackage() {
