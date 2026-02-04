@@ -73,7 +73,7 @@
                                 <div>
                                     <span
                                         class="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500 sm:hidden">Price</span>
-                                    <p class="mt-1 text-sm font-semibold text-slate-900 sm:mt-0">$1125 USD</p>
+                                    <p class="mt-1 text-sm font-semibold text-slate-900 sm:mt-0">{{ $item->min_price ??'n/a' }} USD</p>
                                 </div>
                                 {{-- <div class="flex sm:justify-end">
                                     <a href="/contact/inquiry/"

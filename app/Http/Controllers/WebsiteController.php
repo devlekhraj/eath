@@ -29,7 +29,7 @@ class WebsiteController extends Controller
 
         $mainBanner = Banner::where('slug', 'main-home-banner')->first();
         $galleryImage = Banner::where('slug', 'gallery-images')->first();
-
+        dd($galleryImage);
         $destinations = Destination::where('is_active', 1)
         ->with('treks')
         ->get();
