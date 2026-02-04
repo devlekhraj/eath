@@ -3,24 +3,27 @@
      <div class="absolute inset-0">
          <div class="swiper hero-swiper">
              <div class="swiper-wrapper">
-                 @foreach ($mainBanner->image_urls as $image)
+                 @if ($mainBanner && $mainBanner->image_urls)
+                     @foreach ($mainBanner->image_urls as $image)
+                         <div class="swiper-slide">
+                             <img src="{{ $image }}" alt="{{ $mainBanner->alt_text }}"
+                                 class="h-full w-full object-cover" />
+                         </div>
+                     @endforeach
+                 @else
                      <div class="swiper-slide">
-                         <img src="{{ $image }}" alt="{{ $mainBanner->alt_text }}"
-                             class="h-full w-full object-cover" />
+                         <img src="https://images.unsplash.com/photo-1584395631446-e41b0fc3f68d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                             alt="Himalayan peaks under a clear blue sky" class="h-full w-full object-cover" />
                      </div>
-                 @endforeach
-                 {{-- <div class="swiper-slide">
-                     <img src="https://images.unsplash.com/photo-1584395631446-e41b0fc3f68d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                         alt="Himalayan peaks under a clear blue sky" class="h-full w-full object-cover" />
-                 </div>
-                 <div class="swiper-slide">
-                     <img src="https://images.unsplash.com/photo-1573331343892-976a013b7020?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?auto=format&fit=crop&w=1600&q=80"
-                         alt="Himalayan ridgeline with layered mountains" class="h-full w-full object-cover" />
-                 </div>
-                 <div class="swiper-slide">
-                     <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1600&q=80"
-                         alt="Himalayan snow peaks under a clear sky" class="h-full w-full object-cover" />
-                 </div> --}}
+                     <div class="swiper-slide">
+                         <img src="https://images.unsplash.com/photo-1573331343892-976a013b7020?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?auto=format&fit=crop&w=1600&q=80"
+                             alt="Himalayan ridgeline with layered mountains" class="h-full w-full object-cover" />
+                     </div>
+                     <div class="swiper-slide">
+                         <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1600&q=80"
+                             alt="Himalayan snow peaks under a clear sky" class="h-full w-full object-cover" />
+                     </div>
+                 @endif
              </div>
          </div>
      </div>
