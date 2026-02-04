@@ -55,7 +55,7 @@ const menuGroups = ref([
 		groupName: 'Travel',
 		items: [
 			{ name: 'Regions', icon: 'mdi-tag-multiple-outline', route_name: 'adminDestinationPage' },
-			{ name: 'Categories', icon: 'mdi-tag-multiple-outline', route_name: 'adminPackageCategoryPage' },
+			//{ name: 'Categories', icon: 'mdi-tag-multiple-outline', route_name: 'adminPackageCategoryPage' },
 			{ name: 'Tour / Treks', icon: 'mdi-briefcase-variant', route_name: 'adminPackagePage' },
 			
 			{ name: 'Fixed Departure', icon: 'mdi-calendar-check', route_name: 'adminFeaturedPackagePage' },
