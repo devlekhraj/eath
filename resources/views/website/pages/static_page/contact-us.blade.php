@@ -1,108 +1,153 @@
 @extends('website.layout.master')
 @section('content')
-    <div class="container py-5">
+    @php
+        $contactUsSubTitle =
+            'We would love to hear from you! Whether you have questions, need assistance, or want to plan your next adventure with us, feel free to reach out.';
+        $contactBannerImage =
+            isset($settings['contact_page_banner']) && !empty($settings['contact_page_banner'])
+                ? $settings['contact_page_banner']
+                : 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1800&q=80';
+    @endphp
 
-        @php 
-            $contactUsSubTitle = "We would love to hear from you! Whether you have questions, need assistance, or want to plan your next adventure with us, feel free to reach out."
-        @endphp
-        <div class="row gx-5 align-items-center">
-            <!-- Contact Information -->
-            <div class="col-lg-6 mb-5 mb-lg-0">
-                <div class="bg-white p-5 rounded">
-                    <h2 class="mb-4 fw-bold text-info">{{ isset($settings['contact_page_title']) ? $settings['contact_page_title'] : 'Contact Us' }}</h2>
-                    <p class="mb-4 text-muted">
-                        {{ isset($settings['contact_page_sub_title']) ? $settings['contact_page_sub_title'] : $contactUsSubTitle }}
-                        
-                    </p>
-                    <ul class="list-unstyled">
-                        <li class="mb-3 d-flex align-items-start">
-                            <span class="me-3 fs-4 text-info">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </span>
-                            <div>
-                                <h6 class="mb-1 fw-semibold">Our Address</h6>
-                                <p class="mb-0 text-muted">
-                                    {{ isset($settings['address']) ? $settings['address'] : 'Bode-6, Bhaktapur' }}</p>
-                            </div>
-                        </li>
+    <section class="relative h-[50vh] min-h-[340px] overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="{{ $contactBannerImage }}" alt="Contact us banner" class="h-full w-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-950/35 via-slate-900/55 to-slate-950/70"></div>
+        </div>
+        <div class="relative mx-auto flex h-full w-full max-w-7xl items-end px-6 pb-14">
+            <div class="text-white">
+                <p class="text-xs uppercase tracking-[0.3em] text-white/80">Get In Touch</p>
+                <h1 class="mt-3 text-3xl font-semibold sm:text-5xl">
+                    {{ isset($settings['contact_page_title']) ? $settings['contact_page_title'] : 'Contact Us' }}
+                </h1>
+                <p class="mt-3 max-w-2xl text-sm text-white/85 sm:text-base">
+                    {{ isset($settings['contact_page_sub_title']) ? $settings['contact_page_sub_title'] : $contactUsSubTitle }}
+                </p>
+            </div>
+        </div>
+    </section>
 
-                        <li class="mb-3 d-flex align-items-start">
-                            <span class="me-3 fs-4 text-info">
-                                <i class="fas fa-phone"></i>
-                            </span>
-                            <div>
-                                <h6 class="mb-1 fw-semibold">Phone</h6>
-                                <p class="mb-0 text-muted">
-                                    {{ isset($settings['mobile']) ? $settings['mobile'] : '+977 (984) 192-7372' }}</p>
-                            </div>
-                        </li>
+    <section class="mx-auto w-full max-w-7xl px-6 py-12">
+        <div class="grid gap-8 lg:grid-cols-[1.1fr,1fr]">
+            <div class="rounded bg-white p-6 sm:p-8">
+                <h2 class="text-2xl font-semibold text-slate-900">Contact Information</h2>
+                <ul class="mt-6 space-y-5">
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-50 text-sky-600">
+                            <i class="mdi mdi-map-marker text-xl"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Our Address</h3>
+                            <p class="mt-1 text-slate-600">
+                                {{ isset($settings['address']) ? $settings['address'] : 'Bode-6, Bhaktapur' }}</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-50 text-sky-600">
+                            <i class="mdi mdi-phone text-xl"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Phone</h3>
+                            <p class="mt-1 text-slate-600">
+                                {{ isset($settings['mobile']) ? $settings['mobile'] : '+977 (984) 192-7372' }}</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-50 text-sky-600">
+                            <i class="mdi mdi-email-outline text-xl"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Email</h3>
+                            <p class="mt-1 text-slate-600">
+                                {{ isset($settings['email']) ? $settings['email'] : 'info@eathways.com' }}</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-50 text-sky-600">
+                            <i class="mdi mdi-clock-outline text-xl"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Office Hours</h3>
+                            <p class="mt-1 text-slate-600">Sunday - Friday: 9:00 AM - 6:00 PM</p>
+                        </div>
+                    </li>
+                </ul>
 
-                        <li class="mb-3 d-flex align-items-start">
-                            <span class="me-3 fs-4 text-info">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                            <div>
-                                <h6 class="mb-1 fw-semibold">Email</h6>
-                                <p class="mb-0 text-muted">
-                                    {{ isset($settings['email']) ? $settings['email'] : 'info@eathways.com' }}</p>
-                            </div>
-                        </li>
-
-                        <li class="d-flex align-items-start">
-                            <span class="me-3 fs-4 text-info">
-                                <i class="fas fa-clock"></i>
-                            </span>
-                            <div>
-                                <h6 class="mb-1 fw-semibold">Office Hours</h6>
-                                <p class="mb-0 text-muted">Sunday - Friday: 9:00 AM - 6:00 PM</p>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <div class="mt-4">
-                        <h6 class="fw-semibold mb-2">Follow Us</h6>
+                <div class="mt-8 pt-5">
+                    <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Follow Us</h3>
+                    <div class="mt-3 flex items-center gap-2">
                         @if (!empty($settings['facebook']))
-                            <a href="{{ $settings['facebook'] }}" target="_blank" class="me-3 text-info fs-4" aria-label="Facebook">
-                                <i class="fab fa-facebook-f"></i>
+                            <a href="{{ $settings['facebook'] }}" target="_blank"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:text-sky-600"
+                                aria-label="Facebook">
+                                <i class="mdi mdi-facebook text-xl"></i>
                             </a>
                         @endif
-
                         @if (!empty($settings['twitter']))
-                            <a href="{{ $settings['twitter'] }}" target="_blank" class="me-3 text-info fs-4" aria-label="Twitter">
-                                <i class="fab fa-twitter"></i>
+                            <a href="{{ $settings['twitter'] }}" target="_blank"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:text-sky-600"
+                                aria-label="Twitter">
+                                <i class="mdi mdi-twitter text-xl"></i>
                             </a>
                         @endif
-
                         @if (!empty($settings['instagram']))
-                            <a href="{{ $settings['instagram'] }}" target="_blank" class="me-3 text-info fs-4" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
+                            <a href="{{ $settings['instagram'] }}" target="_blank"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:text-sky-600"
+                                aria-label="Instagram">
+                                <i class="mdi mdi-instagram text-xl"></i>
                             </a>
                         @endif
-
                         @if (!empty($settings['linked_in']))
-                            <a href="{{ $settings['linked_in'] }}" target="_blank" class="me-3 text-info fs-4" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin-in"></i>
+                            <a href="{{ $settings['linked_in'] }}" target="_blank"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:text-sky-600"
+                                aria-label="LinkedIn">
+                                <i class="mdi mdi-linkedin text-xl"></i>
                             </a>
                         @endif
-
                         @if (!empty($settings['tiktok']))
-                            <a href="{{ $settings['tiktok'] }}" target="_blank" class="me-3 text-info fs-4" aria-label="TokTok">
-                                <i class="fab fa-tiktok"></i>
+                            <a href="{{ $settings['tiktok'] }}" target="_blank"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:text-sky-600"
+                                aria-label="TikTok">
+                                <i class="mdi mdi-music-note text-xl"></i>
                             </a>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <!-- Google Map -->
-            <div class="col-lg-6">
-                <div class="ratio ratio-16x9 rounded shadow-sm border">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.2492254385053!2d85.31247651508012!3d27.709231332792503!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1991d2ec895f%3A0x2b37c8151f4119a5!2sKathmandu%2C%20Nepal!5e0!3m2!1sen!2sus!4v1689102094589!5m2!1sen!2sus"
-                        style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                        title="Our Location on Map"></iframe>
+            <div>
+                <div class="aspect-[4/3] overflow-hidden rounded">
+                    <div class="mapouter">
+                        <div class="gmap_canvas"><iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no"
+                                marginheight="0" marginwidth="0"
+                                src="https://maps.google.com/maps?width=660&amp;height=527&amp;hl=en&amp;q=EATH&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><a
+                                href="https://embed-googlemap.com">google maps embed</a></div>
+                        <style>
+                            .mapouter {
+                                position: relative;
+                                text-align: right;
+                                width: 100%;
+                                height: 627px;
+                            }
+
+                            .gmap_canvas {
+                                overflow: hidden;
+                                background: none !important;
+                                width: 100%;
+                                height: 627px;
+                            }
+
+                            .gmap_iframe {
+                                height: 627px !important;
+                            }
+                        </style>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 @endsection
