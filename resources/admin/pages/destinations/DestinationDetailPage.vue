@@ -1,39 +1,61 @@
 <template>
-  <div>
-    <div>
-      <!-- Tabs Section -->
-      <v-card elevation="0" class="mb-6 mt-2">
-        <div class="pa-4">
-          <h2>{{destination?.name}}</h2>
-          <span>/{{ destination?.slug }}</span>
+	<div>
+		<div>
+			<!-- Tabs Section -->
+			<v-card elevation="0" class="mb-6 mt-2">
+				<div class="pa-4 d-flex align-center">
+					<div class="mr-4" style="width: 160px; height: 90px;">
+						<v-img v-if="firstImageUrl" :src="firstImageUrl" cover class="rounded-sm"
+							style="width: 100%; height: 100%;" />
+						<div v-else class="d-flex align-center justify-center rounded-sm"
+							style="width: 100%; height: 100%; border: 1px solid rgba(0,0,0,0.12);">
+							<v-icon>mdi-image-off-outline</v-icon>
+						</div>
+					</div>
+          <div>
+            <h2 class="mb-1">{{ destination?.name }}</h2>
+            <div class="d-flex align-center">
+              <span class="text-medium-emphasis">
+                {{ destinationUrl }}
+              </span>
+							<v-btn v-if="destination?.slug" size="x-small" class="ml-2" color="primary" icon
+								variant="tonal" :href="destinationUrl" target="_blank" rel="noopener">
+                <v-icon>mdi-open-in-new</v-icon>
+              </v-btn>
+            </div>
+            <div class="text-caption text-medium-emphasis mt-1">
+              Total treks: {{ destination?.treks_count ?? 0 }}
+            </div>
+          </div>
         </div>
-        <v-tabs v-model="activeTab" color="primary">
-          <v-tab value="tab_overview">
-            <v-icon color="primary" start>mdi-lightbulb-outline</v-icon>
-            Overview
-          </v-tab>
-          <v-tab value="tab_description">
-            <v-icon color="primary" start>mdi-map-check-outline</v-icon>
-            Description
-          </v-tab>
-          <v-tab value="tab_gallery">
-            <v-icon color="primary" start>mdi-image-multiple</v-icon>
-            Gallery
-          </v-tab>
-          <v-tab value="tab_seo">
-            <v-icon color="primary" start>mdi-currency-usd</v-icon>
-            SEO
-          </v-tab>
-        </v-tabs>
-        <v-divider></v-divider>
-        <div class="pa-4 pt-14" style="min-height: calc(100vh - 300px);">
-          <component v-if="formReady" :is="activeTabComponent" :destination="destination" v-on="activeTabListeners" />
-        </div>
-      </v-card>
-    </div>
+				<v-tabs v-model="activeTab" color="primary">
+					<v-tab value="tab_overview">
+						<v-icon color="primary" start>mdi-lightbulb-outline</v-icon>
+						Overview
+					</v-tab>
+					<v-tab value="tab_description">
+						<v-icon color="primary" start>mdi-map-check-outline</v-icon>
+						Description
+					</v-tab>
+					<v-tab value="tab_gallery">
+						<v-icon color="primary" start>mdi-image-multiple</v-icon>
+						Gallery
+					</v-tab>
+					<v-tab value="tab_seo">
+						<v-icon color="primary" start>mdi-currency-usd</v-icon>
+						SEO
+					</v-tab>
+				</v-tabs>
+				<v-divider></v-divider>
+				<div class="pa-4 pt-14" style="min-height: calc(100vh - 300px);">
+					<component v-if="formReady" :is="activeTabComponent" :destination="destination"
+						v-on="activeTabListeners" />
+				</div>
+			</v-card>
+		</div>
 
 
-  </div>
+	</div>
 </template>
 
 <script setup>
@@ -55,34 +77,40 @@ const formReady = ref(false)
 const activeTab = ref('tab_overview')
 
 const tabComponents = {
-  tab_overview: TabOverview,
-  tab_gallery: TabGallery,
-  tab_seo: TabSeo,
-  tab_description: TabDescription,
+	tab_overview: TabOverview,
+	tab_gallery: TabGallery,
+	tab_seo: TabSeo,
+	tab_description: TabDescription,
 }
 
 const activeTabComponent = computed(() => tabComponents[activeTab.value] || TabOverview)
 
 const activeTabListeners = {
-  refresh: fetchDestination,
+	refresh: fetchDestination,
 }
+const publicBaseUrl = window?.location?.origin ?? ''
+const destinationUrl = computed(() => {
+	if (!destination?.slug) return ''
+	return `${publicBaseUrl}/destinations/${destination.slug}`
+})
+const firstImageUrl = computed(() => destination?.images?.[0]?.url || '')
 
 // Fetch single destination
 async function fetchDestination() {
-  try {
-    if (!destinationId) return
-    const { data } = await axios.get(`/admin/destinations/${destinationId}`)
-    Object.assign(destination, data?.data ?? data)
-    formReady.value = true
-  } catch (err) {
-    console.error('Failed to fetch destination:', err)
-    formReady.value = false
-  }
+	try {
+		if (!destinationId) return
+		const { data } = await axios.get(`/admin/destinations/${destinationId}`)
+		Object.assign(destination, data?.data ?? data)
+		formReady.value = true
+	} catch (err) {
+		console.error('Failed to fetch destination:', err)
+		formReady.value = false
+	}
 }
 
 
 // Fetch on load
 onMounted(() => {
-  if (destinationId) fetchDestination()
+	if (destinationId) fetchDestination()
 })
 </script>

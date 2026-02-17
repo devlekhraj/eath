@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Destination;
 use App\Models\Setting;
-use App\Models\PackageCategory;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,31 +18,42 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (Schema::hasTable('package_categories') && Schema::hasTable('travel_packages')) {
+        View::composer('website.*', function ($view) {
+            $settings = Cache::remember('website.settings', 600, function () {
+                if (!Schema::hasTable('settings')) {
+                    return [];
+                }
 
-            $trekkingInNepal = PackageCategory::where('slug', 'trekking-in-nepal')
-                ->with(['children' => function ($query) {
-                    $query->whereHas('travelPackages');
-                }, 'children.travelPackages'])
-                ->first();
+                return Setting::pluck('value', 'code')->toArray();
+            });
 
-            $helicopterTour = PackageCategory::where('slug', 'helicopter-tour')
-                ->with('travelPackages')
-                ->first();
-        } else {
-            // Default empty values
-            $trekkingInNepal = null;
-            $helicopterTour = null;
-        }
+            $menus = Cache::remember('website.menus', 600, function () {
+                if (!Schema::hasTable('destinations')) {
+                    return [];
+                }
 
-        if (Schema::hasTable('settings')) {
-            $settings = Setting::pluck('value', 'code')->toArray();
-        } else {
-            $settings = [];
-        }
+                return Destination::where('is_active', 1)
+                    ->select(['id', 'name', 'slug'])
+                    ->with(['treks:id,destination_id,name,slug'])
+                    ->get()
+                    ->map(function ($item) {
+                        return [
+                            'name' => $item->name,
+                            'slug' => $item->slug,
+                            'treks' => $item->treks->map(function ($trek) {
+                                return [
+                                    'name' => $trek->name,
+                                    'slug' => $trek->slug,
+                                ];
+                            })->values(),
+                        ];
+                    })->toArray();
+            });
 
-        View::share('trekkingInNepal', $trekkingInNepal);
-        View::share('helicopterTour', $helicopterTour);
-        View::share('settings', $settings);
+            $view->with([
+                'settings' => $settings,
+                'menus' => $menus,
+            ]);
+        });
     }
 }

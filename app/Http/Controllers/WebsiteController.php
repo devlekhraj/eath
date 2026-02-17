@@ -67,7 +67,7 @@ class WebsiteController extends Controller
         return view('website.index', compact('packages', 'mainBanner', 'destinations', 'blogs', 'featuredPackages', 'packageCategories', 'galleryImage', 'hotPackages','menus'));
     }
 
-    public function show($slug)
+    public function show($destinationSlug = null, $slug)
     {
         $package = TravelPackage::where('slug', $slug)->first();
         $package->load('highlights', 'itineraries', 'prices', 'inclusions', 'exclusions', 'categories', 'economyPrice', 'priceStart', 'fixedDeparture');
@@ -92,7 +92,8 @@ class WebsiteController extends Controller
             ->take(4)
             ->get();
 
-        return view('website.pages.travel_packages.index', compact('package', 'relatedPackages', 'parentCategories', 'relatedBlogs'));
+        // return view('website.pages.travel_packages.index', compact('package', 'relatedPackages', 'parentCategories', 'relatedBlogs'));
+        return view('website.pages.trek.index', compact('package', 'relatedPackages', 'parentCategories', 'relatedBlogs'));
     }
 
     public function fixedDeparture($slug)
@@ -146,7 +147,7 @@ class WebsiteController extends Controller
     public function destinationShow($slug)
     {
         $destination = Destination::where('slug', $slug)->firstOrFail();
-        $destination->load('treks');
+        $destination->load('treks.images.gallery');
 
         return view('website.pages.destination.index', compact('destination'));
     }
@@ -243,6 +244,20 @@ class WebsiteController extends Controller
     public function contactUs()
     {
         return view('website.pages.static_page.contact-us');
+    }
+    public function responsibleTravels()
+    {
+        $slug = 'responsible-travels';
+
+        $page = Page::firstOrCreate(
+            ['slug' => $slug],
+            [
+                'title' => 'Responsible Travels',
+                'content' => 'Responsible travels content goes here.', // You can put default content here or leave empty
+            ]
+        );
+
+        return view('website.pages.static_page.responsible-travels', compact('page'));
     }
 
     public function getInquiryForm(Request $request)

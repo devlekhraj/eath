@@ -1,10 +1,6 @@
 <template>
     <div>
-        <!-- <div class="text-right mb-4">
-			<v-btn size="large" color="primary" rounded @click="handleOpen">
-				<v-icon>mdi-plus</v-icon> Add Category
-			</v-btn>
-		</div> -->
+
 
         <v-data-table :headers="headers" :items="filteredItems" :items-per-page="20" :sort-by="['name']"
             :loading="fetching_data" :sort-desc="[false]">
@@ -30,22 +26,56 @@
             </template>
 
             <template #item.name="{ item }">
-                <div style="min-width: 250px;">
+                <div style="min-width: 150px;">
                     <span class="text-primary text-capitalize">{{ item.name }}</span>
                 </div>
             </template>
 
+            <template #item.slug="{ item }">
+                <div class="d-flex align-center" style="min-width: 280px;">
+                    <span class="text-medium-emphasis">
+                        {{ item.slug ? `${publicBaseUrl}/destinations/${item.slug}` : '' }}
+                    </span>
+                    <v-btn
+                        v-if="item.slug"
+                        size="x-small"
+                        class="ml-2"
+                        color="primary"
+                        icon
+                        variant="tonal"
+                        :href="`${publicBaseUrl}/destinations/${item.slug}`"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        <v-icon>mdi-open-in-new</v-icon>
+                    </v-btn>
+                </div>
+            </template>
+
+            <template #item.images="{ item }">
+                <div class="d-flex align-center" style="min-width: 180px;">
+                    <v-avatar size="36" class="mr-3" rounded="sm">
+                        <v-img v-if="item.thumb" :src="item.thumb" cover />
+                        <v-icon v-else>mdi-image-off-outline</v-icon>
+                    </v-avatar>
+                    <span class="text-caption text-medium-emphasis">
+                        {{ item.image_count ?? 0 }} image{{ (item.image_count ?? 0) === 1 ? '' : 's' }}
+                    </span>
+                </div>
+            </template>
+
+            <template #item.treks_count="{ item }">
+                <div style="min-width: 80px;">
+                    <span class="text-caption text-medium-emphasis">
+                        {{ item.treks_count ?? 0 }} Treks
+                    </span>
+                </div>
+            </template>
 
 
-            <!-- <template #item.is_active="{ item }">
-        <v-chip :color="item.is_active ? 'green' : 'red'" dark size="small">
-          {{ item.is_active ? 'Active' : 'Inactive' }}
-        </v-chip>
-      </template> -->
             <template #item.is_active="{ item }">
-                <div>
-                    <!-- <v-switch v-model="item.is_active" density="compact" color="success" hide-details
-                        @change="toggleActive(item)" /> -->
+                  <div style="min-width: 80px;">
+                  
                         <v-chip :color="item.is_active ? 'green' : 'red'" dark size="small">
                             {{ item.is_active ? 'Active' : 'Inactive' }}
                         </v-chip>
@@ -59,10 +89,7 @@
 
                     <v-btn size="x-small" class="ml-2" color="primary" icon variant="tonal"
                     :to="{ name: 'admin.destination.detail', params: { id: item.id } }"
-                    ><v-icon>mdi-pencil</v-icon></v-btn>
-
-                    <!-- <v-btn size="x-small" class="ml-2" color="primary" icon variant="tonal"
-                        @click="handleOpen(item)"><v-icon>mdi-pencil</v-icon></v-btn> -->
+                    ><v-icon>mdi-eye</v-icon></v-btn>
 
                     <v-btn size="x-small" class="ml-2" color="error" icon variant="tonal"
                         @click="handleDelete(item)"><v-icon>mdi-delete</v-icon></v-btn>
@@ -80,11 +107,14 @@ import { ref, onMounted, computed } from 'vue';
 import { useSnackbar } from '@/composables/snackbar'
 
 const { showSuccess, showError } = useSnackbar()
+const publicBaseUrl = window?.location?.origin ?? ''
 // Static headers
 const headers = [
     { title: 'S.N.', key: 'sn', sortable: false },
     { title: 'Category Name', key: 'name', sortable: false },
     { title: 'URL Slug', key: 'slug', sortable: false },
+    { title: 'Images', key: 'images', sortable: false },
+    { title: 'Treks', key: 'treks_count', sortable: false },
     { title: 'Active', key: 'is_active', sortable: false },
     { title: 'Action', key: 'actions', sortable: false },
 ];

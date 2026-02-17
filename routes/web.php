@@ -23,20 +23,26 @@ Route::prefix('auth')->group(function () {
 Route::get('/',[WebsiteController::class,'index']);
 Route::get('/demo',[WebsiteController::class,'demo']);
 
+// Route::get('/destinations',[WebsiteController::class,'destinationPage'])->name('destination.page');
 Route::get('/destinations/{slug}',[WebsiteController::class,'destinationShow'])->name('destination.detail');
+Route::get('/treks/{destination}/{slug}', [WebsiteController::class,'show'])->name('trek.show');
 
 Route::get('/packages/{slug}', [WebsiteController::class,'show']);
-Route::get('/treks/{slug}', [WebsiteController::class,'show']);
 Route::get('/categories/{slug}', [WebsiteController::class,'categoryShow'])->name('category.show');
-Route::get('/guide-profiles', [WebsiteController::class,'guideProfile']);
 Route::get('/blogs', [WebsiteController::class,'blogs']);
 Route::get('/blogs/{slug}', [WebsiteController::class,'blogDetail'])->name('blog.show');
 Route::get('/fixed-departures/{slug}', [WebsiteController::class,'fixedDeparture'])->name('fixed.departure.show');
 Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');
 Route::get('inquiry-form', [WebsiteController::class,'getInquiryForm'])->name('inquiry.form');
 Route::post('inquiry', [WebsiteController::class,'store'])->name('inquiry.store');
-Route::get('/faq', [WebsiteController::class,'faq']);
-Route::get('/privacy-policy', [WebsiteController::class,'privacyPolicy']);
-Route::get('/terms-and-conditions', [WebsiteController::class,'termsConditions']);
-Route::get('/about-us', [WebsiteController::class,'aboutUs']);
-Route::get('/contact-us', [WebsiteController::class,'contactUs']);
+Route::get('/faq', [WebsiteController::class,'faq'])->name('faq');
+
+Route::get('/privacy-policy', [WebsiteController::class,'privacyPolicy'])->name('privacy.policy');
+Route::get('/terms-and-conditions', [WebsiteController::class,'termsConditions'])->name('terms.conditions');
+
+Route::get('/contact-us', [WebsiteController::class,'contactUs'])->name('contact.us');
+
+Route::get('/about-us', [WebsiteController::class,'aboutUs'])->name('about.our.story');
+Route::get('/guide-profiles', [WebsiteController::class,'guideProfile'])->name('about.guide.profiles');
+
+Route::get('/responsible-travels', [WebsiteController::class,'responsibleTravels'])->name('responsible.travels');

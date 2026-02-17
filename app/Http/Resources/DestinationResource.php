@@ -19,6 +19,7 @@ class DestinationResource extends JsonResource
             'district' => $this->district,
             'overview' => $this->overview,
             'highlights' => $this->highlights,
+            'description' => $this->description,
             'best_season' => $this->best_season,
             'how_to_reach' => $this->how_to_reach,
             'permits' => $this->permits,
@@ -29,6 +30,7 @@ class DestinationResource extends JsonResource
             'canonical_url' => $this->canonical_url,
             'is_featured' => $this->is_featured,
             'is_active' => $this->is_active,
+            'treks_count' => $this->treks_count ?? 0,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'images' => $this->whenLoaded('images', function () {

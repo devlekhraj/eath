@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/admin/main.js',
                 'resources/admin/admin.scss',
 
+                'resources/website/scss/tiptap-viewer.scss',
                 'resources/website/scss/website.scss',
                 'resources/website/js/website.js'
             ],

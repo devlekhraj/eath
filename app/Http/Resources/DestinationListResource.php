@@ -15,6 +15,8 @@ class DestinationListResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'thumb' => $imageUsage?->gallery?->url,
+            'image_count' => $this->images_count ?? 0,
+            'treks_count' => $this->treks_count ?? 0,
             'is_active' => $this->is_active,
             'is_featured' => $this->is_featured,
         ];

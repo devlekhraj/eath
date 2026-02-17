@@ -16,7 +16,7 @@
             @foreach ($packages as $package)
             <article class="group overflow-hidden rounded-none">
                 {{-- <a href="/treks/everest/everest-base-camp-trek/" --}}
-                <a href="/treks/{{ $package->slug }}"
+                <a href="{{ route('trek.show', ['destination' => $package->destination['slug'], 'slug' => $package['slug']]) }}"
                     class="relative aspect-[16/9] overflow-hidden block rounded-none">
                     <div class="absolute inset-0 bg-cover bg-center transition duration-500 ease-out group-hover:scale-110"
                         style="background-image:url('{{ $package['image'] }}')">

@@ -40,44 +40,35 @@ class DestinationController extends Controller
         ]);
     }
 
-    public function updateDestination(Request $request)
+    public function updateDestination(Request $request, $id)
     {
-        $id = $request->id;
         $rules = [
-            'name' => 'required|string|max:255|unique:destinations,name,'.($id ?? 'NULL'),
             'id' => 'nullable|exists:destinations,id',
             'best_season' => 'nullable|string',
             'highlights' => 'nullable|string',
+            'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
         ];
         if ($id) {
+            $rules['name'] = 'nullable|string|max:255';
             $rules['slug'] = 'nullable|string|max:255';
         } else {
+            $rules['name'] = 'required|string|max:255|unique:destinations,name';
             $rules['slug'] = 'required|string|max:255|unique:destinations,slug';
         }
 
         $request->validate($rules);
 
-        $data = $request->only([
-            'name',
-            'slug',
-            'best_season',
-            // 'highlights',
-            'is_active',
-            'is_featured',
-        ]);
-
-        // if ($request->has('highlights')) {
-        //     $highlights = $request->input('highlights');
-        //     if (is_string($highlights)) {
-        //         $lines = array_values(array_filter(array_map('trim', preg_split("/\r\n|\r|\n/", $highlights))));
-        //         $data['highlights'] = json_encode($lines);
-        //     }
-        // }
-
-        $data['is_active'] = $request->boolean('is_active') ? 1 : 0;
-        $data['is_featured'] = $request->boolean('is_featured') ? 1 : 0;
+        $data = collect([
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+            'description' => $request->input('description'),
+            'is_active' => $request->has('is_active') ? (int) $request->boolean('is_active') : null,
+            'is_featured' => $request->has('is_featured') ? (int) $request->boolean('is_featured') : null,
+        ])->filter(function ($value, $key) use ($request) {
+            return $request->has($key);
+        })->all();
         try {
             $category = Destination::updateOrCreate(
                 ['id' => $id],
@@ -100,7 +91,9 @@ class DestinationController extends Controller
     public function getDestinations(Request $request)
     {
         $query = Destination::whereNull('deleted_at')
-            ->with(['images.gallery']);
+            ->with(['images.gallery'])
+            ->withCount('images')
+            ->withCount('treks');
         $destinations = $query->orderBy('sort_order', 'asc')->get();
 
         return response()->json([
@@ -147,7 +140,7 @@ class DestinationController extends Controller
 
     public function show($id)
     {
-        $destination = Destination::findOrFail($id);
+        $destination = Destination::withCount('treks')->findOrFail($id);
 
         $destination->load('images.gallery.variants', 'galleries.gallery.variants');
 

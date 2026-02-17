@@ -33,7 +33,7 @@
             </template>
 
             <template #item.sn="{ index }">
-                <div style="max-width: 50px;">
+                <div style="width: 50px;">
                     {{ index + 1 }}
                 </div>
             </template>
@@ -45,7 +45,24 @@
 
                 <div style="vertical-align: middle; min-width: max-content;">
                     <div class="text-primary">{{ item.name }}</div>
-                    <div class="text-caption text-grey-darken-1">/{{ item.slug }}</div>
+                    <div class="d-flex align-center">
+                        <div class="text-caption text-grey-darken-1">
+                            {{ item?.destination?.slug && item?.slug ? `${publicBaseUrl}/treks/${item.destination.slug}/${item.slug}` : '' }}
+                        </div>
+                        <v-btn
+                            v-if="item?.destination?.slug && item?.slug"
+                            size="x-small"
+                            class="ml-2"
+                            color="primary"
+                            icon
+                            variant="text"
+                            :href="`${publicBaseUrl}/treks/${item.destination.slug}/${item.slug}`"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            <v-icon>mdi-open-in-new</v-icon>
+                        </v-btn>
+                    </div>
                 </div>
 
             </template>
@@ -187,6 +204,7 @@ const itemsPerPage = ref(20)
 const totalItems = ref(0)
 const globalModal = ref(null);
 const search = ref('');
+const publicBaseUrl = window?.location?.origin ?? ''
 
 
 const fetching_data = ref(false);
