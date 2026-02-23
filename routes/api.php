@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\Banner\BannerController;
 use App\Http\Controllers\Api\V1\Admin\Banner\BannerImageController;
 use App\Http\Controllers\Api\V1\Admin\Blog\BlogController;
+use App\Http\Controllers\Api\V1\Admin\Blog\BlogImageController;
 use App\Http\Controllers\Api\V1\Admin\BlogCategory\BlogCategoryController;
 use App\Http\Controllers\Api\V1\Admin\Customers\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\Destination\DestinationController;
@@ -94,17 +95,22 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::delete('destinations/{id}/delete', [DestinationController::class, 'delete']);
 
         Route::get('blogs', [BlogController::class, 'index']);
-        Route::post('blogs', [BlogController::class, 'storeUpdate']);
+        Route::post('blogs', [BlogController::class, 'store']);
         Route::get('blogs/{id}', [BlogController::class, 'show']);
+        Route::patch('blogs/{id}/update', [BlogController::class, 'update']);
         Route::delete('blogs/{id}/delete', [BlogController::class, 'delete']);
         Route::patch('blogs/{id}/toggle-active', [BlogController::class, 'toggleActive']);
         Route::patch('blogs/{id}/toggle-publish', [BlogController::class, 'togglePublish']);
+
+        Route::post('blogs/{blogId}/save-image', [BlogImageController::class, 'saveImage']);
+        Route::post('blogs/{blogId}/use-image', [BlogImageController::class, 'useImage']);
 
         Route::get('blog-categories', [BlogCategoryController::class, 'getCategories']);
         Route::post('blog-categories', [BlogCategoryController::class, 'saveCategory']);
         Route::get('blog-categories/{id}', [BlogCategoryController::class, 'show']);
         Route::patch('blog-categories/{id}/toggle-active', [BlogCategoryController::class, 'toggleActive']);
         Route::delete('blog-categories/{id}/delete', [BlogCategoryController::class, 'delete']);
+
 
         Route::get('galleries', [GalleryController::class, 'index']);
         Route::post('gallery-upload', [GalleryController::class, 'uploadImage']);

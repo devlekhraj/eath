@@ -75,15 +75,25 @@ const routes = [
 				},
 			},
 			{
-				path: 'blog-form',
-				name: 'adminBlogForm',
-				component: () => import('@pages/blogs/BlogForm.vue'),
+				path: 'blog-detail',
+				name: 'adminBlogDetailPage',
+				component: () => import('@pages/blogs/BlogDetailPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Create Blog',
-					subtitle: 'Write and publish a new blog post',
+					title: 'Blog Detail',
+					subtitle: 'View and edit blog post',
 				},
 			},
+			// {
+			// 	path: 'blog-form',
+			// 	name: 'adminBlogForm',
+			// 	component: () => import('@pages/blogs/BlogForm.vue'),
+			// 	meta: {
+			// 		requireAuth: true,
+			// 		title: 'Create Blog',
+			// 		subtitle: 'Write and publish a new blog post',
+			// 	},
+			// },
 			{
 				path: 'blog-categories',
 				name: 'adminBlogCategorypage',

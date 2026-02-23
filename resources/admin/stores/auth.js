@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import http from '@/http.config'
+import { loginApi, logoutApi, profileApi } from '@/api/auth.api'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -15,12 +16,12 @@ export const useAuthStore = defineStore('auth', {
             this.error = null
 
             try {
-                const res = await axios.post('/admin/login', { username, password })
+                const res = await loginApi({ username, password })
 
                 this.token = res.access_token
 
                 localStorage.setItem('token', this.token)
-                axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
+                http.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
             } catch (err) {
                 this.error = err.response?.data?.message || 'Login failed'
                 throw err
@@ -31,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
 
         async logout() {
             try {
-                await axios.post('/admin/logout')
+                await logoutApi()
             } catch (e) {
                 console.warn('Logout API failed:', e)
             } finally {
@@ -40,18 +41,18 @@ export const useAuthStore = defineStore('auth', {
                 this.error = null
                 this.loading = false
                 localStorage.removeItem('token')
-                delete axios.defaults.headers.common['Authorization']
+                delete http.defaults.headers.common['Authorization']
             }
         },
 
         async fetchProfile() {
             if (!this.token) return
 
-            axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
+            http.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
 
             try {
-                const resp = await axios.get('/admin/profile')
-                this.user = resp.data
+                const resp = await profileApi()
+                this.user = resp?.data ?? resp
             } catch(error) {
                 console.log({error});
                 // this.logout()

@@ -1,7 +1,11 @@
 <template>
     <v-card flat>
-        <v-card-title>
+        <v-card-title class="d-flex align-center py-1">
             <span class="font-medium">Category Form</span>
+            <v-spacer />
+            <v-btn icon variant="text" size="small" @click="handleCancel" aria-label="Close">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -15,30 +19,41 @@
                     </v-col>
 
                     <v-col cols="12" md="12">
+                        <v-text-field
+                            v-model="form.slug"
+                            label="Slug"
+                            variant="outlined"
+                            density="comfortable"
+                            :rules="[rules.required, rules.slug]"
+                            required
+                        />
+                    </v-col>
+
+                    <v-col cols="12" md="5">
                         <v-select v-model="form.parent_id" :items="parentOptions" item-title="name" item-value="id"
                             label="Parent Category" variant="outlined" density="comfortable" clearable />
                     </v-col>
 
-                    <v-col cols="12" md="12">
-                        <v-textarea v-model="form.description" label="Description" variant="outlined"
-                            density="comfortable" />
-                    </v-col>
-
-                    <v-col cols="6" md="6">
+                    
+                    <v-col cols="6" md="4">
                         <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" variant="outlined"
-                            density="comfortable" />
+                        density="comfortable" />
                     </v-col>
-
-                    <v-col cols="6" md="6">
+                    <v-col cols="6" md="3">
                         <div class="text-right">
                             <v-switch v-model="form.is_active" inset label="Active" color="success" />
                         </div>
                     </v-col>
+                    <v-col cols="12" md="12">
+                        <label class="text-subtitle-2 mb-2 d-block">Description</label>
+                        <RichTextEditor v-model="form.description" minHeight="200" />
+                    </v-col>
+
                 </v-row>
             </v-form>
         </v-card-text>
 
-        <v-card-actions class="justify-end">
+        <v-card-actions class="justify-space-between">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             <v-btn color="primary" :loading="loading" @click="submitForm">Save</v-btn>
         </v-card-actions>
@@ -58,6 +73,7 @@ const formRef = ref(null)
 
 const form = reactive({
     name: '',
+    slug: '',
     parent_id: null,
     description: '',
     is_active: false,
@@ -68,6 +84,9 @@ const parentOptions = ref([])
 
 const rules = {
     required: v => !!v || 'This field is required',
+    slug: v =>
+        !v || /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(v) ||
+        'Slug must contain only lowercase letters, numbers, and hyphens',
 }
 
 const props = defineProps({
@@ -87,6 +106,7 @@ onMounted(() => {
         Object.assign(form, {
             id: props.item.id,
             name: props.item.name || '',
+            slug: props.item.slug || '',
             parent_id: props.item.parent_id || null,
             description: props.item.description || '',
             is_active: props.item.is_active ?? true,
@@ -101,7 +121,13 @@ onMounted(() => {
 async function fetchParentCategories() {
     try {
         const resp = await axios.get('admin/blog-categories?type=parent')
-        parentOptions.value = resp.data || []
+
+        if(props.item?.id) {
+            // Exclude current category from parent options to prevent circular reference
+            parentOptions.value = (resp.data || []).filter(cat => cat.id !== props.item.id)
+        } else {
+            parentOptions.value = resp.data || []
+        }
     } catch (error) {
         console.error('Failed to load parent categories', error)
     }

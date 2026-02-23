@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { loginApi } from '@/api/auth.api'
 
 const credentials = reactive({
     username: '',
@@ -31,10 +32,14 @@ async function handleLogin() {
     if (!valid) return;
 
     try {
-        await auth.login({
+        auth.loading = true
+        const resp = await loginApi({
             username: credentials.username,
             password: credentials.password,
         })
+        auth.token = resp.access_token
+        localStorage.setItem('token', auth.token)
+        await auth.fetchProfile()
         router.push({name:'adminDashboardPage'})
     } catch (error) {
         if (error.response && error.response.status === 422) {
@@ -46,6 +51,8 @@ async function handleLogin() {
         } else {
             serverErrors.password = 'An unexpected error occurred'
         }
+    } finally {
+        auth.loading = false
     }
 
 }

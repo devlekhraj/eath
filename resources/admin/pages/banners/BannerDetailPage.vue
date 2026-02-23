@@ -51,7 +51,6 @@
 			<p>No gallery items found.</p>
 		</div>
 
-		<modal-template ref="globalModal" />
 	</div>
 </template>
 
@@ -61,9 +60,11 @@ import { useRoute } from 'vue-router'
 import SelectGalleryImage from './gallery_form/SelectGalleryImage.vue'
 import FormGalleryUpdate from './gallery_form/FormGalleryUpdate.vue'
 import FormImageDelete from './gallery_form/FormImageDelete.vue'
+import { getBannerByIdApi } from '@/api/banners.api'
+import { useGlobalModal } from '@/composables/globalModal'
 
 const emit = defineEmits(['refresh'])
-const globalModal = ref(null)
+const globalModal = useGlobalModal()
 const route = useRoute()
 const bannerId = route.params.id || route.query.id || null
 const banner = ref({})
@@ -83,7 +84,7 @@ const tableHeaders = [
 ]
 
 function openSelectModal() {
-	globalModal.value.open({
+	globalModal.open({
 		title: 'Select Image',
 		component: SelectGalleryImage,
 		size: 'lg',
@@ -94,7 +95,7 @@ function openSelectModal() {
 }
 
 function handleEdit(item = {}) {
-	globalModal.value.open({
+	globalModal.open({
 		title: item ? 'Edit Category' : 'Add New Category',
 		component: FormGalleryUpdate,
 		size: 'lg',
@@ -105,7 +106,7 @@ function handleEdit(item = {}) {
 	});
 }
 function handleDelete(item = {}) {
-	globalModal.value.open({
+	globalModal.open({
 		title: 'Delete Photo',
 		component: FormImageDelete,
 		size: 'sm',
@@ -122,8 +123,8 @@ function handleDelete(item = {}) {
 async function fetchBanner() {
 	if (!bannerId) return
 	try {
-		const { data } = await axios.get(`/admin/banners/${bannerId}`)
-		banner.value = data?.data ?? data ?? {}
+		const resp = await getBannerByIdApi(bannerId)
+		banner.value = resp?.data ?? resp ?? {}
 	} catch (error) {
 		console.error('Failed to fetch banner', error)
 	}

@@ -13,7 +13,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { defineProps, defineEmits } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
 const { showSuccess, showError } = useSnackbar()

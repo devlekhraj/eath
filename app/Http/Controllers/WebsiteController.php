@@ -187,6 +187,25 @@ class WebsiteController extends Controller
             dd($th->getMessage());
         }
     }
+    public function blogDetailByCategory($category_slug, $blog_slug)
+    {
+        try {
+            $blog = Blog::where('slug', $blog_slug)->firstOrFail();
+            $blog->load('category');
+
+            // Fetch related blogs (same category, excluding current blog)
+            $relatedBlogs = Blog::latest()
+                ->take(4)
+                ->get();
+
+            // Fetch all blog categories
+            $blogCategories = BlogCategory::orderBy('name', 'asc')->get();
+
+            return view('website.pages.blogs.blogDetail', compact('blog', 'relatedBlogs', 'blogCategories'));
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
+    }
 
     public function faq()
     {

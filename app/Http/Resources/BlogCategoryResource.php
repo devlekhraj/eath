@@ -32,6 +32,9 @@ class BlogCategoryResource extends JsonResource
 
         while ($current) {
             $names[] = $current->name;
+            if (! $current->relationLoaded('parent')) {
+                break;
+            }
             $current = $current->parent;
         }
 

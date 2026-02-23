@@ -27,11 +27,13 @@ class Blog extends Model
         'meta_title',
         'meta_description',
         'meta_keyword',
+        'category_id',
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
         'is_active' => 'boolean',
+        'blog_category' => 'integer',
         'published_at' => 'datetime', // must match fillable
     ];
 
@@ -61,15 +63,11 @@ class Blog extends Model
     
     public function getBannerUrlAttribute(): string
     {
-        $galleryImage = Gallery::where('filename', $this->cover_image)->first();
-        if (!$galleryImage) {
-            return asset('images/logo.png');
-        }
+        $lastUsage = $this->relationLoaded('images')
+            ? $this->images->filter(fn ($usage) => $usage->gallery)->last()
+            : $this->images()->latest('id')->first();
 
-        $filePath = storage_path($galleryImage->filepath);
-        return file_exists($filePath)
-            ? route('image.view', ['filename' => $this->cover_image])
-            : asset('images/logo.png');
+        return $lastUsage?->gallery?->url ?? asset('images/logo.png');
     }
 
 
@@ -78,6 +76,15 @@ class Blog extends Model
         return $this->hasMany(GalleryUsage::class, 'usage_id')
             ->where('usage_type', 'blogs')
             ->with('gallery');
+    }
+
+    public function coverImage()
+    {
+        return $this->hasOne(Gallery::class, 'filename', 'cover_image');
+    }
+    public function category()
+    {
+        return $this->belongsTo(BlogCategory::class, 'category_id');
     }
 
     public function categories()

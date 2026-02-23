@@ -25,81 +25,71 @@
             <template #item.sn="{ index }">
                 {{ index + 1 }}
             </template>
-            <template #item.author="{ item }">
+            <template #item.category="{ item }">
                 <div style="min-width: max-content;">   
-                    <v-avatar><v-icon size="32">mdi-account-circle</v-icon></v-avatar>
-                    <span class="text-capitalize">
-                        {{ item.author ? item.author : 'Admin' }}
-                    </span>
+                    <v-chip
+                    
+                        size="small"
+                        :color="item.category?.name ? 'primary' : 'error'"
+                        variant="tonal"
+                        label
+                        class="text-capitalize"
+                    >
+                        {{ item.category?.name || 'no category' }}
+                    </v-chip>
                 </div>
             </template>
 
 
             <template #item.title="{ item }">
-                <div style="min-width: max-content;">
+                <div style="min-width:max-content">
                     <div class="d-flex align-center">
                         <div style="height: 50px; width: 50px;">
                             <v-img :src="item.banner_url" height="50" width="50" contain></v-img>
                         </div>
-                        <div class="ml-4">
-                            <span class="text-primary text-capitalize" :title="item.title">
+                        <div class="ml-4 blog-title-cell">
+                            <p class="text-body-2 font-weight-medium text-high-emphasis text-capitalize mb-1" :title="item.title">
                                 {{ item.title }}
-                            </span>
+                            </p>
+                            <div class="d-flex align-center">
+                                <p class="text-caption text-medium-emphasis mb-0 blog-url" :title="item.blog_url">
+                                    {{ item.blog_url }}
+                                </p>
+                                <a
+                                    v-if="item.blog_url"
+                                    :href="item.blog_url"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="ml-1 d-inline-flex align-center text-medium-emphasis"
+                                    :title="`Open ${item.blog_url}`"
+                                >
+                                    <v-icon size="12" color="primary">mdi-open-in-new</v-icon>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </template>
 
-
-
-
-            <template #item.created_at="{ item }">
-                <div style="min-width: 80px;">
-                    {{ formatDate(item.created_at) }}
-                </div>
-            </template>
-
-            <template #item.published_at="{ item }">
-                <div style="min-width: 140px;">
-                    {{ formatDateTime(item.published_at) }}
-                </div>
-            </template>
-
             <template #item.is_active="{ item }">
-                <v-switch v-model="item.is_active" density="compact" color="success" hide-details
-                    @change="() => toggleActive(item)" />
+                <div class="d-inline-flex align-center">
+                    <span
+                        class="status-dot mr-2"
+                        :class="item.is_active ? 'bg-success' : 'bg-error'"
+                    ></span>
+                    <span
+                        class="text-body-2"
+                        :class="item.is_active ? 'text-success' : 'text-error'"
+                    >
+                        {{ item.is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
             </template>
-
-            <template #item.is_published="{ item }">
-                <v-switch v-model="item.is_published" density="compact" color="success" hide-details
-                    @change="() => togglePublished(item)" />
-            </template>
-
             <template #item.actions="{ item }">
-                <!-- <v-menu location="bottom end">
-                    <template #activator="{ props }">
-                        <v-btn v-bind="props" icon variant="text" color="primary">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-list density="compact" elevation="1">
-                        <v-list-item :to="{ name: 'adminBlogForm', query: { id: item.id } }">
-                            <v-list-item-title>
-                                <v-icon start icon="mdi-pencil" class="mr-2" /> Edit Blog
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="() => deleteItem(item)">
-                            <v-list-item-title>
-                                <v-icon start icon="mdi-delete" class="mr-2" /> Delete Blog
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu> -->
+             
                 <div class="width-max-content d-flex align-center">
-                    <v-btn variant="tonal" icon size="x-small" color="primary" :to="{ name: 'adminBlogForm', query: { id: item.id } }">
-                        <v-icon>mdi-pencil</v-icon>
+                    <v-btn variant="tonal" icon size="x-small" color="primary" :to="{ name: 'adminBlogDetailPage', query: { id: item.id } }">
+                        <v-icon>mdi-eye</v-icon>
                     </v-btn>
                     <v-btn variant="tonal" class="ml-2" icon size="x-small" color="error" @click="deleteItem(item)">
                         <v-icon>mdi-delete</v-icon>
@@ -123,11 +113,8 @@ const { showSuccess, showError } = useSnackbar()
 const headers = [
     { title: 'SN', key: 'sn', sortable: true },
     { title: 'Title', key: 'title', sortable: false },
-    { title: 'Author', key: 'author', sortable: true },
-    { title: 'Created', key: 'created_at', sortable: true },
-    { title: 'Published', key: 'is_published', sortable: false },
-    { title: 'Published On', key: 'published_at', sortable: false },
-    { title: 'Active', key: 'is_active', sortable: false },
+    { title: 'Category', key: 'category', sortable: false },
+    { title: 'Status', key: 'is_active', sortable: false },
     { title: 'Actions', key: 'actions', sortable: false },
 ]
 
@@ -216,4 +203,21 @@ const togglePublished = async (item) => {
 onMounted(fetchBlogs)
 </script>
 
-<style scoped></style>
+<style scoped>
+/* .blog-title-cell {
+    max-width: 420px;
+} */
+
+/* .blog-url {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} */
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    display: inline-block;
+}
+</style>

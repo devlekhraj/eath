@@ -15,7 +15,6 @@
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar' // optional, if you're showing feedback
 import axios from 'axios'
-import { defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
     item: {

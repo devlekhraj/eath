@@ -46,3 +46,6 @@ Route::get('/about-us', [WebsiteController::class,'aboutUs'])->name('about.our.s
 Route::get('/guide-profiles', [WebsiteController::class,'guideProfile'])->name('about.guide.profiles');
 
 Route::get('/responsible-travels', [WebsiteController::class,'responsibleTravels'])->name('responsible.travels');
+
+Route::get('/{category_slug}/{blog_slug}', [WebsiteController::class, 'blogDetailByCategory'])
+    ->name('blog.detail');

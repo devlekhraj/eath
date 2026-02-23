@@ -4,21 +4,20 @@ namespace App\Http\Controllers\Api\V1\Admin\Blog;
 
 
 use App\Models\Blog;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\TravelPackage;
-use App\Models\PackageCategory;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BlogResource;
-use App\Http\Resources\PackageCategoryResource;
+use Illuminate\Validation\ValidationException;
 
 class BlogController extends Controller
 {
     public function index()
     {
         // Logic to retrieve travel packages
-        $blogs = Blog::orderBy('created_at','desc')->get();
+        $blogs = Blog::with(['categories', 'coverImage', 'images.gallery.variants'])
+            ->orderBy('created_at','desc')
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -28,7 +27,7 @@ class BlogController extends Controller
     public function show(Request $request, $id)
     {
         // Retrieve the travel package by ID or fail with 404
-        $blog = Blog::with('categories')->findOrFail($id);
+        $blog = Blog::with(['category','images.gallery.variants'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -49,36 +48,110 @@ class BlogController extends Controller
 
     }
 
-
-
-    public function storeUpdate(Request $request)
+    public function store(Request $request)
     {
-        $isUpdate = $request->has('id');
+        $validated = $this->validatePayload($request, false);
+        $validated = $this->normalizePayload($validated, $request, false);
 
+        $blog = Blog::create($validated);
+
+        if (isset($request['category_ids'])) {
+            $blog->categories()->sync($request['category_ids']);
+        }
+
+        return response()->json([
+            'message' => 'Blog created successfully.',
+            'blog'    => $blog,
+        ], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $blog = Blog::findOrFail($id);
+        $validated = $this->validatePayload($request, true, $id);
+        $validated = $this->normalizePayload($validated, $request, true);
+
+        $blog->update($validated);
+
+        if (isset($request['category_ids'])) {
+            $blog->categories()->sync($request['category_ids']);
+        } else {
+            $blog->categories()->detach();
+        }
+
+        return response()->json([
+            'message' => 'Blog updated successfully.',
+            'blog'    => $blog,
+        ], 200);
+    }
+
+    private function validatePayload(Request $request, bool $isUpdate, ?int $blogId = null): array
+    {
         $rules = [
-            'id'                => 'nullable|exists:blogs,id',
-            'title'             => 'required|string|max:255',
-            'slug'              => [
+            'title' => $isUpdate ? 'sometimes|string|max:255' : 'required|string|max:255',
+            'slug' => [
+                'sometimes',
                 'nullable',
                 'string',
                 'max:255',
                 $isUpdate
-                    ? Rule::unique('blogs', 'slug')->ignore($request->id)
+                    ? Rule::unique('blogs', 'slug')->ignore($blogId)
                     : Rule::unique('blogs', 'slug'),
             ],
-            'sub_title'         => 'nullable|string|max:255',
-            'content'           => 'nullable|string',
-            'cover_image'       => 'nullable|string',
-            'author'            => 'nullable|string|max:100',
-            'is_published'      => 'nullable|boolean',
-            'is_active'         => 'nullable|boolean',
-            'meta_title'        => 'nullable|string|max:255',
-            'meta_description'  => 'nullable|string|max:255',
-            // 'meta_keyword'   => 'nullable|string|max:255',
+            'sub_title' => 'sometimes|nullable|string|max:255',
+            'content' => 'sometimes|nullable|string',
+            'cover_image' => 'sometimes|nullable|string',
+            'author' => 'sometimes|nullable|string|max:100',
+            'is_published' => 'sometimes|nullable|boolean',
+            'is_active' => 'sometimes|nullable|boolean',
+            'meta_title' => 'sometimes|nullable|string|max:255',
+            'meta_description' => 'sometimes|nullable|string|max:255',
+            'meta_keyword' => 'sometimes|nullable|string|max:255',
+            'category_id' => 'sometimes|nullable|exists:blog_categories,id',
         ];
 
         $validated = $request->validate($rules);
-        $validated["author"] = isset($request->author) ? $request->author : 'admin';
+
+        if ($isUpdate) {
+            $updatableFields = [
+                'title',
+                'slug',
+                'sub_title',
+                'content',
+                'cover_image',
+                'author',
+                'is_published',
+                'is_active',
+                'meta_title',
+                'meta_description',
+                'meta_keyword',
+                'category_id',
+            ];
+
+            $hasAtLeastOneValue = collect($updatableFields)->contains(function ($field) use ($request) {
+                if (! $request->has($field)) {
+                    return false;
+                }
+                $value = $request->input($field);
+                if (is_string($value)) {
+                    return trim($value) !== '';
+                }
+                return ! is_null($value);
+            });
+
+            if (! $hasAtLeastOneValue) {
+                throw ValidationException::withMessages([
+                    'payload' => ['At least one field value is required.'],
+                ]);
+            }
+        }
+
+        return $validated;
+    }
+
+    private function normalizePayload(array $validated, Request $request, bool $isUpdate): array
+    {
+        $validated['author'] = isset($request->author) ? $request->author : 'admin';
 
         // Convert empty strings to null to avoid saving "" strings in DB
         foreach ($validated as $key => $value) {
@@ -87,87 +160,15 @@ class BlogController extends Controller
             }
         }
 
-        // Handle image upload
-        // if ($request->hasFile('cover_image')) {
-        //     $image = $request->file('cover_image');
-        //     $imageName = time() . '_' . Str::slug($validated['title']) . '.' . $image->getClientOriginalExtension();
-        //     $image->move(public_path('uploads/blogs'), $imageName);
-        //     $validated['cover_image'] = 'uploads/blogs/' . $imageName;
-        // }
-
         // Set default values if not present
-        $validated['is_published'] = $request->has('is_published') ? $validated['is_published'] : false;
-        $validated['is_active'] = $request->has('is_active') ? $validated['is_active'] : false;
-
-        if ($isUpdate) {
-
-            $blog = Blog::findOrFail($request->id);
-            $blog->update($validated);
-            $message = 'Blog updated successfully.';
-        } else {
-
-            $blog = Blog::create($validated);
-            $message = 'Blog created successfully.';
-        }
-        if (isset($request['category_ids'])) {
-            $blog->categories()->sync($request['category_ids']);
-        } else if ($isUpdate) {
-            $blog->categories()->detach();
+        if (! $isUpdate) {
+            $validated['is_published'] = $request->has('is_published') ? $validated['is_published'] : false;
+            $validated['is_active'] = $request->has('is_active') ? $validated['is_active'] : false;
         }
 
-        return response()->json([
-            'message' => $message,
-            'blog'    => $blog,
-        ], $isUpdate ? 200 : 201);
+        return $validated;
     }
 
-
-
-
-
-
-
-
-
-    // public function saveCategory(Request $request)
-    // {
-    //     $request->validate([
-    //         'name'        => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'parent_id'   => 'nullable|exists:package_categories,id',
-    //         'seq_no' => 'nullable|integer',
-    //         'id'          => 'nullable|exists:package_categories,id',
-    //     ]);
-
-    //     $data = $request->only(['name', 'description', 'parent_id']);
-
-    //     $category = PackageCategory::updateOrCreate(
-    //         ['id' => $request->id],
-    //         $data
-    //     );
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'data'    => $category,
-    //         'message' => $request->id ? 'Category updated successfully.' : 'Category created successfully.'
-    //     ]);
-    // }
-
-    // public function getCategories(Request $request)
-    // {
-    //     $query = PackageCategory::with(['parent', 'children']);
-
-    //     if ($request->query('type') === 'parent') {
-    //         $query->whereNull('parent_id');
-    //     }
-
-    //     $categories = $query->get();
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'data'    => PackageCategoryResource::collection($categories),
-    //     ]);
-    // }
 
     public function toggleActive($id, Request $request)
     {

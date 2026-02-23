@@ -1,30 +1,23 @@
 <template>
   <div>
-    <!-- <div class="text-right mb-4">
-      <v-btn size="large" color="primary" rounded @click="handleOpen">
-        <v-icon>mdi-plus</v-icon> Add Category
-      </v-btn>
-    </div> -->
-
-    <v-data-table :headers="headers" 
-    :loading="fetching_data"
-    :items="filteredItems" :items-per-page="20" :sort-by="['name']" :sort-desc="[false]">
+    <v-data-table :headers="headers" :loading="fetching_data" :items="filteredItems" :items-per-page="20"
+      :sort-by="['name']" :sort-desc="[false]">
 
 
       <template #top>
-				<v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
-					<v-col cols="12" sm="6" md="4" lg="3" xl="3">
-						<v-text-field v-model="search" label="Search" density="comfortable" variant="outlined" clearable
-							hide-details prepend-inner-icon="mdi-magnify" placeholder="Search" />
-					</v-col>
+        <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
+          <v-col cols="12" sm="6" md="4" lg="3" xl="3">
+            <v-text-field v-model="search" label="Search" density="comfortable" variant="outlined" clearable
+              hide-details prepend-inner-icon="mdi-magnify" placeholder="Search" />
+          </v-col>
 
-					<v-col cols="auto">
-						<v-btn color="primary" rounded size="large" variant="elevated" @click="handleOpen">
-							<v-icon left>mdi-plus</v-icon> Add Category
-						</v-btn>
-					</v-col>
-				</v-row>
-			</template>
+          <v-col cols="auto">
+            <v-btn color="primary" rounded size="large" variant="elevated" @click="handleOpen">
+              <v-icon left>mdi-plus</v-icon> Add Category
+            </v-btn>
+          </v-col>
+        </v-row>
+      </template>
 
 
 
@@ -49,11 +42,7 @@
         </div>
       </template>
 
-      <!-- <template #item.is_active="{ item }">
-        <v-chip :color="item.is_active ? 'green' : 'red'" dark size="small">
-          {{ item.is_active ? 'Active' : 'Inactive' }}
-        </v-chip>
-      </template> -->
+
       <template #item.is_active="{ item }">
         <div>
           <v-switch v-model="item.is_active" density="compact" color="success" hide-details
@@ -63,51 +52,26 @@
 
 
 
-      <!-- <template #item.actions="{ item }">
-        <v-btn icon color="primary" variant="text" @click="handleOpen(item)">
-          <v-icon>mdi-eye-circle</v-icon>
-        </v-btn>
-        <v-btn icon color="error" variant="text" @click="handleDelete(item)">
-          <v-icon>mdi-delete-circle</v-icon>
-        </v-btn>
-      </template> -->
+
       <template #item.actions="{ item }">
-        <!-- <v-menu location="bottom end">
-          <template #activator="{ props }">
-            <v-btn v-bind="props" icon variant="text" color="primary">
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
 
-          <v-list density="compact" elevation="1">
-            <v-list-item @click="() => handleOpen(item)">
-              <v-list-item-title>
-                <v-icon start icon="mdi-pencil" class="mr-2" /> Edit Blog
-              </v-list-item-title>
-            </v-list-item>
-
-            <v-list-item @click="() => handleDelete(item)">
-              <v-list-item-title>
-                <v-icon start icon="mdi-delete" class="mr-2" /> Delete Blog
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu> -->
         <div style="width: max-content;">
 
-                        <v-btn size="x-small" class="ml-2" color="primary" icon variant="tonal" @click="handleOpen(item)"><v-icon>mdi-pencil</v-icon></v-btn>
-                        <v-btn size="x-small" class="ml-2" color="error" icon variant="tonal" @click="handleDelete(item)"><v-icon>mdi-delete</v-icon></v-btn>
-                    </div>
+          <v-btn size="x-small" class="ml-2" color="primary" icon variant="tonal"
+            @click="handleOpen(item)"><v-icon>mdi-eye</v-icon></v-btn>
+          <v-btn size="x-small" class="ml-2" color="error" icon variant="tonal"
+            @click="handleDelete(item)"><v-icon>mdi-delete</v-icon></v-btn>
+        </div>
       </template>
     </v-data-table>
 
-    <modal-template ref="globalModal" @saved="fetchCategories" @close="fetchCategories"></modal-template>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 
 const { showSuccess, showError } = useSnackbar()
 // Static headers
@@ -123,7 +87,7 @@ const headers = [
 
 // Refs
 const categories = ref([]);
-const globalModal = ref(null);
+const globalModal = useGlobalModal();
 const search = ref('');
 
 
@@ -140,23 +104,27 @@ import CategoryForm from './modal/CategoryForm.vue';
 import CategoryDelete from './modal/CategoryDelete.vue';
 // Method: Open modal
 function handleOpen(item = {}) {
-  globalModal.value.open({
+  globalModal.open({
     title: item ? 'Edit Category' : 'Add New Category',
     component: CategoryForm,
-    size: 'md',
+    size: 'lg',
     props: {
       item, // <-- correctly passed as a prop
     },
+    onSaved: fetchCategories,
+    onClose: fetchCategories,
   });
 }
 function handleDelete(item = {}) {
-  globalModal.value.open({
+  globalModal.open({
     title: 'Delete Category',
     component: CategoryDelete,
     size: 'sm',
     props: {
       item, // <-- correctly passed as a prop
     },
+    onSaved: fetchCategories,
+    onClose: fetchCategories,
   });
 }
 
@@ -175,8 +143,8 @@ async function fetchCategories() {
           : item.name_en,
       };
     });
-     fetching_data.value = false;
-    } catch (error) {
+    fetching_data.value = false;
+  } catch (error) {
     fetching_data.value = false;
     console.error('Failed to load categories', error);
   }

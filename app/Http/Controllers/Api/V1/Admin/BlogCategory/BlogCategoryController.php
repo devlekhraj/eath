@@ -137,13 +137,9 @@ class BlogCategoryController extends Controller
 
     public function getCategories(Request $request)
     {
-        $query = BlogCategory::with(['parent', 'children']);
-
-        if ($request->query('type') === 'parent') {
-            $query->whereNull('parent_id');
-        }
-
-        $categories = $query->orderBy('sort_order','asc')->get();
+        $categories = BlogCategory::with('parent')
+            ->orderBy('sort_order','asc')
+            ->get();
 
         return response()->json([
             'success' => true,

@@ -75,6 +75,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useSnackbar } from '@/composables/snackbar'
+import { getBannersApi } from '@/api/banners.api'
 
 const { showSuccess, showError } = useSnackbar()
 // Static headers
@@ -132,12 +133,12 @@ const fetching_data = ref(false);
 async function fetchBanners() {
 	try {
 		fetching_data.value = true;
-		const resp = await axios.get('admin/banners');
-		banners.value = resp.data;
-		fetching_data.value = false;
+		const resp = await getBannersApi();
+		banners.value = resp?.data ?? resp ?? [];
 	} catch (error) {
-		fetching_data.value = false;
 		console.error('Failed to load banners', error);
+	} finally {
+		fetching_data.value = false;
 	}
 }
 

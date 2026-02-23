@@ -17,7 +17,7 @@ import '@fontsource/poppins/700.css'
 
 import 'vuetify/styles'
 // Axios global config
-import './axios.config.js'
+import http from './http.config.js'
 
 // Auth store
 import { useAuthStore } from '@/stores/auth'
@@ -27,6 +27,7 @@ import ModalTemplate from '@components/ModalTemplate.vue'
 import { VuetifyViewer } from 'vuetify-pro-tiptap' // ✅ import
 import RichTextEditor from '@components/RichTextEditor.vue'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+import { useGlobalModal } from '@/composables/globalModal'
 
 import 'vuetify-pro-tiptap/style.css'
 
@@ -52,18 +53,20 @@ const vuetify = createVuetify({
 
 const app = createApp(App)
 const pinia = createPinia()
+const modal = useGlobalModal()
 
 // Register global components
 app.component('RichTextEditor', RichTextEditor)
 app.component('ModalTemplate', ModalTemplate)
 app.component('VuetifyViewer', VuetifyViewer) // ✅ register
+app.config.globalProperties.$modal = modal
 
 app.use(pinia)
 
 const auth = useAuthStore()
 if (auth.token) {
-  import('axios').then(({ default: axios }) => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`
+  Promise.resolve().then(() => {
+    http.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`
     auth.fetchProfile()
   })
 }

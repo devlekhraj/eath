@@ -54,15 +54,16 @@
 			<p>No gallery items found.</p>
 		</div>
 
-		<modal-template ref="globalModal" />
 	</div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import SelectGalleryImage from './gallery_form/SelectGalleryImage.vue'
-import FormGalleryUpdate from './gallery_form/FormGalleryUpdate.vue'
-import FormImageDelete from './gallery_form/FormImageDelete.vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import SelectGalleryImage from '@components/gallery/SelectGalleryImage.vue'
+import FormGalleryUpdate from '@components/gallery/FormGalleryUpdate.vue'
+import FormImageDelete from '@components/gallery/FormImageDelete.vue'
+import { useGlobalModal } from '@/composables/globalModal'
 
 const props = defineProps({
 	destination: {
@@ -72,7 +73,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['refresh'])
-const globalModal = ref(null)
+const globalModal = useGlobalModal()
+const route = useRoute()
+const destinationId = route.params.id || route.query.id || null
 
 const galleryItems = computed(() => {
 	if (Array.isArray(props.destination?.galleries)) return props.destination.galleries
@@ -91,7 +94,7 @@ const tableHeaders = [
 ]
 
 function openSelectModal() {
-	globalModal.value.open({
+	globalModal.open({
 		title: 'Select Image',
 		component: SelectGalleryImage,
 		size: 'lg',
@@ -102,7 +105,7 @@ function openSelectModal() {
 }
 
 function handleEdit(item = {}) {
-	globalModal.value.open({
+	globalModal.open({
 		title: item ? 'Edit Category' : 'Add New Category',
 		component: FormGalleryUpdate,
 		size: 'lg',
@@ -113,7 +116,7 @@ function handleEdit(item = {}) {
 	});
 }
 function handleDelete(item = {}) {
-	globalModal.value.open({
+	globalModal.open({
 		title: 'Delete Photo',
 		component: FormImageDelete,
 		size: 'sm',
@@ -125,41 +128,73 @@ function handleDelete(item = {}) {
 }
 
 
-function handleSelectImage(payload) {
-	const image = payload?.image ?? payload
-	const meta = payload?.meta
-	if (!image) return
-
-	const listKey = Array.isArray(props.destination?.galleries)
+function getListKey() {
+	return Array.isArray(props.destination?.galleries)
 		? 'galleries'
 		: Array.isArray(props.destination?.images)
 			? 'images'
 			: Array.isArray(props.destination?.gallery)
 				? 'gallery'
 				: 'galleries'
+}
 
+function upsertImage(image, meta = {}) {
+	const listKey = getListKey()
 	if (!Array.isArray(props.destination[listKey])) {
 		props.destination[listKey] = []
 	}
 
-	const imageUrl = image.url || image.image_url || image
+	const imageUrl = image?.url || image?.image_url || image
 	const exists = props.destination[listKey].some((item) => {
 		const existingUrl = item?.url || item?.image_url || item
 		return item?.id === image?.id || existingUrl === imageUrl
 	})
 
 	if (!exists) {
-		if (meta) {
-			image.custom_attributes = {
-				...(image.custom_attributes || {}),
-				alt_text: meta.alt_text || '',
-				caption: meta.caption || '',
-				description: meta.description || '',
-			}
+		image.custom_attributes = {
+			...(image.custom_attributes || {}),
+			alt_text: meta.alt_text || image?.alt_text || '',
+			caption: meta.caption || image?.caption || '',
+			description: meta.description || image?.description || '',
 		}
 		props.destination[listKey].push(image)
 	}
+}
 
+async function handleSelectImage(payload) {
+	const meta = payload?.meta || {}
+	const file = payload?.file
+	const image = payload?.image ?? payload
+
+	if (!destinationId) return
+
+	if (file instanceof File) {
+		const formData = new FormData()
+		formData.append('image', file)
+		formData.append('alt_text', meta.alt_text || '')
+		formData.append('caption', meta.caption || '')
+		formData.append('description', meta.description || '')
+
+		const response = await axios.post(`/admin/destinations/${destinationId}/save-image`, formData)
+		const uploaded = response?.data?.data ?? response?.data
+		if (uploaded) {
+			upsertImage(uploaded, meta)
+		}
+		emit('refresh')
+		return
+	}
+
+	if (!image) return
+	const response = await axios.post(`/admin/destinations/${destinationId}/use-image`, {
+		gallery_id: image.id,
+		alt_text: meta.alt_text || '',
+		caption: meta.caption || '',
+		description: meta.description || '',
+	})
+	const attached = response?.data?.data ?? response?.data
+	if (attached) {
+		upsertImage(attached, meta)
+	}
 	emit('refresh')
 }
 
@@ -191,13 +226,7 @@ function formatAspectRatio(item) {
 }
 
 function removeImage(item) {
-	const listKey = Array.isArray(props.destination?.galleries)
-		? 'galleries'
-		: Array.isArray(props.destination?.images)
-			? 'images'
-			: Array.isArray(props.destination?.gallery)
-				? 'gallery'
-				: 'galleries'
+	const listKey = getListKey()
 
 	if (!Array.isArray(props.destination[listKey])) return
 	props.destination[listKey] = props.destination[listKey].filter((entry) => {

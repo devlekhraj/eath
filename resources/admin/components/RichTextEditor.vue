@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineEmits, defineProps, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 // import axios from '@/axios.config'
 import {
     BaseKit,
@@ -25,9 +25,12 @@ import {
     Blockquote
 } from 'vuetify-pro-tiptap'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     modelValue: string
-}>()
+    minHeight?: string | number
+}>(), {
+    minHeight: '400px'
+})
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -38,6 +41,17 @@ watch(() => props.modelValue, (val) => {
     if (val !== content.value) {
         content.value = val
     }
+})
+
+const cssMinHeight = computed(() => {
+    if (typeof props.minHeight === 'number') return `${props.minHeight}px`
+    return props.minHeight || '400px'
+})
+
+const numericMinHeight = computed(() => {
+    const raw = cssMinHeight.value
+    const parsed = Number.parseInt(raw, 10)
+    return Number.isFinite(parsed) ? parsed : 400
 })
 
 const extensions = [
@@ -91,6 +105,6 @@ const extensions = [
 </script>
 
 <template>
-    <VuetifyTiptap v-model="content" :min-height="400" class="p-4"
+    <VuetifyTiptap v-model="content" :min-height="numericMinHeight" class="p-4" :style="{ minHeight: cssMinHeight }"
         :placeholder="'Type here...'" :toolbar="true" :toolbar-position="'top'" :extensions="extensions" />
 </template>
