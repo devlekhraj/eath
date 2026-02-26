@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Destination;
+use App\Models\Blog;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -50,9 +51,32 @@ class AppServiceProvider extends ServiceProvider
                     })->toArray();
             });
 
+            $safetyBlogs = Cache::remember('website.blogs.safety', 600, function () {
+                if (!Schema::hasTable('blogs') || !Schema::hasTable('blog_categories')) {
+                    return [];
+                }
+
+                return Blog::query()
+                    ->join('blog_categories as bc', 'bc.id', '=', 'blogs.category_id')
+                    ->select([
+                        'blogs.title',
+                        'blogs.slug',
+                        'blogs.category_id',
+                        'bc.slug as category_slug',
+                    ])
+                    ->where([
+                        'blogs.is_active' => 1,
+                    ])
+                    ->where('bc.slug', 'safety')
+                    ->orderByDesc('blogs.created_at')
+                    ->get();
+            });
+ 
+     
             $view->with([
                 'settings' => $settings,
                 'menus' => $menus,
+                'safetyBlogs' => $safetyBlogs,
             ]);
         });
     }

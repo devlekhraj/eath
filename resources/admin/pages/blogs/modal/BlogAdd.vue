@@ -102,8 +102,9 @@ async function handleSubmit() {
         const resp = await axios.post('/admin/blogs', form)
         loading.value = false;
         showSuccess(resp.data?.message || 'Blog created successfully')
+        console.log('Blog created', { resp });
         // emit('close')
-        router.push({ name: 'adminBlogForm', query: { id: resp.blog.id } })
+        router.push({ name: 'adminBlogDetailPage', query: { id: resp.blog.id } })
     } catch (error) {
         loading.value = false;
         showError(error?.response?.data?.message || 'An error occurred')

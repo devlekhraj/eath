@@ -1,10 +1,6 @@
 <template>
     <div class="mb-4">
         <v-card elevation="0" class="pa-2">
-            <v-card-title class="py-3">
-                <h5>Package Detail</h5>
-            </v-card-title>
-            <v-divider />
             <v-card-text class="pt-10">
                 <v-row>
                     <v-col cols="12">
@@ -17,7 +13,7 @@
                      <v-col cols="12">
                         <v-text-field v-model="form.slug" label="URL" :rules="[rules.required]"
                             :error-messages="errors.slug" density="comfortable" variant="outlined"
-                            :disabled="submitting || Boolean(form.published_at)" required />
+                            :disabled="submitting" required />
                     </v-col>
 
                     <v-col cols="12" md="6" lg="8">

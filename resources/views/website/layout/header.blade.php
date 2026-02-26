@@ -1160,16 +1160,11 @@
                             <div
                                 class="nav-dropdown absolute left-0 top-full -mt-px w-72 backdrop-blur-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition overflow-hidden">
                                 <div class="p-4 pt-6 grid gap-2 text-sm">
-                                    <a href="javascript:void(0)"
-                                        class="text-slate-600 hover:text-slate-900">Altitude Sickness</a>
-                                    <a href="javascript:void(0)"
-                                        class="text-slate-600 hover:text-slate-900">Daily Trek Briefing Process</a>
-                                    <a href="javascript:void(0)" class="text-slate-600 hover:text-slate-900">Emergency
-                                        &amp; Heli Rescue</a>
-                                    <a href="javascript:void(0)"
-                                        class="text-slate-600 hover:text-slate-900">Trekking Insurance</a>
-                                    <a href="javascript:void(0)" class="text-slate-600 hover:text-slate-900">Gear
-                                        Checklist</a>
+                                    @foreach ($safetyBlogs as $blog)
+                                        <a href="{{ route('blog.detail', ['category_slug' => $blog->category['slug'],'blog_slug' => $blog['slug']]) }}"
+                                            class="text-slate-600 hover:text-slate-900">{{ $blog['title'] }}</a>
+                                    @endforeach
+                                   
                                 </div>
                             </div>
                         </div>
