@@ -138,7 +138,7 @@
                 <div>
                     <h4 class="font-semibold">Company</h4>
                     <div class="mt-3 space-y-2 text-slate-600">
-                        <a href="/about/company/" class="block">About</a>
+                        <a href="/about-us" class="block">About</a>
                         <a href="/about/team/" class="block">Team</a>
                         <a href="/about/licenses/" class="block">Licenses</a>
                         <a href="/about/why-us/" class="block">Why Us</a>
@@ -150,8 +150,8 @@
                     <div class="mt-3 space-y-2 text-slate-600">
                         <a href="/contact/" class="block">Contact</a>
                         <a href="/contact/inquiry/" class="block">Inquiry Form</a>
-                        <a href="/terms/" class="block">Terms</a>
-                        <a href="/privacy/" class="block">Privacy</a>
+                        <a href="/terms-and-conditions" class="block">Terms and Conditions</a>
+                        <a href="/privacy-policy" class="block">Privacy Policy</a>
                     </div>
                 </div>
             </div>

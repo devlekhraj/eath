@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
 use App\Http\Controllers\WebsiteController;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,6 +24,16 @@ Route::prefix('auth')->group(function () {
 Route::get('/',[WebsiteController::class,'index']);
 Route::get('/demo',[WebsiteController::class,'demo']);
 
+Route::get('/privacy-policy', [WebsiteController::class,'privacyPolicy'])->name('privacy.policy');
+Route::get('/terms-and-conditions', [WebsiteController::class,'termsConditions'])->name('terms.conditions');
+
+Route::get('/contact-us', [WebsiteController::class,'contactUs'])->name('contact.us');
+
+Route::get('/about-us', [WebsiteController::class,'aboutUs'])->name('about.our.story');
+Route::get('/guide-profiles', [WebsiteController::class,'guideProfile'])->name('about.guide.profiles');
+
+Route::get('/responsible-travels', [WebsiteController::class,'responsibleTravels'])->name('responsible.travels');
+
 // Route::get('/destinations',[WebsiteController::class,'destinationPage'])->name('destination.page');
 Route::get('/destinations/{slug}',[WebsiteController::class,'destinationShow'])->name('destination.detail');
 Route::get('/treks/{destination}/{slug}', [WebsiteController::class,'show'])->name('trek.show');
@@ -37,15 +48,14 @@ Route::get('inquiry-form', [WebsiteController::class,'getInquiryForm'])->name('i
 Route::post('inquiry', [WebsiteController::class,'store'])->name('inquiry.store');
 Route::get('/faq', [WebsiteController::class,'faq'])->name('faq');
 
-Route::get('/privacy-policy', [WebsiteController::class,'privacyPolicy'])->name('privacy.policy');
-Route::get('/terms-and-conditions', [WebsiteController::class,'termsConditions'])->name('terms.conditions');
 
-Route::get('/contact-us', [WebsiteController::class,'contactUs'])->name('contact.us');
+Route::get('/cache/website-blogs-safety/reset', function () {
+    Cache::forget('website.blogs.safety');
 
-Route::get('/about-us', [WebsiteController::class,'aboutUs'])->name('about.our.story');
-Route::get('/guide-profiles', [WebsiteController::class,'guideProfile'])->name('about.guide.profiles');
-
-Route::get('/responsible-travels', [WebsiteController::class,'responsibleTravels'])->name('responsible.travels');
+    return response()->json([
+        'message' => 'Cache cleared: website.blogs.safety',
+    ]);
+})->name('cache.website.blogs.safety.reset');
 
 Route::get('/{category_slug}/{blog_slug}', [WebsiteController::class, 'blogDetailByCategory'])
     ->name('blog.detail');
