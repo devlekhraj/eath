@@ -173,8 +173,8 @@ const routes = [
 				component: () => import('@pages/packages/PackageForm.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Package Form',
-					subtitle: 'Package Form',
+					title: 'Trek Form',
+					// subtitle: 'Trek Form',
 				},
 			},
 			{

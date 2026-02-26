@@ -7,29 +7,30 @@
             <v-divider />
             <v-card-text class="pt-10">
                 <v-row>
-                    <v-col cols="12" lg="6">
-                        <v-text-field v-model="form.name" label="Package Name" :rules="[rules.required]"
+                    <v-col cols="12">
+                        <v-textarea v-model="form.name" label="Package Name" :rules="[rules.required]"
+                        rows="2" auto-grow
                             :error-messages="errors.name" density="comfortable" variant="outlined"
                             :disabled="submitting" required />
                     </v-col>
 
-                     <v-col cols="12" lg="6">
+                     <v-col cols="12">
                         <v-text-field v-model="form.slug" label="URL" :rules="[rules.required]"
                             :error-messages="errors.slug" density="comfortable" variant="outlined"
                             :disabled="submitting || Boolean(form.published_at)" required />
                     </v-col>
 
-                    <v-col cols="12" lg="4">
+                    <v-col cols="12" md="6" lg="8">
                         <v-select v-model="form.destination_id" variant="outlined" :items="destination_list"
                             item-title="name" item-value="id" label="Select Destination" clearable />
                     </v-col>
 
-                     <v-col cols="12" md="6" lg="2">
+                     <v-col cols="6" md="3" lg="2">
                         <v-switch v-model="form.is_active" label="Active" color="success" inset
                             :disabled="submitting" />
                     </v-col>
 
-                     <v-col cols="12" md="6" lg="2">
+                      <v-col cols="6" md="3"  lg="2">
                         <v-switch v-model="form.is_featured" label="Featured" color="success" inset
                             :disabled="submitting" />
                     </v-col>

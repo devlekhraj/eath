@@ -12,7 +12,7 @@ class TravelPackage extends Model
     use SoftDeletes;
     protected $guarded = [];
 
-    protected $appends = ['images_urls', 'image', 'rating', 'min_price', 'highlight_name'];
+    protected $appends = ['images_urls', 'image', 'rating', 'min_price', 'highlight_name', 'fullUrl'];
 
 
     protected static function boot()
@@ -134,6 +134,20 @@ class TravelPackage extends Model
     {
 
         return $this->prices->min('price');
+    }
+
+    public function getFullUrlAttribute(): string
+    {
+        $destinationSlug = $this->destination?->slug;
+
+        if (!$destinationSlug || !$this->slug) {
+            return '';
+        }
+
+        return route('trek.show', [
+            'destination' => $destinationSlug,
+            'slug' => $this->slug,
+        ]);
     }
 
 

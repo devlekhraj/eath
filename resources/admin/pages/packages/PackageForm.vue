@@ -3,39 +3,24 @@
 		<v-row>
 			<v-col cols="12">
 
-				<div>
-					<FormOverview v-if="formReady" :travelPackage="travelPackage" @refresh="fetchPackage" />
-				</div>
+				<DetailHeader
+					v-if="formReady"
+					:title="packageTitle"
+					:url="travelPackage?.full_url ? travelPackage.full_url : ''"
+					:image-url="packageImageUrl"
+				>
+					<template #meta>
+						<v-chip size="small" color="primary" variant="tonal" label>
+							{{ travelPackage?.destination?.name || '-' }}
+						</v-chip>
+					</template>
+				</DetailHeader>
 				<!-- Tabs Section -->
 				<v-card elevation="0" class="mb-6">
 					<v-tabs v-model="activeTab" color="primary">
-						<v-tab value="description">
-							<v-icon color="primary" start>mdi-lightbulb-outline</v-icon>
-							Description
-						</v-tab>
-						<v-tab value="highlight">
-							<v-icon color="primary" start>mdi-lightbulb-outline</v-icon>
-							Highlights
-						</v-tab>
-						<v-tab value="itinerary">
-							<v-icon color="primary" start>mdi-map-check-outline</v-icon>
-							Itinerary
-						</v-tab>
-						<v-tab value="price_list">
-							<v-icon color="primary" start>mdi-currency-usd</v-icon>
-							Price List
-						</v-tab>
-						<v-tab value="includes">
-							<v-icon color="primary" start>mdi-checkbox-marked-circle-outline</v-icon>
-							Includes
-						</v-tab>
-						<!-- <v-tab value="banners">
-							<v-icon color="primary" start>mdi-image</v-icon>
-							Banners
-						</v-tab> -->
-						<v-tab value="gallery">
-							<v-icon color="primary" start>mdi-image-multiple</v-icon>
-							Gallery
+						<v-tab v-for="tab in tabs" :key="tab.value" :value="tab.value">
+							<v-icon color="primary" start>{{ tab.icon }}</v-icon>
+							{{ tab.label }}
 						</v-tab>
 					</v-tabs>
 
@@ -62,6 +47,7 @@
 <script setup>
 import { computed, reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import DetailHeader from '@/components/DetailHeader.vue'
 
 import FormOverview from './form_section/FormOverview.vue'
 import FormDescription from './form_section/FormDescription.vue'
@@ -79,8 +65,19 @@ const packageId = route.query.id
 // Reactive state
 const travelPackage = reactive({})
 const formReady = ref(false)
-const activeTab = ref('description')
+const activeTab = ref('overview')
+const tabs = [
+	{ value: 'overview', label: 'Overview', icon: 'mdi-view-dashboard-outline' },
+	{ value: 'description', label: 'Description', icon: 'mdi-lightbulb-outline' },
+	{ value: 'highlight', label: 'Highlights', icon: 'mdi-lightbulb-outline' },
+	{ value: 'itinerary', label: 'Itinerary', icon: 'mdi-map-check-outline' },
+	{ value: 'price_list', label: 'Price List', icon: 'mdi-currency-usd' },
+	{ value: 'includes', label: 'Includes', icon: 'mdi-checkbox-marked-circle-outline' },
+	// { value: 'banners', label: 'Banners', icon: 'mdi-image' },
+	{ value: 'gallery', label: 'Gallery', icon: 'mdi-image-multiple' },
+]
 const tabComponents = {
+	overview: FormOverview,
 	description: FormDescription,
 	highlight: FormHighlights,
 	itinerary: FormPackageItinery,
@@ -90,6 +87,20 @@ const tabComponents = {
 	gallery: FormPackageGallery,
 }
 const activeComponent = computed(() => tabComponents[activeTab.value] || null)
+const publicBaseUrl = window?.location?.origin ?? ''
+const packageTitle = computed(() => travelPackage?.name || '')
+const packageUrl = computed(() => {
+	if (!travelPackage?.full_url?.slug || !travelPackage?.slug) return ''
+	return `${publicBaseUrl}/treks/${travelPackage.full_url.slug}/${travelPackage.slug}`
+})
+const packageImageUrl = computed(() =>
+	travelPackage?.thumb
+	|| travelPackage?.cover_image
+	|| travelPackage?.featured_image
+	|| travelPackage?.galleries?.[0]?.url
+	|| travelPackage?.images?.[0]?.url
+	|| ''
+)
 
 // Fetch single travel package
 async function fetchPackage() {

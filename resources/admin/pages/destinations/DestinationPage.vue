@@ -55,7 +55,7 @@
             <template #item.images="{ item }">
                 <div class="d-flex align-center" style="min-width: 180px;">
                     <v-avatar size="36" class="mr-3" rounded="sm">
-                        <v-img v-if="item.thumb" :src="item.thumb" cover />
+                        <v-img v-if="item.thumb" :src="item.thumb" cover/>
                         <v-icon v-else>mdi-image-off-outline</v-icon>
                     </v-avatar>
                     <span class="text-caption text-medium-emphasis">

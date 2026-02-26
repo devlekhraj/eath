@@ -19,6 +19,7 @@ class TravelPackageResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'full_url' => $this->fullUrl,
             'description' => $this->description,
             'additional_info' => $this->additional_info,
             'duration_days' => $this->duration_days,
@@ -38,6 +39,13 @@ class TravelPackageResource extends JsonResource
             'seo_image' => $this->seo_image,
             'seo_image' => $this->seo_image,
             'destination_id' => $this->destination_id,
+            'destination' => $this->whenLoaded('destination', function () {
+                return [
+                    'id' => $this->destination->id,
+                    'name' => $this->destination->name,
+                    'slug' => $this->destination->slug,
+                ];
+            }),
             'published_at' => $this->published_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
