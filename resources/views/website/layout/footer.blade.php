@@ -287,13 +287,26 @@
     });
 
     const header = document.querySelector(".site-header");
-    const heroSection = document.querySelector(".hero-overlay");
+    const scrollTargetConfigs = [
+        { selector: ".hero-overlay", mode: "height" },
+        { selector: ".blog-page-bg", mode: "top" },
+    ];
+    const scrollTargetConfig = scrollTargetConfigs
+        .map((config) => ({
+            ...config,
+            element: document.querySelector(config.selector),
+        }))
+        .find((config) => config.element);
+    const scrollTarget = scrollTargetConfig?.element ?? null;
 
     const updateHeaderStyle = () => {
-        if (!header || !heroSection) {
+        if (!header || !scrollTarget) {
             return;
         }
-        const threshold = heroSection.offsetHeight - header.offsetHeight;
+        const threshold =
+            scrollTargetConfig?.mode === "top"
+                ? scrollTarget.offsetTop - header.offsetHeight
+                : scrollTarget.offsetHeight - header.offsetHeight;
         header.classList.toggle("is-scrolled", window.scrollY > threshold);
     };
 

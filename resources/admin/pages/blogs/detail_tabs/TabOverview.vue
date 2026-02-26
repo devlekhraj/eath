@@ -15,16 +15,20 @@
                             hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint
                             :error-messages="errors.slug" />
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="5">
                         <v-select v-model="form.category_id" variant="outlined" density="comfortable"
                             :items="blogCategories" item-title="name" item-value="id" label="Select Categories"
                             clearable :error-messages="errors.category_id || errors.category_id" />
                     </v-col>
 
-                    <v-col cols="6">
+                    <v-col cols="5">
                         <v-text-field v-model="form.author" label="Author" variant="outlined" density="comfortable"
                             prepend-inner-icon="mdi-account" :rules="[rules.required]" class="mb-4"
                             :error-messages="errors.author" />
+                    </v-col>
+                    <v-col cols="2">
+                        <v-switch v-model="form.is_active" label="Is Active" color="primary"
+                            :error-messages="errors.is_active" inset />
                     </v-col>
 
 
@@ -93,6 +97,7 @@ async function submitOverview() {
             slug: form.value.slug,
             category_id: form.value.category_id,
             author: form.value.author,
+            is_active: form.value.is_active,
         }
 
         const resp = blogId.value

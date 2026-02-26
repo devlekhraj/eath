@@ -175,7 +175,12 @@ class WebsiteController extends Controller
             $blog = Blog::where('slug', $slug)->firstOrFail();
 
             // Fetch related blogs (same category, excluding current blog)
-            $relatedBlogs = Blog::latest()
+            $relatedBlogsQuery = Blog::where('id', '!=', $blog->id);
+            if (!empty($blog->category_id)) {
+                $relatedBlogsQuery->where('category_id', $blog->category_id);
+            }
+            $relatedBlogs = $relatedBlogsQuery
+                ->latest()
                 ->take(4)
                 ->get();
 
@@ -191,10 +196,14 @@ class WebsiteController extends Controller
     {
         try {
             $blog = Blog::where('slug', $blog_slug)->firstOrFail();
-            $blog->load('category');
 
             // Fetch related blogs (same category, excluding current blog)
-            $relatedBlogs = Blog::latest()
+            $relatedBlogsQuery = Blog::where('id', '!=', $blog->id);
+            if (!empty($blog->category_id)) {
+                $relatedBlogsQuery->where('category_id', $blog->category_id);
+            }
+            $relatedBlogs = $relatedBlogsQuery
+                ->latest()
                 ->take(4)
                 ->get();
 

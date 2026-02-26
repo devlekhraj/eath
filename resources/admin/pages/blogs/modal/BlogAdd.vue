@@ -55,7 +55,8 @@ const { showSuccess, showError } = useSnackbar()
 
 
 function slugify(text) {
-    return text
+    const safeText = text == null ? '' : String(text)
+    return safeText
         .toLowerCase()
         .trim()
         .replace(/[\s_]+/g, '-')       // Replace spaces/underscores with -
