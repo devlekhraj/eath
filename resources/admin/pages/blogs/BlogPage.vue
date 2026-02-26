@@ -71,17 +71,17 @@
                 </div>
             </template>
 
-            <template #item.is_active="{ item }">
+            <template #item.status="{ item }">
                 <div class="d-inline-flex align-center">
                     <span
                         class="status-dot mr-2"
-                        :class="item.is_active ? 'bg-success' : 'bg-error'"
+                        :class="item.status ? 'bg-success' : 'bg-error'"
                     ></span>
                     <span
                         class="text-body-2"
-                        :class="item.is_active ? 'text-success' : 'text-error'"
+                        :class="item.status ? 'text-success' : 'text-error'"
                     >
-                        {{ item.is_active ? 'Active' : 'Inactive' }}
+                        {{ item.status ? 'Active' : 'Inactive' }}
                     </span>
                 </div>
             </template>
@@ -114,7 +114,7 @@ const headers = [
     { title: 'SN', key: 'sn', sortable: true },
     { title: 'Title', key: 'title', sortable: false },
     { title: 'Category', key: 'category', sortable: false },
-    { title: 'Status', key: 'is_active', sortable: false },
+    { title: 'Status', key: 'status', sortable: false },
     { title: 'Actions', key: 'actions', sortable: false },
 ]
 

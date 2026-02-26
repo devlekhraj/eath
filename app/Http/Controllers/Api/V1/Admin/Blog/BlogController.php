@@ -2,39 +2,41 @@
 
 namespace App\Http\Controllers\Api\V1\Admin\Blog;
 
-
+use App\Http\Controllers\Controller;
+use App\Http\Resources\BlogListResource;
+use App\Http\Resources\BlogResource;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\BlogResource;
 use Illuminate\Validation\ValidationException;
 
 class BlogController extends Controller
 {
     public function index()
     {
-        // Logic to retrieve travel packages
-        $blogs = Blog::with(['categories', 'coverImage', 'images.gallery.variants'])
-            ->orderBy('created_at','desc')
+        $blogs = Blog::with(['category', 'categories'])
+            ->select(['id', 'title', 'slug', 'category_id', 'is_active', 'is_published', 'created_at'])
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json([
             'success' => true,
-            'data' => BlogResource::collection($blogs)
+            'data' => BlogListResource::collection($blogs),
         ], 200);
     }
+
     public function show(Request $request, $id)
     {
         // Retrieve the travel package by ID or fail with 404
-        $blog = Blog::with(['category','images.gallery.variants'])->findOrFail($id);
+        $blog = Blog::with(['category', 'images.gallery.variants'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
             'data' => new BlogResource($blog),  // Use `new` here
-            'message' => 'Blog retrieved.'
+            'message' => 'Blog retrieved.',
         ], 200);
     }
+
     public function delete(Request $request, $id)
     {
         // Retrieve the travel package by ID or fail with 404
@@ -43,7 +45,7 @@ class BlogController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $blog->title.' deleted.'
+            'message' => $blog->title.' deleted.',
         ], 200);
 
     }
@@ -61,7 +63,7 @@ class BlogController extends Controller
 
         return response()->json([
             'message' => 'Blog created successfully.',
-            'blog'    => $blog,
+            'blog' => $blog,
         ], 201);
     }
 
@@ -81,7 +83,7 @@ class BlogController extends Controller
 
         return response()->json([
             'message' => 'Blog updated successfully.',
-            'blog'    => $blog,
+            'blog' => $blog,
         ], 200);
     }
 
@@ -136,6 +138,7 @@ class BlogController extends Controller
                 if (is_string($value)) {
                     return trim($value) !== '';
                 }
+
                 return ! is_null($value);
             });
 
@@ -168,7 +171,6 @@ class BlogController extends Controller
 
         return $validated;
     }
-
 
     public function toggleActive($id, Request $request)
     {
