@@ -29,6 +29,7 @@ class TravelPackage extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
+        'destination_id' => 'integer',
     ];
     public function featured()
     {
