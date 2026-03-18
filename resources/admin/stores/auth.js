@@ -54,8 +54,13 @@ export const useAuthStore = defineStore('auth', {
                 const resp = await profileApi()
                 this.user = resp?.data ?? resp
             } catch(error) {
-                console.log({error});
-                // this.logout()
+                const status = error?.response?.status
+                if (status === 401 || status === 419) {
+                    this.token = null
+                    this.user = null
+                    localStorage.removeItem('token')
+                    delete http.defaults.headers.common['Authorization']
+                }
             }
         }
     }

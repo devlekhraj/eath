@@ -1,0 +1,1 @@
+import{_ as t,j as o,o as r,b as s}from"./main-DU3zfdbm.js";import"./style-IlyYNi84.js";const n={};function a(i,e){return r(),o("div",null,e[0]||(e[0]=[s("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, ipsa.",-1)]))}const m=t(n,[["render",a]]);export{m as default};

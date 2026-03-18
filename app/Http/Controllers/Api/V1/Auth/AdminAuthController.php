@@ -23,6 +23,14 @@ class AdminAuthController extends Controller
     // }
    public function login(Request $request)
 {
+    // Ensure stale incoming tokens are ignored on login request.
+    $request->headers->remove('Authorization');
+    $request->headers->remove('authorization');
+
+    if (method_exists(auth('api_admin'), 'unsetToken')) {
+        auth('api_admin')->unsetToken();
+    }
+
     $messages = [
         'username.required' => 'Please enter your username.',
         'password.required' => 'Please enter your password.',
@@ -59,17 +67,10 @@ class AdminAuthController extends Controller
         ], 422);
     }
 
-    // Log in
-    try {
-        if (!$token = auth('api_admin')->login($user)) {
-            return response()->json([
-                'password' => 'Login failed. Please try again.'
-            ], 500);
-        }
-    } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-        // If an old token in the request is expired, we might need to skip detection or clear it.
-        // However, fromUser avoids the request parsing as much.
-        $token = auth('api_admin')->login($user); 
+    if (!$token = auth('api_admin')->login($user)) {
+        return response()->json([
+            'password' => 'Login failed. Please try again.'
+        ], 500);
     }
 
     return $this->respondWithToken($token);
