@@ -1,7 +1,11 @@
 import http from '@/http.config'
 
 export function loginApi(payload) {
-    return http.post('/admin/login', payload)
+    return http.post('/admin/login', payload, {
+        headers: {
+            Authorization: '',
+        },
+    })
 }
 
 export function logoutApi() {
