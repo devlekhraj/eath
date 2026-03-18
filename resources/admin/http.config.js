@@ -14,6 +14,20 @@ if (token) {
 }
 
 http.interceptors.request.use((config) => {
+    const requestUrl = String(config.url || '')
+    const isLoginRequest =
+        requestUrl.endsWith('/admin/login') ||
+        requestUrl.endsWith('/user/login') ||
+        requestUrl === '/admin/login' ||
+        requestUrl === '/user/login'
+
+    if (isLoginRequest) {
+        if (config.headers?.Authorization) {
+            delete config.headers.Authorization
+        }
+        return config
+    }
+
     const latestToken = localStorage.getItem('token')
     if (latestToken) {
         config.headers.Authorization = `Bearer ${latestToken}`
