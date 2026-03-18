@@ -23,3 +23,12 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+
+# Logs
+error_log
+public/error_log
+*.log
+
+# Test files
+public/imagick-test.php
