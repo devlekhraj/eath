@@ -388,7 +388,10 @@ router.beforeEach((to, from, next) => {
 	const requiresAuth = to.matched.some(record => record.meta.requireAuth)
 
 	if (requiresAuth && !isLoggedIn) {
-		return next({ name: 'adminLoginPage' })
+		return next({
+			path: '/admin/login',
+			query: { redirect: to.fullPath },
+		})
 	}
 
 	if (to.name === 'adminLoginPage' && isLoggedIn) {

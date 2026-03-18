@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const http = axios
+const ADMIN_LOGIN_PATH = '/admin/login'
 
 http.defaults.baseURL = import.meta.env.VITE_API_BASE_URL || ''
 http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
@@ -25,6 +26,17 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
     (response) => response.data,
     (error) => {
+        const status = error?.response?.status
+
+        if (status === 401 || status === 419) {
+            localStorage.removeItem('token')
+            delete http.defaults.headers.common['Authorization']
+
+            if (window.location.pathname !== ADMIN_LOGIN_PATH) {
+                window.location.href = ADMIN_LOGIN_PATH
+            }
+        }
+
         if (
             error.response &&
             error.response.status === 422 &&

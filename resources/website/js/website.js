@@ -42,6 +42,12 @@ window.sendAjax = function (
 			if (typeof success === 'function') success(response.data);
 		})
 		.catch((err) => {
+			const status = err?.response?.status;
+			if (status === 401 || status === 419) {
+				const redirectUrl = err?.response?.data?.redirect || '/admin/login';
+				window.location.href = redirectUrl;
+				return;
+			}
 			console.error('AJAX Error:', err);
 			if (typeof error === 'function') error(err.response?.data || err.message);
 		})
@@ -249,4 +255,3 @@ $(document).ready(() => {
 
 
 });
-

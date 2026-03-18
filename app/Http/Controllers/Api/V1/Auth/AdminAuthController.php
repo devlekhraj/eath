@@ -60,10 +60,16 @@ class AdminAuthController extends Controller
     }
 
     // Log in
-    if (!$token = auth('api_admin')->login($user)) {
-        return response()->json([
-            'password' => 'Login failed. Please try again.'
-        ], 500);
+    try {
+        if (!$token = auth('api_admin')->login($user)) {
+            return response()->json([
+                'password' => 'Login failed. Please try again.'
+            ], 500);
+        }
+    } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+        // If an old token in the request is expired, we might need to skip detection or clear it.
+        // However, fromUser avoids the request parsing as much.
+        $token = auth('api_admin')->login($user); 
     }
 
     return $this->respondWithToken($token);
@@ -98,10 +104,12 @@ class AdminAuthController extends Controller
     // Format the token response
     protected function respondWithToken($token)
     {
+        $ttl = Auth::guard('api_admin')->factory()->getTTL();
+        
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'bearer',
-            'expires_in'   => Auth::guard('api_admin')->factory()->getTTL() * 60,
+            'expires_in'   => $ttl ? $ttl * 60 : null,
         ]);
     }
 }

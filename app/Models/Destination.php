@@ -15,7 +15,7 @@ class Destination extends Model
         "is_featured" => "boolean"
     ];
 
-     protected $appends = ['image'];
+    protected $appends = ['image', 'url'];
 
     protected static function booted()
     {
@@ -63,5 +63,10 @@ class Destination extends Model
             ->first()
             ?->gallery
             ?->url ?? '/images/logo.png'; // fallback if gallery exists but URL is null
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return route('destination.detail', ['slug' => $this->slug]);
     }
 }

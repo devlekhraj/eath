@@ -1,3 +1,40 @@
+
+<template>
+    <v-container>
+
+        <v-card elevation="0" class="pa-6 login-card-shadow" rounded style="max-width: 500px;">
+            <v-card-title class="text-h5">Login</v-card-title>
+            <v-card-text>
+                <v-form ref="formRef" @submit.prevent="handleLogin" lazy-validation>
+                    <div class="mb-4">
+                        <label class="text-caption text-medium-emphasis d-block mb-2">Username</label>
+                        <v-text-field v-model="credentials.username" prepend-inner-icon="mdi-account" required
+                            :rules="[v => !!v || 'Username is required']" variant="outlined" density="comfortable"
+                            placeholder="john_cena" hide-details="auto"
+                            :error="!!serverErrors.username" :error-messages="serverErrors.username"
+                            autocomplete="username" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="text-caption text-medium-emphasis d-block mb-2">Password</label>
+                        <v-text-field v-model="credentials.password" type="password" variant="outlined"
+                            density="comfortable" prepend-inner-icon="mdi-lock" required
+                            :rules="[v => !!v || 'Password is required']" placeholder="******"
+                            hide-details="auto"
+                            :error="!!serverErrors.password" :error-messages="serverErrors.password"
+                            autocomplete="current-password" />
+                    </div>
+                    <v-btn :loading="auth.loading" size="large" tile type="submit" color="primary" class="mt-4" block>
+                        <v-icon start icon="mdi-login" />
+                        Login
+                    </v-btn>
+                </v-form>
+            </v-card-text>
+        </v-card>
+
+    </v-container>
+</template>
+
+
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -58,34 +95,8 @@ async function handleLogin() {
 }
 </script>
 
-<template>
-    <v-container>
-        <v-row>
-            <v-col cols="12" md="6" offset-md="3">
-                <v-card elevation="0">
-                    <v-card-title class="text-h5">Login</v-card-title>
-                    <v-card-text>
-                        <v-form ref="formRef" @submit.prevent="handleLogin" lazy-validation>
-                            <div class="mb-4">
-                                <v-text-field v-model="credentials.username" label="Username"
-                                    prepend-inner-icon="mdi-account" required :rules="[v => !!v || 'Username is required']"
-                                    :error="!!serverErrors.username" :error-messages="serverErrors.username"
-                                    autocomplete="username" />
-                            </div>
-                            <div class="mb-4">
-                                <v-text-field v-model="credentials.password" label="Password" type="password"
-                                    prepend-inner-icon="mdi-lock" required :rules="[v => !!v || 'Password is required']"
-                                    :error="!!serverErrors.password" :error-messages="serverErrors.password"
-                                    autocomplete="current-password" />
-                            </div>
-                            <v-btn :loading="auth.loading" size="large" tile type="submit" color="primary" class="mt-4" block>
-                                <v-icon start icon="mdi-login" />
-                                Login
-                            </v-btn>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
-</template>
+<style scoped>
+.login-card-shadow {
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+</style>

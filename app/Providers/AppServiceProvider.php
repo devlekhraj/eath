@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Destination;
 use App\Models\Blog;
+use App\Models\Country;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -51,6 +52,38 @@ class AppServiceProvider extends ServiceProvider
                     })->toArray();
             });
 
+
+
+            // Cache::delete('website.destinations.v2');
+            $destinations = Cache::remember('website.destinations.v2', 600, function () {
+                if (!Schema::hasTable('destinations')) {
+                    return [];
+                }
+
+                return Destination::where('is_active', 1)
+                    ->select(['id', 'name', 'slug'])
+                    ->get()
+                    ->map(function ($destination) {
+                        return [
+                            'name' => $destination->name,
+                            'image' => $destination->image,
+                            'id' => $destination->id,
+                            'url' => $destination->url,
+                        ];
+                    })
+                    ->toArray();
+            });
+            // dd($destinations);
+            $countries = Cache::remember('website.countries', 600, function () {
+                if (!Schema::hasTable('countries')) {
+                    return [];
+                }
+
+                return Country::select(['id', 'name', 'country_code','phone_extension'])
+                    ->get()
+                    ->toArray();
+            });
+
             $safetyBlogs = Cache::remember('website.blogs.safety', 600, function () {
                 if (!Schema::hasTable('blogs') || !Schema::hasTable('blog_categories')) {
                     return [];
@@ -76,6 +109,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'settings' => $settings,
                 'menus' => $menus,
+                'destinations' => $destinations,
+                'countries' => $countries,
                 'safetyBlogs' => $safetyBlogs,
             ]);
         });

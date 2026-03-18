@@ -46,6 +46,7 @@ Route::get('/fixed-departures/{slug}', [WebsiteController::class,'fixedDeparture
 Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');
 Route::get('inquiry-form', [WebsiteController::class,'getInquiryForm'])->name('inquiry.form');
 Route::post('inquiry', [WebsiteController::class,'store'])->name('inquiry.store');
+Route::post('footer-inquiry', [WebsiteController::class, 'storeFooterInquiry'])->name('footer.inquiry.store');
 Route::get('/faq', [WebsiteController::class,'faq'])->name('faq');
 
 

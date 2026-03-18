@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Faq;
 use App\Models\FeaturedPackage;
 use App\Models\Guide;
+use App\Models\Inquiry;
 use App\Models\PackageCategory;
 use App\Models\Page;
 use App\Models\TravelPackage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WebsiteController extends Controller
 {
@@ -273,6 +276,67 @@ class WebsiteController extends Controller
     {
         return view('website.pages.static_page.contact-us');
     }
+
+    public function storeFooterInquiry(Request $request)
+    {
+        $data = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'country' => 'required|string|max:100',
+            'destination' => 'required|integer|exists:destinations,id',
+            'travel_date' => 'required|date|after_or_equal:today',
+            'number_of_people' => 'required|integer|min:1',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        $nameParts = preg_split('/\s+/', trim($data['full_name'])) ?: [];
+        $fname = $nameParts[0] ?? '';
+        $lname = trim(implode(' ', array_slice($nameParts, 1)));
+        $destination = Destination::findOrFail($data['destination']);
+        $country = Country::query()
+            ->where('name', $data['country'])
+            ->orWhere('country_code', $data['country'])
+            ->first();
+
+        $rawPhone = trim((string) $data['phone']);
+        $mobileNo = $rawPhone;
+
+        if ($country?->phone_extension) {
+            $extension = preg_replace('/\s+/', '', (string) $country->phone_extension);
+            $normalizedPhone = preg_replace('/\s+/', '', $rawPhone);
+            $normalizedPhone = preg_replace('/^' . preg_quote($extension, '/') . '/', '', $normalizedPhone);
+            $mobileNo = $extension . ' ' . ltrim($normalizedPhone, '+');
+        }
+
+        $inquiry = Inquiry::create([
+            'fname' => $fname,
+            'lname' => $lname,
+            'email' => $data['email'],
+            'mobile_no' => $mobileNo,
+            'country' => $data['country'],
+            'custom_destination' => $destination->name,
+            'description' => $data['description'],
+            'travel_date' => $data['travel_date'],
+            'number_of_people' => $data['number_of_people'],
+            'message' => $data['description'],
+            'status' => 'new',
+            'is_active' => true,
+            'inquirable_type' => Destination::class,
+            'inquirable_id' => $destination->id,
+        ]);
+
+        Log::info('Footer inquiry submitted', [
+            'inquiry_id' => $inquiry->id,
+            'destination_id' => $destination->id,
+        ]);
+
+        return response()->json([
+            'message' => 'Inquiry submitted successfully.',
+            'inquiry' => $inquiry,
+        ], 201);
+    }
+
     public function responsibleTravels()
     {
         $slug = 'responsible-travels';

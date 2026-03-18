@@ -1,5 +1,3 @@
-
-
 {{-- inquiry panel --}}
 <button id="inquiry-toggle"
     class="inquiry-cta fixed right-0 bottom-10 z-50 -translate-y-1/2 bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-lg hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2">
@@ -15,58 +13,24 @@
 
 <div id="inquiry-panel" class="fixed inset-0 z-50">
     <div class="inquiry-backdrop absolute inset-0 bg-slate-900/40"></div>
-        <aside class="inquiry-drawer absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
-            <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Inquiry</p>
-                    <h3 class="mt-1 text-lg font-semibold text-slate-900">Plan Your Trek</h3>
-                </div>
-                <button id="inquiry-close"
-                    class="rounded-full p-2 text-slate-500 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                    aria-label="Close inquiry panel">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M6 6l12 12M18 6l-12 12" />
-                    </svg>
-                </button>
+    <aside class="inquiry-drawer absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Inquiry</p>
+                <h3 class="mt-1 text-lg font-semibold text-slate-900">Plan Your Trek</h3>
             </div>
-            <form class="px-6 py-6" action="#" method="post">
-                <label class="block text-sm font-semibold text-slate-900" for="inquiry-name">Full name</label>
-                <input id="inquiry-name" name="name" type="text" autocomplete="name" required
-                    class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
+            <button id="inquiry-close"
+                class="rounded-full p-2 text-slate-500 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+                aria-label="Close inquiry panel">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6l-12 12" />
+                </svg>
+            </button>
+        </div>
+        @include('website.layout.partials.inquiry-form')
 
-                <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-email">Email</label>
-                <input id="inquiry-email" name="email" type="email" autocomplete="email" required
-                    class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-
-                <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-phone">Phone /
-                    WhatsApp</label>
-                <input id="inquiry-phone" name="phone" type="tel" autocomplete="tel"
-                    class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-
-                <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-message">Your
-                    plan</label>
-                <textarea id="inquiry-message" name="message" rows="4" required
-                    class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"></textarea>
-
-                <button type="submit"
-                    class="mt-6 inline-flex w-full items-center justify-center rounded-md bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2">
-                    Send Inquiry
-                </button>
-                <a href="https://wa.me/9779867666656?text=Hello%2C%20I%27d%20like%20to%20inquire%20about%20a%20Himalayan%20trek."
-                    class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2"
-                    target="_blank" rel="noopener">
-                    <svg class="h-4 w-4" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-                    <path
-                        d="M19.11 17.205c-.27-.135-1.6-.79-1.85-.88-.246-.09-.427-.135-.608.135-.18.27-.7.88-.855 1.06-.156.18-.31.202-.58.067-.27-.135-1.14-.42-2.173-1.34-.804-.716-1.345-1.6-1.5-1.87-.156-.27-.017-.416.118-.55.12-.12.27-.31.405-.465.135-.156.18-.27.27-.45.09-.18.045-.337-.022-.472-.067-.135-.608-1.466-.833-2.005-.22-.53-.446-.457-.608-.465l-.517-.01c-.18 0-.472.067-.72.337-.247.27-.945.924-.945 2.252 0 1.327.968 2.61 1.103 2.79.135.18 1.905 2.91 4.615 4.08.645.278 1.148.444 1.54.568.646.205 1.234.176 1.7.107.518-.077 1.6-.653 1.83-1.283.225-.63.225-1.17.157-1.283-.067-.112-.247-.18-.517-.315ZM16.004 4C9.375 4 4 9.373 4 16c0 2.118.555 4.144 1.606 5.94L4 28l6.258-1.642A11.96 11.96 0 0 0 16.004 28C22.63 28 28 22.627 28 16S22.63 4 16.004 4Zm0 21.818a9.82 9.82 0 0 1-5.018-1.377l-.36-.214-3.71.974.99-3.62-.235-.373A9.78 9.78 0 0 1 6.182 16c0-5.418 4.404-9.818 9.822-9.818 5.417 0 9.818 4.4 9.818 9.818 0 5.42-4.4 9.818-9.818 9.818Z" />
-                    </svg>
-                    Message on WhatsApp
-                </a>
-                <p class="mt-3 text-xs text-slate-500">We reply within 24 hours with route and pricing options.
-                </p>
-            </form>
-
-        </aside>
+    </aside>
 </div>
 
 </main>
@@ -97,31 +61,31 @@
                 </div>
             </div>
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 text-sm">
-                <div>
-                    <h4 class="font-semibold">Himalayan Treks</h4>
-                    <div class="mt-3 space-y-2 text-slate-600">
-                        <a href="/treks/" class="block">All Treks</a>
-                        <a href="/treks/everest/" class="block">Everest Treks</a>
-                        <a href="/treks/annapurna/" class="block">Annapurna Treks</a>
-                        <a href="/treks/manaslu/" class="block">Manaslu Treks</a>
-                    </div>
-                </div>
+
                 <div>
                     <h4 class="font-semibold">Destinations</h4>
                     <div class="mt-3 space-y-2 text-slate-600">
-                        <a href="/destinations/everest/" class="block">Everest Region</a>
-                        <a href="/destinations/annapurna/" class="block">Annapurna Region</a>
-                        <a href="/destinations/manaslu/" class="block">Manaslu Region</a>
+                        @if (sizeof($destinations) > 0)
+                            @foreach ($destinations as $destination)
+                                <a href="{{ $destination['url'] }}" class="block">{{ $destination['name'] }}</a>
+                            @endforeach
+                        @else
+                            <p>N/A</p>
+                        @endif
+
                     </div>
                 </div>
                 <div>
                     <h4 class="font-semibold">Safety</h4>
                     <div class="mt-3 space-y-2 text-slate-600">
-                        <a href="/safety/" class="block">Safety Overview</a>
-                        <a href="/safety/altitude-sickness/" class="block">Altitude Sickness</a>
-                        <a href="/safety/trek-briefing-process/" class="block">Daily Trek Briefing</a>
-                        <a href="/safety/heli-rescue/" class="block">Emergency Rescue</a>
-                        <a href="/safety/gear-checklist/" class="block">Gear Checklist</a>
+                        @if (count($safetyBlogs) > 0)
+                            @foreach ($safetyBlogs as $safety)
+                                <a href="/safety/{{ $safety->slug }}" class="block">{{ $safety->title }}</a>
+                            @endforeach
+                        @else
+                            <p>n/a</p>
+                        @endif
+
                     </div>
                 </div>
                 <div>
@@ -135,25 +99,7 @@
                         <a href="/responsible-travel/social-fund/" class="block">Social Fund</a>
                     </div>
                 </div>
-                <div>
-                    <h4 class="font-semibold">Company</h4>
-                    <div class="mt-3 space-y-2 text-slate-600">
-                        <a href="/about-us" class="block">About</a>
-                        <a href="/about/team/" class="block">Team</a>
-                        <a href="/about/licenses/" class="block">Licenses</a>
-                        <a href="/about/why-us/" class="block">Why Us</a>
-                        <a href="/about/reviews/" class="block">Reviews</a>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="font-semibold">Contact</h4>
-                    <div class="mt-3 space-y-2 text-slate-600">
-                        <a href="/contact/" class="block">Contact</a>
-                        <a href="/contact/inquiry/" class="block">Inquiry Form</a>
-                        <a href="/terms-and-conditions" class="block">Terms and Conditions</a>
-                        <a href="/privacy-policy" class="block">Privacy Policy</a>
-                    </div>
-                </div>
+
             </div>
         </div>
         <div class="mt-10 border-t border-slate-200 pt-6 text-xs text-slate-500">© <?php echo date('Y'); ?> EATH Travel
@@ -287,9 +233,14 @@
     });
 
     const header = document.querySelector(".site-header");
-    const scrollTargetConfigs = [
-        { selector: ".hero-overlay", mode: "height" },
-        { selector: ".blog-page-bg", mode: "top" },
+    const scrollTargetConfigs = [{
+            selector: ".hero-overlay",
+            mode: "height"
+        },
+        {
+            selector: ".blog-page-bg",
+            mode: "top"
+        },
     ];
     const scrollTargetConfig = scrollTargetConfigs
         .map((config) => ({
@@ -304,9 +255,9 @@
             return;
         }
         const threshold =
-            scrollTargetConfig?.mode === "top"
-                ? scrollTarget.offsetTop - header.offsetHeight
-                : scrollTarget.offsetHeight - header.offsetHeight;
+            scrollTargetConfig?.mode === "top" ?
+            scrollTarget.offsetTop - header.offsetHeight :
+            scrollTarget.offsetHeight - header.offsetHeight;
         header.classList.toggle("is-scrolled", window.scrollY > threshold);
     };
 
@@ -392,6 +343,7 @@
             }
         });
     }
+
 </script>
 </body>
 

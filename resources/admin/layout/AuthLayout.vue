@@ -1,22 +1,10 @@
 <template>
-    <v-container class="pa-0" fluid fill-height>
-        <v-row no-gutters align="center" justify="center">
-            <!-- Left Side - Banner or Logo -->
-            <v-col cols="12" md="6" class="d-flex align-center justify-center banner-col">
-                <div class="text-center px-6">
-                    <v-img src="/logo.svg" alt="Logo" contain max-height="150" class="mb-6"></v-img>
-                    <h2 class="mb-2 font-weight-bold">Welcome to Admin Panel</h2>
-                    <p class="text--secondary">
-                        Manage your store efficiently with powerful tools.
-                    </p>
-                </div>
-            </v-col>
-
-            <!-- Right Side - Login Form -->
-            <v-col cols="12" md="6" class="d-flex align-center justify-center">
+    <v-container class="pa-0 auth-container" fluid>
+        <div class="auth-content">
+            <div class="auth-card-wrap">
                 <router-view></router-view>
-            </v-col>
-        </v-row>
+            </div>
+        </div>
     </v-container>
 </template>
 
@@ -55,6 +43,24 @@ const goToRegister = () => {
 </script>
 
 <style scoped>
+.auth-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 45%, #e0f2fe 100%);
+}
+
+.auth-content {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.auth-card-wrap {
+    width: 100%;
+    max-width: 500px;
+}
+
 .banner-col {
     background-color: #f5f5f5;
     min-height: 100vh;
