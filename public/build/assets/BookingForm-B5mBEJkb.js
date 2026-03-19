@@ -1,1 +1,0 @@
-import{_ as t,k as o,o as r,b as s}from"./main-BAXdQqEl.js";import"./style-IlyYNi84.js";const n={data(){return{}}};function a(i,e,c,p,l,u){return r(),o("div",null,e[0]||(e[0]=[s("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, quidem.",-1)]))}const _=t(n,[["render",a]]);export{_ as default};
