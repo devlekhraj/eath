@@ -13,6 +13,15 @@ class AdminAuthController extends Controller
 {
     public function login(Request $request): JsonResponse
     {
+        $request->headers->remove('Authorization');
+        $request->headers->remove('authorization');
+
+        /** @var JWTGuard $guard */
+        $guard = Auth::guard('api_admin');
+        if (method_exists($guard, 'unsetToken')) {
+            $guard->unsetToken();
+        }
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -32,7 +41,7 @@ class AdminAuthController extends Controller
             ], 422);
         }
 
-        $token = Auth::guard('api_admin')->attempt([
+        $token = $guard->attempt([
             'username' => $request->string('username')->toString(),
             'password' => $request->string('password')->toString(),
         ]);
