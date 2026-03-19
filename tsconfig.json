@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ESNext", "DOM"],
+    "strict": true,
+    "jsx": "preserve",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["./resources/admin/*"],
+      "@pages/*": ["./resources/admin/pages/*"],
+      "@components/*": ["./resources/admin/components/*"],
+      "@utils/*": ["./resources/admin/utils/*"]
+    }
+  },
+  "include": [
+    "resources/admin/env.d.ts",
+    "resources/admin/**/*.ts",
+    "resources/admin/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

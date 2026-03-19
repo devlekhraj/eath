@@ -15,7 +15,9 @@
         "sass": "^1.89.2",
         "sass-loader": "^13.3.3",
         "tailwindcss": "^3.4.13",
-        "vite": "^6.3.5"
+        "typescript": "^5.9.3",
+        "vite": "^6.3.5",
+        "vue-tsc": "^3.2.6"
     },
     "dependencies": {
         "@fontsource/poppins": "^5.2.6",

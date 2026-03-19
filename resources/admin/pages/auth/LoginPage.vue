@@ -23,7 +23,7 @@
                             :error="!!serverErrors.password" :error-messages="serverErrors.password"
                             autocomplete="current-password" />
                     </div>
-                    <v-btn :loading="auth.loading" size="large" tile type="submit" color="primary" class="mt-4" block>
+                    <v-btn :loading="loading" size="large" tile type="submit" color="primary" class="mt-4" block>
                         <v-icon start icon="mdi-login" />
                         Login
                     </v-btn>
@@ -35,19 +35,19 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+
 import { loginApi } from '@/api/auth.api'
 
 const credentials = reactive({
     username: '',
     password: ''
 })
-const auth = useAuthStore()
+const loading = ref(false)
 const router = useRouter()
-const formRef = ref(null)
+const formRef = ref<any>(null)
 const isFormValid = ref(false)
 
 // Server validation errors per field
@@ -64,21 +64,20 @@ async function handleLogin() {
     serverErrors.password = ''
     serverErrors.general = ''
 
+    if (!formRef.value) return
     const { valid } = await formRef.value.validate()
 
     if (!valid) return;
 
     try {
-        auth.loading = true
+        loading.value = true
         const resp = await loginApi({
             username: credentials.username,
             password: credentials.password,
         })
-        auth.token = resp.access_token
-        localStorage.setItem('token', auth.token)
-        await auth.fetchProfile()
+        localStorage.setItem('token', resp.access_token)
         router.push({name:'adminDashboardPage'})
-    } catch (error) {
+    } catch (error: any) {
         if (error.response && error.response.status === 422) {
             const errors = error.response.data.errors
             serverErrors.username = errors.username || ''
@@ -89,7 +88,7 @@ async function handleLogin() {
             serverErrors.password = 'An unexpected error occurred'
         }
     } finally {
-        auth.loading = false
+        loading.value = false
     }
 
 }

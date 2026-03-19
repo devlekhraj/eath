@@ -15,6 +15,9 @@ class AdminAuthController extends Controller
     {
         $request->headers->remove('Authorization');
         $request->headers->remove('authorization');
+        $request->server->remove('HTTP_AUTHORIZATION');
+        $request->server->remove('REDIRECT_HTTP_AUTHORIZATION');
+        $request->cookies->remove('token');
 
         /** @var JWTGuard $guard */
         $guard = Auth::guard('api_admin');

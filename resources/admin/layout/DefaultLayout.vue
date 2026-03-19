@@ -2,9 +2,9 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
-import { useAuthStore } from '@/stores/auth'
 
-const auth = useAuthStore()
+
+
 const router = useRouter()
 const route = useRoute()
 const { mdAndUp } = useDisplay()
@@ -28,8 +28,7 @@ const goToNotificationsPage = () => {
 
 const logout = async () => {
 	try {
-		const resp = await auth.logout()
-		console.log(resp)
+		localStorage.removeItem('token')
 		router.push({ name: 'adminLoginPage' })
 	} catch (error) {
 		console.log({ error })

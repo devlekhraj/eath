@@ -9,7 +9,7 @@
 
     {{-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" /> --}}
 
-    @vite(['resources/admin/main.js', 'resources/admin/admin.scss'])
+    @vite(['resources/admin/main.ts', 'resources/admin/admin.scss'])
     <style>
         *,
         html,

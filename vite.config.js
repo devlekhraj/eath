@@ -10,7 +10,7 @@ export default defineConfig({
         laravel({
             //   input: ['resources/js/app.js'],
             input: [
-                'resources/admin/main.js',
+                'resources/admin/main.ts',
                 'resources/admin/admin.scss',
 
                 'resources/website/scss/tiptap-viewer.scss',
