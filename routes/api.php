@@ -41,12 +41,12 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
     // Admin login route (no auth middleware)
     Route::post('admin/login', [AdminAuthController::class, 'login']);
+    Route::post('admin/refresh', [AdminAuthController::class, 'refresh']);
 
     // Protected admin routes with auth:api_admin
     Route::middleware('auth:api_admin')->prefix('admin')->group(function () {
 
         Route::post('logout', [AdminAuthController::class, 'logout']);
-        Route::post('refresh', [AdminAuthController::class, 'refresh']);
         Route::get('profile', [AdminAuthController::class, 'profile']);
 
         Route::get('travel-packages', [TravelPackageController::class, 'index']);

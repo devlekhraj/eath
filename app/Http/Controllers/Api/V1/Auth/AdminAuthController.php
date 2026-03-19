@@ -2,111 +2,81 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\JWTGuard;
 
 class AdminAuthController extends Controller
 {
-    // Login admin and return JWT token
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->only('email', 'password');
-
-    //     if (!$token = auth('api_admin')->attempt($credentials)) {
-    //         return response()->json(['error' => 'Unauthorized'], 401);
-    //     }
-
-    //     return $this->respondWithToken($token);
-    // }
-   public function login(Request $request)
-{
-    // Ensure stale incoming tokens are ignored on login request.
-    $request->headers->remove('Authorization');
-    $request->headers->remove('authorization');
-
-    if (method_exists(auth('api_admin'), 'unsetToken')) {
-        auth('api_admin')->unsetToken();
-    }
-
-    $messages = [
-        'username.required' => 'Please enter your username.',
-        'password.required' => 'Please enter your password.',
-        'password.min' => 'Password must be at least 6 characters.',
-    ];
-
-    $validator = Validator::make($request->all(), [
-        'username' => 'required|string',
-        'password' => 'required|string|min:6',
-    ], $messages);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'errors' => $validator->errors()
-        ], 422);
-    }
-
-    // Manual credential check for specific feedback
-    $user = \App\Models\Admin::where('username', $request->username)->first();
-
-    if (!$user) {
-        return response()->json([
-            'errors' => [
-                'username' => ['This username is not registered.']
-            ]
-        ], 422);
-    }
-
-    if (!Hash::check($request->password, $user->password)) {
-        return response()->json([
-            'errors' => [
-                'password' => ['Incorrect password.']
-            ]
-        ], 422);
-    }
-
-    if (!$token = auth('api_admin')->login($user)) {
-        return response()->json([
-            'password' => 'Login failed. Please try again.'
-        ], 500);
-    }
-
-    return $this->respondWithToken($token);
-}
-
-    // Get authenticated admin info
-    public function profile()
+    public function login(Request $request): JsonResponse
     {
-        $user = Auth::guard('api_admin')->user();
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'username' => 'required|string',
+                'password' => 'required|string|min:6',
+            ],
+            [
+                'username.required' => 'Please enter your username.',
+                'password.required' => 'Please enter your password.',
+                'password.min' => 'Password must be at least 6 characters.',
+            ]
+        );
 
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $token = Auth::guard('api_admin')->attempt([
+            'username' => $request->string('username')->toString(),
+            'password' => $request->string('password')->toString(),
+        ]);
+
+        if (!$token) {
+            return response()->json([
+                'errors' => [
+                    'password' => ['Invalid username or password.'],
+                ],
+            ], 422);
+        }
+
+        return $this->respondWithToken($token);
+    }
+
+    public function profile(): JsonResponse
+    {
         return response()->json([
-            "data" => $user,
+            'data' => Auth::guard('api_admin')->user(),
         ]);
     }
 
-    // Logout admin (invalidate token)
-    public function logout()
+    public function logout(): JsonResponse
     {
         Auth::guard('api_admin')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    // Refresh JWT token
-    public function refresh()
+    public function refresh(): JsonResponse
     {
-        $token = Auth::guard('api_admin')->refresh();
+        /** @var JWTGuard $guard */
+        $guard = Auth::guard('api_admin');
+        $token = $guard->refresh();
 
         return $this->respondWithToken($token);
     }
 
-    // Format the token response
-    protected function respondWithToken($token)
+    protected function respondWithToken(string $token): JsonResponse
     {
-        $ttl = Auth::guard('api_admin')->factory()->getTTL();
-        
+        /** @var JWTGuard $guard */
+        $guard = Auth::guard('api_admin');
+        $ttl = $guard->factory()->getTTL();
+
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'bearer',

@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const http = axios
 const ADMIN_LOGIN_PATH = '/admin/login'
+let refreshPromise = null
 
 http.defaults.baseURL = import.meta.env.VITE_API_BASE_URL || ''
 http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
@@ -15,11 +16,7 @@ if (token) {
 
 http.interceptors.request.use((config) => {
     const requestUrl = String(config.url || '')
-    const isLoginRequest =
-        requestUrl.endsWith('/admin/login') ||
-        requestUrl.endsWith('/user/login') ||
-        requestUrl === '/admin/login' ||
-        requestUrl === '/user/login'
+    const isLoginRequest = requestUrl.endsWith('/admin/login') || requestUrl === '/admin/login'
 
     if (isLoginRequest) {
         if (config.headers?.Authorization) {
@@ -39,8 +36,47 @@ http.interceptors.request.use((config) => {
 
 http.interceptors.response.use(
     (response) => response.data,
-    (error) => {
+    async (error) => {
         const status = error?.response?.status
+        const message = String(error?.response?.data?.message || '').toLowerCase()
+        const originalRequest = error?.config
+        if (!originalRequest) {
+            return Promise.reject(error)
+        }
+
+        const requestUrl = String(originalRequest?.url || '')
+        const isRefreshRequest = requestUrl.endsWith('/admin/refresh') || requestUrl === '/admin/refresh'
+        const hasToken = !!localStorage.getItem('token')
+
+        if (status === 401 && message.includes('token has expired') && hasToken && !isRefreshRequest) {
+            originalRequest._retry = originalRequest._retry || false
+
+            if (!originalRequest._retry) {
+                originalRequest._retry = true
+
+                if (!refreshPromise) {
+                    refreshPromise = http.post('/admin/refresh')
+                        .then((refreshResponse) => {
+                            const newToken = refreshResponse?.access_token
+                            if (newToken) {
+                                localStorage.setItem('token', newToken)
+                                http.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+                            }
+                            return newToken
+                        })
+                        .finally(() => {
+                            refreshPromise = null
+                        })
+                }
+
+                const newToken = await refreshPromise
+                if (newToken) {
+                    originalRequest.headers = originalRequest.headers || {}
+                    originalRequest.headers.Authorization = `Bearer ${newToken}`
+                    return http(originalRequest)
+                }
+            }
+        }
 
         if (status === 401 || status === 419) {
             localStorage.removeItem('token')
