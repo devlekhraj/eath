@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\JWTGuard;
 
 class AdminAuthController extends Controller
 {
@@ -33,7 +33,9 @@ class AdminAuthController extends Controller
         }
         $credentials = $request->only('username','password');
 
-        $token = auth('api_admin')->attempt($credentials);
+        /** @var JWTGuard $guard */
+        $guard = Auth::guard('api_admin');
+        $token = $guard->attempt($credentials);
         if (!$token) {
             return response()->json([
                 'errors' => [
