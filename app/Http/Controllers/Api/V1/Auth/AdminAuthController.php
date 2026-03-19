@@ -32,8 +32,10 @@ class AdminAuthController extends Controller
             ], 422);
         }
         $credentials = $request->only('username','password');
-        $token = Auth::guard('api_admin')->attempt($credentials);
 
+
+        $token = Auth::guard('api_admin')->attempt($credentials);
+        dd($token);
         if (!$token) {
             return response()->json([
                 'errors' => [
