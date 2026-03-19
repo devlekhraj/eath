@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+import http from '@/http.config'
 export default {
     data() {
         return {
@@ -17,7 +18,7 @@ export default {
             const formData = new FormData();
             formData.append('image', this.selected_file);
 
-            return axios.post('/admin/gallery-upload', formData)
+            return http.post('/admin/gallery-upload', formData)
                 .then(response => {
                     // return response;
                     if (response) {

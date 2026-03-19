@@ -54,6 +54,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -118,7 +119,7 @@ onMounted(() => {
 
 async function fetchPackageCategories() {
     try {
-        const resp = await axios.get(`/admin/package-categories`)
+        const resp = await http.get(`/admin/package-categories`)
         package_categories.value = resp.data
     } catch (error) {
         console.error('Failed to fetch package categories', error)
@@ -143,7 +144,7 @@ async function submitPackage() {
                 : '',
         }
 
-        const resp = await axios.post('/admin/travel-packages', payload)
+        const resp = await http.post('/admin/travel-packages', payload)
 
         showSuccess(resp.message || 'Package saved successfully')
 

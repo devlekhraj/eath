@@ -33,7 +33,7 @@
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useRouter } from 'vue-router'
 
@@ -98,7 +98,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true;
-        const resp = await axios.post('/admin/pages', form)
+        const resp = await http.post('/admin/pages', form)
         loading.value = false;
         showSuccess(resp.data?.message || 'Page created successfully')
         // emit('close')

@@ -73,6 +73,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, onMounted, computed } from 'vue';
 import { useSnackbar } from '@/composables/snackbar'
 import { getBannersApi } from '@/api/banners.api'
@@ -84,7 +85,6 @@ const headers = [
 	{ title: 'Banner Name', key: 'name', sortable: false },
 	{ title: 'Slug', key: 'slug', sortable: false },
 	{ title: 'Images', key: 'image_count', sortable: false },
-
 	{ title: 'Active', key: 'is_active', sortable: false },
 	{ title: 'Action', key: 'actions', sortable: false },
 ];
@@ -144,7 +144,7 @@ async function fetchBanners() {
 
 async function toggleActive(item) {
 	try {
-		const resp = await axios.patch(`admin/banners/${item.id}/toggle-active`, {
+		const resp = await http.patch(`admin/banners/${item.id}/toggle-active`, {
 			is_active: item.is_active
 		});
 		showSuccess(resp.message);

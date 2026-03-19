@@ -99,6 +99,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 const props = defineProps({
@@ -115,7 +116,7 @@ async function handleUpdate() {
   if (!props.destination?.id) return
   submitting.value = true
   try {
-    const resp = await axios.patch(`/admin/destinations/${props.destination.id}/update`, {
+    const resp = await http.patch(`/admin/destinations/${props.destination.id}/update`, {
       name: props.destination.name,
       slug: props.destination.slug,
       best_season: props.destination.best_season,

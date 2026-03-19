@@ -72,6 +72,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, watch } from 'vue'
 
 const props = defineProps({
@@ -128,7 +129,7 @@ async function handleUpdate() {
 
   submitting.value = true
   try {
-    await axios.patch('/admin/media-usages/' + props.imageItem.id + '/update', {
+    await http.patch('/admin/media-usages/' + props.imageItem.id + '/update', {
       ...props.imageItem,
       ...draftMeta.value,
     })

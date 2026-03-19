@@ -44,6 +44,7 @@
     </div>
 </template>
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 const emit = defineEmits(['refresh', 'close'])
@@ -89,7 +90,7 @@ function handleUploadImage() {
 
     formData.append('image', selected_file.value);
 
-    return axios.post('/admin/gallery-upload', formData)
+    return http.post('/admin/gallery-upload', formData)
         .then(response => {
             if (response && response.url) {
                 showSuccess("Image uploaded");

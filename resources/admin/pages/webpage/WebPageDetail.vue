@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { useRoute } from 'vue-router'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -77,7 +77,7 @@ onMounted(() => {
 
 const fetchData = async () => {
 	try {
-		const resp = await axios.get(`/admin/pages/${page_id.value}`)
+		const resp = await http.get(`/admin/pages/${page_id.value}`)
 		Object.assign(form, {
 			...resp.data,
 			content: resp.data.content || '',
@@ -97,7 +97,7 @@ const submitForm = async () => {
 	submitting.value = true
 
 	try {
-		const resp = await axios.post('/admin/pages', form)
+		const resp = await http.post('/admin/pages', form)
 		showSuccess(resp.data?.message || 'Page saved successfully')
 	} catch (error) {
 		if (error.response?.status === 422) {

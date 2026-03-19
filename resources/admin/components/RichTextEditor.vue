@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import http from '@/http.config'
 import { computed, ref, watch } from 'vue'
-// import axios from '@/axios.config'
+// import axios from '@/http.config'
 import {
     BaseKit,
     Bold,
@@ -81,7 +82,7 @@ const extensions = [
             const formData = new FormData();
             formData.append('image', file);
 
-            return axios.post('/admin/gallery-upload', formData)
+            return http.post('/admin/gallery-upload', formData)
                 .then(response => {
                     console.log(response.url);
                     if (response && response.url) {

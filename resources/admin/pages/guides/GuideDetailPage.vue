@@ -69,7 +69,7 @@
 <script setup>
 import { ref, onMounted, defineAsyncComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import GuideForm from './modal/GuideForm.vue'
 
@@ -96,7 +96,7 @@ const handlePhotoChange = async (event) => {
 
 
     try {
-        const { url, filename } = await axios.post(`/admin/gallery-upload`, formData, {
+        const { url, filename } = await http.post(`/admin/gallery-upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -125,7 +125,7 @@ onMounted(async () => {
 })
 async function fetchData(){
     try {
-        const { data } = await axios.get(`/admin/guides/${route.params.id}`)
+        const { data } = await http.get(`/admin/guides/${route.params.id}`)
         guide.value = data
     } catch (error) {
         console.error('Error fetching guide details:', error)

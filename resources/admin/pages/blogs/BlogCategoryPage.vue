@@ -69,6 +69,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, onMounted, computed } from 'vue';
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
@@ -134,7 +135,7 @@ const fetching_data = ref(false);
 async function fetchCategories() {
   try {
     fetching_data.value = true;
-    const resp = await axios.get('admin/blog-categories');
+    const resp = await http.get('admin/blog-categories');
     categories.value = resp.data.map((item) => {
       return {
         ...item,
@@ -152,7 +153,7 @@ async function fetchCategories() {
 
 async function toggleActive(item) {
   try {
-    const resp = await axios.patch(`admin/blog-categories/${item.id}/toggle-active`, {
+    const resp = await http.patch(`admin/blog-categories/${item.id}/toggle-active`, {
       is_active: item.is_active
     });
     showSuccess(resp.message || 'success');

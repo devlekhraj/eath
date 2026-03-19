@@ -176,7 +176,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { formatDate, formatAmount, formatDateTime } from '@/utils/format'
 import PackageDelete from './modal/PackageDelete.vue'
 import PackageAdd from './modal/PackageAdd.vue'
@@ -212,7 +212,7 @@ const fetching_data = ref(false);
 async function fetchPackages() {
     try {
         fetching_data.value = true;
-        const resp = await axios.get('admin/travel-packages', {
+        const resp = await http.get('admin/travel-packages', {
             params: {
                 page: page.value,
                 per_page: itemsPerPage.value,
@@ -232,7 +232,7 @@ function handleOptions() {
 
 async function toggleActive(item) {
     try {
-        const resp = await axios.patch(`admin/travel-packages/${item.id}/toggle-active`, {
+        const resp = await http.patch(`admin/travel-packages/${item.id}/toggle-active`, {
             is_active: item.is_active
         });
         console.log({ resp });
@@ -247,7 +247,7 @@ async function toggleActive(item) {
 
 const togglePublished = async (item) => {
     try {
-        const resp = await axios.patch(`admin/travel-packages/${item.id}/toggle-publish`, {
+        const resp = await http.patch(`admin/travel-packages/${item.id}/toggle-publish`, {
             is_published: item.is_published
         });
         showSuccess(resp.message || 'success');

@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -40,7 +41,7 @@ async function handleDelete() {
 
     console.log(props.item);
     try {
-        const resp = await axios.delete(`/admin/itinerary-lookups/${props.item.id}/delete`)
+        const resp = await http.delete(`/admin/itinerary-lookups/${props.item.id}/delete`)
         submitting.value = false
         showSuccess(resp.message || 'success');
         handleClose()

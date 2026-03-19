@@ -70,6 +70,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { formatDate, formatPhoneNumber } from '@utils/format'
@@ -150,7 +151,7 @@ function deleteItem(item = {}) {
 async function fetchData() {
     try {
         loading.value = true;
-        const resp = await axios.get('/admin/customers');
+        const resp = await http.get('/admin/customers');
         loading.value = false;
         data_list.value = resp.data;
         console.log(resp);

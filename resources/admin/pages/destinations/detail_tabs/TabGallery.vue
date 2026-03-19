@@ -58,6 +58,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import SelectGalleryImage from '@components/gallery/SelectGalleryImage.vue'
@@ -175,7 +176,7 @@ async function handleSelectImage(payload) {
 		formData.append('caption', meta.caption || '')
 		formData.append('description', meta.description || '')
 
-		const response = await axios.post(`/admin/destinations/${destinationId}/save-image`, formData)
+		const response = await http.post(`/admin/destinations/${destinationId}/save-image`, formData)
 		const uploaded = response?.data?.data ?? response?.data
 		if (uploaded) {
 			upsertImage(uploaded, meta)
@@ -185,7 +186,7 @@ async function handleSelectImage(payload) {
 	}
 
 	if (!image) return
-	const response = await axios.post(`/admin/destinations/${destinationId}/use-image`, {
+	const response = await http.post(`/admin/destinations/${destinationId}/use-image`, {
 		gallery_id: image.id,
 		alt_text: meta.alt_text || '',
 		caption: meta.caption || '',

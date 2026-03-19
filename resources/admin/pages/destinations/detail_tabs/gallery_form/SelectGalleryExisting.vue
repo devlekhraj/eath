@@ -61,6 +61,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 const props = defineProps({
@@ -127,7 +128,7 @@ async function confirmSelect() {
 
 	try {
 		uploading.value = true;
-		const resp = await axios.post(`/admin/destinations/${destinationId}/use-image`, {
+		const resp = await http.post(`/admin/destinations/${destinationId}/use-image`, {
 			gallery_id: props.selectedImage.id,
 			alt_text: props.meta?.alt_text,
 			caption: props.meta?.caption,

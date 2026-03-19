@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import http from '@/http.config'
 
 export const useTravelPackageStore = defineStore('travelPackage', {
   state: () => ({
@@ -15,7 +15,7 @@ export const useTravelPackageStore = defineStore('travelPackage', {
       this.error = null
 
       try {
-        const resp = await axios.get('admin/travel-packages', { params })
+        const resp = await http.get('admin/travel-packages', { params })
         this.travel_package_list = resp.data
       } catch (error) {
         this.error = error
@@ -30,7 +30,7 @@ export const useTravelPackageStore = defineStore('travelPackage', {
       this.error = null
 
       try {
-        const resp = await axios.get(`admin/travel-packages/${id}`)
+        const resp = await http.get(`admin/travel-packages/${id}`)
         this.travel_package = resp.data
       } catch (error) {
         this.error = error

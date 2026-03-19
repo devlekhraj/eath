@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import http from '@/http.config'
 import TabOverview from './detail_tabs/TabOverview.vue'
 import TabContent from './detail_tabs/TabContent.vue'
 import TabImages from './detail_tabs/TabImages.vue'
@@ -137,7 +138,7 @@ export default {
 
         async fetchBlogCategory() {
             try {
-                const resp = await axios.get('admin/blog-categories');
+                const resp = await http.get('admin/blog-categories');
                 this.blog_categories = resp.data;
             } catch {
                 this.blog_categories = [];

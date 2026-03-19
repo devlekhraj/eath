@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import http from '@/http.config'
 import { computed, defineAsyncComponent } from "vue";
 
 export default {
@@ -64,7 +65,7 @@ export default {
   },
   methods: {
     async fetchGallery() {
-      const resp = await axios.get("/admin/galleries");
+      const resp = await http.get("/admin/galleries");
       this.galleryImages = resp.data;
       this.allImages = resp.data;
     },

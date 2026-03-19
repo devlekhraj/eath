@@ -68,6 +68,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -195,7 +196,7 @@ async function handleUpload() {
 		formData.append('caption', props.meta?.caption || '')
 		formData.append('description', props.meta?.description || '')
 
-		const resp = await axios.post(`/admin/treks/${trekId}/save-image`, formData)
+		const resp = await http.post(`/admin/treks/${trekId}/save-image`, formData)
 		const uploaded = resp.data?.data ?? resp.data
 		console.log('Uploaded image', { uploaded })
 		if (uploaded) {

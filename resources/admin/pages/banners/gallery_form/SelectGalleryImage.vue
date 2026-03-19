@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import SelectGalleryExisting from './SelectGalleryExisting.vue'
 import SelectGalleryUpload from './SelectGalleryUpload.vue'
@@ -115,7 +116,7 @@ const activeTabListeners = computed(() => {
 
 async function fetchImages() {
   try {
-    const resp = await axios.get('/admin/galleries')
+    const resp = await http.get('/admin/galleries')
     images.value = resp.data?.data ?? resp.data ?? []
   } catch (error) {
     console.error('Failed to load gallery images', error)

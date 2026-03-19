@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -72,7 +73,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await axios.patch(`admin/guides/${props.item.id}/bio`, form)
+        const resp = await http.patch(`admin/guides/${props.item.id}/bio`, form)
         showSuccess(resp.message || 'Bio updated successfully')
         emit('close')
     } catch (error) {

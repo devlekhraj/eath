@@ -60,6 +60,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -141,7 +142,7 @@ async function handleSubmit() {
   try {
     loading.value = true
     // Replace with your actual API endpoint and method
-    const resp = await axios.post('/admin/guides', form)
+    const resp = await http.post('/admin/guides', form)
 
     showSuccess(resp.data.message || 'Guide saved successfully')
     emit('close')

@@ -104,7 +104,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { formatDate, formatDateTime, formatAmount } from '@/utils/format'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -148,7 +148,7 @@ const fetching_data = ref(false);
 const fetchBlogs = async () => {
     try {
         fetching_data.value = true;
-        const resp = await axios.get('admin/blogs')
+        const resp = await http.get('admin/blogs')
         fetching_data.value = false;
         blogList.value = resp.data
         
@@ -173,7 +173,7 @@ const deleteItem = (item) => {
 
 async function toggleActive(item) {
     try {
-        const resp = await axios.patch(`admin/blogs/${item.id}/toggle-active`, {
+        const resp = await http.patch(`admin/blogs/${item.id}/toggle-active`, {
             is_active: item.is_active
         });
         showSuccess(resp.message || 'success');
@@ -188,7 +188,7 @@ async function toggleActive(item) {
 
 const togglePublished = async (item) => {
     try {
-        const resp = await axios.patch(`admin/blogs/${item.id}/toggle-publish`, {
+        const resp = await http.patch(`admin/blogs/${item.id}/toggle-publish`, {
             is_published: item.is_published
         });
         showSuccess(resp.message || 'success');

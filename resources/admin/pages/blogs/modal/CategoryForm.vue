@@ -61,6 +61,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 
 import { useSnackbar } from '@/composables/snackbar'
@@ -120,7 +121,7 @@ onMounted(() => {
 
 async function fetchParentCategories() {
     try {
-        const resp = await axios.get('admin/blog-categories?type=parent')
+        const resp = await http.get('admin/blog-categories?type=parent')
 
         if(props.item?.id) {
             // Exclude current category from parent options to prevent circular reference
@@ -152,7 +153,7 @@ async function handleSubmit() {
         form.sort_order = parseInt(form.sort_order) || 0
 
         loading.value = true;
-        const resp = await axios.post('admin/blog-categories', form)
+        const resp = await http.post('admin/blog-categories', form)
         loading.value = false;
         showSuccess(resp.message || 'Success')
         emit('close')

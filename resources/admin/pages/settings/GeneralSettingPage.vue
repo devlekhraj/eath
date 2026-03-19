@@ -64,6 +64,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, onMounted } from 'vue'
 const globalModal = ref(null)
 const data_list = ref([])
@@ -109,7 +110,7 @@ async function fetchData() {
     try {
 
         is_fetching.value = true;
-        const resp = await axios.get(`/admin/settings`)
+        const resp = await http.get(`/admin/settings`)
         is_fetching.value = false;
         data_list.value = resp.data;
 

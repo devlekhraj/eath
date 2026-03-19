@@ -122,7 +122,7 @@
 
 <script setup>
 import { ref, reactive, watch, onMounted } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useRouter } from 'vue-router'
 
@@ -176,7 +176,7 @@ onMounted(() => {
 function fetchPackages() {
 
     fetching_data.value = true;
-    axios.get('/admin/travel-packages')
+    http.get('/admin/travel-packages')
         .then(response => {
             package_list.value = response.data;
 
@@ -221,7 +221,7 @@ async function onImageChange() {
         formData.append('image', selected)
 
         try {
-            const { data } = await axios.post('/admin/gallery-upload', formData, {
+            const { data } = await http.post('/admin/gallery-upload', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
 
@@ -298,7 +298,7 @@ async function handleSubmit() {
 
         console.log({payload});
 
-        const resp = await axios.post('/admin/featured-packages', payload)
+        const resp = await http.post('/admin/featured-packages', payload)
         showSuccess(resp.data?.message || 'Package created successfully')
         emit('close')
     } catch (error) {

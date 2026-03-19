@@ -45,7 +45,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useRouter } from 'vue-router'
 
@@ -106,7 +106,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true;
-        const resp = await axios.post('/admin/faqs', form)
+        const resp = await http.post('/admin/faqs', form)
         loading.value = false;
         showSuccess(resp.data?.message || 'Blog created successfully')
         emit('close')

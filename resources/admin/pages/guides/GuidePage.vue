@@ -102,6 +102,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -186,7 +187,7 @@ function deleteItem(item = {}) {
 async function fetchGuideList() {
     try {
         loading.value = true;
-        const resp = await axios.get('/admin/guides');
+        const resp = await http.get('/admin/guides');
         loading.value = false;
         guide_list.value = resp.data;
         console.log(resp);

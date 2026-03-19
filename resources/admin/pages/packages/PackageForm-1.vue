@@ -173,6 +173,7 @@
 </template>
 
 <script>
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useRoute } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
@@ -257,7 +258,7 @@ export default {
 			}
 			formData.append('image', this.selected_file);
 
-			return axios.post('/admin/gallery-upload', formData)
+			return http.post('/admin/gallery-upload', formData)
 				.then(response => {
 					console.log(response.url);
 					this.form.images.push({
@@ -278,7 +279,7 @@ export default {
 		},
 		async fetchPackage() {
 			try {
-				const resp = await axios.get(`/admin/travel-packages/${this.package_id}`)
+				const resp = await http.get(`/admin/travel-packages/${this.package_id}`)
 				this.travel_package = resp.data
 
 				Object.assign(this.form, {
@@ -292,7 +293,7 @@ export default {
 		},
 		async packageCategories() {
 			try {
-				const resp = await axios.get(`/admin/package-categories`)
+				const resp = await http.get(`/admin/package-categories`)
 				console.log(resp.data);
 				this.package_categories = resp.data
 			} catch (error) {
@@ -329,7 +330,7 @@ export default {
 					this.form.end_date = new Date(this.form.end_date).toISOString().split('T')[0];
 				}
 
-				const resp = await axios.post('/admin/travel-packages', this.form);
+				const resp = await http.post('/admin/travel-packages', this.form);
 				this.showSuccess(resp.message|| "Success");
 
 				this.package_id = resp.data.id

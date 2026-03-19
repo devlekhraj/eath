@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -20,7 +21,7 @@ const router = useRouter()
 const handleLogin = async () => {
     loading.value = true
 
-    const resp = await axios.post('/admin/login', {
+    const resp = await http.post('/admin/login', {
         email: email.value,
         password: password.value
     });

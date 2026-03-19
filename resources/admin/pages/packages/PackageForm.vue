@@ -45,6 +45,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { computed, reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import DetailHeader from '@/components/DetailHeader.vue'
@@ -105,7 +106,7 @@ const packageImageUrl = computed(() =>
 // Fetch single travel package
 async function fetchPackage() {
 	try {
-		const { data } = await axios.get(`/admin/travel-packages/${packageId}`)
+		const { data } = await http.get(`/admin/travel-packages/${packageId}`)
 		Object.assign(travelPackage, data)
 		formReady.value = true
 	} catch (err) {

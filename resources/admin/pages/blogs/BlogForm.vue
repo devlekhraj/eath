@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 export default {
 	data() {
@@ -214,7 +215,7 @@ export default {
 
 		async fetchBlogCategory() {
 			try {
-				const resp = await axios.get('admin/blog-categories');
+				const resp = await http.get('admin/blog-categories');
 				this.blog_categories = resp.data;
 			} catch {
 				this.blog_categories = [];
@@ -222,7 +223,7 @@ export default {
 		},
 
 		async fetchBlog() {
-			const resp = await axios.get(`/admin/blogs/${this.blog_id}`);
+			const resp = await http.get(`/admin/blogs/${this.blog_id}`);
 			this.form = resp.data;
 			this.previewImage = resp.data.banner_url;
 		},
@@ -238,7 +239,7 @@ export default {
 				}
 				formData.append('image', selected);
 
-				axios.post('/admin/gallery-upload', formData, {
+				http.post('/admin/gallery-upload', formData, {
 					headers: { 'Content-Type': 'multipart/form-data' }
 				})
 				.then(response => {
@@ -263,7 +264,7 @@ export default {
 
 			this.submitting = true;
 			try {
-				const resp = await axios.post('/admin/blogs', this.form);
+				const resp = await http.post('/admin/blogs', this.form);
 				this.showSuccess(resp.message || "Blog saved successfully");
 				
 			} catch (error) {

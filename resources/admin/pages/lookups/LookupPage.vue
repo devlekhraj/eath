@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -121,7 +122,7 @@ function deleteItem(item = {}) {
 async function fetchLoopData() {
     try {
         loading.value = true;
-        const resp = await axios.get('/admin/lookups');
+        const resp = await http.get('/admin/lookups');
         loading.value = false;
         lookups.value = resp.data;
         lookup_codes.value = resp.lookupCodes;

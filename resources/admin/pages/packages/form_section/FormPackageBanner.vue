@@ -58,6 +58,7 @@ const props = defineProps({
 })
 
 import DeleteImage from '../modal/DeleteImage.vue'
+import http from '@/http.config'
 
 function handleDelete(item = {}) {
     globalModal.value.open({
@@ -98,7 +99,7 @@ function handleUploadImage() {
             formData.append('usage_type', 'travel_packages')
             formData.append('image', file)
 
-            axios
+            http
                 .post('/admin/gallery-upload', formData)
                 .then(response => {
                     if (response && response.data && response.data.url) {

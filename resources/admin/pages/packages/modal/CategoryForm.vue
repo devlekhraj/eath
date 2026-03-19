@@ -73,6 +73,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -120,7 +121,7 @@ onMounted(() => {
 
 async function fetchParentCategories() {
     try {
-        const resp = await axios.get('admin/package-categories?type=parent')
+        const resp = await http.get('admin/package-categories?type=parent')
         parentOptions.value = resp.data || []
     } catch (error) {
         console.error('Failed to load parent categories', error)
@@ -147,7 +148,7 @@ async function handleSubmit() {
         form.sort_order = parseInt(form.sort_order) || 0
 
         loading.value = true
-        const resp = await axios.post('admin/package-categories', form)
+        const resp = await http.post('admin/package-categories', form)
 
         showSuccess(resp.message || 'Category created successfully')
         emit('close')

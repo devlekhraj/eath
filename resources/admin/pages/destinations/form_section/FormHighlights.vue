@@ -47,6 +47,7 @@
     </div>
 </template>
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 const emit = defineEmits(['refresh', 'close'])
@@ -93,7 +94,7 @@ async function handleSubmit() {
 
     try {
         loading.value = true
-        const resp = await axios.post(
+        const resp = await http.post(
             `/admin/travel-packages/${props.travelPackage.id}/inlusions`,
             form
         )

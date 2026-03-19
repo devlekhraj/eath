@@ -26,6 +26,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { computed, ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -55,7 +56,7 @@ async function handleUpdate() {
   if (!props.destination?.id) return
   submitting.value = true
   try {
-    const resp = await axios.patch(`/admin/destinations/${props.destination.id}/update`, {
+    const resp = await http.patch(`/admin/destinations/${props.destination.id}/update`, {
       description: props.destination.description ?? '',
     })
     showSuccess(resp.message)

@@ -70,6 +70,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 
 const emit = defineEmits(['close', 'saved'])
@@ -124,7 +125,7 @@ function handleCancel() {
 async function handleDelete() {
     try {
         loading_delete.value = true
-        await axios.delete(`/admin/package-prices/${form.id}/delete`)
+        await http.delete(`/admin/package-prices/${form.id}/delete`)
         emit('close')
     } catch (err) {
         console.error('Failed to delete:', err)
@@ -142,7 +143,7 @@ async function submitForm() {
 
     try {
         loading.value = true
-        const resp = await axios.post(
+        const resp = await http.post(
             `/admin/travel-packages/${props.item.travel_package_id}/prices`,
             form
         )

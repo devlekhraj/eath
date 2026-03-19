@@ -69,7 +69,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 
 const { showSuccess, showError } = useSnackbar()
@@ -121,7 +121,7 @@ onMounted(async () => {
 })
 async function fetchData(){
     try {
-        const resp = await axios.get('/admin/travel-packages') // Adjust your API endpoint here
+        const resp = await http.get('/admin/travel-packages') // Adjust your API endpoint here
         travelPackages.value = resp.data || []
     } catch (error) {
         showError('Failed to load travel packages')
@@ -149,7 +149,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await axios.post(`admin/guides/${props.guide.id}/trip`, form)
+        const resp = await http.post(`admin/guides/${props.guide.id}/trip`, form)
         showSuccess(resp.message || 'Trip added successfully')
         emit('saved')
         emit('close')

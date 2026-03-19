@@ -14,7 +14,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar' // optional, if you're showing feedback
-import axios from 'axios'
+import http from '@/http.config'
 
 const props = defineProps({
     item: {
@@ -35,7 +35,7 @@ const handleClose = () => {
 const handleDelete = async () => {
     try {
         submitting.value = true
-        await axios.delete(`/admin/galleries/${props.item.id}/delete`)
+        await http.delete(`/admin/galleries/${props.item.id}/delete`)
         showSuccess('Image deleted successfully') // optional
         emit('close')
     } catch (error) {

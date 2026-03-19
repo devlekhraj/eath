@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import http from '@/http.config'
 export default {
     props: {
         imageItem: {
@@ -30,7 +31,7 @@ export default {
         },
         async deleteCategory() {
             this.submitting = true;
-            const resp = await axios.delete('/admin/galleries/'+this.imageItem.id+"/delete");
+            const resp = await http.delete('/admin/galleries/'+this.imageItem.id+"/delete");
             this.submitting = false;
             this.handleClose();
         }

@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import FaqForm from './modal/FaqForm.vue'
@@ -85,7 +86,7 @@ function deleteFAQ(item) {
 async function fetchData() {
     try {
         loading.value = true
-        const resp = await axios.get('/admin/faqs')
+        const resp = await http.get('/admin/faqs')
         data_list.value = resp.data
     } catch (err) {
         showError('Failed to load FAQs')

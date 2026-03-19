@@ -75,7 +75,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
+import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 
 const { showSuccess, showError } = useSnackbar()
@@ -131,7 +131,7 @@ onMounted(() => {
 
 async function fetchHighlights() {
     try {
-        const resp = await axios.get('/admin/lookups?code=itinerary_highlights')
+        const resp = await http.get('/admin/lookups?code=itinerary_highlights')
         lookupItems.value = resp.data
     } catch (err) {
         showError('Failed to load highlights')
@@ -167,7 +167,7 @@ async function submitForm() {
 
     loading.value = true
     try {
-        const response = await axios.post(`/admin/package-itineraries/${props.itinerary.id}/highlight`, form)
+        const response = await http.post(`/admin/package-itineraries/${props.itinerary.id}/highlight`, form)
         showSuccess(response.message || 'Saved successfully')
         emit('close')
     } catch (err) {
@@ -192,7 +192,7 @@ async function handleDelete() {
 
     loading_delete.value = true
     try {
-        const resp = await axios.delete(`/admin/itinerary-highlights/${form.id}/delete`)
+        const resp = await http.delete(`/admin/itinerary-highlights/${form.id}/delete`)
         showSuccess(resp.message || 'Deleted successfully')
         emit('saved')
         emit('close')

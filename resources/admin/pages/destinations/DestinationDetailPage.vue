@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import TabOverview from './detail_tabs/TabOverview.vue'
@@ -84,7 +85,7 @@ const firstImageUrl = computed(() => destination?.images?.[0]?.url || '')
 async function fetchDestination() {
 	try {
 		if (!destinationId) return
-		const { data } = await axios.get(`/admin/destinations/${destinationId}`)
+		const { data } = await http.get(`/admin/destinations/${destinationId}`)
 		Object.assign(destination, data?.data ?? data)
 		formReady.value = true
 	} catch (err) {

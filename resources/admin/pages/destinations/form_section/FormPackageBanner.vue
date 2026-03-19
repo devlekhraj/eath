@@ -41,6 +41,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import http from '@/http.config'
 
 const emit = defineEmits(['refresh', 'close'])
 const { showSuccess, showError } = useSnackbar()
@@ -98,7 +99,7 @@ function handleUploadImage() {
             formData.append('usage_type', 'travel_packages')
             formData.append('image', file)
 
-            axios
+            http
                 .post('/admin/gallery-upload', formData)
                 .then(response => {
                     if (response && response.data && response.data.url) {

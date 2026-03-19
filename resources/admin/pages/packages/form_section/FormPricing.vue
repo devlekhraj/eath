@@ -98,6 +98,7 @@
     </div>
 </template>
 <script setup>
+import http from '@/http.config'
 import { formatAmount } from '@utils/format'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
@@ -145,7 +146,7 @@ async function handleSubmit() {
 
     try {
         loading.value = true
-        const resp = await axios.post(
+        const resp = await http.post(
             `/admin/travel-packages/${props.travelPackage.id}/prices`,
             form
         )

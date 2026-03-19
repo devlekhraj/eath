@@ -12,6 +12,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -35,7 +36,7 @@ function handleClose() {
 async function deleteCategory() {
     submitting.value = true
     try {
-        const resp = await axios.delete(`/admin/blog-categories/${props.item.id}/delete`)
+        const resp = await http.delete(`/admin/blog-categories/${props.item.id}/delete`)
         showSuccess(resp.message || 'success');
         submitting.value = false
         handleClose()

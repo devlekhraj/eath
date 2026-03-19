@@ -61,6 +61,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { computed } from 'vue'
 import SelectGalleryImage from '@components/gallery/SelectGalleryImage.vue'
 import FormGalleryUpdate from '@components/gallery/FormGalleryUpdate.vue'
@@ -151,7 +152,7 @@ async function handleSelectImage(payload) {
         formData.append('caption', meta.caption || '')
         formData.append('description', meta.description || '')
 
-        const response = await axios.post(`/admin/blogs/${blogId}/save-image`, formData, {
+        const response = await http.post(`/admin/blogs/${blogId}/save-image`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
 
@@ -163,7 +164,7 @@ async function handleSelectImage(payload) {
         }
     } else {
         if (!image?.id) return
-        await axios.post(`/admin/blogs/${blogId}/use-image`, {
+        await http.post(`/admin/blogs/${blogId}/use-image`, {
             gallery_id: image.id,
             alt_text: meta.alt_text || '',
             caption: meta.caption || '',

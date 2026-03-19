@@ -53,6 +53,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -110,7 +111,7 @@ function handleCancel() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await axios.post('admin/lookups', form)
+        const resp = await http.post('admin/lookups', form)
 
         showSuccess(resp.message || 'Itinerary lookup saved successfully')
         emit('saved', resp.data)
@@ -146,7 +147,7 @@ async function handleUploadImage(event) {
     formData.append('usage_id', props.banner.id)
 
     try {
-        const uploadResp = await axios.post('/admin/gallery-upload', formData, {
+        const uploadResp = await http.post('/admin/gallery-upload', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
 

@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -144,7 +145,7 @@ async function handleSubmit() {
   try {
     loading.value = true
     // Replace with your actual API endpoint and method
-    const resp = await axios.post('/admin/customers', form)
+    const resp = await http.post('/admin/customers', form)
 
     showSuccess(resp.message || 'Saved successfully')
     emit('close')

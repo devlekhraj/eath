@@ -100,6 +100,7 @@
 </template>
 
 <script setup>
+import http from '@/http.config'
 import { reactive, ref, watch } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 
@@ -175,7 +176,7 @@ const submitPackage = async () => {
 
         console.log({ payload });
 
-        const resp = await axios.post('/admin/travel-packages', payload);
+        const resp = await http.post('/admin/travel-packages', payload);
         console.log(resp.message);
         showSuccess(resp.message || "Success");
 

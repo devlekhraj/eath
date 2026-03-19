@@ -44,6 +44,7 @@
 
 <script setup>
 
+import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useTravelPackageStore } from '@/stores/travel_package' // adjust path as needed
 import { useSnackbar } from '@/composables/snackbar'
@@ -106,7 +107,7 @@ async function handleDelete(item) {
         loading_delete.value = true
 
         // Submit logic here, for example:
-        const resp = await axios.delete(`/admin/package-itineraries/${props.item.id}/delete`)
+        const resp = await http.delete(`/admin/package-itineraries/${props.item.id}/delete`)
         showSuccess("Itinerary Deleted Successfully");
         console.log(resp.data);
         emit('close')
@@ -133,7 +134,7 @@ async function submitForm() {
         loading.value = true
 
         // Submit logic here, for example:
-        const resp = await axios.post(`/admin/travel-packages/${props.travelPackageId}/itinerary`, form)
+        const resp = await http.post(`/admin/travel-packages/${props.travelPackageId}/itinerary`, form)
         console.log(resp.data);
         showSuccess("Success");
         emit('close')
