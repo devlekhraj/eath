@@ -30,7 +30,12 @@ class WebsiteController extends Controller
         $packages = TravelPackage::where('is_active', 1)->limit(6)->get();
         $hotPackages = TravelPackage::where('is_active', 1)->offset(6)->limit(6)->get();
 
-        $mainBanner = Banner::where('slug', 'main-home-banner')->first();
+        $mainBanner = Banner::where('slug', 'home-banner')->first();
+
+    
+        dd($mainBanner);
+
+
         $galleryImage = Banner::where('slug', 'gallery-images')->first();
 
         $destinations = Destination::where('is_active', 1)
