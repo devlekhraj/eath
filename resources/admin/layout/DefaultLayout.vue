@@ -36,7 +36,7 @@
 				<v-list dense nav id="main-nav">
 					<template v-for="group in menuGroups" :key="group.groupName">
 					<template v-if="filteredGroupItems(group.items).length">
-						<v-list-subheader class="text-uppercase group-title pb-0">
+						<v-list-subheader class="group-title pb-0">
 							{{ group.groupName }}
 						</v-list-subheader>
 						<v-list-item
@@ -284,7 +284,7 @@ onMounted(() => {
 }
 
 .custom-title {
-	font-size: 0.82rem;
+	font-size: 0.8rem;
 }
 
 .hover-notification {
@@ -330,22 +330,14 @@ onMounted(() => {
 }
 
 .v-list-item.v-list-item--active {
-	background-color: #e3f2fd;
-	color: #1976d2;
+	background-color: #dedede40;
+	color: #000000;
 }
-
-// .group-title {
-// 	font-size: 0.9rem;
-// 	font-weight: 500;
-// 	padding-bottom: 6px;
-// }
 
 .v-list-subheader__text {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	// color: #2b77d2;
-	font-weight: 600;
 	font-size: 12px;
 }
 

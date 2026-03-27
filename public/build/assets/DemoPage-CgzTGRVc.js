@@ -1,1 +1,0 @@
-import{_ as t,j as i,o as r,b as o}from"./main-BB-pcuJq.js";import"./style-IlyYNi84.js";const s={};function n(c,e){return r(),i("div",null,e[0]||(e[0]=[o("div",null,[o("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, doloribus.")],-1)]))}const d=t(s,[["render",n]]);export{d as default};

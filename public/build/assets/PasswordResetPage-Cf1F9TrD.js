@@ -1,0 +1,1 @@
+import{_ as s,j as r,o,b as t}from"./main-CxHKihcN.js";import"./style-IlyYNi84.js";const a={};function n(c,e){return o(),r("div",null,e[0]||(e[0]=[t("p",null,"password reset",-1)]))}const p=s(a,[["render",n]]);export{p as default};
