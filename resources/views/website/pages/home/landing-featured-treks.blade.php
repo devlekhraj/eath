@@ -14,27 +14,29 @@
         </div>
         <div class="mt-10 grid gap-6 md:grid-cols-3">
             @foreach ($packages as $package)
-            <article class="group overflow-hidden rounded-none">
-                {{-- <a href="/treks/everest/everest-base-camp-trek/" --}}
-                <a href="{{ route('trek.show', ['destination' => $package->destination['slug'], 'slug' => $package['slug']]) }}"
-                    class="relative aspect-[16/9] overflow-hidden block rounded-none">
-                    <div class="absolute inset-0 bg-cover bg-center transition duration-500 ease-out group-hover:scale-110"
-                        style="background-image:url('{{ $package['image'] }}')">
-                    </div>
-                    <div
-                        class="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/70 via-slate-900/30 to-slate-900/10">
-                    </div>
-                    <div
-                        class="absolute bottom-3 left-4 z-20 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100">
-                        Everest
-                    </div>
-                </a>
-                <div class="py-4">
-                    <div class="flex items-center justify-center text-center">
-                        <h3 class="text-lg font-semibold">{{ $package['name'] }}</h3>
-                    </div>
+                <article class="group overflow-hidden rounded-none">
+                    {{-- <a href="/treks/everest/everest-base-camp-trek/" --}}
+                    <a href="{{ route('trek.show', ['destination' => $package->destination['slug'], 'slug' => $package['slug']]) }}"
+                        class="relative aspect-[16/9] overflow-hidden block rounded-none">
+                        <div class="absolute inset-0 bg-cover bg-center transition duration-500 ease-out group-hover:scale-110"
+                            style="background-image:url('{{ $package['image'] }}')">
+                        </div>
+                        <div
+                            class="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/70 via-slate-900/30 to-slate-900/10">
+                        </div>
+                        @if (isset($packate) && isset($package->destination))
+                            <div
+                                class="absolute bottom-3 left-4 z-20 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100">
+                                {{ $package->destination->name }}
+                            </div>
+                        @endif
+                    </a>
+                    <div class="py-4">
+                        <div class="flex items-center justify-center text-center">
+                            <h3 class="text-lg font-semibold">{{ $package['name'] }}</h3>
+                        </div>
 
-                    {{-- <div
+                        {{-- <div
                         class="trek-stats mt-4 flex flex-nowrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-700">
                         <div class="flex flex-col items-center gap-1 text-center px-2 py-1">
                             <svg class="h-6 w-6 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -59,8 +61,8 @@
                             <span>Hard</span>
                         </div>
                     </div> --}}
-                </div>
-            </article>
+                    </div>
+                </article>
             @endforeach
             {{-- <article class="group overflow-hidden rounded-none">
                 <a href="/treks/annapurna/annapurna-base-camp-trek/"
