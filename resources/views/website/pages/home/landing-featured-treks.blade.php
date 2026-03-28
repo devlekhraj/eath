@@ -24,7 +24,7 @@
                         <div
                             class="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/70 via-slate-900/30 to-slate-900/10">
                         </div>
-                        @if (isset($packate) && isset($package->destination))
+                        @if (isset($package) && isset($package->destination))
                             <div
                                 class="absolute bottom-3 left-4 z-20 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100">
                                 {{ $package->destination->name }}
