@@ -144,7 +144,7 @@
                                 <h2 class="text-2xl font-semibold text-slate-900">Itinerary</h2>
                                 <div class="mt-6 space-y-4">
                                     @foreach ($package->itineraries as $key => $itinery)
-                                        <details class="group rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+                                        <details class="group rounded-xl border border-slate-200 bg-slate-50/70 p-4 vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                             <summary class="flex cursor-pointer list-none items-center justify-between">
                                                 <div class="flex items-center gap-3">
                                                     <span
