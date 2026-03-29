@@ -5,10 +5,6 @@ body {
   font-family: 'Poppins', sans-serif !important;
 }
 
-.vuetify-pro-tiptap-editor__content.markdown-theme-default p {
-  margin: 0 !important;
-}
-
 $secondary: #ec9214;
 
 // Bootstrap import
@@ -200,44 +196,6 @@ h3:after {
   top: 0;
   content: "" !important;
   padding: 0 !important;
-}
-
-.vuetify-pro-tiptap-editor__content.markdown-theme-default h1,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default h2,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default h3,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default h4,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default h5,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default h6,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default b,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default strong {
-  color: #000 !important;
-  position: relative;
-  padding-bottom: 0;
-  margin-top: 10px !important;
-  margin-bottom: 0 !important;
-  line-height: unset;
-  padding: 0 !important;
-}
-
-.vuetify-pro-tiptap-editor__content.markdown-theme-default p {
-  margin-top: 10px !important;
-  margin-bottom: 14px !important;
-  line-height: inherit;
-}
-
-.vuetify-pro-tiptap-editor__content.markdown-theme-default table th,
-.vuetify-pro-tiptap-editor__content.markdown-theme-default table td {
-  // padding: 12px 8px;
-  // line-height: 24px;
-  border: 1px solid #d0d0d0 !important;
-}
-
-.vuetify-pro-tiptap-editor__content.markdown-theme-default table {
-  border: none !important;
-}
-
-.vuetify-pro-tiptap-editor__content.markdown-theme-default table tr:nth-child(2n) {
-  background-color: #fff !important;
 }
 
 

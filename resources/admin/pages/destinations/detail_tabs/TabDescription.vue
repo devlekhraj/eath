@@ -4,9 +4,9 @@
       <v-col cols="12" md="12" lg="8" offset-lg="2">
         <v-form v-if="destination" class="mt-4">
           <RichTextEditor v-model="descriptionValue" />
-          <div class="mt-4">
+          <!-- <div class="mt-4">
              <VuetifyViewer :value="descriptionValue" />
-          </div>
+          </div> -->
           <div class="text-center py-4">
             <v-btn
               size="large"

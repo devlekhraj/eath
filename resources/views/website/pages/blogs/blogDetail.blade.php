@@ -542,7 +542,7 @@
                         <section class="container pb-5">
                             <div class="row justify-content-center">
                                 <div class="col-lg-9 col-xl-8">
-                                    <div class="blog-content px-10">
+                                    <div class="blog-content px-10 vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                         {!! $blog->content !!}
                                     </div>
                                 </div>

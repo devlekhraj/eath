@@ -27,13 +27,16 @@ import {
 } from 'vuetify-pro-tiptap'
 
 const props = withDefaults(defineProps<{
-    modelValue: string
+    modelValue: unknown
     minHeight?: string | number
+    /** Desired output format from VuetifyTiptap */
+    output?: 'html' | 'json' | 'text'
 }>(), {
-    minHeight: '400px'
+    minHeight: '400px',
+    output: 'html'
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'change'])
 
 const content = ref(props.modelValue)
 
@@ -106,6 +109,16 @@ const extensions = [
 </script>
 
 <template>
-    <VuetifyTiptap v-model="content" :min-height="numericMinHeight" class="p-4" :style="{ minHeight: cssMinHeight }"
-        :placeholder="'Type here...'" :toolbar="true" :toolbar-position="'top'" :extensions="extensions" />
+    <VuetifyTiptap
+        v-model="content"
+        :min-height="numericMinHeight"
+        class="p-4"
+        :style="{ minHeight: cssMinHeight }"
+        :placeholder="'Type here...'"
+        :toolbar="true"
+        :toolbar-position="'top'"
+        :extensions="extensions"
+        :output="props.output"
+        @change="payload => emit('change', payload)"
+    />
 </template>

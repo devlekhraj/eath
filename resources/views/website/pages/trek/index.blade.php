@@ -130,8 +130,10 @@
                         @if ($hasOverview)
                             <div id="tab-panel-overview" class="tab-panel p-6" data-tab-panel="overview" role="tabpanel">
                                 <h2 class="text-2xl font-semibold text-slate-900">Overview</h2>
-                                <div class="prose prose-slate mt-4 max-w-none">
-                                    {!! $package->description !!}
+                                <div class="tiptap-container">
+                                    <div class="prose prose-slate mt-4 max-w-none vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                        {!! $package->description !!}
+                                    </div>
                                 </div>
                             </div>
                         @endif

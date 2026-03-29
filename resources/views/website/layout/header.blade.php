@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <title>Safely Guided Himalayan Treks in Nepal | Everest, Annapurna, Manaslu</title>
     {{-- <link rel="stylesheet" href="/style.css" /> --}}
     <style>
