@@ -36,7 +36,7 @@
 
 
     {{-- section safety & preparation --}}
-    @include('website.pages.home.landing-safety-preparation')
+    {{-- @include('website.pages.home.landing-safety-preparation') --}}
 
 
     {{-- section newsletter --}}

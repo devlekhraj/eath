@@ -88,7 +88,7 @@
 
                     </div>
                 </div>
-                <div>
+                {{-- <div>
                     <h4 class="font-semibold">Responsible Travel</h4>
                     <div class="mt-3 space-y-2 text-slate-600">
                         <a href="/responsible-travel/" class="block">Overview</a>
@@ -98,7 +98,7 @@
                             Responsibility</a>
                         <a href="/responsible-travel/social-fund/" class="block">Social Fund</a>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>

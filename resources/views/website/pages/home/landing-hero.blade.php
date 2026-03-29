@@ -33,7 +33,7 @@
          <div class="mx-auto max-w-7xl px-2 sm:px-3 lg:px-4 h-full flex items-center justify-start text-left">
              <div class="text-white p-6">
                  <p class="hero-typing text-xs sm:text-sm uppercase tracking-[0.35em] text-white/80">
-                     <span data-text="Easy Access to the Himalayas · 2025">Easy Access to the Himalayas ·
+                     <span data-text="Easy Access to the Himalayas · @php echo date('Y'); @endphp">Easy Access to the Himalayas ·
                          @php echo date('Y'); @endphp</span>
                  </p>
                  <h1 id="hero-title" class="mt-4 text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-[0.08em]">

@@ -40,7 +40,7 @@ Route::get('/treks/{destination}/{slug}', [WebsiteController::class,'show'])->na
 
 Route::get('/packages/{slug}', [WebsiteController::class,'show']);
 Route::get('/categories/{slug}', [WebsiteController::class,'categoryShow'])->name('category.show');
-Route::get('/blogs', [WebsiteController::class,'blogs']);
+Route::get('/blogs', [WebsiteController::class,'blogs'])->name('blogs');
 Route::get('/blogs/{slug}', [WebsiteController::class,'blogDetail'])->name('blog.show');
 Route::get('/fixed-departures/{slug}', [WebsiteController::class,'fixedDeparture'])->name('fixed.departure.show');
 Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');

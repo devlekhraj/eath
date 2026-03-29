@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="mt-10 grid gap-10 md:grid-cols-2">
-            <a href="/safety/altitude-sickness/"
+            <a href="/safety/altitude-sickness-himalayan-trekking-guide"
                 class="group transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400">
                 <div class="flex items-start gap-5">
                     <svg class="h-14 w-14 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"

@@ -1169,10 +1169,10 @@
                             </div>
                         </div>
                         <div class="relative group">
-                            <a href="{{ route('responsible.travels') }}"
+                            <a href="{{ route('blogs') }}"
                                 class="nav-link inline-flex items-center gap-2 py-3 text-sm font-medium">
 
-                                Responsible Travel
+                                Blogs
                                 {{-- <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
                                     aria-hidden="true">

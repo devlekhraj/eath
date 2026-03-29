@@ -13,7 +13,7 @@
          <div class="mt-8 grid gap-6 md:grid-cols-2">
              @foreach ($destinations as $destination)
                  <article class="group relative h-96">
-                     <a href="/destinations/everest/" class="absolute inset-0 block overflow-hidden rounded-none">
+                     <a href="/destinations/{{ $destination['slug'] }}" class="absolute inset-0 block overflow-hidden rounded-none">
                          <img src="{{ $destination['image'] }}"
                              alt="Everest region ridgeline"
                              class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105" />

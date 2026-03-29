@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-            // Cache::delete('website.destinations.v2');
+            Cache::delete('website.destinations.v2');
             $destinations = Cache::remember('website.destinations.v2', 600, function () {
                 if (!Schema::hasTable('destinations')) {
                     return [];
@@ -66,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
                     ->map(function ($destination) {
                         return [
                             'name' => $destination->name,
+                            'slug' => $destination->slug,
                             'image' => $destination->image,
                             'id' => $destination->id,
                             'url' => $destination->url,

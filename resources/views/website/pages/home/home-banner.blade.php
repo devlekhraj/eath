@@ -283,7 +283,7 @@
                     </h1>
 
                     <small class="text-uppercase text-tagline fw-semibold">
-                        Easy Access To Himalayas · 2025
+                        Easy Access To Himalayas · @php date('Y') @endphp
                         <!-- in Blade: {{ now()->year }} -->
                     </small>
 
