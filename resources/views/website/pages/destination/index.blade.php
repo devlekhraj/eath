@@ -10,37 +10,11 @@
     </div>
 
     <div class="relative mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 px-6 py-12 text-center">
-        {{-- <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.2em]">
-            <span>Destination</span>
-            <span class="h-1 w-1 rounded-full bg-white/60"></span>
-            <span>{{ $destination->slug }}</span>
-        </div> --}}
+
         <h1 class="text-4xl font-semibold tracking-tight uppercase sm:text-5xl lg:text-6xl">
             {{ $destination->name }}
         </h1>
-        {{-- @if(!empty($destination->overview))
-            <p class="mt-2 max-w-2xl text-base text-white/80 sm:text-lg">
-                {{ $destination->overview }}
-            </p>
-        @endif
-        <div class="mt-4 flex flex-wrap items-center justify-center gap-4 border border-white/10 bg-white/10 px-6 py-4 backdrop-blur">
-            <div class="px-3">
-                <p class="text-xs uppercase tracking-[0.2em] text-white/70">Active treks</p>
-                <p class="text-2xl font-semibold">{{ $destination->treks?->count() ?? 0 }}</p>
-            </div>
-            @if(!empty($destination->best_season))
-                <div class="px-3">
-                    <p class="text-xs uppercase tracking-[0.2em] text-white/70">Best season</p>
-                    <p class="text-base font-medium text-white/90">{{ $destination->best_season }}</p>
-                </div>
-            @endif
-            @if(!empty($destination->region))
-                <div class="px-3">
-                    <p class="text-xs uppercase tracking-[0.2em] text-white/70">Region</p>
-                    <p class="text-base font-medium text-white/90">{{ $destination->region }}</p>
-                </div>
-            @endif
-        </div> --}}
+      
     </div>
 </section>
 

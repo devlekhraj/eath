@@ -168,7 +168,7 @@ class WebsiteController extends Controller
     {
         $blogs = Blog::where([
             'is_active' => 1,
-            'is_published' => 1,
+            // 'is_published' => 1,
         ])->orderByDesc('created_at')->get();
 
         return view('website.pages.blogs.index', compact('blogs'));

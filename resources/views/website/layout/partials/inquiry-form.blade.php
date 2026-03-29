@@ -44,6 +44,11 @@
     </select>
     <p class="mt-1 text-xs text-red-600 hidden" data-error-for="destination"></p>
 
+    <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-plan-name">Plan name / Trip title</label>
+    <input id="inquiry-plan-name" name="plan_name" type="text" autocomplete="off" required
+        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
+    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="plan_name"></p>
+
     <div class="mt-4 grid gap-4 sm:grid-cols-2">
         <div>
             <label class="block text-sm font-semibold text-slate-900" for="inquiry-travel-date">Travel date</label>
@@ -63,6 +68,8 @@
     <textarea id="inquiry-description" name="description" rows="4" required
         class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"></textarea>
     <p class="mt-1 text-xs text-red-600 hidden" data-error-for="description"></p>
+
+    <input type="hidden" id="inquiry-package-id" name="package_id" value="">
 
     <button type="submit"
         class="mt-6 inline-flex w-full items-center justify-center rounded-md bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2">
@@ -90,6 +97,7 @@
 
         const fieldNames = [
             "full_name",
+            "plan_name",
             "email",
             "country",
             "phone",
@@ -140,9 +148,14 @@
             const travelDate = (data.travel_date || "").trim();
             const numberOfPeople = (data.number_of_people || "").trim();
             const description = (data.description || "").trim();
+            const planName = (data.plan_name || "").trim();
 
             if (!fullName || fullName.length < 3) {
                 errors.full_name = "Please enter full name (at least 3 characters).";
+            }
+
+            if (!planName || planName.length < 3) {
+                errors.plan_name = "Please enter a plan name (at least 3 characters).";
             }
 
             if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-            Cache::delete('website.destinations.v2');
+            // Cache::delete('website.destinations.v2');
             $destinations = Cache::remember('website.destinations.v2', 600, function () {
                 if (!Schema::hasTable('destinations')) {
                     return [];

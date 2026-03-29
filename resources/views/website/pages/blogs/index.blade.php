@@ -1,116 +1,57 @@
 @extends('website.layout.master')
 @section('content')
-    <style>
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        }
+    <section class="relative h-[60vh] min-h-[420px] overflow-hidden bg-slate-950 text-white">
+        <div class="absolute inset-0">
+            <div class="h-full w-full bg-cover bg-center"
+                style="background-image: url('https://cdn.eathways.com/gallery/2025/08/gokyo-2.png')">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-900/50 to-slate-950/60"></div>
+        </div>
 
-        .text-truncate-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        <div
+            class="relative mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 px-6 py-12 text-center">
 
-        .title-truncate-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-height: 3.2rem;
-            /* Ensures space for two lines based on font-size + line-height */
-        }
-    </style>
-
-    @php
-        $pageSubTitle =
-            'Discover inspiring stories, expert travel tips, and hidden treasures of Nepal shared by our seasoned explorers. Start your journey through words.';
-    @endphp
-
-    <div class="container py-5">
-        <h2 class="mb-3 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
-            {{ isset($settings['blog_page_title']) ? $settings['blog_page_title'] : 'Our Latest Blogs' }}
-        </h2>
-
-        <p class="text-center text-muted mb-5" style="max-width: 720px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
-            {{ isset($settings['blog_page_sub_title']) ? $settings['blog_page_sub_title'] : $pageSubTitle }}
-        </p>
-
-        {{-- @php
-            $blogs = [
-                [
-                    'title' => 'Exploring the Hidden Gems of Mustang',
-                    'slug' => 'exploring-the-hidden-gems-of-mustang',
-                    'image' => 'https://source.unsplash.com/600x400/?mountain,nepal',
-                    'excerpt' =>
-                        'Mustang offers surreal landscapes and ancient Tibetan culture. Discover the lesser-known trails and villages tucked in the shadows of the Himalayas.',
-                    'date' => 'August 1, 2025',
-                    'author' => 'Admin',
-                ],
-                [
-                    'title' => 'Top 5 Treks for Beginners in Nepal',
-                    'slug' => 'top-5-treks-for-beginners-in-nepal',
-                    'image' => 'https://source.unsplash.com/600x400/?trekking,nepal',
-                    'excerpt' =>
-                        'New to trekking? Here are the top 5 beginner-friendly treks in Nepal that offer stunning views without the extreme difficulty.',
-                    'date' => 'July 25, 2025',
-                    'author' => 'Lekh Raj',
-                ],
-                [
-                    'title' => 'Culture and Cuisine: A Journey Through Kathmandu',
-                    'slug' => 'culture-and-cuisine-a-journey-through-kathmandu',
-                    'image' => 'https://source.unsplash.com/600x400/?kathmandu,nepal',
-                    'excerpt' =>
-                        'Explore the vibrant culture, street food, and sacred heritage sites of Nepal’s capital city, Kathmandu. Explore the vibrant culture, street food, and sacred heritage sites of Nepal’s capital city, Kathmandu.Explore the vibrant culture, street food, and sacred heritage sites of Nepal’s capital city, Kathmandu.Explore the vibrant culture, street food, and sacred heritage sites of Nepal’s capital city, Kathmandu.Explore the vibrant culture, street food, and sacred heritage sites of Nepal’s capital city, Kathmandu.',
-                    'date' => 'July 10, 2025',
-                    'author' => 'Priya Shrestha',
-                ],
-            ];
-
-        @endphp --}}
-
-        <div class="row g-4">
-            @foreach ($blogs as $blog)
-                <div class="col-12 col-md-6 col-lg-4">
-                    <a href="{{ url('blogs/' . $blog['slug']) }}" class="text-decoration-none text-reset">
-                        <div class="card h-100 border-0 overflow-hidden transition" style="transition: transform 0.3s ease;">
-                            <img src="{{ $blog['banner_url'] }}" class="card-img-top" alt="{{ $blog['title'] }}"
-                                title="{{ $blog['title'] }}" loading="lazy" style="height: 220px; object-fit: cover;">
-
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="fw-bold text-info mb-2 title-truncate-2"
-                                    style="font-size: 1.2rem; line-height: 1.6;">
-                                    {{ $blog['title'] }}
-                                </h5>
-
-                                <small class="text-muted mb-2 d-block">
-                                    By {{ $blog['author'] }} | {{ format_date($blog['published_at']) }}
-                                </small>
-
-                                <p class="text-muted mb-3 flex-grow-1"
-                                    style="
-                                    font-size: 0.95rem;
-                                    line-height: 1.5;
-                                    display: -webkit-box;
-                                    -webkit-line-clamp: 3;  
-                                    -webkit-box-orient: vertical;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    max-height: calc(1.5em * 3);
-                                ">
-                                    {{ $blog['sub_title'] }}
-                                </p>
-
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+            <h1 class="text-4xl font-semibold tracking-tight uppercase sm:text-5xl lg:text-6xl">
+                Our Blogs
+            </h1>
 
         </div>
-    </div>
+    </section>
+
+
+    <section class="featured-section py-16 sm:py-20 bg-sky-50">
+        <div class="featured-inner max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
+            @php
+                $blogCount = is_countable($blogs) ? count($blogs) : 0;
+                $cols = $blogCount % 3 === 0 ? 'md:grid-cols-3' : 'md:grid-cols-2';
+            @endphp
+            <div class="mt-10 grid gap-6 sm:grid-cols-2 {{ $cols }}">
+                @foreach ($blogs as $blog)
+                    <article class="group overflow-hidden rounded-none">
+                        <a href="{{ url('blogs/' . $blog['slug']) }}"
+                            class="relative aspect-[16/9] overflow-hidden block rounded-none">
+                            <div class="absolute inset-0 bg-cover bg-center transition duration-500 ease-out group-hover:scale-110"
+                                style="background-image:url('{{ $blog['banner_url'] }}')">
+                            </div>
+                            <div
+                                class="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/70 via-slate-900/30 to-slate-900/10">
+                            </div>
+                            {{-- <div
+                                class="absolute bottom-3 left-4 z-20 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100">
+                                Annapurna
+                            </div> --}}
+                        </a>
+                        <div class="py-4">
+                            <div>
+                                <h2 class="text-lg font-semibold">{{ $blog['title'] }}</h2>
+                            </div>
+                            <p class="mt-2 text-sm text-slate-600">{{ $blog['sub_title'] }}</p>
+                            <p class="mt-2 text-xs uppercase tracking-[0.15em] text-slate-500">
+                                {{ format_date($blog['published_at']) }}</p>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
 @endsection

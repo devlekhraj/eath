@@ -85,16 +85,16 @@
     </div>
     @endif
 
-    <div class="aside-card mb-4">
+    {{-- <div class="aside-card mb-4">
         <div class="aside-section-title">Trip Inquiry</div>
         <div class="cta-card rounded-lg">
             <div class="cta-title">Plan your next trek with us</div>
             <div class="cta-text">Get a custom itinerary and quick answers from our team.</div>
             <a href="{{ url('contact') }}" class="cta-button">Send an inquiry</a>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="aside-card">
+    {{-- <div class="aside-card">
         <div class="aside-section-title">Travel Resources</div>
         <div class="resource-list">
             <a href="#" class="resource-link rounded-lg">Packing checklist</a>
@@ -102,5 +102,5 @@
             <a href="#" class="resource-link rounded-lg">Permits and documents</a>
             <a href="#" class="resource-link rounded-lg">Travel insurance tips</a>
         </div>
-    </div>
+    </div> --}}
 </div>

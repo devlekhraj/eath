@@ -293,11 +293,33 @@
                         </div>
                     @endif
 
-                    <button
-                        class="mt-5 w-full rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white btnOpenModal"
-                        data-type="travel_packages" data-id="{{ $package['id'] }}">
-                        Check availability
-                    </button>
+                    <div class="mt-5 space-y-3">
+                        <button
+                            class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow btnOpenInquiry"
+                            data-type="travel_packages" data-id="{{ $package['id'] }}"
+                            data-package-id="{{ $package['id'] }}"
+                            data-package-title="{{ $package['name'] ?? $package['title'] ?? '' }}"
+                            data-destination-id="{{ $package->destination->id ?? '' }}">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 12l2 2 4-4" />
+                                <path d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
+                            </svg>
+                            Instant booking
+                        </button>
+
+                        <button type="button"
+                            class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:border-slate-900 hover:bg-slate-900 hover:text-white btnOpenInquiry"
+                            data-type="travel_packages" data-id="{{ $package['id'] }}"
+                            data-package-id="{{ $package['id'] }}"
+                            data-package-title="{{ $package['name'] ?? $package['title'] ?? '' }}"
+                            data-destination-id="{{ $package->destination->id ?? '' }}">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 6v12" />
+                                <path d="M18 12H6" />
+                            </svg>
+                            Customize trip
+                        </button>
+                    </div>
                 </div>
             @endif
 

@@ -321,28 +321,76 @@
     const inquiryClose = document.getElementById("inquiry-close");
     const inquiryBackdrop = document.querySelector("#inquiry-panel .inquiry-backdrop");
 
-    if (inquiryToggle && inquiryPanel && inquiryClose && inquiryBackdrop) {
-        const openInquiry = () => {
-            inquiryPanel.classList.add("is-open");
-            inquiryToggle.setAttribute("aria-expanded", "true");
-        };
-        const closeInquiry = () => {
-            inquiryPanel.classList.remove("is-open");
-            inquiryToggle.setAttribute("aria-expanded", "false");
-        };
+    const openInquiryPanel = () => {
+        if (!inquiryPanel) return;
+        inquiryPanel.classList.add("is-open");
+        if (inquiryToggle) inquiryToggle.setAttribute("aria-expanded", "true");
+    };
 
+    const closeInquiryPanel = () => {
+        if (!inquiryPanel) return;
+        inquiryPanel.classList.remove("is-open");
+        if (inquiryToggle) inquiryToggle.setAttribute("aria-expanded", "false");
+    };
+
+    window.openInquiryPanel = openInquiryPanel;
+    window.closeInquiryPanel = closeInquiryPanel;
+
+    if (inquiryToggle && inquiryPanel && inquiryClose && inquiryBackdrop) {
         inquiryToggle.setAttribute("aria-expanded", "false");
         inquiryToggle.setAttribute("aria-controls", "inquiry-panel");
 
-        inquiryToggle.addEventListener("click", openInquiry);
-        inquiryClose.addEventListener("click", closeInquiry);
-        inquiryBackdrop.addEventListener("click", closeInquiry);
+        inquiryToggle.addEventListener("click", openInquiryPanel);
+        inquiryClose.addEventListener("click", closeInquiryPanel);
+        inquiryBackdrop.addEventListener("click", closeInquiryPanel);
         window.addEventListener("keydown", (event) => {
             if (event.key === "Escape" && inquiryPanel.classList.contains("is-open")) {
-                closeInquiry();
+                closeInquiryPanel();
             }
         });
     }
+
+    // Handle CTA buttons that should open and prefill the inquiry panel
+    document.addEventListener("click", (event) => {
+        const target = event.target.closest(".btnOpenInquiry");
+        if (!target) return;
+        event.preventDefault();
+
+        const destinationId = target.getAttribute("data-destination-id") || "";
+        const packageTitle = target.getAttribute("data-package-title") || "";
+        const packageId = target.getAttribute("data-package-id") || "";
+
+        openInquiryPanel();
+
+        const form = document.getElementById("inquiry-form");
+        if (!form) return;
+
+        const destinationSelect = form.querySelector("#inquiry-destination");
+        if (destinationSelect && destinationId) {
+            destinationSelect.value = destinationId;
+            destinationSelect.dispatchEvent(new Event("change"));
+        }
+
+        const descriptionEl = form.querySelector("#inquiry-description");
+        if (descriptionEl && packageTitle) {
+            const seed = `Inquiry for ${packageTitle}`;
+            if (!descriptionEl.value.includes(seed)) {
+                descriptionEl.value = descriptionEl.value ? `${descriptionEl.value}\n\n${seed}` : seed;
+            }
+        }
+
+        const planNameEl = form.querySelector("#inquiry-plan-name");
+        if (planNameEl && packageTitle) {
+            if (!planNameEl.value) {
+                planNameEl.value = packageTitle;
+            }
+        }
+
+        const packageIdEl = form.querySelector("#inquiry-package-id");
+        if (packageIdEl && packageId) {
+            packageIdEl.value = packageId;
+        }
+    });
 
 </script>
 </body>

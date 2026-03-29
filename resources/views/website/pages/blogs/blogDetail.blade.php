@@ -535,7 +535,7 @@
                         <section>
                             <figure class="blog-banner mb-5">
                                 <img src="{{ $bannerImage }}" class="shadow-sm rounded" alt="{{ $blog->title }}" loading="lazy">
-                                <figcaption>Lorem ipsum dolor sit amet.</figcaption>
+                                {{-- <figcaption>{{ $blog }}</figcaption> --}}
                             </figure>
                         </section>
 
@@ -546,29 +546,9 @@
                                         {!! $blog->content !!}
                                     </div>
                                 </div>
-                                <div class="col-lg-1 d-none d-lg-flex justify-content-center">
-                                    <div class="blog-share">
-                                        <span class="share-label">Share</span>
-                                        <a class="share-btn" href="#" aria-label="Share on Facebook"
-                                            title="Share on Facebook">f</a>
-                                        <a class="share-btn" href="#" aria-label="Share on Twitter"
-                                            title="Share on Twitter">x</a>
-                                        <a class="share-btn" href="#" aria-label="Share on LinkedIn"
-                                            title="Share on LinkedIn">in</a>
-                                    </div>
-                                </div>
+                               
                             </div>
-                            <div class="d-lg-none d-flex justify-content-center">
-                                <div class="blog-share mt-4">
-                                    <span class="share-label">Share</span>
-                                    <a class="share-btn" href="#" aria-label="Share on Facebook"
-                                        title="Share on Facebook">f</a>
-                                    <a class="share-btn" href="#" aria-label="Share on Twitter"
-                                        title="Share on Twitter">x</a>
-                                    <a class="share-btn" href="#" aria-label="Share on LinkedIn"
-                                        title="Share on LinkedIn">in</a>
-                                </div>
-                            </div>
+                           
                         </section>
 
                     </div>
