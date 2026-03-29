@@ -22,7 +22,7 @@ Route::prefix('auth')->group(function () {
 //     return view('website.index');
 // });
 
-Route::get('/',[WebsiteController::class,'index']);
+Route::get('/',[WebsiteController::class,'index'])->name('home');
 Route::get('/demo',[WebsiteController::class,'demo']);
 
 Route::get('/privacy-policy', [WebsiteController::class,'privacyPolicy'])->name('privacy.policy');

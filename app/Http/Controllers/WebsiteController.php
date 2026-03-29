@@ -69,7 +69,48 @@ class WebsiteController extends Controller
                     })->values(),
                 ];
             })->toArray();
-        return view('website.index', compact('packages', 'mainBanner', 'destinations', 'blogs', 'featuredPackages', 'packageCategories', 'galleryImage', 'hotPackages','menus'));
+        $q = $request->input('q');
+        $region = $request->input('region');
+        $duration = $request->input('duration');
+
+        $query = TravelPackage::where('is_active', 1)->with('destination');
+
+        if ($q) {
+            $query->where('name', 'like', '%' . $q . '%');
+        }
+
+        if ($region) {
+            $query->whereHas('destination', function ($sub) use ($region) {
+                $sub->where('slug', $region)->orWhere('name', 'like', '%' . $region . '%');
+            });
+        }
+
+        if ($duration) {
+            $query->where(function ($sub) use ($duration) {
+                if ($duration === 'short') {
+                    $sub->whereBetween('duration_days', [6, 10]);
+                } elseif ($duration === 'medium') {
+                    $sub->whereBetween('duration_days', [11, 14]);
+                } elseif ($duration === 'long') {
+                    $sub->where('duration_days', '>=', 15);
+                }
+            });
+        }
+
+        $searchResults = ($q || $region || $duration) ? $query->limit(20)->get() : null;
+
+        return view('website.index', compact(
+            'packages',
+            'mainBanner',
+            'destinations',
+            'blogs',
+            'featuredPackages',
+            'packageCategories',
+            'galleryImage',
+            'hotPackages',
+            'menus',
+            'searchResults'
+        ));
     }
 
     public function show($destinationSlug = null, $slug)
