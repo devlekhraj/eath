@@ -60,11 +60,10 @@
                  </div>
 
 
-                 <div class="relative rounded-2xl bg-white p-6 sm:p-7 shadow-sm ring-1 ring-slate-200">
-                     <form action="/newsletter/subscribe" method="POST" class="space-y-4">
-
-
-
+                 <div id="newsletter-container"
+                     class="relative rounded-2xl bg-white p-6 sm:p-7 shadow-sm border ring-slate-200">
+                     <form method="POST" class="space-y-4 newsletter-form" id="formnewsletter">
+                         @csrf
                          <div>
                              <label for="newsletter_email" class="sr-only">Email address</label>
                              <input id="newsletter_email" name="email" type="email" required
@@ -73,17 +72,110 @@
                          </div>
 
                          <button type="submit"
-                             class="w-full inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
-                             Subscribe
+                             class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
+                             <svg class="h-4 w-4 animate-spin text-white hidden" data-newsletter-spinner
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                 <circle cx="12" cy="12" r="10" class="opacity-25"></circle>
+                                 <path class="opacity-75" d="M4 12a8 8 0 0 1 8-8" />
+                             </svg>
+                             <span data-newsletter-label>Subscribe</span>
                          </button>
+
+                         <p class="text-xs text-slate-500 leading-relaxed hidden" data-newsletter-feedback></p>
 
                          <p class="text-xs text-slate-500 leading-relaxed">
                              By subscribing, you agree to receive email updates about trekking in Nepal. You can
                              unsubscribe anytime.
                          </p>
                      </form>
+
                  </div>
              </div>
          </div>
      </div>
  </section>
+ <script>
+     document.addEventListener("DOMContentLoaded", function() {
+         const form = document.getElementById("formnewsletter");
+         const button = form.querySelector("button[type='submit']");
+         const spinner = form.querySelector("[data-newsletter-spinner]");
+         const label = form.querySelector("[data-newsletter-label]");
+         const feedback = form.querySelector("[data-newsletter-feedback]");
+
+         form.addEventListener("submit", async function(e) {
+             e.preventDefault();
+
+             const formData = new FormData(form);
+
+             // UI: loading state
+             spinner.classList.remove("hidden");
+             label.textContent = "Subscribing...";
+             button.disabled = true;
+             feedback.classList.add("hidden");
+
+             try {
+                 const response = await fetch("{{ route('newsletter.subscribe') }}", {
+                     method: "POST",
+                     headers: {
+                         "X-CSRF-TOKEN": form.querySelector("input[name='_token']").value,
+                         "Accept": "application/json"
+                     },
+                     body: formData
+                 });
+
+                 const data = await response.json();
+
+                 // Success
+                 // Success
+                 if (response.ok) {
+                     const container = document.getElementById("newsletter-container");
+
+                     container.innerHTML = `
+                        <div class="flex flex-col items-center justify-center text-center space-y-4 py-6">
+                            
+                            <div class="h-14 w-14 rounded-full bg-green-100 flex items-center justify-center">
+                                <svg class="h-7 w-7 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+
+                            <h3 class="text-lg font-semibold text-slate-900">
+                                Thank you for subscribing!
+                            </h3>
+
+                            <p class="text-sm text-slate-500">
+                                You will now receive updates about trekking in Nepal.
+                            </p>
+
+                        </div>
+                    `;
+                 } else {
+                     throw data;
+                 }
+
+             } catch (error) {
+                 // Error handling
+                 let message = "Something went wrong. Please try again.";
+
+                 if (error.errors && error.errors.email) {
+                     message = error.errors.email[0];
+                 } else if (error.message) {
+                     message = error.message;
+                 }
+
+                 feedback.textContent = message;
+                 feedback.classList.remove("hidden");
+                 feedback.classList.remove("text-green-600");
+                 feedback.classList.add("text-red-500");
+             }
+
+             // Reset UI
+             spinner.classList.add("hidden");
+             label.textContent = "Subscribe";
+             button.disabled = false;
+         });
+     });
+ </script>

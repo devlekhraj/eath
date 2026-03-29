@@ -1034,6 +1034,77 @@
                                 </button>
                             </div>
                         </form>
+
+                        <script>
+                            (function() {
+                                if (window.__newsletterBoundLanding) return;
+                                window.__newsletterBoundLanding = true;
+
+                                const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+                                const handleSubmit = async (event) => {
+                                    const form = event.target.closest('form.newsletter-form');
+                                    if (!form) return;
+                                    event.preventDefault();
+
+                                    const submitBtn = form.querySelector('button[type="submit"]');
+                                    const spinner = submitBtn?.querySelector('[data-newsletter-spinner]');
+                                    const label = submitBtn?.querySelector('[data-newsletter-label]');
+                                    const feedback = form.querySelector('[data-newsletter-feedback]');
+
+                                    feedback?.classList.add('hidden');
+                                    feedback?.classList.remove('text-red-600', 'text-emerald-600');
+                                    if (feedback) feedback.textContent = '';
+
+                                    if (submitBtn) submitBtn.disabled = true;
+                                    if (spinner) spinner.classList.remove('hidden');
+                                    const originalLabel = label?.textContent || 'Subscribe';
+                                    if (label) label.textContent = 'Subscribing...';
+
+                                    const payload = {
+                                        email: form.querySelector('input[name="email"]')?.value || '',
+                                        name: form.querySelector('input[name="name"]')?.value || null,
+                                    };
+
+                                    try {
+                                        const response = await fetch(form.action, {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Accept': 'application/json',
+                                                'X-CSRF-TOKEN': token || '',
+                                            },
+                                            body: JSON.stringify(payload),
+                                        });
+
+                                        const result = await response.json();
+
+                                        if (!response.ok) {
+                                            const message = result?.message || 'Subscription failed. Please try again.';
+                                            feedback?.classList.remove('hidden');
+                                            feedback?.classList.add('text-red-600');
+                                            if (feedback) feedback.textContent = message;
+                                            return;
+                                        }
+
+                                        feedback?.classList.remove('hidden');
+                                        feedback?.classList.add('text-emerald-600');
+                                        if (feedback) feedback.textContent = result?.message || "You’re subscribed! We’ll email you shortly.";
+                                        form.reset();
+                                    } catch (error) {
+                                        feedback?.classList.remove('hidden');
+                                        feedback?.classList.add('text-red-600');
+                                        if (feedback) feedback.textContent = 'Network error. Please try again.';
+                                    } finally {
+                                        if (spinner) spinner.classList.add('hidden');
+                                        if (label) label.textContent = originalLabel;
+                                        if (submitBtn) submitBtn.disabled = false;
+                                    }
+                                };
+
+                                document.addEventListener('submit', handleSubmit);
+                            })();
+                        </script>
                     </div>
                 </div>
                 <div>
@@ -2306,27 +2377,33 @@
 
                         <!-- Form -->
                         <div class="relative rounded-2xl bg-white p-6 sm:p-7 shadow-sm ring-1 ring-slate-200">
-                            <form action="/newsletter/subscribe" method="POST" class="space-y-4">
-                                <!-- CSRF (Laravel) -->
-                                <!-- @csrf -->
+                        <form action="/newsletter/subscribe" method="POST" class="space-y-4 newsletter-form">
+                            <!-- CSRF (Laravel) -->
+                            <!-- @csrf -->
 
-                                <div>
-                                    <label for="newsletter_email" class="sr-only">Email address</label>
-                                    <input id="newsletter_email" name="email" type="email" required
-                                        placeholder="Enter your email"
-                                        class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2" />
-                                </div>
+                            <div>
+                                <label for="newsletter_email" class="sr-only">Email address</label>
+                                <input id="newsletter_email" name="email" type="email" required
+                                    placeholder="Enter your email"
+                                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2" />
+                            </div>
 
-                                <button type="submit"
-                                    class="w-full inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
-                                    Subscribe
-                                </button>
+                            <button type="submit"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
+                                <svg class="h-4 w-4 animate-spin text-white hidden" data-newsletter-spinner viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" class="opacity-25"></circle>
+                                    <path class="opacity-75" d="M4 12a8 8 0 0 1 8-8" />
+                                </svg>
+                                <span data-newsletter-label>Subscribe</span>
+                            </button>
 
-                                <p class="text-xs text-slate-500 leading-relaxed">
-                                    By subscribing, you agree to receive email updates about trekking in Nepal. You can
-                                    unsubscribe anytime.
-                                </p>
-                            </form>
+                            <p class="text-xs text-slate-500 leading-relaxed hidden" data-newsletter-feedback></p>
+
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                By subscribing, you agree to receive email updates about trekking in Nepal. You can
+                                unsubscribe anytime.
+                            </p>
+                        </form>
                         </div>
                     </div>
                 </div>
@@ -2402,7 +2479,7 @@
                 <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Inquiry</p>
-                        <h3 class="mt-1 text-lg font-semibold text-slate-900">Plan Your Trek</h3>
+                        <h3 class="mt-1 text-lg font-semibold text-slate-700">Plan Your Trek</h3>
                     </div>
                     <button id="inquiry-close"
                         class="rounded-full p-2 text-slate-500 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"

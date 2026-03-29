@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\Gallery\GalleryController;
 use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\NewsletterController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,7 @@ Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('ima
 Route::get('inquiry-form', [WebsiteController::class,'getInquiryForm'])->name('inquiry.form');
 Route::post('inquiry', [WebsiteController::class,'store'])->name('inquiry.store');
 Route::post('footer-inquiry', [WebsiteController::class, 'storeFooterInquiry'])->name('footer.inquiry.store');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->name('newsletter.subscribe');
 Route::get('/faq', [WebsiteController::class,'faq'])->name('faq');
 
 

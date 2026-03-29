@@ -69,7 +69,7 @@
                              Local hiring, fair porter treatment, and contribution to village economies.
                          </p>
 
-                         <div class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600">
+                         {{-- <div class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600">
                              Learn more
 
                              <svg xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@
                                  <path stroke-linecap="round" stroke-linejoin="round"
                                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                              </svg>
-                         </div>
+                         </div> --}}
                      </div>
                  </div>
              </a>
@@ -105,7 +105,7 @@
                              Leave-no-trace operations and waste management in trekking regions.
                          </p>
 
-                         <div class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600">
+                         {{-- <div class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600">
                              Learn more
                              <svg xmlns="http://www.w3.org/2000/svg"
                                  class="h-4 w-4 transition group-hover:translate-x-0.5" fill="none"
@@ -113,7 +113,7 @@
                                  <path stroke-linecap="round" stroke-linejoin="round"
                                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                              </svg>
-                         </div>
+                         </div> --}}
                      </div>
                  </div>
              </a>
@@ -140,7 +140,7 @@
                              Respectful practices for monasteries, villages, and local traditions.
                          </p>
 
-                         <div class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600">
+                         {{-- <div class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600">
                              Learn more
                              <svg xmlns="http://www.w3.org/2000/svg"
                                  class="h-4 w-4 transition group-hover:translate-x-0.5" fill="none"
@@ -148,7 +148,7 @@
                                  <path stroke-linecap="round" stroke-linejoin="round"
                                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                              </svg>
-                         </div>
+                         </div> --}}
                      </div>
                  </div>
              </a>

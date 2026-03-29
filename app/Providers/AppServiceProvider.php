@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Destination;
 use App\Models\Blog;
 use App\Models\Country;
+use App\Models\TravelPackage;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -85,6 +86,54 @@ class AppServiceProvider extends ServiceProvider
                     ->toArray();
             });
 
+            $travelPackages = Cache::remember('website.travel_packages.v1', 600, function () {
+                if (!Schema::hasTable('travel_packages')) {
+                    return [];
+                }
+
+                return TravelPackage::where('is_active', 1)
+                    ->where('is_published', 1)
+                    ->select(['id', 'name', 'slug', 'destination_id'])
+                    ->orderBy('name')
+                    ->get()
+                    ->map(function ($package) {
+                        return [
+                            'id' => $package->id,
+                            'name' => $package->name,
+                            'slug' => $package->slug,
+                            'destination_id' => $package->destination_id,
+                        ];
+                    })
+                    ->toArray();
+            });
+
+            $travelPackagesByDestination = Cache::remember('website.travel_packages.by_destination.v1', 600, function () {
+                if (!Schema::hasTable('travel_packages')) {
+                    return [];
+                }
+
+                return TravelPackage::where('is_active', 1)
+                    ->where('is_published', 1)
+                    ->select(['id', 'name', 'slug', 'destination_id'])
+                    ->orderBy('name')
+                    ->get()
+                    ->groupBy('destination_id')
+                    ->map(function ($group) {
+                        return $group->map(function ($package) {
+                            return [
+                                'id' => $package->id,
+                                'name' => $package->name,
+                                'slug' => $package->slug,
+                                'destination_id' => $package->destination_id,
+                            ];
+                        })->values();
+                    })
+                    ->tap(function ($collection) use (&$travelPackages) {
+                        $collection['__all'] = collect($travelPackages ?? [])->values();
+                    })
+                    ->toArray();
+            });
+
             $safetyBlogs = Cache::remember('website.blogs.safety', 600, function () {
                 if (!Schema::hasTable('blogs') || !Schema::hasTable('blog_categories')) {
                     return [];
@@ -113,6 +162,8 @@ class AppServiceProvider extends ServiceProvider
                 'destinations' => $destinations,
                 'countries' => $countries,
                 'safetyBlogs' => $safetyBlogs,
+                'travelPackages' => $travelPackages,
+                'travelPackagesByDestination' => $travelPackagesByDestination,
             ]);
         });
     }

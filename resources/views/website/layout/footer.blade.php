@@ -16,8 +16,8 @@
     <aside class="inquiry-drawer absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
         <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Inquiry</p>
-                <h3 class="mt-1 text-lg font-semibold text-slate-900">Plan Your Trek</h3>
+                {{-- <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Inquiry</p> --}}
+                <h3 class="mt-1 text-lg font-semibold text-slate-400">Plan Your Trek</h3>
             </div>
             <button id="inquiry-close"
                 class="rounded-full p-2 text-slate-500 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"

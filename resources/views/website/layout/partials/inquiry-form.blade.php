@@ -1,96 +1,167 @@
-<form id="inquiry-form" class="px-6 py-6" action="{{ route('footer.inquiry.store') }}" method="post" novalidate>
-    @csrf
-    <label class="block text-sm font-semibold text-slate-900" for="inquiry-name">Full name</label>
-    <input id="inquiry-name" name="full_name" type="text" autocomplete="name" required
-        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="full_name"></p>
-
-    <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-email">Email</label>
-    <input id="inquiry-email" name="email" type="email" autocomplete="email" required
-        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="email"></p>
-
-    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-        <div>
-            <label class="block text-sm font-semibold text-slate-900" for="inquiry-country">Country</label>
-            <select id="inquiry-country" name="country"
-                class="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200">
-                <option value="">Select Country</option>
-                @if (count($countries) > 0)
-                    @foreach ($countries as $country)
-                        <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
-                    @endforeach
-                @endif
-            </select>
-            <p class="mt-1 text-xs text-red-600 hidden" data-error-for="country"></p>
+<style>
+    #inquiry-form {
+        max-height: 94vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 20px 10px 60px 10px;
+    }
+</style>
+<div class="px-4" id="inquiry-form-wrapper">
+    <form id="inquiry-form" action="{{ route('footer.inquiry.store') }}" method="post" novalidate>
+        @csrf
+        <div class="space-y-2 border-slate-200 pb-4">
+            <p class="text-base font-black uppercase tracking-[0.08em] text-slate-900">Contact</p>
+            <div class="space-y-4 px-2">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600" for="inquiry-name">Full name</label>
+                    <input id="inquiry-name" name="full_name" type="text" autocomplete="name" required
+                        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
+                    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="full_name"></p>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600" for="inquiry-email">Email</label>
+                    <input id="inquiry-email" name="email" type="email" autocomplete="email" required
+                        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
+                    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="email"></p>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-600" for="inquiry-country">Country</label>
+                        <select id="inquiry-country" name="country"
+                            class="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                            <option value="">Select Country</option>
+                            @if (count($countries) > 0)
+                                @foreach ($countries as $country)
+                                    <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <p class="mt-1 text-xs text-red-600 hidden" data-error-for="country"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-600" for="inquiry-phone">Phone /
+                            WhatsApp</label>
+                        <input id="inquiry-phone" name="phone" type="tel" autocomplete="tel" required
+                            class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
+                        <p class="mt-1 text-xs text-red-600 hidden" data-error-for="phone"></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <label class="block text-sm font-semibold text-slate-900" for="inquiry-phone">Phone / WhatsApp</label>
-            <input id="inquiry-phone" name="phone" type="tel" autocomplete="tel" required
-                class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-            <p class="mt-1 text-xs text-red-600 hidden" data-error-for="phone"></p>
+
+        <div class="mt-6 space-y-2 border-slate-200 pb-4">
+            <p class="text-base font-black uppercase tracking-[0.08em] text-slate-900">Destination & Plan</p>
+            <div class="space-y-4 px-2">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600"
+                        for="inquiry-destination">Destination</label>
+                    <select id="inquiry-destination" name="destination" required
+                        class="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                        <option value="">Select destination</option>
+                        @if (count($destinations) > 0)
+                            @foreach ($destinations as $destination)
+                                <option value="{{ $destination['id'] }}">{{ $destination['name'] }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="destination"></p>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600" for="inquiry-plan-name">Plan name / Trip
+                        title</label>
+                    <select id="inquiry-plan-name" name="plan_name" required
+                        class="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                        <option value="">Select plan</option>
+                    </select>
+                    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="plan_name"></p>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-destination">Destination</label>
-    <select id="inquiry-destination" name="destination" required
-        class="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200">
-        <option value="">Select destination</option>
-        @if (count($destinations) > 0)
-            @foreach ($destinations as $destination)
-                <option value="{{ $destination['id'] }}">{{ $destination['name'] }}</option>
-            @endforeach
-        @endif
-    </select>
-    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="destination"></p>
-
-    <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-plan-name">Plan name / Trip title</label>
-    <input id="inquiry-plan-name" name="plan_name" type="text" autocomplete="off" required
-        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="plan_name"></p>
-
-    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-        <div>
-            <label class="block text-sm font-semibold text-slate-900" for="inquiry-travel-date">Travel date</label>
-            <input id="inquiry-travel-date" name="travel_date" type="date" required
-                class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-            <p class="mt-1 text-xs text-red-600 hidden" data-error-for="travel_date"></p>
+        <div class="mt-6 space-y-2 border-slate-200 pb-4">
+            <p class="text-base font-black uppercase tracking-[0.08em] text-slate-900">Dates & Group Size</p>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600" for="inquiry-travel-date">Travel
+                        date</label>
+                    <input id="inquiry-travel-date" name="travel_date" type="date" required
+                        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
+                    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="travel_date"></p>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600" for="inquiry-people">Number of
+                        people</label>
+                    <input id="inquiry-people" name="number_of_people" type="number" min="1" required
+                        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
+                    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="number_of_people"></p>
+                </div>
+            </div>
         </div>
-        <div>
-            <label class="block text-sm font-semibold text-slate-900" for="inquiry-people">Number of people</label>
-            <input id="inquiry-people" name="number_of_people" type="number" min="1" required
-                class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200" />
-            <p class="mt-1 text-xs text-red-600 hidden" data-error-for="number_of_people"></p>
+
+        <div class="mt-6 space-y-2">
+            <p class="text-base font-black uppercase tracking-[0.08em] text-slate-900">Trip Details</p>
+            <div>
+                <label class="block text-sm font-semibold text-slate-600" for="inquiry-description">Description</label>
+                <textarea id="inquiry-description" name="description" rows="4" required
+                    class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"></textarea>
+                <p class="mt-1 text-xs text-red-600 hidden" data-error-for="description"></p>
+            </div>
         </div>
-    </div>
 
-    <label class="mt-4 block text-sm font-semibold text-slate-900" for="inquiry-description">Description</label>
-    <textarea id="inquiry-description" name="description" rows="4" required
-        class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"></textarea>
-    <p class="mt-1 text-xs text-red-600 hidden" data-error-for="description"></p>
+        <input type="hidden" id="inquiry-package-id" name="package_id" value="">
+        <input type="hidden" id="inquiry-plan-name-text" name="plan_name_text" value="">
 
-    <input type="hidden" id="inquiry-package-id" name="package_id" value="">
+        <script type="application/json" id="plan-map">
+        {!! json_encode($travelPackagesByDestination ?? []) !!}
+    </script>
+        <script type="application/json" id="plan-all">
+        {!! json_encode($travelPackages ?? []) !!}
+    </script>
 
-    <button type="submit"
-        class="mt-6 inline-flex w-full items-center justify-center rounded-md bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2">
-        Send Inquiry
-    </button>
-    <p id="inquiry-form-feedback" class="mt-3 hidden text-sm"></p>
-    <a href="https://wa.me/9779867666656?text=Hello%2C%20I%27d%20like%20to%20inquire%20about%20a%20Himalayan%20trek."
-        class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2"
-        target="_blank" rel="noopener">
-        <svg class="h-4 w-4" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-            <path
-                d="M19.11 17.205c-.27-.135-1.6-.79-1.85-.88-.246-.09-.427-.135-.608.135-.18.27-.7.88-.855 1.06-.156.18-.31.202-.58.067-.27-.135-1.14-.42-2.173-1.34-.804-.716-1.345-1.6-1.5-1.87-.156-.27-.017-.416.118-.55.12-.12.27-.31.405-.465.135-.156.18-.27.27-.45.09-.18.045-.337-.022-.472-.067-.135-.608-1.466-.833-2.005-.22-.53-.446-.457-.608-.465l-.517-.01c-.18 0-.472.067-.72.337-.247.27-.945.924-.945 2.252 0 1.327.968 2.61 1.103 2.79.135.18 1.905 2.91 4.615 4.08.645.278 1.148.444 1.54.568.646.205 1.234.176 1.7.107.518-.077 1.6-.653 1.83-1.283.225-.63.225-1.17.157-1.283-.067-.112-.247-.18-.517-.315ZM16.004 4C9.375 4 4 9.373 4 16c0 2.118.555 4.144 1.606 5.94L4 28l6.258-1.642A11.96 11.96 0 0 0 16.004 28C22.63 28 28 22.627 28 16S22.63 4 16.004 4Zm0 21.818a9.82 9.82 0 0 1-5.018-1.377l-.36-.214-3.71.974.99-3.62-.235-.373A9.78 9.78 0 0 1 6.182 16c0-5.418 4.404-9.818 9.822-9.818 5.417 0 9.818 4.4 9.818 9.818 0 5.42-4.4 9.818-9.818 9.818Z" />
+        <button type="submit"
+            class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2">
+            <svg class="h-4 w-4 animate-spin text-white hidden" id="inquiry-submit-spinner" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" class="opacity-25"></circle>
+                <path class="opacity-75" d="M4 12a8 8 0 0 1 8-8" />
+            </svg>
+            <span id="inquiry-submit-label">Send Inquiry</span>
+        </button>
+        <p id="inquiry-form-feedback" class="mt-3 hidden text-sm"></p>
+        <a href="https://wa.me/9779867666656?text=Hello%2C%20I%27d%20like%20to%20inquire%20about%20a%20Himalayan%20trek."
+            class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2"
+            target="_blank" rel="noopener">
+            <svg class="h-4 w-4" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+                <path
+                    d="M19.11 17.205c-.27-.135-1.6-.79-1.85-.88-.246-.09-.427-.135-.608.135-.18.27-.7.88-.855 1.06-.156.18-.31.202-.58.067-.27-.135-1.14-.42-2.173-1.34-.804-.716-1.345-1.6-1.5-1.87-.156-.27-.017-.416.118-.55.12-.12.27-.31.405-.465.135-.156.18-.27.27-.45.09-.18.045-.337-.022-.472-.067-.135-.608-1.466-.833-2.005-.22-.53-.446-.457-.608-.465l-.517-.01c-.18 0-.472.067-.72.337-.247.27-.945.924-.945 2.252 0 1.327.968 2.61 1.103 2.79.135.18 1.905 2.91 4.615 4.08.645.278 1.148.444 1.54.568.646.205 1.234.176 1.7.107.518-.077 1.6-.653 1.83-1.283.225-.63.225-1.17.157-1.283-.067-.112-.247-.18-.517-.315ZM16.004 4C9.375 4 4 9.373 4 16c0 2.118.555 4.144 1.606 5.94L4 28l6.258-1.642A11.96 11.96 0 0 0 16.004 28C22.63 28 28 22.627 28 16S22.63 4 16.004 4Zm0 21.818a9.82 9.82 0 0 1-5.018-1.377l-.36-.214-3.71.974.99-3.62-.235-.373A9.78 9.78 0 0 1 6.182 16c0-5.418 4.404-9.818 9.822-9.818 5.417 0 9.818 4.4 9.818 9.818 0 5.42-4.4 9.818-9.818 9.818Z" />
+            </svg>
+            Message on WhatsApp
+        </a>
+        <p class="mt-3 text-xs text-slate-500">We reply within 24 hours with route and pricing options.</p>
+    </form>
+</div>
+
+<div id="inquiry-success-panel" class="hidden px-6 py-6 flex min-h-[260px] items-center justify-center">
+    <div class="flex items-center gap-3 rounded-md bg-emerald-50 p-4 text-emerald-700">
+        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 12l2 2 4-4" />
+            <circle cx="12" cy="12" r="9" />
         </svg>
-        Message on WhatsApp
-    </a>
-    <p class="mt-3 text-xs text-slate-500">We reply within 24 hours with route and pricing options.</p>
-</form>
+        <div>
+            <p class="text-base font-semibold">Thank you! We’ve received your inquiry.</p>
+            <p class="text-sm text-emerald-700/80">Our team will email you shortly with next steps.</p>
+        </div>
+    </div>
+</div>
 
 <script>
     (function() {
         const inquiryForm = document.getElementById("inquiry-form");
+        const formWrapper = document.getElementById("inquiry-form-wrapper");
+        const successPanel = document.getElementById("inquiry-success-panel");
+        let successTimer = null;
         if (!inquiryForm) {
             return;
         }
@@ -133,6 +204,51 @@
 
         const clearAllErrors = () => {
             fieldNames.forEach((field) => clearFieldError(field));
+        };
+
+        const syncPlanNameToPackageId = () => {
+            const planSelect = inquiryForm.querySelector('#inquiry-plan-name');
+            const hiddenPackageId = inquiryForm.querySelector('#inquiry-package-id');
+            const hiddenPlanText = inquiryForm.querySelector('#inquiry-plan-name-text');
+            if (!planSelect || !hiddenPackageId || !hiddenPlanText) return;
+
+            const selectedOption = planSelect.options[planSelect.selectedIndex];
+            if (!selectedOption || !planSelect.value) {
+                hiddenPackageId.value = '';
+                hiddenPlanText.value = '';
+                return;
+            }
+
+            hiddenPackageId.value = selectedOption.dataset.id || '';
+            hiddenPlanText.value = selectedOption.textContent || '';
+        };
+
+        const buildPlanOptions = (destinationId) => {
+            const planSelect = inquiryForm.querySelector('#inquiry-plan-name');
+            if (!planSelect) return;
+
+            const planMapEl = document.getElementById('plan-map');
+            const mapData = planMapEl ? JSON.parse(planMapEl.textContent || '{}') : {};
+            const allPlans = mapData.__all || [];
+            const plans = destinationId ? (mapData[destinationId] || []) : allPlans;
+
+            planSelect.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = plans.length ? 'Select plan' : 'No plans available';
+            planSelect.appendChild(placeholder);
+
+            plans.forEach((plan) => {
+                const opt = document.createElement('option');
+                opt.value = plan.name;
+                opt.dataset.id = plan.id;
+                opt.textContent = plan.name;
+                planSelect.appendChild(opt);
+            });
+
+            planSelect.value = '';
+            const hiddenPackageId = inquiryForm.querySelector('#inquiry-package-id');
+            if (hiddenPackageId) hiddenPackageId.value = '';
         };
 
         const validateClient = (data) => {
@@ -201,8 +317,21 @@
             }
 
             const eventName = input.tagName === "SELECT" ? "change" : "input";
-            input.addEventListener(eventName, () => clearFieldError(field));
+            input.addEventListener(eventName, () => {
+                clearFieldError(field);
+                if (field === 'plan_name') {
+                    syncPlanNameToPackageId();
+                }
+                if (field === 'destination') {
+                    buildPlanOptions(input.value || '');
+                    syncPlanNameToPackageId();
+                }
+            });
         });
+
+        // Initialize package id on load (in case prefill set value)
+        buildPlanOptions(inquiryForm.querySelector('#inquiry-destination')?.value || '');
+        syncPlanNameToPackageId();
 
         inquiryForm.addEventListener("submit", async (event) => {
             event.preventDefault();
@@ -216,7 +345,8 @@
 
             const clientErrors = validateClient(data);
             if (Object.keys(clientErrors).length > 0) {
-                Object.entries(clientErrors).forEach(([field, message]) => showFieldError(field, message));
+                Object.entries(clientErrors).forEach(([field, message]) => showFieldError(field,
+                    message));
                 if (feedback) {
                     feedback.textContent = "Please fix the highlighted fields and try again.";
                     feedback.classList.remove("hidden", "text-emerald-600");
@@ -232,7 +362,10 @@
 
             if (submitButton) {
                 submitButton.disabled = true;
-                submitButton.textContent = "Sending...";
+                const spinner = document.getElementById("inquiry-submit-spinner");
+                const label = document.getElementById("inquiry-submit-label");
+                if (spinner) spinner.classList.remove("hidden");
+                if (label) label.textContent = "Sending...";
             }
 
             try {
@@ -248,7 +381,8 @@
                 if (!response.ok) {
                     if (response.status === 422 && result.errors) {
                         Object.entries(result.errors).forEach(([field, messages]) => {
-                            showFieldError(field, Array.isArray(messages) ? messages[0] : messages);
+                            showFieldError(field, Array.isArray(messages) ? messages[0] :
+                                messages);
                         });
                         throw new Error(result.message || "Validation failed.");
                     }
@@ -256,10 +390,33 @@
                 }
 
                 console.log("Inquiry submit response:", result);
+
+                // Show success panel, hide form
+                if (formWrapper && successPanel) {
+                    formWrapper.classList.add("hidden");
+                    successPanel.classList.remove("hidden");
+                }
+
+                // Clear previous timers
+                if (successTimer) {
+                    clearTimeout(successTimer);
+                }
+
+                // Reset form fields after showing success
                 inquiryForm.reset();
+                syncPlanNameToPackageId();
+
+                // Auto-restore form after 10s
+                successTimer = setTimeout(() => {
+                    if (formWrapper && successPanel) {
+                        successPanel.classList.add("hidden");
+                        formWrapper.classList.remove("hidden");
+                    }
+                }, 10000);
 
                 if (feedback) {
-                    feedback.textContent = result.message || "Inquiry submitted successfully.";
+                    feedback.textContent = result.message ||
+                        "We’ve received your inquiry and will email you shortly.";
                     feedback.classList.remove("hidden");
                     feedback.classList.remove("text-red-600");
                     feedback.classList.add("text-emerald-600");
@@ -273,10 +430,19 @@
                     feedback.classList.remove("text-emerald-600");
                     feedback.classList.add("text-red-600");
                 }
+
+                // Ensure form is visible if an error occurred
+                if (formWrapper && successPanel) {
+                    formWrapper.classList.remove("hidden");
+                    successPanel.classList.add("hidden");
+                }
             } finally {
                 if (submitButton) {
                     submitButton.disabled = false;
-                    submitButton.textContent = originalText || "Send Inquiry";
+                    const spinner = document.getElementById("inquiry-submit-spinner");
+                    const label = document.getElementById("inquiry-submit-label");
+                    if (spinner) spinner.classList.add("hidden");
+                    if (label) label.textContent = originalText || "Send Inquiry";
                 }
             }
         });
