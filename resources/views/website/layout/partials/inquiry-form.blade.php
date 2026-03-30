@@ -99,9 +99,9 @@
         </div>
 
         <div class="mt-6 space-y-2">
-            <p class="text-base font-black uppercase tracking-[0.08em] text-slate-900">Trip Details</p>
+            <p class="text-base font-black uppercase tracking-[0.08em] text-slate-900">Additional Details</p>
             <div>
-                <label class="block text-sm font-semibold text-slate-600" for="inquiry-description">Description</label>
+                {{-- <label class="block text-sm font-semibold text-slate-600" for="inquiry-description">Details</label> --}}
                 <textarea id="inquiry-description" name="description" rows="4" required
                     class="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"></textarea>
                 <p class="mt-1 text-xs text-red-600 hidden" data-error-for="description"></p>
