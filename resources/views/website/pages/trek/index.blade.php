@@ -353,8 +353,11 @@
 
 </section>
 {{-- section fixed departures --}}
-@if ($package->fixedDeparture)
+@if ($package->departures)
+<div class="mb-8">
     @include('website.pages.trek.partials.fixed-departures')
+</div> 
+
 @endif
 
 {{-- gallery section --}}

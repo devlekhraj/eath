@@ -158,6 +158,8 @@ import { formatHuman } from './modal/utils'
 import { deleteTrekDeparture } from '@/api/treks.api'
 import { useSnackbar } from '@/composables/snackbar'
 import FixedDepartureForm from './modal/FixedDepartureForm.vue'
+import EditFixedDepartureForm from './modal/EditFixedDepartureForm.vue'
+import ConfirmDeleteModal from './modal/ConfirmDeleteModal.vue'
 
 const props = defineProps({
 	travelPackage: {
@@ -198,13 +200,13 @@ const toggleExpand = (item) => {
 }
 
 const openDepartureModal = (item = {}, mode = 'create') => {
+	const isEdit = mode === 'edit'
 	globalModal.value?.open({
-		title: mode === 'edit' ? 'Edit Fixed Departure' : 'Add Fixed Departure',
-		component: FixedDepartureForm,
+		title: isEdit ? 'Edit Fixed Departure' : 'Add Fixed Departure',
+		component: isEdit ? EditFixedDepartureForm : FixedDepartureForm,
 		size: 'lg',
 		props: {
-			item,
-			mode,
+			item: isEdit ? item : undefined,
 			travelPackageId: props.travelPackage?.id ?? null,
 		},
 	})
@@ -213,18 +215,16 @@ const openDepartureModal = (item = {}, mode = 'create') => {
 const addDeparture = () => openDepartureModal({}, 'create')
 const editDeparture = (item = {}) => openDepartureModal(item, 'edit')
 
-const deleteDeparture = async (item) => {
+const deleteDeparture = (item) => {
 	if (!item?.id || !props.travelPackage?.id) return
-	try {
-		deletingId.value = item.id
-		await deleteTrekDeparture(props.travelPackage.id, item.id)
-		showSuccess('Departure deleted')
-		emit('refresh')
-	} catch (error) {
-		showError(error?.response?.data?.message || 'Failed to delete departure')
-		console.error(error)
-	} finally {
-		deletingId.value = null
-	}
+	globalModal.value?.open({
+		title: 'Confirm Deletion',
+		component: ConfirmDeleteModal,
+		size: 'md',
+		props: {
+			item,
+			travelPackageId: props.travelPackage.id,
+		},
+	})
 }
 </script>

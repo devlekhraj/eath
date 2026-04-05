@@ -17,7 +17,7 @@
                 </div>
                 <div class="divide-y divide-slate-200">
 
-                    @foreach ($package->departures as $item)
+                    @foreach ($package->departures()->where('start_date', '>=', now()->toDateString())->where('status','active')->orderBy('start_date')->get() as $item)
                         <div class="grid gap-3 py-4 sm:grid-cols-[1.7fr_0.8fr_0.8fr_0.6fr_0.8fr_auto] sm:items-center">
 
                             <div>

@@ -1,1 +1,0 @@
-import{_ as e,a as n,c as r,o as s,w as c,b as t}from"./main-ToNrBgAW.js";import"./style-IlyYNi84.js";const _={data(){return{}}};function d(i,o,p,l,u,f){const a=n("v-container");return s(),r(a,{fluid:""},{default:c(()=>o[0]||(o[0]=[t("div",null,[t("div",null," Dashboard ")],-1)])),_:1,__:[0]})}const x=e(_,[["render",d]]);export{x as default};

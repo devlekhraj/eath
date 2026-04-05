@@ -132,6 +132,7 @@ class WebsiteController extends Controller
             'trek.destination:id,slug',
         ])
             ->whereDate('start_date', '>=', now()->toDateString())
+            ->where('status','active')
             ->orderBy('start_date')
             ->get()
             ->groupBy('trek_id')
