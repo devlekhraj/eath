@@ -179,6 +179,18 @@
             });
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
+                const submitBtn = form.querySelector('[data-fd-submit-btn]');
+                const submitText = form.querySelector('[data-fd-submit-text]');
+                const submitSpinner = form.querySelector('[data-fd-submit-spinner]');
+
+                const setSubmitting = (isSubmitting) => {
+                    if (submitBtn) submitBtn.disabled = isSubmitting;
+                    if (submitText) submitText.textContent = isSubmitting ? 'Submitting...' : 'Confirm & Submit';
+                    if (submitSpinner) submitSpinner.classList.toggle('hidden', !isSubmitting);
+                };
+
+                setSubmitting(true);
+
                 const fd = new FormData(form);
                 const payload = {};
                 fd.forEach((value, key) => {
@@ -199,7 +211,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name=\"csrf-token\"]')?.getAttribute('content') || '',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                         'Accept': 'application/json',
                     },
                     body: JSON.stringify(payload),
@@ -220,6 +232,9 @@
                     .catch((err) => {
                         console.error(err);
                         alert(err.message || 'Unable to submit booking.');
+                    })
+                    .finally(() => {
+                        setSubmitting(false);
                     });
             });
 
