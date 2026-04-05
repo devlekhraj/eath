@@ -127,7 +127,7 @@ class WebsiteController extends Controller
 
         $departures = TrekDeparture::with([
             'trek' => function ($q) {
-                $q->select('id', 'name', 'slug', 'destination_id', 'duration_days');
+                $q->select('id', 'name', 'slug', 'destination_id', 'duration_days','duration_nights');
             },
             'trek.destination:id,slug',
         ])
@@ -142,7 +142,8 @@ class WebsiteController extends Controller
                     'package_name' => $trek->name ?? null,
                     'package_slug' => $trek->slug ?? null,
                     'destination_slug' => $trek->destination->slug ?? null,
-                    'duration' => $trek->duration_days ?? null,
+                    'days' => $trek->duration_days ?? null,
+                    'nights' => $trek->duration_nights ?? null,
                     'cost' => $group->min('cost'),
                 ];
             })
