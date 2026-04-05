@@ -351,7 +351,9 @@
 
     </section>
     {{-- section fixed departures --}}
-    @include('website.pages.trek.partials.fixed-departures')
+    @if ($package->fixedDeparture)
+        @include('website.pages.trek.partials.fixed-departures')
+    @endif
 
     <section class="py-12 pb-0 mb-4">
         <div class="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
