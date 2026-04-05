@@ -58,6 +58,7 @@ import FormHighlights from './form_section/FormHighlights.vue'
 import FormPackageGallery from './form_section/FormPackageGallery.vue'
 // import FormPackageBanner from './form_section/FormPackageBanner.vue'
 import FormPricing from './form_section/FormPricing.vue'
+import FormFixedDeparture from './form_section/FormFixedDeparture.vue'
 
 // Get package ID from route
 const route = useRoute()
@@ -74,8 +75,8 @@ const tabs = [
 	{ value: 'itinerary', label: 'Itinerary', icon: 'mdi-map-check-outline' },
 	{ value: 'price_list', label: 'Price List', icon: 'mdi-currency-usd' },
 	{ value: 'includes', label: 'Includes', icon: 'mdi-checkbox-marked-circle-outline' },
-	// { value: 'banners', label: 'Banners', icon: 'mdi-image' },
 	{ value: 'gallery', label: 'Gallery', icon: 'mdi-image-multiple' },
+	{ value: 'fixed_departure', label: 'Fixed Departure', icon: 'mdi-calendar-clock' },
 ]
 const tabComponents = {
 	overview: FormOverview,
@@ -86,6 +87,7 @@ const tabComponents = {
 	includes: FormPackageInclude,
 	// banners: FormPackageBanner,
 	gallery: FormPackageGallery,
+	fixed_departure: FormFixedDeparture,
 }
 const activeComponent = computed(() => tabComponents[activeTab.value] || null)
 const publicBaseUrl = window?.location?.origin ?? ''

@@ -1,194 +1,95 @@
 @extends('website.layout.master')
 @section('content')
 
-    @php
-        $guides = [
-            [
-                'name' => 'Lekh Raj Rai',
-                'photo' => 'https://randomuser.me/api/portraits/men/10.jpg',
-                'rating' => 4.5,
-                'reviews' => 48,
-                'languages' => ['English', 'Nepali'],
-                'bio' =>
-                    'Experienced mountain and cultural guide with 10+ years of leading tours in Nepal and Himalayas.',
-            ],
-            [
-                'name' => 'Anita Gurung',
-                'photo' => 'https://randomuser.me/api/portraits/women/20.jpg',
-                'rating' => 5,
-                'reviews' => 63,
-                'languages' => ['English', 'Nepali', 'Tamang'],
-                'bio' => 'Friendly and knowledgeable guide specializing in trekking and cultural tours across Nepal.',
-            ],
-            [
-                'name' => 'Rajendra Lama',
-                'photo' => 'https://randomuser.me/api/portraits/men/30.jpg',
-                'rating' => 4,
-                'reviews' => 27,
-                'languages' => ['English', 'Nepali', 'Hindi'],
-                'bio' => 'Skilled guide with passion for adventure trekking and wildlife tours in Nepal.',
-            ],
-            [
-                'name' => 'Sita Rai',
-                'photo' => 'https://randomuser.me/api/portraits/women/40.jpg',
-                'rating' => 4.8,
-                'reviews' => 55,
-                'languages' => ['English', 'Nepali', 'Rai'],
-                'bio' => 'Certified trekking guide with a warm personality and deep knowledge of Himalayan culture.',
-            ],
-            [
-                'name' => 'Mohan KC',
-                'photo' => 'https://randomuser.me/api/portraits/men/50.jpg',
-                'rating' => 4.2,
-                'reviews' => 40,
-                'languages' => ['English', 'Nepali'],
-                'bio' => 'Adventure enthusiast who loves leading challenging mountain expeditions across Nepal.',
-            ],
-            [
-                'name' => 'Laxmi Sherpa',
-                'photo' => 'https://randomuser.me/api/portraits/women/60.jpg',
-                'rating' => 5,
-                'reviews' => 80,
-                'languages' => ['English', 'Nepali', 'Sherpa'],
-                'bio' => 'Experienced in cultural and wildlife tours, especially in the Everest region.',
-            ],
-            [
-                'name' => 'Dipendra Tamang',
-                'photo' => 'https://randomuser.me/api/portraits/men/70.jpg',
-                'rating' => 3.9,
-                'reviews' => 20,
-                'languages' => ['English', 'Nepali', 'Tamang'],
-                'bio' => 'Multilingual guide specializing in city tours and historical landmarks.',
-            ],
-            [
-                'name' => 'Priya Shrestha',
-                'photo' => 'https://randomuser.me/api/portraits/women/80.jpg',
-                'rating' => 4.7,
-                'reviews' => 70,
-                'languages' => ['English', 'Nepali'],
-                'bio' => 'Passionate about eco-tourism and sustainable travel in Nepal’s remote regions.',
-            ],
-        ];
+{{-- Hero Section remains unchanged --}}
+<section class="relative h-[55vh] min-h-[420px] overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1800&q=80"
+            alt="Mountain landscape" class="h-full w-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-900/60 to-slate-950/70"></div>
+    </div>
+    <div class="relative mx-auto flex h-full w-full max-w-7xl items-end px-6 pb-16">
+        <div class="text-white">
+            <p class="text-xs uppercase tracking-[0.4em] text-white/70 font-bold mb-2">Our Foundation</p>
+            <h1 class="text-4xl font-bold sm:text-6xl tracking-tight mb-4">The Experts Behind Every Peak</h1>
+            <p class="max-w-2xl text-lg text-white/80 leading-relaxed">
+                Meet our certified guides—the heart of your journey, dedicated to safety, culture, and life-changing mountain experiences.
+            </p>
+        </div>
+    </div>
+</section>
 
-        // Function to render stars based on rating
-        function renderStars($rating)
-        {
-            $fullStars = floor($rating);
-            $halfStar = $rating - $fullStars >= 0.5;
-            $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
-            $html = '';
+<div class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            @if (isset($guideList) && count($guideList) > 0)
+            @foreach ($guideList as $guide)
+            <div class="relative bg-white rounded border border-slate-100 shadow-sm p-10 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 flex flex-col items-center group h-full">
 
-            for ($i = 0; $i < $fullStars; $i++) {
-                $html .= '<i class="fas fa-star"></i>';
-            }
-            if ($halfStar) {
-                $html .= '<i class="fas fa-star-half-alt"></i>';
-            }
-            for ($i = 0; $i < $emptyStars; $i++) {
-                $html .= '<i class="far fa-star"></i>';
-            }
-            return $html;
-        }
-    @endphp
-    <style>
-        .card-img-top {
-            aspect-ratio: 16 / 9;
-            /* or 4 / 3, 1 / 1, etc */
-            width: 100%;
-            /* responsive width */
-            object-fit: cover;
-        }
+                {{-- Featured Badge remains --}}
+                <div class="absolute top-6 right-6 bg-amber-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm uppercase tracking-widest">
+                    <i class="fas fa-crown text-[8px]"></i>
+                    Featured
+                </div>
 
-        .bio-text {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            /* limits to 3 lines */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
-    @php
-        $pageSubtitle = "Meet our highly skilled and experienced travel guides who will make your Nepal journey unforgettable. They are
-            passionate about sharing the beauty, culture, and adventure of Nepal with you.";
-    @endphp
-    <div class="container py-5">
-        <h2 class="mb-3 text-center fw-bold" style="letter-spacing: 0.05em; color: #222;">
-            {{ isset($settings['guide_profile_page_title']) ? $settings['guide_profile_page_title'] : 'Contact Us' }}
-        </h2>
-
-        <p class="text-center text-muted mb-5"
-            style="max-width: 700px; margin-left: auto; margin-right: auto; font-size: 1.1rem; line-height: 1.5;">
-            {{ isset($settings['guide_profile_page_sub_title']) ? $settings['guide_profile_page_sub_title'] : $pageSubtitle }}
-        </p>
-
-        @php
-            $randomRating = rand(1, 5); // random rating between 1 and 5
-            $randomReviews = rand(0, 200); // random number of reviews
-        @endphp
-        <div class="row g-4">
-            @if (count($guideList) > 0)
-                @foreach ($guideList as $guide)
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card shadow-sm border-0 h-100">
-                            <img src="{{ $guide['avatar'] }}" class="card-img-top" alt="Guide Photo"
-                                style="height: 280px; object-fit: cover; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-semibold mb-2 text-capitalize">{{ $guide['name'] }}</h5>
-                                <div class="mb-3 d-flex align-items-center">
-                                    <div class="text-warning me-2" aria-label="Rating: {{ $randomRating }} out of 5 stars">
-                                        {!! renderStars($randomRating) !!}
-                                    </div>
-                                    <small class="text-muted">({{ $randomReviews }} reviews)</small>
-                                </div>
-
-                                <p class="mb-2">
-                                    <strong>Languages:</strong> {{ implode(', ', $guide['language_spoken']) }}
-                                </p>
-
-                                <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
-                                    <div class="bio-text">
-                                        {!! $guide['bio'] !!}
-                                    </div>
-                                    {{-- <div>
-                                        <a href="/guide-profiles/{{ $guide->slug }}" class="btn btn-gradient"> See Profile
-                                            <i class="fa-solid fa-arrow-right"></i>
-                                        </a>
-                                    </div> --}}
-                                </div>
-                            </div>
-                        </div>
+                {{-- Avatar --}}
+                <div class="relative mb-8">
+                    <div class="w-32 h-32 rounded-full overflow-hidden border-[6px] border-slate-50 shadow-inner">
+                        <img src="{{ $guide->avatar }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-115" alt="{{ $guide->name }}">
                     </div>
-                @endforeach
+                </div>
+
+                {{-- Name & Title --}}
+                <h3 class="text-2xl font-black text-slate-900 mb-1 tracking-tight">{{ $guide->name }}</h3>
+                <p class="text-sm font-bold text-sky-600 mb-2 uppercase tracking-wide">
+                    {{ $guide->license_number ? 'Senior Trekking Guide' : 'Adventure Specialist' }}
+                </p>
+
+                {{-- Location --}}
+                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-400 mb-8">
+                    <i class="fas fa-map-marker-alt text-slate-300"></i>
+                    Nepal, Himalayas
+                </div>
+
+                {{-- Stats Row --}}
+                <div class="w-full flex items-center justify-between border-t border-slate-50 pt-6 mb-6 mt-auto">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-star text-amber-400"></i>
+                        <span class="text-sm font-black text-slate-900">{{ round($guide->reviews_avg_rating ?? 4.8, 1) }}</span>
+                        <span class="text-xs font-bold text-slate-400">({{ $guide->reviews_count ?? 0 }})</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-slate-500">
+                        <i class="far fa-clock text-slate-300"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider">{{ $guide->experience_years ?? 12 }} years exp.</span>
+                    </div>
+                </div>
+
+                {{-- Tags / Languages --}}
+                <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+                    @php
+                    $tags = is_array($guide->language_spoken) ? $guide->language_spoken : ['English', 'Nepali'];
+                    @endphp
+                    @foreach(array_slice($tags, 0, 2) as $tag)
+                    <span class="px-4 py-1.5 bg-slate-50 text-slate-500 text-[10px] font-black uppercase rounded-full border border-slate-100 tracking-widest">
+                        {{ $tag }}
+                    </span>
+                    @endforeach
+                    @if(count($tags) > 2)
+                    <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest">+{{ count($tags) - 2 }}</span>
+                    @endif
+                </div>
+
+                {{-- Social Links Row --}}
+               
+            </div>
+            @endforeach
             @else
-                @foreach ($guides as $guide)
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card shadow-sm border-0 h-100">
-                            <img src="{{ $guide['photo'] }}" class="card-img-top" alt="Guide Photo"
-                                style="height: 280px; object-fit: cover; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-semibold mb-2">{{ $guide['name'] }}</h5>
-                                <div class="mb-3 d-flex align-items-center">
-                                    <div class="text-warning me-2"
-                                        aria-label="Rating: {{ $guide['rating'] }} out of 5 stars">
-                                        {!! renderStars($guide['rating']) !!}
-                                    </div>
-                                    <small class="text-muted">({{ $guide['reviews'] }} reviews)</small>
-                                </div>
-                                <p class="mb-2"><strong>Languages:</strong> {{ implode(', ', $guide['languages']) }}</p>
-                                {{-- <p class="card-text text-muted flex-grow-1" style="font-size: 0.95rem;">
-                                    {{ $guide['bio'] }}
-                                </p> --}}
-                                <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
-                                    {!! $guide['bio'] !!}
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+            <div class="col-span-full py-20 text-center">
+                <p class="text-slate-400 font-bold uppercase tracking-widest text-sm">No guides currently available on this trail.</p>
+            </div>
             @endif
         </div>
     </div>
+</div>
+
 @endsection

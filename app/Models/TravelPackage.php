@@ -164,4 +164,9 @@ class TravelPackage extends Model
             ->where('end_date', '>=', now())
             ->where('is_active', 1);
     }
+
+    public function departures()
+    {
+        return $this->hasMany(TrekDeparture::class, 'trek_id', 'id')->orderBy('start_date');
+    }
 }

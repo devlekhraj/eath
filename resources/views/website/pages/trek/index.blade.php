@@ -131,7 +131,8 @@
                             <div id="tab-panel-overview" class="tab-panel p-6" data-tab-panel="overview" role="tabpanel">
                                 <h2 class="text-2xl font-semibold text-slate-900">Overview</h2>
                                 <div class="tiptap-container">
-                                    <div class="prose prose-slate mt-4 max-w-none vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                    <div
+                                        class="prose prose-slate mt-4 max-w-none vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                         {!! $package->description !!}
                                     </div>
                                 </div>
@@ -144,7 +145,8 @@
                                 <h2 class="text-2xl font-semibold text-slate-900">Itinerary</h2>
                                 <div class="mt-6 space-y-4">
                                     @foreach ($package->itineraries as $key => $itinery)
-                                        <details class="group rounded-xl border border-slate-200 bg-slate-50/70 p-4 vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                        <details
+                                            class="group rounded-xl border border-slate-200 bg-slate-50/70 p-4 vuetify-pro-tiptap-editor__content view markdown-theme-default">
                                             <summary class="flex cursor-pointer list-none items-center justify-between">
                                                 <div class="flex items-center gap-3">
                                                     <span
@@ -300,9 +302,10 @@
                             class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow btnOpenInquiry"
                             data-type="travel_packages" data-id="{{ $package['id'] }}"
                             data-package-id="{{ $package['id'] }}"
-                            data-package-title="{{ $package['name'] ?? $package['title'] ?? '' }}"
+                            data-package-title="{{ $package['name'] ?? ($package['title'] ?? '') }}"
                             data-destination-id="{{ $package->destination->id ?? '' }}">
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M9 12l2 2 4-4" />
                                 <path d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
                             </svg>
@@ -313,9 +316,10 @@
                             class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:border-slate-900 hover:bg-slate-900 hover:text-white btnOpenInquiry"
                             data-type="travel_packages" data-id="{{ $package['id'] }}"
                             data-package-id="{{ $package['id'] }}"
-                            data-package-title="{{ $package['name'] ?? $package['title'] ?? '' }}"
+                            data-package-title="{{ $package['name'] ?? ($package['title'] ?? '') }}"
                             data-destination-id="{{ $package->destination->id ?? '' }}">
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M12 6v12" />
                                 <path d="M18 12H6" />
                             </svg>
@@ -346,6 +350,8 @@
 
 
     </section>
+    {{-- section fixed departures --}}
+    @include('website.pages.trek.partials.fixed-departures')
 
     <section class="py-12 pb-0 mb-4">
         <div class="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
@@ -362,23 +368,9 @@
         <div class="mt-8 px-2 sm:px-3 lg:px-4">
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @if (count($package->images_urls))
-                    @foreach ($package->images_urls as $img)
-                        <button type="button" class="group relative overflow-hidden rounded text-left"
-                            data-gallery-item data-src="{{ $img }}"
-                            data-alt="Snowy Himalayan peak under a clear sky" data-title="" data-subtitle="">
-                            <div class="relative aspect-[4/3] overflow-hidden">
-                                <img src="{{ $img }}" alt="Snowy Himalayan peak under a clear sky"
-                                    class="h-full w-full rounded object-cover object-center transition duration-500 ease-out group-hover:scale-105" />
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-slate-900/10 to-transparent">
-                            </div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <p class="text-xs uppercase tracking-[0.3em] text-white/80"></p>
-                                <h3 class="mt-1 text-xl font-semibold"></h3>
-                            </div>
-                        </button>
-                    @endforeach
+                    @include('website.pages.home.partials.gallery-slider', [
+                        'images' => $package->images_urls ?? [],
+                    ])
                 @else
                     <button type="button" class="group relative overflow-hidden rounded-none text-left" data-gallery-item
                         data-src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1400&q=80"

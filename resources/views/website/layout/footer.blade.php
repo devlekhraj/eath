@@ -124,6 +124,48 @@
         }
     });
 
+    const gallerySwiperEl = document.querySelector(".gallery-swiper");
+    if (gallerySwiperEl) {
+        new Swiper(".gallery-swiper", {
+            slidesPerView: 1,
+            grid: {
+                rows: 1,
+                fill: "row",
+            },
+            spaceBetween: 12,
+            slidesPerGroup: 1,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            navigation: {
+                nextEl: "[data-gallery-swiper-next]",
+                prevEl: "[data-gallery-swiper-prev]",
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    grid: {
+                        rows: 2,
+                        fill: "row",
+                    },
+                    slidesPerGroup: 4,
+                    spaceBetween: 14,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    grid: {
+                        rows: 2,
+                        fill: "row",
+                    },
+                    slidesPerGroup: 6,
+                    spaceBetween: 16,
+                },
+            },
+        });
+    }
+
     const mobileMenuButton = document.getElementById("mobile-menu-button");
     const mobileMenu = document.getElementById("mobile-menu");
 

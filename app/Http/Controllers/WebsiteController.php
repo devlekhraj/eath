@@ -14,6 +14,8 @@ use App\Models\Inquiry;
 use App\Models\PackageCategory;
 use App\Models\Page;
 use App\Models\TravelPackage;
+use App\Models\TrekDeparture;
+use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -24,6 +26,32 @@ class WebsiteController extends Controller
         return view('website.landing');
     }
 
+    public function trekAll()
+    {
+        $packages = TravelPackage::where('is_active', 1)->with('destination')->get();
+
+        return view('website.pages.trek.list', compact('packages'));
+    }
+
+    public function bookModal(Request $request)
+    {
+        $packageId = $request->query('package_id');
+        $departureId = $request->query('departure_id');
+
+        abort_unless($packageId, 400, 'package_id is required');
+
+        $package = TravelPackage::with(['destination', 'departures'])->findOrFail($packageId);
+        $departure = $departureId ? $package->departures->firstWhere('id', (int) $departureId) : null;
+
+        $countries = Country::orderBy('name')->get(['id', 'name', 'country_code']);
+        
+        return View::make('website.pages.trek.partials.book-modal', [
+            'package' => $package,
+            'departure' => $departure,
+            'countries' => $countries,
+        ]);
+    }
+    
     public function index(Request $request)
     {
 
@@ -97,6 +125,31 @@ class WebsiteController extends Controller
             });
         }
 
+        $departures = TrekDeparture::with([
+            'trek' => function ($q) {
+                $q->select('id', 'name', 'slug', 'destination_id', 'duration_days');
+            },
+            'trek.destination:id,slug',
+        ])
+            ->whereDate('start_date', '>=', now()->toDateString())
+            ->orderBy('start_date')
+            ->get()
+            ->groupBy('trek_id')
+            ->map(function ($group) {
+                $trek = $group->first()->trek;
+                return [
+                    'package_id' => $trek->id ?? null,
+                    'package_name' => $trek->name ?? null,
+                    'package_slug' => $trek->slug ?? null,
+                    'destination_slug' => $trek->destination->slug ?? null,
+                    'duration' => $trek->duration_days ?? null,
+                    'cost' => $group->min('cost'),
+                ];
+            })
+            ->values();
+
+// dd($departures);
+
         $searchResults = ($q || $region || $duration) ? $query->limit(20)->get() : null;
 
         return view('website.index', compact(
@@ -109,6 +162,7 @@ class WebsiteController extends Controller
             'galleryImage',
             'hotPackages',
             'menus',
+            'departures',
             'searchResults'
         ));
     }
@@ -200,7 +254,9 @@ class WebsiteController extends Controller
 
     public function guideProfile()
     {
-        $guideList = Guide::all();
+        $guideList = Guide::withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->get();
 
         return view('website.pages.guide.index', compact('guideList'));
     }

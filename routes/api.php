@@ -22,7 +22,9 @@ use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageInclusionController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackageItinareryController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\PackagePriceController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TravelPackageController;
+use App\Http\Controllers\Api\V1\Admin\TravelPackage\TrekDepartureController;
 use App\Http\Controllers\Api\V1\Admin\TravelPackage\TrekImageController;
+use App\Http\Controllers\Api\V1\Admin\Booking\BookingController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Auth\UserAuthController;
 use Illuminate\Support\Facades\Route;
@@ -77,7 +79,13 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::delete('package-prices/{id}/delete', [PackagePriceController::class, 'deletePrice']);
 
         Route::post('treks/{trekId}/save-image', [TrekImageController::class, 'saveImage']);
+        
         Route::post('treks/{trekId}/use-image', [TrekImageController::class, 'useImage']);
+        Route::post('treks/{id}/fixed-departures', [TrekDepartureController::class, 'store']);
+        Route::patch('treks/{trekId}/fixed-departures/{departureId}', [TrekDepartureController::class, 'update']);
+        Route::delete('treks/{trekId}/fixed-departures/{departureId}', [TrekDepartureController::class, 'destroy']);
+
+
 
         Route::get('package-categories', [PackageCategoryController::class, 'getCategories']);
         Route::post('package-categories', [PackageCategoryController::class, 'saveCategory']);
@@ -172,5 +180,10 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::patch('media-usages/{id}/update', [MediaUsageController::class, 'updateItem']);
         Route::delete('media-usages/{id}/delete', [MediaUsageController::class, 'delete']);
+
+        Route::get('bookings', [BookingController::class, 'index']);
+        Route::post('bookings', [BookingController::class, 'storeUpdate']);
+        Route::get('bookings/{id}', [BookingController::class, 'show']);
+        Route::delete('bookings/{id}/delete', [BookingController::class, 'delete']);
     });
 });

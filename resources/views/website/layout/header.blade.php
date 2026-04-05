@@ -1141,7 +1141,7 @@
                         </div>
 
                         <a href="javascript:void(0)"
-                            class="nav-link inline-flex items-center gap-2 py-3 text-sm font-medium">
+                            class="nav-link inline-flex items-center gap-2 py-3 text-sm font-medium btnOpenInquiry">
                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path
@@ -1149,7 +1149,8 @@
                             </svg>
                             Custom Trip</a>
                         <div class="relative group">
-                            <a href="javascript:void(0)" class="nav-link inline-flex items-center gap-2 py-3 text-sm font-medium">
+                            <a href="javascript:void(0)"
+                                class="nav-link inline-flex items-center gap-2 py-3 text-sm font-medium">
 
                                 Safety
                                 <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1162,12 +1163,21 @@
                                 class="nav-dropdown absolute left-0 top-full -mt-px w-72 backdrop-blur-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition overflow-hidden">
                                 <div class="p-4 pt-6 grid gap-2 text-sm">
                                     @foreach ($safetyBlogs as $blog)
-                                        <a href="{{ route('blog.detail', ['category_slug' => $blog->category['slug'],'blog_slug' => $blog['slug']]) }}"
+                                        <a href="{{ route('blog.detail', ['category_slug' => $blog->category['slug'], 'blog_slug' => $blog['slug']]) }}"
                                             class="text-slate-600 hover:text-slate-900">{{ $blog['title'] }}</a>
                                     @endforeach
-                                   
+
                                 </div>
                             </div>
+                        </div>
+                        <div class="relative group">
+                            <a href="{{ route('about.guide.profiles') }}"
+                                class="nav-link inline-flex items-center gap-2 py-3 text-sm font-medium">
+
+                                Guide Profles
+                              
+                            </a>
+                    
                         </div>
                         <div class="relative group">
                             <a href="{{ route('blogs') }}"
@@ -1208,7 +1218,8 @@
                             <div
                                 class="nav-dropdown absolute left-0 top-full -mt-px w-64 backdrop-blur-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition overflow-hidden">
                                 <div class="p-4 pt-6 grid gap-2 text-sm">
-                                    <a href="{{ route('about.our.story') }}" class="text-slate-600 hover:text-slate-900">Our Story</a>
+                                    <a href="{{ route('about.our.story') }}"
+                                        class="text-slate-600 hover:text-slate-900">Our Story</a>
                                     {{-- <a href="{{ route('about.guide.profiles') }}" class="text-slate-600 hover:text-slate-900">Guide Profiles</a> --}}
                                     {{-- <a href="/about/licenses/"
                                         class="text-slate-600 hover:text-slate-900">Licenses</a> --}}

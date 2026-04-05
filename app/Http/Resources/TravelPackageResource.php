@@ -154,6 +154,41 @@ class TravelPackageResource extends JsonResource
                     'travel_package_id' => $item->travel_package_id,
                 ];
             }),
+        'departures' => $this->whenLoaded('departures', function () {
+            return $this->departures->map(function ($dep) {
+                return [
+                    'id' => $dep->id,
+                    'start_date' => optional($dep->start_date)->toDateString(),
+                    'end_date' => optional($dep->end_date)->toDateString(),
+                    'available_seats' => $dep->available_seats,
+                    'cost' => $dep->cost,
+                    'status' => $dep->status,
+                    'seq_no' => $dep->seq_no,
+                    'booking_count' => $dep->relationLoaded('bookings') ? $dep->bookings->count() : null,
+                    'bookings' => $dep->relationLoaded('bookings') ? $dep->bookings->map(function ($booking) {
+                        $user = $booking->relationLoaded('user') ? $booking->user : null;
+                        return [
+                            'id' => $booking->id,
+                            'package_id' => $booking->package_id,
+                            'departure_id' => $booking->departure_id,
+                            'total_travellers' => $booking->total_travellers,
+                            'travellers' => $booking->travellers,
+                            'flight' => $booking->flight,
+                            'insurance' => $booking->insurance,
+                            'special_requirements' => $booking->special_requirements,
+                            'referral' => $booking->referral,
+                            'user' => $user ? [
+                                'id' => $user->id,
+                                'name' => trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')) ?: null,
+                                'email' => $user->email,
+                                'phone' => $user->mobile_no,
+                            ] : null,
+                            'created_at' => optional($booking->created_at)->toDateTimeString(),
+                        ];
+                    }) : null,
+                ];
+            });
+        }),
             // 'category_ids'        => $this->categories()->pluck('id')
         ];
     }

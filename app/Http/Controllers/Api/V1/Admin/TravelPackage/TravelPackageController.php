@@ -33,7 +33,7 @@ class TravelPackageController extends Controller
     public function show(Request $request, $id)
     {
         // Retrieve the travel package by ID or fail with 404
-        $package = TravelPackage::with('images','destination')->findOrFail($id);
+        $package = TravelPackage::with('images','destination','departures.bookings.user')->findOrFail($id);
 
       
 

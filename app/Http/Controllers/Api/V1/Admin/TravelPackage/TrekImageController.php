@@ -1,13 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1\Admin\TravelPackage;
 
-
-
-use App\Models\Gallery;
-use Illuminate\Http\Request;
-use App\Models\TravelPackage;
 use App\Http\Controllers\Controller;
+use App\Models\Gallery;
+use App\Models\TravelPackage;
 use App\Services\GalleryImageService;
+use Illuminate\Http\Request;
 
 class TrekImageController extends Controller
 {

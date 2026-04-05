@@ -37,7 +37,15 @@ Route::get('/responsible-travels', [WebsiteController::class,'responsibleTravels
 
 // Route::get('/destinations',[WebsiteController::class,'destinationPage'])->name('destination.page');
 Route::get('/destinations/{slug}',[WebsiteController::class,'destinationShow'])->name('destination.detail');
+
+
+Route::get('/treks', [WebsiteController::class,'trekAll'])->name('trek.list');
+
 Route::get('/treks/{destination}/{slug}', [WebsiteController::class,'show'])->name('trek.show');
+Route::post('/bookings', [\App\Http\Controllers\TrekBookingController::class, 'store'])->name('bookings.store');
+
+// Booking modal (AJAX HTML fragment)
+Route::get('/book-modal', [WebsiteController::class, 'bookModal'])->name('book.modal');
 
 Route::get('/packages/{slug}', [WebsiteController::class,'show']);
 Route::get('/categories/{slug}', [WebsiteController::class,'categoryShow'])->name('category.show');

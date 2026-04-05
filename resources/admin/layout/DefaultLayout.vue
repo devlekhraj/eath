@@ -209,6 +209,7 @@ const menuGroups = ref([
 		items: [
 			{ name: 'Customer List', icon: 'mdi-account-group-outline', route_name: 'adminCustomerPage' },
 			{ name: 'Inquiries', icon: 'mdi-message-question-outline', route_name: 'adminInquiryPage' },
+			{ name: 'Bookings', icon: 'mdi-calendar-check-outline', route_name: 'adminBookingPage' },
 		],
 	},
 	// {
