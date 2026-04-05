@@ -358,9 +358,12 @@
 @endif
 
 {{-- gallery section --}}
-@if (count($package->images_urls))
-    @include('website.pages.trek.partials.trek-gallery')
-@endif
+@include('website.pages.home.landing-gallery', [
+    'images' => $package->images_urls ?? [],
+    'title' => 'Best Moments',
+    'subtitle' => 'Scenic highlights from ' . ($package->destination->name ?? 'this trek') . '.',
+    'badge' => 'Photo Gallery'
+])
 
 
 
