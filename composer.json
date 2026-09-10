@@ -30,6 +30,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Admin\\": "packages/admin/src/",
+            "Website\\": "packages/website/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },

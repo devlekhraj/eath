@@ -72,13 +72,13 @@ return [
         // Default user provider (flexible via .env)
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', Admin\Models\User::class),
         ],
 
         // Admin provider
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
+            'model' => Admin\Models\Admin::class,
         ],
 
         // You can leave this commented if not using DB driver

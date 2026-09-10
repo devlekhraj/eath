@@ -12,16 +12,16 @@
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "paths": {
-      "@/*": ["./resources/admin/*"],
-      "@pages/*": ["./resources/admin/pages/*"],
-      "@components/*": ["./resources/admin/components/*"],
-      "@utils/*": ["./resources/admin/utils/*"]
+      "@/*": ["./packages/admin/resources/admin/*"],
+      "@pages/*": ["./packages/admin/resources/admin/pages/*"],
+      "@components/*": ["./packages/admin/resources/admin/components/*"],
+      "@utils/*": ["./packages/admin/resources/admin/utils/*"]
     }
   },
   "include": [
-    "resources/admin/env.d.ts",
-    "resources/admin/**/*.ts",
-    "resources/admin/**/*.vue"
+    "packages/admin/resources/admin/env.d.ts",
+    "packages/admin/resources/admin/**/*.ts",
+    "packages/admin/resources/admin/**/*.vue"
   ],
   "exclude": [
     "node_modules"

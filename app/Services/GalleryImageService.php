@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Gallery;
-use App\Models\GalleryVariant;
+use Admin\Models\Gallery;
+use Admin\Models\GalleryVariant;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;

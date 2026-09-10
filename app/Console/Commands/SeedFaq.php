@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Faq;
+use Admin\Models\Faq;
 use Illuminate\Console\Command;
-use App\Models\Setting;
+use Admin\Models\Setting;
 
 class SeedFaq extends Command
 {

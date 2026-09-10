@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "is_website": true,
+  "brand": {
+    "name": "EATH",
+    "tagline": "Find your Nepal journey.",
+    "intro": "A sample travel-planning experience built around discovery, comparison and a clear next step.",
+    "trust_statement": "Explore the EATH planning website",
+    "contact_email": "hello@example.test",
+    "contact_phone": null,
+    "whatsapp_number": null,
+    "office_address": "Sample office details — not supplied",
+    "social_profiles": []
+  },
+  "articles": [
+    {
+      "id": "article-seasons",
+      "slug": "choosing-a-travel-month",
+      "title": "Choosing a travel month",
+      "category": "seasons",
+      "summary": "A sample planning checklist for comparing dates, flexibility and route preferences.",
+      "trek_ids": [
+        "t-ebc",
+        "t-abc",
+        "t-mustang"
+      ],
+      "sections": [
+        {
+          "heading": "Start with your available time",
+          "body": "Write down the month you can travel and the number of days available. In this website, choosing a month filters illustrative trek records. The results are examples for testing the interface, not a forecast or confirmation that a route will operate."
+        },
+        {
+          "heading": "Look beyond one perfect date",
+          "body": "Compare a few possible departures and consider how much flexibility you have. Your final real-world decision should use verified route information and current advice from the operator. The website month selector deliberately includes months with no matching records."
+        },
+        {
+          "heading": "Carry your choice into a plan",
+          "body": "Open a sample trek, compare alternatives, or start Plan My Trek with a month selected. The planner keeps your preference visible so you can change it later without repeating the entire journey."
+        }
+      ],
+      "is_website": true,
+      "author_label": "EATH Website Editorial",
+      "image_key": "article-seasons",
+      "updated_date": "2030-09-01"
+    },
+    {
+      "id": "article-packing",
+      "slug": "organizing-your-packing-questions",
+      "title": "Organizing your packing questions",
+      "category": "packing",
+      "summary": "A sample way to organize questions before creating a trek-specific packing list.",
+      "trek_ids": [
+        "t-langtang",
+        "t-mardi"
+      ],
+      "sections": [
+        {
+          "heading": "Use categories, not an unverified checklist",
+          "body": "Create headings for clothing, personal items, documents and items to discuss with your guide. This sample article illustrates an educational layout. It is not a complete equipment list and should not be used to prepare for a real trek without route-specific guidance."
+        },
+        {
+          "heading": "Ask what is already included",
+          "body": "Check the actual operator's verified inclusion list before buying or renting equipment. The price and inclusion fields on this website are illustrative, so they do not confirm which supplies will be provided."
+        },
+        {
+          "heading": "Record requests in your plan",
+          "body": "The planner has a short requests field for non-sensitive questions. Use sample text when testing, such as asking where an approved packing list would be supplied. Do not upload identity or medical documents."
+        }
+      ],
+      "is_website": true,
+      "author_label": "EATH Website Editorial",
+      "image_key": "article-packing",
+      "updated_date": "2030-09-01"
+    },
+    {
+      "id": "article-altitude",
+      "slug": "questions-before-a-high-altitude-trip",
+      "title": "Questions before a high-altitude trip",
+      "category": "preparation",
+      "summary": "A sample question-led article layout, not medical guidance.",
+      "trek_ids": [
+        "t-ebc",
+        "t-gokyo",
+        "t-manaslu"
+      ],
+      "sections": [
+        {
+          "heading": "Treat the displayed metrics as samples",
+          "body": "The website uses illustrative altitude and difficulty fields to show how comparison works. Those values are not a medical assessment, an operational itinerary or confirmation of individual suitability."
+        },
+        {
+          "heading": "Seek appropriate advice before real travel",
+          "body": "For a real journey, discuss the actual itinerary with the operator and personal health questions with an appropriate qualified professional. This page intentionally provides no diagnosis, medication advice or treatment instructions."
+        },
+        {
+          "heading": "Use preferences carefully",
+          "body": "The website planner ranks expressed interests and practical preferences. It does not evaluate health. A preference match is not a safety clearance, and it must never be presented as one."
+        }
+      ],
+      "is_website": true,
+      "author_label": "EATH Website Editorial",
+      "image_key": "article-altitude",
+      "updated_date": "2030-09-01"
+    },
+    {
+      "id": "article-compare",
+      "slug": "how-to-compare-trek-ideas",
+      "title": "How to compare trek ideas",
+      "category": "planning",
+      "summary": "Use duration, pace and interests to make a clearer shortlist.",
+      "trek_ids": [
+        "t-abc",
+        "t-khopra",
+        "t-mardi"
+      ],
+      "sections": [
+        {
+          "heading": "Choose two or three options",
+          "body": "Add sample treks from the listing or detail pages. Keeping the shortlist small makes it easier to inspect the same fields across each option. You can remove or replace a trek without starting a new search."
+        },
+        {
+          "heading": "Read the trade-offs",
+          "body": "A lower illustrative price does not prove a lower final trip cost. A shorter itinerary does not automatically mean easier walking. Compare duration, displayed difficulty, walking hours and included sample content separately."
+        },
+        {
+          "heading": "Take the next step",
+          "body": "Select Plan This Trek to carry an option into the planner. If none of the samples fits, choose a custom request and explain your preferences using non-sensitive website text."
+        }
+      ],
+      "is_website": true,
+      "author_label": "EATH Website Editorial",
+      "image_key": "article-compare",
+      "updated_date": "2030-09-01"
+    },
+    {
+      "id": "article-culture",
+      "slug": "planning-a-culture-led-journey",
+      "title": "Planning a culture-led journey",
+      "category": "culture",
+      "summary": "A sample article about expressing cultural interests in a trip request.",
+      "trek_ids": [
+        "t-mustang",
+        "t-langtang"
+      ],
+      "sections": [
+        {
+          "heading": "Name the experience you are interested in",
+          "body": "Use the Cultural Trails experience filter to explore sample itineraries tagged with a village and culture theme. These tags describe the website catalog; they do not promise access to specific sites, events or communities."
+        },
+        {
+          "heading": "Leave space for verified local guidance",
+          "body": "Real trips require up-to-date local guidance and respectful arrangements. The website does not invent event schedules, religious rules, access permissions or named community partnerships."
+        },
+        {
+          "heading": "Build a flexible request",
+          "body": "Choose culture as an interest, set your preferred pace and add a sample question. The planning summary will retain these choices while you compare potential routes."
+        }
+      ],
+      "is_website": true,
+      "author_label": "EATH Website Editorial",
+      "image_key": "article-culture",
+      "updated_date": "2030-09-01"
+    },
+    {
+      "id": "article-logistics",
+      "slug": "organizing-travel-logistics",
+      "title": "Organizing travel logistics",
+      "category": "logistics",
+      "summary": "Separate confirmed arrangements from questions that still need an answer.",
+      "trek_ids": [
+        "t-ebc",
+        "t-manaslu"
+      ],
+      "sections": [
+        {
+          "heading": "Separate the package from the wider journey",
+          "body": "The sample prices in this website cover only an illustrative ground-package basis. International flights, insurance and customization are not priced. Nothing shown is a ticket, reservation or quote."
+        },
+        {
+          "heading": "Record dependencies",
+          "body": "Use your plan to note dates, available days and transfer preferences. Actual transport schedules, permits and operator arrangements need confirmation outside this website. No external schedule or permit service is connected."
+        },
+        {
+          "heading": "Review before sending a real request",
+          "body": "The website review step lets you edit each group of preferences before a simulated submission. A future production inquiry flow would require separate approval and real integration; it is not implemented by these samples."
+        }
+      ],
+      "is_website": true,
+      "author_label": "EATH Website Editorial",
+      "image_key": "article-logistics",
+      "updated_date": "2030-09-01"
+    }
+  ],
+  "guides": [
+    {
+      "id": "guide-website-01",
+      "slug": "website-guide-01",
+      "name": "Website Guide 01",
+      "role": "Sample Trek Leader",
+      "is_website": true,
+      "disclosure": "Fictional website profile — not an actual employee or credential.",
+      "image_key": "guide-website-01",
+      "biography": "This fictional profile illustrates a calm, approachable guide page. Its sample story emphasizes listening to traveler preferences and discussing the pace of a journey. It must not be published as a real person's experience.",
+      "languages": [],
+      "qualifications": [],
+      "years_experience": null,
+      "trek_ids": [
+        "t-ebc",
+        "t-mardi",
+        "t-khopra"
+      ]
+    },
+    {
+      "id": "guide-website-02",
+      "slug": "website-guide-02",
+      "name": "Website Guide 02",
+      "role": "Sample Journey Planner",
+      "is_website": true,
+      "disclosure": "Fictional website profile — not an actual employee or credential.",
+      "image_key": "guide-website-02",
+      "biography": "This fictional profile illustrates a planning-focused team member. The sample biography explains how trip questions could be organized before a conversation. It makes no claim about real employment, training or availability.",
+      "languages": [],
+      "qualifications": [],
+      "years_experience": null,
+      "trek_ids": [
+        "t-abc",
+        "t-gokyo",
+        "t-mustang"
+      ]
+    },
+    {
+      "id": "guide-website-03",
+      "slug": "website-guide-03",
+      "name": "Website Guide 03",
+      "role": "Sample Local Host",
+      "is_website": true,
+      "disclosure": "Fictional website profile — not an actual employee or credential.",
+      "image_key": "guide-website-03",
+      "biography": "This fictional profile illustrates a people-led travel story. The sample narrative highlights curiosity and respectful questions without inventing qualifications or community affiliations.",
+      "languages": [],
+      "qualifications": [],
+      "years_experience": null,
+      "trek_ids": [
+        "t-langtang",
+        "t-manaslu"
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "story-website-01",
+      "slug": "a-slower-morning-on-the-trail",
+      "title": "A slower morning on the trail",
+      "traveler_name": "Website Traveler A",
+      "trek_id": "t-khopra",
+      "summary": "A fictional narrative showing how a photo-led traveler story can read.",
+      "body": "This fictional traveler story describes pausing to enjoy a view, adjusting the pace of a day and sharing questions with a guide. It exists to test the editorial layout and links to a sample trek. It is not a review of a real trip or a claim about EATH's services.",
+      "is_website": true,
+      "image_key": "story-website-01",
+      "disclosure": "Fictional website story — not a customer testimonial.",
+      "rating": null,
+      "source_url": null
+    },
+    {
+      "id": "story-website-02",
+      "slug": "choosing-between-two-journeys",
+      "title": "Choosing between two journeys",
+      "traveler_name": "Website Traveler B",
+      "trek_id": "t-abc",
+      "summary": "A fictional planning story about turning several options into one request.",
+      "body": "This fictional story follows a traveler using duration and personal interests to make a shortlist. The comparison screen helps organize questions, and the planner keeps the selected option visible. No actual booking, traveler experience or service rating is represented.",
+      "is_website": true,
+      "image_key": "story-website-02",
+      "disclosure": "Fictional website story — not a customer testimonial.",
+      "rating": null,
+      "source_url": null
+    },
+    {
+      "id": "story-website-03",
+      "slug": "space-for-a-different-kind-of-trip",
+      "title": "Space for a different kind of trip",
+      "traveler_name": "Website Traveler C",
+      "trek_id": "t-mustang",
+      "summary": "A fictional custom-trip narrative for illustrating another visitor journey.",
+      "body": "This sample narrative describes someone asking for a different pace and more time for cultural interests. It illustrates the custom-request workflow. All people and events are fictional, and every itinerary or price reference remains illustrative.",
+      "is_website": true,
+      "image_key": "story-website-03",
+      "disclosure": "Fictional website story — not a customer testimonial.",
+      "rating": null,
+      "source_url": null
+    }
+  ],
+  "faqs": [
+    {
+      "id": "faq-duration",
+      "category": "choosing",
+      "question": "How long is this sample trek?",
+      "answer_template": "The website itinerary contains {duration_days} days. This is an illustrative record, not a confirmed operating schedule.",
+      "trek_specific": true
+    },
+    {
+      "id": "faq-price",
+      "category": "pricing",
+      "question": "Is the displayed price a confirmed quote?",
+      "answer_template": "No. It is an illustrative USD ground-package price per person. Flights, insurance and unpriced requests are excluded, and no reservation or payment is created.",
+      "trek_specific": false
+    },
+    {
+      "id": "faq-customize",
+      "category": "planning",
+      "question": "Can I change this sample plan?",
+      "answer_template": "Yes. Choose Customize This Trek or Build My Trip. Your preferences are kept in a website draft, and the final request is simulated rather than sent.",
+      "trek_specific": false
+    },
+    {
+      "id": "faq-contact",
+      "category": "planning",
+      "question": "Will someone receive my website request?",
+      "answer_template": "No. Website forms do not send messages or create CRM records. Use the supplied sample contact details and do not enter sensitive information.",
+      "trek_specific": false
+    },
+    {
+      "id": "faq-compare",
+      "category": "choosing",
+      "question": "How many treks can I compare?",
+      "answer_template": "Choose up to three different sample treks. At least two are useful for a side-by-side comparison. You can remove or replace a selection.",
+      "trek_specific": false
+    },
+    {
+      "id": "faq-preparation",
+      "category": "preparation",
+      "question": "Does a preference match mean a trek is safe for me?",
+      "answer_template": "No. The website matches expressed preferences only. Real route planning and personal health questions require appropriate verified advice.",
+      "trek_specific": false
+    },
+    {
+      "id": "faq-departure",
+      "category": "dates",
+      "question": "Are the departure seats real?",
+      "answer_template": "No. Dates and seat counts are generated from a fixed sample calendar. Choosing one does not reserve inventory.",
+      "trek_specific": false
+    },
+    {
+      "id": "faq-accommodation",
+      "category": "comfort",
+      "question": "Are accommodation upgrades priced?",
+      "answer_template": "No. Comfort choices and extras are sample requests. The website does not confirm lodging availability or calculate upgrade charges.",
+      "trek_specific": false
+    },
+    {
+      "id": "faq-policy",
+      "category": "booking",
+      "question": "Are these booking policies binding?",
+      "answer_template": "No. Policy pages are labeled draft layouts awaiting business and legal review. The website does not create a booking contract.",
+      "trek_specific": false
+    }
+  ],
+  "policy_slugs": [
+    "privacy",
+    "terms",
+    "booking-conditions",
+    "cancellation",
+    "cookies"
+  ]
+}

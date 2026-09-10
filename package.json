@@ -25,20 +25,14 @@
         "@mdi/font": "^7.4.47",
         "@vicons/ionicons5": "^0.13.0",
         "bootstrap": "5.3",
+        "intl-tel-input": "^29.2.3",
         "jquery": "^3.7.1",
-        "lucide": "^0.525.0",
         "pinia": "^3.0.3",
-        "quill": "^2.0.3",
-        "quill-better-table": "^1.2.10",
-        "quill-image-drop-module": "^1.0.3",
-        "quill-image-resize-module": "^3.0.0",
-        "quill-image-resize-vue": "^1.0.4",
+        "summernote": "^0.9.1",
         "swiper": "^11.2.10",
         "vue": "^3.5.17",
         "vue-router": "^4.5.1",
         "vue3-nepali-date-picker": "^1.4.1",
-        "vue3-quill": "^0.3.1",
-        "vuetify": "^3.8.11",
-        "vuetify-pro-tiptap": "^2.6.0"
+        "vuetify": "^3.8.11"
     }
 }

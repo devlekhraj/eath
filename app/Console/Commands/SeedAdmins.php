@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Admin;
+use Admin\Models\Admin;
 
 class SeedAdmins extends Command
 {

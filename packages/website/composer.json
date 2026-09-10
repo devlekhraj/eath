@@ -1,0 +1,17 @@
+{
+    "name": "eath/website",
+    "description": "E.A.T.H. website package",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Website\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Website\\WebsiteServiceProvider"
+            ]
+        }
+    }
+}

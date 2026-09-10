@@ -1,0 +1,618 @@
+{
+  "schema_version": 1,
+  "is_website": true,
+  "currency": "USD",
+  "website_calendar_date": "2030-09-01",
+  "regions": [
+    {
+      "id": "everest",
+      "slug": "everest",
+      "name": "Everest",
+      "intro": "Sample region introduction: compare longer mountain-view journeys and explore the pace that suits your plans."
+    },
+    {
+      "id": "annapurna",
+      "slug": "annapurna",
+      "name": "Annapurna",
+      "intro": "Sample region introduction: explore a range of shorter and longer scenic trekking ideas."
+    },
+    {
+      "id": "langtang",
+      "slug": "langtang",
+      "name": "Langtang",
+      "intro": "Sample region introduction: discover a valley-focused journey with a culture and landscape theme."
+    },
+    {
+      "id": "manaslu",
+      "slug": "manaslu",
+      "name": "Manaslu",
+      "intro": "Sample region introduction: explore an extended circuit idea and its planning trade-offs."
+    },
+    {
+      "id": "mustang",
+      "slug": "mustang",
+      "name": "Mustang",
+      "intro": "Sample region introduction: consider a culture-led landscape journey and extra planning questions."
+    }
+  ],
+  "experiences": [
+    {
+      "id": "mountain-scenery",
+      "slug": "mountain-scenery",
+      "name": "Mountain Scenery",
+      "intro": "Browse sample journeys where the landscape is the central experience."
+    },
+    {
+      "id": "cultural-trails",
+      "slug": "cultural-trails",
+      "name": "Cultural Trails",
+      "intro": "Explore sample itineraries with village visits and cultural context."
+    },
+    {
+      "id": "quiet-trails",
+      "slug": "quiet-trails",
+      "name": "Quieter Trail Ideas",
+      "intro": "Compare sample routes tagged for quieter-trail interests; this is not a crowd forecast."
+    },
+    {
+      "id": "short-treks",
+      "slug": "short-treks",
+      "name": "Short Trek Ideas",
+      "intro": "Find sample trips tagged for a shorter overall visit."
+    },
+    {
+      "id": "photography",
+      "slug": "photography",
+      "name": "Photography Journeys",
+      "intro": "Consider sample itineraries with an emphasis on viewpoints and time to observe."
+    },
+    {
+      "id": "iconic-routes",
+      "slug": "iconic-routes",
+      "name": "Iconic Route Ideas",
+      "intro": "Start with familiar trek names, then compare actual sample preferences and duration."
+    }
+  ],
+  "months": [
+    {
+      "id": 1,
+      "slug": "january",
+      "name": "January",
+      "season_website": "winter",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 2,
+      "slug": "february",
+      "name": "February",
+      "season_website": "winter",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 3,
+      "slug": "march",
+      "name": "March",
+      "season_website": "spring",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 4,
+      "slug": "april",
+      "name": "April",
+      "season_website": "spring",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 5,
+      "slug": "may",
+      "name": "May",
+      "season_website": "spring",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 6,
+      "slug": "june",
+      "name": "June",
+      "season_website": "summer",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 7,
+      "slug": "july",
+      "name": "July",
+      "season_website": "summer",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 8,
+      "slug": "august",
+      "name": "August",
+      "season_website": "summer",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 9,
+      "slug": "september",
+      "name": "September",
+      "season_website": "autumn",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 10,
+      "slug": "october",
+      "name": "October",
+      "season_website": "autumn",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 11,
+      "slug": "november",
+      "name": "November",
+      "season_website": "autumn",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    },
+    {
+      "id": 12,
+      "slug": "december",
+      "name": "December",
+      "season_website": "winter",
+      "intro": "Illustrative month profile. Seasonal descriptions and route conditions require verification before real travel planning."
+    }
+  ],
+  "treks": [
+    {
+      "id": "t-ebc",
+      "slug": "everest-base-camp",
+      "name": "Everest Base Camp",
+      "region_id": "everest",
+      "duration_days": 15,
+      "difficulty": "challenging",
+      "max_altitude_m": 5545,
+      "walking_hours_max": 8,
+      "suitable_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "price_usd": 1790,
+      "experience_ids": [
+        "iconic-routes",
+        "mountain-scenery",
+        "cultural-trails"
+      ],
+      "accommodation": "standard",
+      "pace": "active",
+      "featured_rank": 1,
+      "summary": "A sample longer Himalayan journey combining big mountain views and village stays.",
+      "highlights": [
+        "Big mountain viewpoints",
+        "Village-to-village walking",
+        "Time for a slower pace between trail days"
+      ],
+      "price_minor": 179000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-ebc",
+      "guide_id": "guide-website-01",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-ebc-01",
+        "gallery-t-ebc-02",
+        "gallery-t-ebc-03",
+        "gallery-t-ebc-04"
+      ]
+    },
+    {
+      "id": "t-abc",
+      "slug": "annapurna-base-camp",
+      "name": "Annapurna Base Camp",
+      "region_id": "annapurna",
+      "duration_days": 15,
+      "difficulty": "moderate",
+      "max_altitude_m": 4130,
+      "walking_hours_max": 7,
+      "suitable_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "price_usd": 1290,
+      "experience_ids": [
+        "iconic-routes",
+        "mountain-scenery",
+        "cultural-trails"
+      ],
+      "accommodation": "standard",
+      "pace": "balanced",
+      "featured_rank": 2,
+      "summary": "A sample trek pairing changing landscapes with a mountain amphitheater theme.",
+      "highlights": [
+        "Forest and open landscapes",
+        "Mountain-focused trail days",
+        "Village hospitality theme"
+      ],
+      "price_minor": 129000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-abc",
+      "guide_id": "guide-website-02",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-abc-01",
+        "gallery-t-abc-02",
+        "gallery-t-abc-03",
+        "gallery-t-abc-04"
+      ]
+    },
+    {
+      "id": "t-langtang",
+      "slug": "langtang-valley",
+      "name": "Langtang Valley",
+      "region_id": "langtang",
+      "duration_days": 10,
+      "difficulty": "moderate",
+      "max_altitude_m": 4984,
+      "walking_hours_max": 7,
+      "suitable_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "price_usd": 990,
+      "experience_ids": [
+        "quiet-trails",
+        "mountain-scenery",
+        "cultural-trails"
+      ],
+      "accommodation": "standard",
+      "pace": "balanced",
+      "featured_rank": 3,
+      "summary": "A sample valley itinerary with space for mountain scenery and local stories.",
+      "highlights": [
+        "Valley scenery",
+        "Culture-led village stops",
+        "A flexible exploration day"
+      ],
+      "price_minor": 99000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-langtang",
+      "guide_id": "guide-website-03",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-langtang-01",
+        "gallery-t-langtang-02",
+        "gallery-t-langtang-03",
+        "gallery-t-langtang-04"
+      ]
+    },
+    {
+      "id": "t-mardi",
+      "slug": "mardi-himal",
+      "name": "Mardi Himal",
+      "region_id": "annapurna",
+      "duration_days": 7,
+      "difficulty": "moderate",
+      "max_altitude_m": 4500,
+      "walking_hours_max": 7,
+      "suitable_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "price_usd": 690,
+      "experience_ids": [
+        "short-treks",
+        "mountain-scenery",
+        "quiet-trails"
+      ],
+      "accommodation": "standard",
+      "pace": "relaxed",
+      "featured_rank": 4,
+      "summary": "A compact sample mountain escape for testing shorter-trip discovery.",
+      "highlights": [
+        "Shorter overall itinerary",
+        "Ridge-view theme",
+        "Forest-to-mountain scenery"
+      ],
+      "price_minor": 69000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-mardi",
+      "guide_id": "guide-website-01",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-mardi-01",
+        "gallery-t-mardi-02",
+        "gallery-t-mardi-03",
+        "gallery-t-mardi-04"
+      ]
+    },
+    {
+      "id": "t-gokyo",
+      "slug": "gokyo-lakes",
+      "name": "Gokyo Lakes",
+      "region_id": "everest",
+      "duration_days": 14,
+      "difficulty": "challenging",
+      "max_altitude_m": 5357,
+      "walking_hours_max": 8,
+      "suitable_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "price_usd": 1690,
+      "experience_ids": [
+        "mountain-scenery",
+        "quiet-trails",
+        "photography"
+      ],
+      "accommodation": "standard",
+      "pace": "active",
+      "featured_rank": 5,
+      "summary": "A sample high-country journey organized around lakes, viewpoints and photography.",
+      "highlights": [
+        "Lake-view theme",
+        "Photo-led exploration",
+        "Longer mountain walking days"
+      ],
+      "price_minor": 169000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-gokyo",
+      "guide_id": "guide-website-02",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-gokyo-01",
+        "gallery-t-gokyo-02",
+        "gallery-t-gokyo-03",
+        "gallery-t-gokyo-04"
+      ]
+    },
+    {
+      "id": "t-manaslu",
+      "slug": "manaslu-circuit",
+      "name": "Manaslu Circuit",
+      "region_id": "manaslu",
+      "duration_days": 16,
+      "difficulty": "challenging",
+      "max_altitude_m": 5106,
+      "walking_hours_max": 9,
+      "suitable_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "price_usd": 1890,
+      "experience_ids": [
+        "quiet-trails",
+        "cultural-trails",
+        "mountain-scenery"
+      ],
+      "accommodation": "standard",
+      "pace": "active",
+      "featured_rank": 6,
+      "summary": "A sample extended circuit for comparing longer, more demanding journeys.",
+      "highlights": [
+        "Extended circuit theme",
+        "Changing mountain landscapes",
+        "Community-focused stops"
+      ],
+      "price_minor": 189000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-manaslu",
+      "guide_id": "guide-website-03",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-manaslu-01",
+        "gallery-t-manaslu-02",
+        "gallery-t-manaslu-03",
+        "gallery-t-manaslu-04"
+      ]
+    },
+    {
+      "id": "t-khopra",
+      "slug": "khopra-ridge",
+      "name": "Khopra Ridge",
+      "region_id": "annapurna",
+      "duration_days": 13,
+      "difficulty": "moderate",
+      "max_altitude_m": 4660,
+      "walking_hours_max": 7,
+      "suitable_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "price_usd": 1390,
+      "experience_ids": [
+        "quiet-trails",
+        "photography",
+        "mountain-scenery"
+      ],
+      "accommodation": "standard",
+      "pace": "balanced",
+      "featured_rank": 7,
+      "summary": "A sample ridge journey focused on slower exploration and broad views.",
+      "highlights": [
+        "Panoramic ridge theme",
+        "Photography time",
+        "Flexible village stays"
+      ],
+      "price_minor": 139000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-khopra",
+      "guide_id": "guide-website-01",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-khopra-01",
+        "gallery-t-khopra-02",
+        "gallery-t-khopra-03",
+        "gallery-t-khopra-04"
+      ]
+    },
+    {
+      "id": "t-mustang",
+      "slug": "upper-mustang",
+      "name": "Upper Mustang",
+      "region_id": "mustang",
+      "duration_days": 14,
+      "difficulty": "moderate",
+      "max_altitude_m": 4200,
+      "walking_hours_max": 6,
+      "suitable_months": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "price_usd": 2290,
+      "experience_ids": [
+        "cultural-trails",
+        "photography",
+        "quiet-trails"
+      ],
+      "accommodation": "upgraded",
+      "pace": "balanced",
+      "featured_rank": 8,
+      "summary": "A sample cultural landscape itinerary for testing different months and comfort preferences.",
+      "highlights": [
+        "Culture-focused exploration",
+        "Distinctive landscape theme",
+        "Unhurried village visits"
+      ],
+      "price_minor": 229000,
+      "currency": "USD",
+      "pricing_basis": "per_person_ground_package",
+      "is_website": true,
+      "image_key": "trek-t-mustang",
+      "guide_id": "guide-website-02",
+      "route_map_key": null,
+      "faq_ids": [
+        "faq-duration",
+        "faq-price",
+        "faq-customize"
+      ],
+      "gallery_keys": [
+        "gallery-t-mustang-01",
+        "gallery-t-mustang-02",
+        "gallery-t-mustang-03",
+        "gallery-t-mustang-04"
+      ]
+    }
+  ],
+  "addons": [
+    {
+      "id": "extra-hotel-nights",
+      "label": "Extra hotel nights",
+      "price_minor": null
+    },
+    {
+      "id": "private-transfer",
+      "label": "Private transfer request",
+      "price_minor": null
+    },
+    {
+      "id": "cultural-day",
+      "label": "Cultural day request",
+      "price_minor": null
+    },
+    {
+      "id": "extra-trail-day",
+      "label": "Extra trail day request",
+      "price_minor": null
+    }
+  ],
+  "departure_templates": [
+    {
+      "suffix": "a",
+      "start_offset_days": 30,
+      "status": "open",
+      "sample_seats": 8,
+      "price_adjustment_minor": 0
+    },
+    {
+      "suffix": "b",
+      "start_offset_days": 55,
+      "status": "limited",
+      "sample_seats": 2,
+      "price_adjustment_minor": 10000
+    },
+    {
+      "suffix": "c",
+      "start_offset_days": 90,
+      "status": "full",
+      "sample_seats": 0,
+      "price_adjustment_minor": 0
+    }
+  ]
+}

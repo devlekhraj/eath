@@ -1,0 +1,44 @@
+// =========================================================================
+// EATH WAYS HIMALAYAN TREKKING DESIGN SYSTEM
+// Authoritative Stylesheet per docs/eath-homepage-antigravity-prompts/
+// =========================================================================
+
+// 1. Design System Foundations (Prompt 02)
+@import "tokens";
+@import "typography";
+
+// 2. Global Document Standards
+html,
+body {
+  font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 3. Core Third-Party Frameworks & Dependencies
+@import "bootstrap/scss/bootstrap";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "swiper/css/bundle";
+
+// 4. Design System Components & Layouts (Prompts 02, 03, 05)
+// Sourced strictly according to project design prompt specifications
+@import "buttons";
+@import "utilities";
+@import "layout";
+
+// 5. Shared Editor & Detail Page Styles
+@import "tiptap-viewer";
+@import "package-page";
+
+// 6. Complete Removal of Border Radius Across Every Component
+.eath-site,
+.eath-site *,
+.eath-site *::before,
+.eath-site *::after {
+  border-radius: 0 !important;
+}
+

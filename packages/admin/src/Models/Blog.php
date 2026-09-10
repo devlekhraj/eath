@@ -1,0 +1,99 @@
+<?php
+
+namespace Admin\Models;
+
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Blog extends Model
+{
+    use SoftDeletes;
+
+    protected $table = 'blogs';
+    protected $appends = ['banner_url'];
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'sub_title',
+        'content',
+        'cover_image',
+        'author',
+        'is_published',
+        'published_at', // <-- Make this match the cast
+        'is_active',
+        'meta_title',
+        'meta_description',
+        'meta_keyword',
+        'category_id',
+    ];
+
+    protected $casts = [
+        'is_published' => 'boolean',
+        'is_active' => 'boolean',
+        'blog_category' => 'integer',
+        'published_at' => 'datetime', // must match fillable
+    ];
+
+    protected $dates = [
+        'deleted_at',
+    ];
+
+    protected static function booted()
+    {
+        static::creating(function ($blog) {
+            if (empty($blog->slug) && !empty($blog->title)) {
+                $slug = Str::slug($blog->title);
+
+                // Ensure uniqueness if needed (optional but recommended)
+                $originalSlug = $slug;
+                $count = 1;
+
+                while (static::query()->where('slug', $slug)->exists()) {
+                    $slug = "{$originalSlug}-{$count}";
+                    $count++;
+                }
+
+                $blog->slug = $slug;
+            }
+        });
+    }
+    
+    public function getBannerUrlAttribute(): string
+    {
+        $lastUsage = $this->relationLoaded('images')
+            ? $this->images->filter(fn ($usage) => $usage->gallery)->last()
+            : $this->images()->latest('id')->first();
+
+        return $lastUsage?->gallery?->url ?? asset('images/logo.png');
+    }
+
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(GalleryUsage::class, 'usage_id')
+            ->where('usage_type', 'blogs')
+            ->with('gallery');
+    }
+
+    public function coverImage()
+    {
+        return $this->hasOne(Gallery::class, 'filename', 'cover_image');
+    }
+    public function category()
+    {
+        return $this->belongsTo(BlogCategory::class, 'category_id');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(
+            BlogCategory::class,
+            'category_blog',
+            'blog_id',
+            'blog_category_id'
+        )->withTimestamps();  // <-- this enables automatic update of timestamps on pivot
+    }
+}

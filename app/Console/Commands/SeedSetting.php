@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Setting;
+use Admin\Models\Setting;
 
 class SeedSetting extends Command
 {

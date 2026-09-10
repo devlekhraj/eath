@@ -1,0 +1,17 @@
+{
+    "name": "eath/admin",
+    "description": "E.A.T.H. admin package",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Admin\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Admin\\AdminServiceProvider"
+            ]
+        }
+    }
+}

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\TravelPackage;
+use Admin\Models\TravelPackage;
 use Illuminate\Console\Command;
 
 class SeedTravelPackage extends Command

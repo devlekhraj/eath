@@ -2,13 +2,14 @@
 
 namespace App\Providers;
 
-use App\Models\Destination;
-use App\Models\Blog;
-use App\Models\Country;
-use App\Models\TravelPackage;
-use App\Models\Setting;
+use Admin\Models\Destination;
+use Admin\Models\Blog;
+use Admin\Models\Country;
+use Admin\Models\TravelPackage;
+use Admin\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +22,13 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+            if (config('app.url')) {
+                URL::forceRootUrl(config('app.url'));
+            }
+        }
+
         View::composer('website.*', function ($view) {
             $settings = Cache::remember('website.settings', 600, function () {
                 if (!Schema::hasTable('settings')) {
@@ -35,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
                     return [];
                 }
 
-                return Destination::where('is_active', 1)
+                return Destination::query()->where('is_active', 1)
                     ->select(['id', 'name', 'slug'])
                     ->with(['treks:id,destination_id,name,slug'])
                     ->get()
@@ -61,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
                     return [];
                 }
 
-                return Destination::where('is_active', 1)
+                return Destination::query()->where('is_active', 1)
                     ->select(['id', 'name', 'slug'])
                     ->get()
                     ->map(function ($destination) {
@@ -81,7 +89,7 @@ class AppServiceProvider extends ServiceProvider
                     return [];
                 }
 
-                return Country::select(['id', 'name', 'country_code','phone_extension'])
+                return Country::select(['id', 'name', 'country_code', 'phone_extension'])
                     ->get()
                     ->toArray();
             });
@@ -91,7 +99,7 @@ class AppServiceProvider extends ServiceProvider
                     return [];
                 }
 
-                return TravelPackage::where('is_active', 1)
+                return TravelPackage::query()->where('is_active', 1)
                     ->where('is_published', 1)
                     ->select(['id', 'name', 'slug', 'destination_id'])
                     ->orderBy('name')
@@ -112,7 +120,7 @@ class AppServiceProvider extends ServiceProvider
                     return [];
                 }
 
-                return TravelPackage::where('is_active', 1)
+                return TravelPackage::query()->where('is_active', 1)
                     ->where('is_published', 1)
                     ->select(['id', 'name', 'slug', 'destination_id'])
                     ->orderBy('name')
@@ -128,7 +136,7 @@ class AppServiceProvider extends ServiceProvider
                             ];
                         })->values();
                     })
-                    ->tap(function ($collection) use (&$travelPackages) {
+                    ->tap(function ($collection) use (&$travelPackagesByDestination) {
                         $collection['__all'] = collect($travelPackages ?? [])->values();
                     })
                     ->toArray();
@@ -140,22 +148,15 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 return Blog::query()
-                    ->join('blog_categories as bc', 'bc.id', '=', 'blogs.category_id')
-                    ->select([
-                        'blogs.title',
-                        'blogs.slug',
-                        'blogs.category_id',
-                        'bc.slug as category_slug',
-                    ])
-                    ->where([
-                        'blogs.is_active' => 1,
-                    ])
-                    ->where('bc.slug', 'safety')
-                    ->orderByDesc('blogs.created_at')
+                    ->where('is_active', 1)
+                    ->whereRelation('category', 'slug', 'safety')
+                    ->with('category:id,slug')
+                    ->select(['id', 'title', 'slug', 'category_id', 'created_at'])
+                    ->orderByDesc('created_at')
                     ->get();
             });
- 
-     
+
+
             $view->with([
                 'settings' => $settings,
                 'menus' => $menus,

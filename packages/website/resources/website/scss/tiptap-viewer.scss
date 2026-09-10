@@ -1,0 +1,51 @@
+// Rich text content viewer styles for rendered HTML from Summernote / Editors
+.tiptap-container,
+.note-editable-content,
+.content-viewer {
+  font-size: 0.95rem;
+  line-height: 1.6;
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+
+  table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 0.5rem 0.75rem;
+    }
+
+    th {
+      background-color: #f8f9fa;
+    }
+  }
+
+  blockquote {
+    padding: 0.5rem 1rem;
+    margin: 0 0 1rem;
+    border-left: 4px solid #dee2e6;
+    color: #6c757d;
+  }
+
+  ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
