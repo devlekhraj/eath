@@ -6,12 +6,8 @@
 
 .eath-website {
     // 1. Font Families
-    --font-display:
-        "Newsreader", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Georgia, serif;
-    --font-body:
-        "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+    --font-display: Georgia, "Times New Roman", serif;
+    --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
     // 2. Fluid Typography Scale (375px -> 1280px viewport range)
     --type-display: clamp(2.5rem, 1.878rem + 2.652vw, 4rem); // 40px -> 64px

@@ -23,6 +23,15 @@ class WebsiteAssetRegistry
             'height' => 900,
             'is_fallback' => false,
         ],
+        'trek-t-ebc' => [
+            'url' => '/cdn/destinations/everest/gallery/2026-02-02/everest-gallery-8106bd31e5-1280.webp',
+            'mobile_url' => '/cdn/destinations/everest/gallery/2026-02-02/everest-gallery-8106bd31e5-800.webp',
+            'srcset' => '/cdn/destinations/everest/gallery/2026-02-02/everest-gallery-8106bd31e5-400.webp 400w, /cdn/destinations/everest/gallery/2026-02-02/everest-gallery-8106bd31e5-800.webp 800w, /cdn/destinations/everest/gallery/2026-02-02/everest-gallery-8106bd31e5-1280.webp 1280w',
+            'alt' => 'Everest Base Camp trail through the Khumbu region beneath Himalayan peaks',
+            'width' => 1280,
+            'height' => 853,
+            'is_fallback' => false,
+        ],
         // Everest gallery sample assets audited in public/cdn/destinations/everest/gallery/2026-02-02/
         'gallery-t-ebc-01' => [
             'url' => '/cdn/destinations/everest/gallery/2026-02-02/everest-gallery-8106bd31e5-1280.webp',

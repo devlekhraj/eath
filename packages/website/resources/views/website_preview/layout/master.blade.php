@@ -1,27 +1,60 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-NP">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#0284c7">
 
-    <title>@yield('title', 'EATH Ways — Himalayan Trekking & Local Guided Expeditions (Website)')</title>
-    <meta name="description" content="@yield('meta_description', 'Explore sample Himalayan trek journeys in the EATH preview website.')">
-    <link rel="canonical" href="{{ url(request()->getPathInfo()) }}">
+    @php
+        $seoTitle = trim($__env->yieldContent('title', 'EATH Ways — Himalayan Trekking & Local Guided Expeditions'));
+        $seoDescription = trim($__env->yieldContent('meta_description', 'Explore authentic Himalayan trekking itineraries across Everest, Annapurna, Langtang, Manaslu, and Mustang with licensed local guides and careful altitude pacing.'));
+        $seoCanonical = url(request()->getPathInfo());
+        $seoImage = url('/images/hero.webp');
+    @endphp
+
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDescription }}">
+    <link rel="canonical" href="{{ $seoCanonical }}">
+    <link rel="alternate" hreflang="en-np" href="{{ $seoCanonical }}">
+    <link rel="alternate" hreflang="x-default" href="{{ $seoCanonical }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="@yield('title', 'EATH Ways Website')">
-    <meta property="og:description" content="@yield('meta_description', 'Explore sample Himalayan trek journeys in the EATH preview website.')">
-    <meta property="og:url" content="{{ url(request()->getPathInfo()) }}">
+    <meta property="og:site_name" content="EATH Ways">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
+    <meta property="og:url" content="{{ $seoCanonical }}">
+    <meta property="og:image" content="{{ $seoImage }}">
+    <meta property="og:image:alt" content="Himalayan trekking landscape by EATH Ways">
+    <meta property="og:locale" content="en_NP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescription }}">
+    <meta name="twitter:image" content="{{ $seoImage }}">
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'TravelAgency',
+            'name' => 'EATH Ways',
+            'url' => url('/website'),
+            'logo' => url('/images/logo.png'),
+            'image' => $seoImage,
+            'description' => $seoDescription,
+            'areaServed' => 'Nepal',
+            'knowsAbout' => ['Everest trekking', 'Annapurna trekking', 'Langtang trekking', 'Manaslu trekking', 'Mustang trekking'],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => 'EATH Ways',
+            'url' => url('/website'),
+            'inLanguage' => 'en-NP',
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 
-    <!-- Google Fonts Preconnect & Non-Render-Blocking Stylesheet -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap">
-    </noscript>
+    @stack('preload')
 
     <!-- Scoped Website Assets (Vite CSS & Progressive Enhancement JS) -->
     @vite(['packages/website/resources/website/scss/website-preview.scss', 'packages/website/resources/website/js/website-preview.js'])

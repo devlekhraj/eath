@@ -20,9 +20,6 @@ class EnsureWebsiteAllowed
         /** @var Response $response */
         $response = $next($request);
 
-        // Enforce website-only noindex header
-        $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
-
         return $response;
     }
 }

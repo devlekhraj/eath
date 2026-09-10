@@ -3,8 +3,22 @@
 @section('title', $trek['name'] . ' — Himalayan Trekking Itinerary (Website)')
 @section('meta_description', $trek['name'] . ' (' . $trek['duration_days'] . ' days, ' . $trek['difficulty'] . ') in the ' . $trek['region']['name'] . ' region. Sample Himalayan trekking itinerary with licensed local guides.')
 
+@php
+$priceFormatted = \Website\Support\WebsiteMoneyFormatter::format($trek['price_minor']);
+$heroImage = $trek['image'] ?? \Website\Support\WebsiteAssetRegistry::resolve("trek-{$trek['id']}", $trek['name']);
+@endphp
+
+@push('preload')
+@if(!empty($heroImage['mobile_url']))
+<link rel="preload" as="image" href="{{ $heroImage['mobile_url'] }}" media="(max-width: 768px)" fetchpriority="high">
+<link rel="preload" as="image" href="{{ $heroImage['url'] }}" media="(min-width: 769px)" fetchpriority="high">
+@else
+<link rel="preload" as="image" href="{{ $heroImage['url'] }}" fetchpriority="high">
+@endif
+@endpush
+
 @push('head')
-@vite(['packages/website/resources/website/scss/website-icons.scss'])
+@vite(['packages/website/resources/website/scss/website-preview-icons.scss'])
 <style>
     .website-trek-dates { border: 1px solid #e2e8f0; border-top: 4px solid #0284c7; background: #fff; border-radius: 0 !important; box-shadow: none; }
     .website-trek-dates__header { padding: clamp(20px, 4vw, 32px); background: #0c4a6e; color: #fff; }
@@ -43,9 +57,6 @@
 
 
 @php
-$priceFormatted = \Website\Support\WebsiteMoneyFormatter::format($trek['price_minor']);
-$heroImage = $trek['image'] ?? \Website\Support\WebsiteAssetRegistry::resolve("trek-{$trek['id']}", $trek['name']);
-
 $trekTaglines = [
 't-ebc' => 'Walk through Sherpa country to the foot of the world\'s highest mountain.',
 't-abc' => 'Trek into the heart of the Annapurna Sanctuary surrounded by 8,000m giants.',
@@ -70,17 +81,62 @@ $bestSeason = 'Spring & Autumn';
 $hideTopBreadcrumbs = true;
 @endphp
 
+@push('head')
+<script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'TouristTrip',
+        'name' => $trek['name'],
+        'description' => trim($__env->yieldContent('meta_description')),
+        'image' => $heroImage['url'],
+        'url' => url()->current(),
+        'touristType' => 'Himalayan trekkers',
+        'itinerary' => [
+            '@type' => 'ItemList',
+            'numberOfItems' => count($trek['itinerary'] ?? []),
+            'itemListElement' => collect($trek['itinerary'] ?? [])->values()->map(fn ($day, $index) => [
+                '@type' => 'ListItem',
+                'position' => $index + 1,
+                'name' => $day['title'] ?? ('Day ' . ($index + 1)),
+                'description' => $day['description'] ?? null,
+            ])->all(),
+        ],
+        'offers' => [
+            '@type' => 'Offer',
+            'priceCurrency' => 'USD',
+            'price' => number_format(($trek['price_minor'] ?? 0) / 100, 2, '.', ''),
+            'availability' => 'https://schema.org/InStock',
+            'url' => url()->current(),
+        ],
+        'provider' => [
+            '@type' => 'TravelAgency',
+            'name' => 'EATH Ways',
+            'url' => url('/website'),
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
+@endpush
+
 @section('content')
 <!-- Section 02: Full-Width Hero Banner with Overlaid Breadcrumbs -->
 <header class="website-trek-hero-fullscreen">
     <div class="website-trek-hero-fullscreen__media">
-        <img src="{{ $heroImage['url'] }}"
-            alt="{{ $heroImage['alt'] }}"
-            width="{{ $heroImage['width'] }}"
-            height="{{ $heroImage['height'] }}"
-            loading="eager"
-            fetchpriority="high"
-            class="website-trek-hero-fullscreen__img">
+        <picture>
+            @if(!empty($heroImage['mobile_url']))
+                <source media="(max-width: 768px)" srcset="{{ $heroImage['mobile_url'] }}">
+            @endif
+            @if(!empty($heroImage['srcset']))
+                <source srcset="{{ $heroImage['srcset'] }}" sizes="100vw">
+            @endif
+            <img src="{{ $heroImage['url'] }}"
+                alt="{{ $heroImage['alt'] }}"
+                width="{{ $heroImage['width'] }}"
+                height="{{ $heroImage['height'] }}"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+                class="website-trek-hero-fullscreen__img">
+        </picture>
 
         <div class="website-trek-hero-fullscreen__scrim"></div>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <title>EATH Ways — Website Preview Ready</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; padding: 2rem; }
@@ -27,7 +27,7 @@
             <li><strong>Isolated View Layer:</strong> <code>packages/website/resources/views/website/</code> (zero database queries)</li>
             <li><strong>Shared Fixtures:</strong> {{ $treks_count }} treks, 5 regions, 6 experiences, 24 departures</li>
             <li><strong>Calendar Context:</strong> {{ $disclosure }} ({{ $calendar_date }})</li>
-            <li><strong>Security:</strong> Scoped session storage, <code>noindex, nofollow</code> headers active</li>
+            <li><strong>Security:</strong> Scoped session storage and indexable preview metadata active</li>
         </ul>
     </div>
 </body>
