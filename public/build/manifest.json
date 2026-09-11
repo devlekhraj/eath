@@ -994,7 +994,7 @@
     ]
   },
   "packages/website/resources/website/js/website-preview.js": {
-    "file": "assets/website-preview-CV2QzQmH.js",
+    "file": "assets/website-preview-CHaiHWUW.js",
     "name": "website-preview",
     "src": "packages/website/resources/website/js/website-preview.js",
     "isEntry": true,
@@ -1036,7 +1036,7 @@
     "isEntry": true
   },
   "packages/website/resources/website/scss/website-preview.scss": {
-    "file": "assets/website-preview-B6ObIwUr.css",
+    "file": "assets/website-preview-DOA6K7wh.css",
     "src": "packages/website/resources/website/scss/website-preview.scss",
     "isEntry": true
   },

@@ -522,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildCompareUrl(ids) {
-        const baseUrl = window.__WEBSITE_COMPARE_URL__ || '/website/compare-treks';
+        const baseUrl = window.__WEBSITE_COMPARE_URL__ || '/compare-treks';
         if (!ids || ids.length === 0) return baseUrl;
         const params = new URLSearchParams();
         ids.forEach(id => params.append('treks[]', id));
@@ -895,6 +895,8 @@ document.addEventListener('DOMContentLoaded', () => {
         curatedSection.style.opacity = '0.45';
         curatedSection.style.pointerEvents = 'none';
 
+        const preservedScrollY = window.scrollY;
+
         try {
             const response = await fetch(url, {
                 headers: {
@@ -939,6 +941,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.WebsiteCompare.reconcile();
             }
 
+            // Guarantee zero page movement on tab click
+            window.scrollTo({
+                top: preservedScrollY,
+                left: 0,
+                behavior: 'instant'
+            });
+
         } catch (err) {
             console.error('AJAX catalog filter error, falling back to direct navigation:', err);
             window.location.href = url;
@@ -949,9 +958,157 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Delegated click handler for Region Tabs, Pagination, and Filter Chips
+    // =========================================================================
+    // 5.1 Seamless In-Place Travel Guide Tab Switching & Filtering (Zero Refresh, Zero Move)
+    // =========================================================================
+    let isTravelGuideFetching = false;
+
+    async function loadTravelGuide(url, pushState = true) {
+        if (isTravelGuideFetching) return;
+        const filterWrap = document.getElementById('website-guide-filter-wrap');
+        const featuredWrap = document.getElementById('website-guide-featured-wrap');
+        const catalogSection = document.getElementById('website-guide-catalog-section');
+
+        if (!catalogSection) {
+            window.location.href = url;
+            return;
+        }
+
+        // STRICT REQUIREMENT: Capture exact scroll position so the page NEVER moves
+        const preservedScrollY = window.scrollY;
+        isTravelGuideFetching = true;
+
+        // Subtle opacity transition on content for instant visual responsiveness
+        if (catalogSection) {
+            catalogSection.style.transition = 'opacity 0.12s ease';
+            catalogSection.style.opacity = '0.45';
+            catalogSection.style.pointerEvents = 'none';
+        }
+        if (featuredWrap) {
+            featuredWrap.style.transition = 'opacity 0.12s ease';
+            featuredWrap.style.opacity = '0.45';
+        }
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                window.location.href = url;
+                return;
+            }
+
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // 1. Update Topic Filter Hub (Search form + topic tabs)
+            const newFilterWrap = doc.getElementById('website-guide-filter-wrap');
+            if (filterWrap && newFilterWrap) {
+                filterWrap.innerHTML = newFilterWrap.innerHTML;
+            }
+
+            // 2. Update Featured Dispatch
+            const newFeaturedWrap = doc.getElementById('website-guide-featured-wrap');
+            if (featuredWrap && newFeaturedWrap) {
+                featuredWrap.innerHTML = newFeaturedWrap.innerHTML;
+            }
+
+            // 3. Update Guides Catalog Section (Count, filtered badge, cards grid, pagination, empty state)
+            const newCatalogSection = doc.getElementById('website-guide-catalog-section');
+            if (catalogSection && newCatalogSection) {
+                catalogSection.innerHTML = newCatalogSection.innerHTML;
+            }
+
+            // 4. Update browser URL history without reloading
+            if (pushState) {
+                window.history.pushState({ travelGuideUrl: url }, '', url);
+            }
+
+            // 5. Enforce ZERO page movement: instantly restore preserved scroll position
+            window.scrollTo({
+                top: preservedScrollY,
+                left: 0,
+                behavior: 'instant'
+            });
+
+        } catch (err) {
+            console.error('Travel guide tab filter error, falling back to direct navigation:', err);
+            window.location.href = url;
+        } finally {
+            if (catalogSection) {
+                catalogSection.style.opacity = '1';
+                catalogSection.style.pointerEvents = '';
+            }
+            if (featuredWrap) {
+                featuredWrap.style.opacity = '1';
+            }
+            isTravelGuideFetching = false;
+
+            // Frame guard: Ensure no layout shift or scroll drift after repaint
+            requestAnimationFrame(() => {
+                if (Math.abs(window.scrollY - preservedScrollY) > 1) {
+                    window.scrollTo({
+                        top: preservedScrollY,
+                        left: 0,
+                        behavior: 'instant'
+                    });
+                }
+            });
+        }
+    }
+
+    // Delegated click handler for Region Tabs, Travel Guide Tabs, Pagination, and Filter Chips
     document.addEventListener('click', (e) => {
-        // Region filter pill clicked
+        // A. Travel Guide Topic Tab clicked (.website-guide-topic-btn)
+        const topicBtn = e.target.closest('.website-guide-topic-btn');
+        if (topicBtn && topicBtn.href) {
+            e.preventDefault();
+            const targetUrl = topicBtn.href;
+
+            // Optimistic UI state: highlight clicked button immediately
+            const allTopicBtns = document.querySelectorAll('.website-guide-topic-btn');
+            allTopicBtns.forEach(btn => {
+                btn.classList.remove('is-active');
+                btn.setAttribute('aria-current', 'false');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            topicBtn.classList.add('is-active');
+            topicBtn.setAttribute('aria-current', 'page');
+            topicBtn.setAttribute('aria-selected', 'true');
+
+            loadTravelGuide(targetUrl, true);
+            return;
+        }
+
+        // B. Travel Guide Reset Filter or Clear Search link clicked
+        const guideResetOrClear = e.target.closest('.website-guide-reset-link, .website-guide-clear-search');
+        if (guideResetOrClear && guideResetOrClear.href) {
+            e.preventDefault();
+            loadTravelGuide(guideResetOrClear.href, true);
+            return;
+        }
+
+        // C. Travel Guide Pillar card clicked (6 Pillars of Himalayan Trekking)
+        const pillarCard = e.target.closest('.website-pillar-card');
+        if (pillarCard && pillarCard.hasAttribute('href') && document.getElementById('website-guide-catalog-section')) {
+            e.preventDefault();
+            loadTravelGuide(pillarCard.href, true);
+            return;
+        }
+
+        // D. Travel Guide Pagination link clicked
+        const guidePaginationLink = e.target.closest('#website-guide-catalog-section nav a');
+        if (guidePaginationLink && guidePaginationLink.href) {
+            e.preventDefault();
+            loadTravelGuide(guidePaginationLink.href, true);
+            return;
+        }
+
+        // E. Catalog Region filter pill clicked
         const regionLink = e.target.closest('#website-region-nav a');
         if (regionLink) {
             e.preventDefault();
@@ -966,19 +1123,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Pagination link clicked inside catalog
+        // F. Pagination link clicked inside catalog (zero jump)
         const paginationLink = e.target.closest('.website-pagination a');
         if (paginationLink) {
             e.preventDefault();
             loadTreksCatalog(paginationLink.href, true);
-            const targetHeading = document.getElementById('journey-list-heading') || document.getElementById('website-region-nav');
-            if (targetHeading) {
-                targetHeading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
             return;
         }
 
-        // Filter summary chips or Clear all clicked inside filter bar
+        // G. Filter summary chips or Clear all clicked inside filter bar
         const filterChip = e.target.closest('#website-filter-sidebar a');
         if (filterChip) {
             e.preventDefault();
@@ -996,21 +1149,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData(form);
                 const params = new URLSearchParams(formData);
                 const baseUrl = (form.getAttribute('action') || window.location.href).split('?')[0].split('#')[0];
-                const newUrl = baseUrl + '?' + params.toString() + '#website-region-nav';
+                const newUrl = baseUrl + '?' + params.toString();
                 loadTreksCatalog(newUrl, true);
             }
         }
     });
 
-    // Delegated submit handler for catalog sorting form
+    // Delegated submit handler for catalog sorting and travel guide search forms
     document.addEventListener('submit', (e) => {
+        // 1. Travel Guide search form
+        const guideSearchForm = e.target.closest('.website-guide-search-form');
+        if (guideSearchForm && document.getElementById('website-guide-catalog-section')) {
+            e.preventDefault();
+            const formData = new FormData(guideSearchForm);
+            const params = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+                if (value && typeof value === 'string' && value.trim()) {
+                    params.append(key, value.trim());
+                }
+            }
+            const baseUrl = (guideSearchForm.getAttribute('action') || window.location.pathname).split('?')[0];
+            const targetUrl = baseUrl + (params.toString() ? ('?' + params.toString()) : '');
+            loadTravelGuide(targetUrl, true);
+            return;
+        }
+
+        // 2. Catalog sorting form
         const form = e.target.closest('#website-listing-sort-form');
         if (form) {
             e.preventDefault();
             const formData = new FormData(form);
             const params = new URLSearchParams(formData);
             const baseUrl = (form.getAttribute('action') || window.location.href).split('?')[0].split('#')[0];
-            const newUrl = baseUrl + '?' + params.toString() + '#website-region-nav';
+            const newUrl = baseUrl + '?' + params.toString();
             loadTreksCatalog(newUrl, true);
         }
     });
@@ -1019,6 +1190,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('popstate', () => {
         if (document.getElementById('website-region-nav')) {
             loadTreksCatalog(window.location.href, false);
+        }
+        if (document.getElementById('website-guide-catalog-section')) {
+            loadTravelGuide(window.location.href, false);
         }
     });
 

@@ -1,57 +1,14 @@
 <?php
 
-use Website\Services\WebsiteCatalogRepository;
-use Website\Support\WebsiteClock;
 use App\Http\Middleware\EnsureWebsiteAllowed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use Website\Http\Controllers\NewsletterController;
-use Website\Http\Controllers\TrekBookingController;
-use Website\Http\Controllers\WebsiteController;
+use Website\Services\WebsiteCatalogRepository;
+use Website\Support\WebsiteClock;
 
-Route::get('/', [WebsiteController::class, 'index'])->name('home');
-
-Route::get('/privacy-policy', [WebsiteController::class, 'privacyPolicy'])->name('privacy.policy');
-Route::get('/terms-and-conditions', [WebsiteController::class, 'termsConditions'])->name('terms.conditions');
-
-Route::get('/contact-us', [WebsiteController::class, 'contactUs'])->name('contact.us');
-
-Route::get('/about-us', [WebsiteController::class, 'aboutUs'])->name('about.our.story');
-Route::get('/guide-profiles', [WebsiteController::class, 'guideProfile'])->name('about.guide.profiles');
-
-Route::get('/responsible-travels', [WebsiteController::class, 'responsibleTravels'])->name('responsible.travels');
-
-Route::get('/destinations/{slug}', [WebsiteController::class, 'destinationShow'])->name('destination.detail');
-
-Route::get('/treks', [WebsiteController::class, 'trekAll'])->name('trek.list');
-Route::get('/treks/{destination}/{slug}', [WebsiteController::class, 'show'])->name('trek.show');
-
-Route::post('/bookings', [TrekBookingController::class, 'store'])->name('bookings.store');
-Route::get('/book-modal', [WebsiteController::class, 'bookModal'])->name('book.modal');
-
-Route::get('/packages/{slug}', [WebsiteController::class, 'show']);
-Route::get('/categories/{slug}', [WebsiteController::class, 'categoryShow'])->name('category.show');
-Route::get('/blogs', [WebsiteController::class, 'blogs'])->name('blogs');
-Route::get('/blogs/{slug}', [WebsiteController::class, 'blogDetail'])->name('blog.show');
-Route::get('/fixed-departures/{slug}', [WebsiteController::class, 'fixedDeparture'])->name('fixed.departure.show');
-
-Route::get('inquiry-form', [WebsiteController::class, 'getInquiryForm'])->name('inquiry.form');
-Route::post('inquiry', [WebsiteController::class, 'store'])->name('inquiry.store');
-Route::post('footer-inquiry', [WebsiteController::class, 'storeFooterInquiry'])->name('footer.inquiry.store');
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->name('newsletter.subscribe');
-Route::get('/faq', [WebsiteController::class, 'faq'])->name('faq');
-
-Route::get('/cache/website-blogs-safety/reset', function () {
-    Cache::forget('website.blogs.safety');
-
-    return response()->json([
-        'message' => 'Cache cleared: website.blogs.safety',
-    ]);
-})->name('cache.website.blogs.safety.reset');
-
-Route::prefix('website')->name('website.')->middleware([EnsureWebsiteAllowed::class])->group(function () {
+Route::name('website.')->middleware([EnsureWebsiteAllowed::class])->group(function () {
     // P01: Preview root / Homepage (Phase 05: Exact 20-section homepage)
     Route::get('/', function () {
         $allTreks = WebsiteCatalogRepository::getTreks();
@@ -1739,13 +1696,103 @@ Route::prefix('website')->name('website.')->middleware([EnsureWebsiteAllowed::cl
             $featuredArticle = WebsiteCatalogRepository::findArticle('choosing-a-travel-month');
         }
 
-        // Pagination: page size = 4
+        $topicPillars = [
+            'seasons' => [
+                'title' => 'Seasons & Timing',
+                'tagline' => 'Weather Windows & Trail Conditions',
+                'description' => 'Pre-monsoon spring blooms, crisp autumn visibility, and high-pass winter considerations.',
+                'icon' => 'sun',
+                'image' => \Website\Support\WebsiteAssetRegistry::resolve('article-seasons')['url'],
+                'image_alt' => 'Clear autumn skies across the Nepal Himalayas',
+            ],
+            'packing' => [
+                'title' => 'Packing & Gear',
+                'tagline' => 'Alpine Layering & Teahouse Kit',
+                'description' => 'Tested layering systems, cold-rated sleeping bags, footwear selection, and pack weight discipline.',
+                'icon' => 'backpack',
+                'image' => \Website\Support\WebsiteAssetRegistry::resolve('homepage-safety')['url'],
+                'image_alt' => 'Mountain trekker equipped with alpine backpack and boots',
+            ],
+            'preparation' => [
+                'title' => 'Preparation & Health',
+                'tagline' => 'Altitude Acclimatization Curves',
+                'description' => 'Safe elevation gains, hydration baselines, AMS recognition, and physical endurance baselines.',
+                'icon' => 'shield',
+                'image' => \Website\Support\WebsiteAssetRegistry::resolve('article-altitude')['url'],
+                'image_alt' => 'High-altitude snow and glacial crossing at Cho La Pass',
+            ],
+            'planning' => [
+                'title' => 'Route Planning',
+                'tagline' => 'Shortlists, Pacing & Difficulty',
+                'description' => 'Comparing daily walking hours, teahouse versus camping logistics, and contingency buffer days.',
+                'icon' => 'map',
+                'image' => \Website\Support\WebsiteAssetRegistry::resolve('article-compare')['url'],
+                'image_alt' => 'Stone footpath winding through Himalayan valleys for route planning',
+            ],
+            'culture' => [
+                'title' => 'Himalayan Culture',
+                'tagline' => 'Monasteries & Sherpa Traditions',
+                'description' => 'Buddhist mani stone customs, stupa circumambulation, prayer flags, and mountain etiquette.',
+                'icon' => 'compass',
+                'image' => \Website\Support\WebsiteAssetRegistry::resolve('homepage-responsible-travel')['url'],
+                'image_alt' => 'Colorful Buddhist prayer flags and mountain village',
+            ],
+            'logistics' => [
+                'title' => 'Travel Logistics',
+                'tagline' => 'Permits, Flights & Checkpoints',
+                'description' => 'Lukla flight weather buffers, TIMS card permits, national park entry fees, and mountain transfers.',
+                'icon' => 'plane',
+                'image' => \Website\Support\WebsiteAssetRegistry::resolve('article-logistics')['url'],
+                'image_alt' => 'High mountain suspension bridge across deep river gorge',
+            ],
+        ];
+
+        // Pagination: page size = 6 to showcase a rich 3-column editorial grid
         $page = max(1, (int) $request->query('page', 1));
-        $perPage = 4;
+        $perPage = 6;
         $totalPages = max(1, (int) ceil($totalCount / $perPage));
         $page = min($page, $totalPages);
         $offset = ($page - 1) * $perPage;
         $pageArticles = array_slice($filteredArticles, $offset, $perPage);
+
+        // Enrich articles with reading time and resolved related trek models
+        $treks = WebsiteCatalogRepository::getTreks();
+        $treksMap = [];
+        foreach ($treks as $t) {
+            $treksMap[$t['id']] = $t;
+        }
+
+        $enrichArticle = function (?array $art) use ($treksMap) {
+            if (!$art) {
+                return null;
+            }
+            $related = [];
+            foreach ($art['trek_ids'] ?? [] as $tId) {
+                if (isset($treksMap[$tId])) {
+                    $related[] = [
+                        'id' => $tId,
+                        'name' => $treksMap[$tId]['name'],
+                        'slug' => $treksMap[$tId]['slug'],
+                        'region' => $treksMap[$tId]['region']['name'] ?? 'Nepal',
+                    ];
+                }
+            }
+            $art['related_treks'] = $related;
+
+            // Compute reading time estimate (approx 130 words/min)
+            $wordCount = str_word_count($art['summary'] ?? '');
+            foreach ($art['sections'] ?? [] as $s) {
+                $wordCount += str_word_count($s['heading'] ?? '') + str_word_count($s['body'] ?? '');
+            }
+            $art['reading_time'] = max(3, (int) ceil($wordCount / 130)) . ' min read';
+
+            return $art;
+        };
+
+        $pageArticles = array_map($enrichArticle, $pageArticles);
+        if ($featuredArticle) {
+            $featuredArticle = $enrichArticle($featuredArticle);
+        }
 
         return view('website_preview.pages.articles.index', [
             'articles' => $pageArticles,
@@ -1758,6 +1805,7 @@ Route::prefix('website')->name('website.')->middleware([EnsureWebsiteAllowed::cl
             'selectedCategory' => $selectedCategory,
             'allowedCategories' => $allowedCategories,
             'categoryCounts' => $categoryCounts,
+            'topicPillars' => $topicPillars,
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'Travel Guide'],
@@ -2172,17 +2220,11 @@ Route::prefix('website')->name('website.')->middleware([EnsureWebsiteAllowed::cl
         ]);
     })->name('reset');
 
-    // Keep unknown preview paths inside the website shell; never allow the production
-    // two-segment blog catch-all in routes/web.php to handle them.
     $websiteNotFound = function () {
         return response()->view('website_preview.pages.error', [
             'title' => 'Website page not found',
             'message' => 'That sample page is not available. Continue exploring the website from the homepage.',
         ], 404);
     };
-    Route::get('/{any}', $websiteNotFound)->where('any', '.*');
     Route::fallback($websiteNotFound);
 });
-
-Route::get('/{category_slug}/{blog_slug}', [WebsiteController::class, 'blogDetailByCategory'])
-    ->name('blog.detail');

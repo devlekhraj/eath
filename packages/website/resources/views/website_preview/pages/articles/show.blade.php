@@ -42,7 +42,7 @@
 
     <!-- 3. Hero Image -->
     @if(!empty($article['image']['url']))
-        <div style="border-radius: var(--radius-lg); overflow: hidden; max-height: 420px; margin-bottom: var(--space-8); border: 1px solid var(--color-border); background: var(--color-surface);">
+        <div style="border-radius: 0 !important; overflow: hidden; max-height: 420px; margin-bottom: var(--space-8); border: 1px solid var(--color-border); background: var(--color-surface);">
             <img src="{{ $article['image']['url'] }}"
                  alt="{{ $article['image']['alt'] }}"
                  style="width: 100%; height: 100%; object-fit: cover; display: block;"
@@ -102,7 +102,7 @@
             </article>
 
             <!-- 7. Reference / Citation Notes -->
-            <div style="padding: var(--space-4); background: var(--color-background-warm); border-left: 3px solid var(--color-primary); border-radius: var(--radius-sm); margin-top: var(--space-8); margin-bottom: var(--space-10);">
+            <div style="padding: var(--space-4); background: var(--color-background-warm); border-left: 3px solid var(--color-primary); border-radius: 0 !important; margin-top: var(--space-8); margin-bottom: var(--space-10);">
                 <strong class="website-micro" style="text-transform: uppercase; color: var(--color-primary-dark); display: block; margin-bottom: var(--space-1);">
                     Reference &amp; Editorial Standards
                 </strong>
