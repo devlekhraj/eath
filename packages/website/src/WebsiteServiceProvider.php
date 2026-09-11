@@ -3,6 +3,7 @@
 namespace Website;
 
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class WebsiteServiceProvider extends ServiceProvider
@@ -11,6 +12,6 @@ class WebsiteServiceProvider extends ServiceProvider
     {
         View::addLocation(__DIR__.'/../resources/views');
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/route_website.php');
+        Route::middleware('web')->group(__DIR__.'/../routes/route_website.php');
     }
 }

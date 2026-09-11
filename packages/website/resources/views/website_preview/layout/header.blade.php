@@ -127,14 +127,6 @@
                                     @php
                                         $regionImage = $reg['image'] ?? \Website\Support\WebsiteAssetRegistry::resolve("region-{$reg['slug']}", $reg['name']);
                                         $maxDuration = collect($reg['treks'] ?? [])->max('duration_days');
-                                        $regionStyles = [
-                                            'everest' => 'High-altitude classics',
-                                            'annapurna' => 'Scenic lodge routes',
-                                            'langtang' => 'Valley culture trek',
-                                            'manaslu' => 'Remote circuit route',
-                                            'mustang' => 'Rain-shadow landscapes',
-                                        ];
-                                        $regionStyle = $regionStyles[$reg['slug']] ?? 'Curated Himalayan routes';
                                     @endphp
                                     <div class="website-nav__mega-region-group">
                                         <a href="{{ route('website.destinations.show', ['slug' => $reg['slug']]) }}" class="website-nav__mega-region-link">
@@ -153,7 +145,6 @@
                                                         · up to {{ $maxDuration }}d
                                                     @endif
                                                 </span>
-                                                <span class="website-nav__mega-region-style">{{ $regionStyle }}</span>
                                             </span>
                                             <span class="website-nav__mega-region-meta">
                                                 <span aria-hidden="true">&rarr;</span>
@@ -161,13 +152,13 @@
                                         </a>
 
                                         <div class="website-nav__mega-panel">
-                                            <div>
+                                            <div class="website-nav__mega-panel-header">
                                                 <span class="website-nav__mega-panel-label">Selected Region</span>
                                                 <h4 class="website-nav__mega-panel-title">{{ $reg['name'] }}</h4>
                                                 <p class="website-nav__mega-intro">{{ $reg['intro'] ?? 'Explore curated Himalayan trekking routes in this region.' }}</p>
                                             </div>
 
-                                            <div>
+                                            <div class="website-nav__mega-panel-routes">
                                                 <div class="website-nav__mega-treks-title">Key Routes</div>
                                                 <ul class="website-nav__mega-trek-list">
                                                     @foreach($reg['treks'] as $t)

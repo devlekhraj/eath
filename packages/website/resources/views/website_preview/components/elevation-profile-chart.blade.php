@@ -60,16 +60,29 @@
     ];
 @endphp
 
-<div class="website-elevation-card" id="website-elevation-profile">
-    <div class="website-elevation-card__header">
-        <div class="website-elevation-card__title-group">
-            <h3 class="website-elevation-card__title">
-                Interactive Elevation &amp; Acclimatization Profile
-            </h3>
-            <p class="website-elevation-card__subtitle">
-                Hover over any day node to view overnight camp altitude and acclimatization status.
-            </p>
-        </div>
+@if(!empty($titleAbove))
+    <div class="website-elevation-title-group">
+        <h3 class="website-elevation-title">
+            Interactive Elevation &amp; Acclimatization Profile
+        </h3>
+        <p class="website-elevation-subtitle">
+            Hover over any day node to view overnight camp altitude and acclimatization status.
+        </p>
+    </div>
+@endif
+
+<div class="website-elevation-card {{ !empty($borderless) ? 'website-elevation-card--borderless' : '' }}" id="website-elevation-profile">
+    <div class="website-elevation-card__header" @if(!empty($titleAbove)) style="justify-content: flex-end;" @endif>
+        @if(empty($titleAbove))
+            <div class="website-elevation-card__title-group">
+                <h3 class="website-elevation-card__title">
+                    Interactive Elevation &amp; Acclimatization Profile
+                </h3>
+                <p class="website-elevation-card__subtitle">
+                    Hover over any day node to view overnight camp altitude and acclimatization status.
+                </p>
+            </div>
+        @endif
         <div class="website-elevation-card__legend">
             <span class="website-elevation-card__legend-item">
                 <span class="website-elevation-card__legend-dot website-elevation-card__legend-dot--pacing"></span>

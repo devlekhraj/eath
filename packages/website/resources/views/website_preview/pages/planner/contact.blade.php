@@ -30,7 +30,6 @@
     <!-- Notice: Sample data warning -->
     <div class="website-notice website-notice--warning" style="margin-bottom: var(--space-6); padding: var(--space-4);">
         <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
-            <span style="font-size: 1.5rem; line-height: 1;">⚠️</span>
             <div>
                 <strong style="color: var(--color-warning-dark); display: block; margin-bottom: var(--space-1);">
                     Sample Preview Mode Only

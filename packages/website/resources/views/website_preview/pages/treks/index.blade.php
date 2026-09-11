@@ -3,6 +3,10 @@
 @section('title', 'Himalayan Journeys & Treks — EATH Ways (Website)')
 @section('meta_description', 'Explore curated luxury trekking journeys across the Everest, Annapurna, Langtang, Manaslu and Mustang regions of Nepal.')
 
+@push('head')
+    @vite(['packages/website/resources/website/scss/website-preview-icons.scss'])
+@endpush
+
 @section('content')
 <div class="website-container website-section--compact">
     <!-- 1. Editorial Page Introduction -->
@@ -117,7 +121,7 @@
                         </div>
                     </div>
                     <p class="website-small website-text-secondary" style="margin-bottom: var(--space-5);">
-                        From <span class="website-text-primary font-weight-medium">{{ \Website\Support\WebsiteMoneyFormatter::format($featuredJourney['price_minor']) }} USD</span> per person
+                        From <span class="website-text-primary font-weight-bold" style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 700;">{{ \Website\Support\WebsiteMoneyFormatter::format($featuredJourney['price_minor']) }} USD</span> per person
                     </p>
                     <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
                         <a href="{{ route('website.treks.show', $featuredJourney['slug']) }}" class="website-btn website-btn--primary">
@@ -163,8 +167,8 @@
     @endif
 
     <!-- 4. Editorial Region Tabs -->
-    <nav id="website-region-nav" aria-label="Browse by region" class="website-region-nav" style="scroll-margin-top: 100px; margin-bottom: var(--space-10); display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap;">
-        <span class="website-micro website-text-muted text-uppercase" style="letter-spacing: 0.08em; margin-right: var(--space-2);">Regions:</span>
+    <nav id="website-region-nav" aria-label="Browse by region" class="website-region-nav">
+        <span class="website-region-nav__label">Regions:</span>
         <a href="{{ route('website.treks.index', array_filter(['experience' => $currentParams['experience'] ?? null])) }}#website-region-nav" 
            class="website-filter-pill {{ empty($currentParams['region']) ? 'is-selected' : '' }}">
             All Regions
@@ -184,7 +188,7 @@
     </nav>
 
     <!-- 5. Curated Journey List (Editorial Cards) -->
-    <section aria-labelledby="journey-list-heading" style="margin-bottom: var(--space-14);">
+    <section id="website-curated-journeys-section" aria-labelledby="journey-list-heading" style="margin-bottom: var(--space-14);">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-6); padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-border);">
             <div>
                 <span class="website-micro website-text-muted text-uppercase" style="letter-spacing: 0.08em;">Curated Portfolio</span>
@@ -193,12 +197,12 @@
             </div>
             
             <!-- Sorting Control -->
-            <form method="GET" action="{{ route('website.treks.index') }}#website-region-nav" style="display: flex; gap: var(--space-2); align-items: center;">
+            <form id="website-listing-sort-form" method="GET" action="{{ route('website.treks.index') }}#website-region-nav" style="display: flex; gap: var(--space-2); align-items: center;">
                 @if(!empty($currentParams['region']))<input type="hidden" name="region" value="{{ $currentParams['region'] }}">@endif
                 @if(!empty($currentParams['experience']))<input type="hidden" name="experience" value="{{ $currentParams['experience'] }}">@endif
                 @if(!empty($currentParams['difficulty']))<input type="hidden" name="difficulty" value="{{ $currentParams['difficulty'] }}">@endif
                 <label for="listing-sort" class="website-small website-text-secondary">Sort by:</label>
-                <select id="listing-sort" name="sort" class="website-select" onchange="this.form.submit()" style="padding: 0.4rem 0.8rem; border-radius: 0 !important; border: 1px solid var(--color-border); font-size: var(--type-small);">
+                <select id="listing-sort" name="sort" class="website-select" style="padding: 0.4rem 0.8rem; border-radius: 0 !important; border: 1px solid var(--color-border); font-size: var(--type-small);">
                     <option value="recommended" {{ ($currentParams['sort'] ?? '') === 'recommended' ? 'selected' : '' }}>Recommended</option>
                     <option value="duration_asc" {{ ($currentParams['sort'] ?? '') === 'duration_asc' ? 'selected' : '' }}>Duration: short to long</option>
                     <option value="duration_desc" {{ ($currentParams['sort'] ?? '') === 'duration_desc' ? 'selected' : '' }}>Duration: long to short</option>
@@ -211,70 +215,87 @@
         @if(count($treks) > 0)
             <div class="website-listing-grid website-editorial-journeys">
                 @foreach($treks as $trek)
-                    <article class="website-editorial-journey" data-trek-id="{{ $trek['id'] }}">
-                        @php
-                            $image = $trek['image'] ?? \Website\Support\WebsiteAssetRegistry::resolve('trek-'.$trek['id'], 'Himalayan journey landscape');
-                        @endphp
-                        <div class="website-editorial-journey__image">
-                            <img src="{{ $image['url'] }}" alt="{{ $image['alt'] }}" width="{{ $image['width'] }}" height="{{ $image['height'] }}" loading="lazy">
+                    @php
+                        $image = $trek['image'] ?? \Website\Support\WebsiteAssetRegistry::resolve('trek-'.$trek['id'], 'Himalayan journey landscape');
+                        $isFeatured = $loop->first;
+                        $regionName = strtoupper($trek['region']['name'] ?? 'NEPAL');
+                        $priceFormatted = \Website\Support\WebsiteMoneyFormatter::format($trek['price_minor']);
+                    @endphp
+                    <article class="website-editorial-journey {{ $isFeatured ? 'website-editorial-journey--featured' : '' }}" data-trek-id="{{ $trek['id'] }}">
+                        <div class="website-editorial-journey__media">
+                            <a href="{{ route('website.treks.show', $trek['slug']) }}" class="website-editorial-journey__media-link" tabindex="-1" aria-hidden="true">
+                                <img src="{{ $image['url'] }}" alt="{{ $image['alt'] }}" width="{{ $image['width'] }}" height="{{ $image['height'] }}" loading="lazy">
+                                <span class="website-editorial-journey__badge">
+                                    {{ $trek['duration_days'] }} Days
+                                </span>
+                            </a>
                         </div>
-                        <div class="website-editorial-journey__body">
-                            <div class="website-editorial-journey__main">
-                                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-2); gap: var(--space-2); flex-wrap: wrap;">
-                                    <span class="website-eyebrow">{{ strtoupper($trek['region']['name'] ?? 'NEPAL') }} REGION</span>
-                                    <span class="website-micro website-text-secondary font-weight-medium">{{ $trek['duration_days'] }} Days Itinerary</span>
-                                </div>
-                                <h3 class="website-card-title" style="margin: 0 0 var(--space-2); font-size: 1.35rem;">
-                                    <a href="{{ route('website.treks.show', $trek['slug']) }}" class="website-link" style="color: inherit; text-decoration: none;">
-                                        {{ $trek['name'] }}
+                        <div class="website-editorial-journey__details">
+                            @if($isFeatured)
+                                <p class="website-editorial-journey__label website-editorial-journey__label--accent">
+                                    <i class="fa-solid fa-bolt" aria-hidden="true"></i> Featured Signature Route &middot; {{ $regionName }} &middot; 
+                                    <a href="{{ route('website.treks.itinerary.modal', $trek['slug']) }}" 
+                                       class="website-itinerary-trigger" 
+                                       data-open-modal="{{ route('website.treks.itinerary.modal', $trek['slug']) }}" 
+                                       data-modal-size="modal-xl" 
+                                       title="View {{ $trek['duration_days'] }} Days Itinerary Details">
+                                        {{ $trek['duration_days'] }} Days Itinerary
                                     </a>
-                                </h3>
-                                <p class="website-body-small website-text-secondary" style="line-height: 1.6; margin-bottom: var(--space-4);">
-                                    {{ $trek['summary'] }}
                                 </p>
-                                <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-2);">
-                                    <span class="website-badge website-badge--outline" style="border: 1px solid var(--color-border); padding: 0.25rem 0.5rem; font-size: var(--type-micro);">
-                                        Grade: {{ ucfirst($trek['difficulty']) }}
-                                    </span>
-                                    <span class="website-badge website-badge--outline" style="border: 1px solid var(--color-border); padding: 0.25rem 0.5rem; font-size: var(--type-micro);">
-                                        Max: {{ number_format($trek['max_altitude_m']) }}m
-                                    </span>
-                                    <span class="website-badge website-badge--outline" style="border: 1px solid var(--color-border); padding: 0.25rem 0.5rem; font-size: var(--type-micro);">
-                                        {{ $trek['duration_days'] }} Days
-                                    </span>
-                                    <span class="website-badge website-badge--outline" style="border: 1px solid var(--color-border); padding: 0.25rem 0.5rem; font-size: var(--type-micro);">
-                                        Private Sherpa Guide
-                                    </span>
-                                </div>
+                            @else
+                                <p class="website-editorial-journey__label">
+                                    <i class="fa-solid fa-mountain" aria-hidden="true"></i> {{ $regionName }} Region &middot; 
+                                    <a href="{{ route('website.treks.itinerary.modal', $trek['slug']) }}" 
+                                       class="website-itinerary-trigger" 
+                                       data-open-modal="{{ route('website.treks.itinerary.modal', $trek['slug']) }}" 
+                                       data-modal-size="modal-xl" 
+                                       title="View {{ $trek['duration_days'] }} Days Itinerary Details">
+                                        {{ $trek['duration_days'] }} Days Itinerary
+                                    </a>
+                                </p>
+                            @endif
+
+                            <h3 class="website-editorial-journey__title">
+                                <a href="{{ route('website.treks.show', $trek['slug']) }}">
+                                    {{ $trek['name'] }}
+                                </a>
+                            </h3>
+
+                            <p class="website-editorial-journey__meta">
+                                {{ $trek['duration_days'] }} days &middot; Max {{ number_format($trek['max_altitude_m']) }}m &middot; Grade: {{ ucfirst($trek['difficulty']) }} &middot; Private Sherpa Guide
+                            </p>
+
+                            <p class="website-editorial-journey__summary">
+                                {{ $trek['summary'] }}
+                            </p>
+
+                            <span class="website-editorial-journey__spaces">
+                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Guaranteed departures available &middot; Private dates on request
+                            </span>
+                        </div>
+                        <div class="website-editorial-journey__action">
+                            <div class="website-editorial-journey__pricing">
+                                <span class="website-editorial-journey__price">{{ $priceFormatted }}</span>
+                                <span class="website-editorial-journey__note">Illustrative USD / person</span>
                             </div>
-                            <div class="website-editorial-journey__aside">
-                                <div>
-                                    <span class="website-micro website-text-muted display-block text-uppercase" style="letter-spacing: 0.08em;">STARTING FROM</span>
-                                    <div class="website-card-price font-weight-medium website-text-primary" style="font-size: 1.35rem; line-height: 1.2;">
-                                        {{ \Website\Support\WebsiteMoneyFormatter::format($trek['price_minor']) }} USD
-                                    </div>
-                                    <span class="website-micro website-text-secondary display-block">per person</span>
-                                </div>
-                                <div class="website-editorial-journey__actions">
-                                    <a href="{{ route('website.treks.show', $trek['slug']) }}" class="website-btn website-btn--primary website-btn--compact">
-                                        <svg class="website-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="m2 20 7-10 5 6 4-3 4 7H2z"></path>
-                                        </svg>
-                                        <span>Explore Journey</span>
-                                    </a>
-                                    <a href="{{ route('website.compare', ['treks' => [$trek['id']]]) }}" 
-                                       class="website-btn website-btn--outline website-btn--compact website-compare-btn" 
-                                       data-trek-id="{{ $trek['id'] }}" 
-                                       role="button" 
-                                       aria-label="Add {{ $trek['name'] }} to comparison" 
-                                       aria-pressed="false">
-                                        <svg class="website-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <rect x="3" y="3" width="7" height="18"></rect>
-                                            <rect x="14" y="3" width="7" height="18"></rect>
-                                        </svg>
-                                        <span>Compare</span>
-                                    </a>
-                                </div>
+                            <div class="website-editorial-journey__buttons">
+                                <a href="{{ route('website.treks.show', $trek['slug']) }}" 
+                                   class="website-btn {{ $isFeatured ? 'website-btn--accent' : 'website-btn--primary' }} website-btn--compact website-btn--block">
+                                    <span>Explore Journey</span>
+                                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                                </a>
+                                <a href="{{ route('website.compare', ['treks' => [$trek['id']]]) }}" 
+                                   class="website-btn website-btn--outline website-btn--compact website-btn--block website-compare-btn" 
+                                   data-trek-id="{{ $trek['id'] }}" 
+                                   role="button" 
+                                   aria-label="Add {{ $trek['name'] }} to comparison" 
+                                   aria-pressed="false">
+                                    <span>Compare</span>
+                                    <svg class="website-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <rect x="3" y="3" width="7" height="18"></rect>
+                                        <rect x="14" y="3" width="7" height="18"></rect>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </article>

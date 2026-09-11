@@ -304,6 +304,15 @@ Route::prefix('website')->name('website.')->middleware([EnsureWebsiteAllowed::cl
         ]);
     })->name('treks.index');
 
+    Route::get('/treks/{slug}/itinerary-modal', function (string $slug) {
+        $trek = WebsiteCatalogRepository::findTrek($slug);
+        abort_unless($trek, 404, 'Trek itinerary not found');
+
+        return view('website_preview.modals.trek-itinerary', [
+            'trek' => $trek,
+        ]);
+    })->name('treks.itinerary.modal');
+
     Route::get('/treks/{slug}', function (string $slug) {
         $trek = WebsiteCatalogRepository::findTrek($slug);
         abort_unless($trek, 404);

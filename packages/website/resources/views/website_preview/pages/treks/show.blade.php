@@ -19,40 +19,6 @@ $heroImage = $trek['image'] ?? \Website\Support\WebsiteAssetRegistry::resolve("t
 
 @push('head')
 @vite(['packages/website/resources/website/scss/website-preview-icons.scss'])
-<style>
-    .website-trek-dates { border: 1px solid #e2e8f0; border-top: 4px solid #0284c7; background: #fff; border-radius: 0 !important; box-shadow: none; }
-    .website-trek-dates__header { padding: clamp(20px, 4vw, 32px); background: #0c4a6e; color: #fff; }
-    .website-trek-dates__eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #2fb8ff; background: transparent !important; border: none !important; padding: 0 !important; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-    .website-trek-dates__header h2 { margin: 0 0 10px; color: #fff; font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.15; }
-    .website-trek-dates__header p { margin: 0; font-size: .9rem; line-height: 1.6; color: #f1f5f9; }
-    .website-trek-dates__row { display: grid; grid-template-columns: 100px minmax(0, 1fr) 180px; gap: 24px; align-items: center; padding: 26px; border-bottom: 1px solid #e2e8f0; }
-    .website-trek-dates__row--next { background: #f1f5f9; border-left: 4px solid #e11d48; padding-left: 22px; }
-    .website-trek-dates__date { display: flex; flex-direction: column; color: #0284c7; }
-    .website-trek-dates__day { font-family: var(--font-display); font-size: 3rem; font-weight: 700; line-height: 1; }
-    .website-trek-dates__month { margin-top: 8px; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-    .website-trek-dates__label { margin: 0 0 8px; color: #e11d48; background: transparent !important; border: none !important; padding: 0 !important; font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-    .website-trek-dates__title { margin: 0 0 8px; font-size: 1.15rem; font-weight: 600; color: #0f172a; }
-    .website-trek-dates__meta { margin: 0 0 12px; color: #475569; font-size: .8rem; }
-    .website-trek-dates__spaces { color: #0c4a6e; font-size: .8rem; font-weight: 600; }
-    .website-trek-dates__spaces--limited { color: #e11d48; }
-    .website-trek-dates__price { display: block; font-family: var(--font-display); font-size: 1.65rem; font-weight: 700; color: #0284c7; line-height: 1.2; }
-    .website-trek-dates__action { text-align: right; }
-    .website-trek-dates__note { display: block; margin: 4px 0 14px; font-size: .7rem; color: #64748b; }
-    .website-trek-dates .website-btn { min-height: 44px; border-radius: 0 !important; box-shadow: none; }
-    .website-trek-dates__footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 18px 26px; font-size: .8rem; color: #64748b; }
-    .website-trek-dates__footer a { color: #0284c7; text-decoration: underline; font-weight: 600; }
-    @media (max-width: 1100px) {
-        .website-trek-dates__row { grid-template-columns: 80px minmax(0, 1fr); gap: 18px; }
-        .website-trek-dates__action { grid-column: 2; text-align: left; }
-    }
-    @media (max-width: 480px) {
-        .website-trek-dates__row { padding: 20px; gap: 16px; grid-template-columns: 64px minmax(0, 1fr); }
-        .website-trek-dates__row--next { padding-left: 16px; }
-        .website-trek-dates__action { grid-column: 1 / -1; }
-        .website-trek-dates__day { font-size: 2.5rem; }
-        .website-trek-dates__footer { padding: 20px; }
-    }
-</style>
 @endpush
 
 

@@ -240,7 +240,7 @@
                                       @error('message') aria-invalid="true" aria-describedby="error-message" @enderror>{{ old('message', request()->query('subject') ? 'Inquiry regarding ' . request()->query('subject') . ': We are interested in learning more about this itinerary.' : 'This is a preview message testing the EATH contact form. We are interested in understanding pacing and acclimatization for sample autumn treks.') }}</textarea>
                             <div style="display: flex; justify-content: space-between; margin-top: 4px; gap: var(--space-2); flex-wrap: wrap;">
                                 <span class="website-micro website-text-muted" style="font-weight: 500; color: #b45309;">
-                                    ⚠️ Please do not enter real credit card numbers, passport information, or sensitive private data.
+                                    Please do not enter real credit card numbers, passport information, or sensitive private data.
                                 </span>
                                 <span class="website-micro website-text-muted">Max 1,000 characters</span>
                             </div>

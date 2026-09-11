@@ -138,6 +138,11 @@ window.initModalPlugins = function(container) {
         });
     });
 
+    // Initialize Elevation & Acclimatization Profile Interactive Chart if present in modal
+    if (typeof window.initElevationProfile === 'function') {
+        window.initElevationProfile(container);
+    }
+
     // Auto-focus first visible input
     setTimeout(() => {
         $container.find('input:visible:first').trigger('focus');
@@ -870,37 +875,152 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // =========================================================================
-    // 5. Scroll Position Preservation for Region Tabs & Catalog Navigation
+    // 5. Seamless AJAX Region Filtering & Catalog Navigation (No Page Refresh)
     // =========================================================================
-    const SCROLL_KEY = 'eath.website.catalog.scroll';
+    let isCatalogFetching = false;
 
-    // Restore scroll position immediately if arriving from a catalog tab change
-    const savedScrollPos = sessionStorage.getItem(SCROLL_KEY);
-    if (savedScrollPos !== null) {
-        sessionStorage.removeItem(SCROLL_KEY);
-        const targetY = parseInt(savedScrollPos, 10);
-        if (!isNaN(targetY) && targetY > 0) {
-            window.scrollTo({ top: targetY, behavior: 'instant' });
-            requestAnimationFrame(() => {
-                window.scrollTo({ top: targetY, behavior: 'instant' });
+    async function loadTreksCatalog(url, pushState = true) {
+        if (isCatalogFetching) return;
+        const regionNav = document.getElementById('website-region-nav');
+        const curatedSection = document.getElementById('website-curated-journeys-section') || document.querySelector('section[aria-labelledby="journey-list-heading"]');
+        const summaryBar = document.getElementById('website-filter-sidebar');
+
+        if (!curatedSection) {
+            window.location.href = url;
+            return;
+        }
+
+        isCatalogFetching = true;
+        curatedSection.style.transition = 'opacity 0.18s ease';
+        curatedSection.style.opacity = '0.45';
+        curatedSection.style.pointerEvents = 'none';
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             });
+
+            if (!response.ok) {
+                window.location.href = url;
+                return;
+            }
+
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // 1. Update Region Navigation Tabs
+            const newRegionNav = doc.getElementById('website-region-nav');
+            if (regionNav && newRegionNav) {
+                regionNav.innerHTML = newRegionNav.innerHTML;
+            }
+
+            // 2. Update Curated Journeys Section (Cards + Sorting + Pagination + Empty state)
+            const newCuratedSection = doc.getElementById('website-curated-journeys-section') || doc.querySelector('section[aria-labelledby="journey-list-heading"]');
+            if (curatedSection && newCuratedSection) {
+                curatedSection.innerHTML = newCuratedSection.innerHTML;
+            }
+
+            // 3. Update Summary Bar if present
+            const newSummaryBar = doc.getElementById('website-filter-sidebar');
+            if (summaryBar && newSummaryBar) {
+                summaryBar.innerHTML = newSummaryBar.innerHTML;
+            }
+
+            // 4. Update browser URL history without reloading
+            if (pushState) {
+                window.history.pushState({ catalogUrl: url }, '', url);
+            }
+
+            // 5. Reconcile comparison tray states for newly inserted trek cards
+            if (window.WebsiteCompare && typeof window.WebsiteCompare.reconcile === 'function') {
+                window.WebsiteCompare.reconcile();
+            }
+
+        } catch (err) {
+            console.error('AJAX catalog filter error, falling back to direct navigation:', err);
+            window.location.href = url;
+        } finally {
+            curatedSection.style.opacity = '1';
+            curatedSection.style.pointerEvents = '';
+            isCatalogFetching = false;
         }
     }
 
-    // Capture scroll position before navigating via region tabs or pagination
-    document.querySelectorAll('.website-region-nav a, .website-pagination a').forEach(link => {
-        link.addEventListener('click', () => {
-            sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
-        });
+    // Delegated click handler for Region Tabs, Pagination, and Filter Chips
+    document.addEventListener('click', (e) => {
+        // Region filter pill clicked
+        const regionLink = e.target.closest('#website-region-nav a');
+        if (regionLink) {
+            e.preventDefault();
+            const targetUrl = regionLink.href;
+
+            // Optimistic UI state: highlight clicked button immediately
+            const allPills = document.querySelectorAll('#website-region-nav .website-filter-pill');
+            allPills.forEach(p => p.classList.remove('is-selected'));
+            regionLink.classList.add('is-selected');
+
+            loadTreksCatalog(targetUrl, true);
+            return;
+        }
+
+        // Pagination link clicked inside catalog
+        const paginationLink = e.target.closest('.website-pagination a');
+        if (paginationLink) {
+            e.preventDefault();
+            loadTreksCatalog(paginationLink.href, true);
+            const targetHeading = document.getElementById('journey-list-heading') || document.getElementById('website-region-nav');
+            if (targetHeading) {
+                targetHeading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            return;
+        }
+
+        // Filter summary chips or Clear all clicked inside filter bar
+        const filterChip = e.target.closest('#website-filter-sidebar a');
+        if (filterChip) {
+            e.preventDefault();
+            loadTreksCatalog(filterChip.href, true);
+            return;
+        }
     });
 
-    // Capture scroll position when submitting the catalog sorting form
-    const listingSortForm = document.querySelector('form[action*="website/treks"]');
-    if (listingSortForm) {
-        listingSortForm.addEventListener('submit', () => {
-            sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
-        });
-    }
+    // Delegated change handler for Catalog Sort Select dropdown
+    document.addEventListener('change', (e) => {
+        if (e.target && e.target.id === 'listing-sort') {
+            const form = e.target.closest('form');
+            if (form) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const params = new URLSearchParams(formData);
+                const baseUrl = (form.getAttribute('action') || window.location.href).split('?')[0].split('#')[0];
+                const newUrl = baseUrl + '?' + params.toString() + '#website-region-nav';
+                loadTreksCatalog(newUrl, true);
+            }
+        }
+    });
+
+    // Delegated submit handler for catalog sorting form
+    document.addEventListener('submit', (e) => {
+        const form = e.target.closest('#website-listing-sort-form');
+        if (form) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const params = new URLSearchParams(formData);
+            const baseUrl = (form.getAttribute('action') || window.location.href).split('?')[0].split('#')[0];
+            const newUrl = baseUrl + '?' + params.toString() + '#website-region-nav';
+            loadTreksCatalog(newUrl, true);
+        }
+    });
+
+    // Handle browser Back and Forward navigation without reload
+    window.addEventListener('popstate', () => {
+        if (document.getElementById('website-region-nav')) {
+            loadTreksCatalog(window.location.href, false);
+        }
+    });
 
     // =========================================================================
     // 6. Fixed Departure Planning Wizard Modal
@@ -1434,152 +1554,172 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     // 8. Elevation & Acclimatization Profile Interactive Chart Controller
     // -------------------------------------------------------------------------
-    const chartCard = document.getElementById('website-elevation-profile');
-    if (chartCard) {
-        const tooltip = document.getElementById('website-elevation-tooltip');
-        const tooltipDay = document.getElementById('website-tooltip-day');
-        const tooltipTitle = document.getElementById('website-tooltip-title');
-        const tooltipRoute = document.getElementById('website-tooltip-route');
-        const tooltipAlt = document.getElementById('website-tooltip-alt');
-        const tooltipBadge = document.getElementById('website-tooltip-badge');
-        const triggers = chartCard.querySelectorAll('.website-elevation-trigger');
-        const nodes = chartCard.querySelectorAll('.website-elevation-node');
-        const dayLabels = chartCard.querySelectorAll('.website-elevation-day-label');
-        const dayItems = chartCard.querySelectorAll('.website-elevation-day-item');
-        const vGuides = chartCard.querySelectorAll('.website-elevation-vguide');
-        const chartWrapper = chartCard.querySelector('.website-elevation-card__chart-wrapper');
+    window.initElevationProfile = function(rootEl = document) {
+        let chartCards = [];
+        if (rootEl.classList && rootEl.classList.contains('website-elevation-card')) {
+            chartCards = [rootEl];
+        } else if (rootEl.querySelectorAll) {
+            chartCards = Array.from(rootEl.querySelectorAll('.website-elevation-card'));
+        }
 
-        const hideTooltip = () => {
-            if (tooltip) {
-                tooltip.classList.remove('is-visible');
-            }
-            nodes.forEach(n => n.classList.remove('is-active'));
-            dayLabels.forEach(l => l.classList.remove('is-active'));
-            dayItems.forEach(i => i.classList.remove('is-active'));
-            vGuides.forEach(g => { g.style.opacity = '0'; });
-        };
+        chartCards.forEach(chartCard => {
+            if (chartCard.dataset.elevationInitialized === 'true') return;
+            chartCard.dataset.elevationInitialized = 'true';
 
-        triggers.forEach(target => {
-            const day = target.getAttribute('data-day');
-            const title = target.getAttribute('data-title');
-            const route = target.getAttribute('data-route');
-            const alt = target.getAttribute('data-alt');
-            const hours = target.getAttribute('data-hours');
-            const isAcclimatization = target.getAttribute('data-acclimatization') === '1';
+            const tooltip = chartCard.querySelector('.website-elevation-tooltip');
+            const tooltipDay = chartCard.querySelector('.website-elevation-tooltip__day');
+            const tooltipTitle = chartCard.querySelector('.website-elevation-tooltip__title');
+            const tooltipRoute = chartCard.querySelector('.website-elevation-tooltip__route');
+            const tooltipAlt = chartCard.querySelector('.website-elevation-tooltip__alt');
+            const tooltipBadge = chartCard.querySelector('.website-elevation-tooltip__badge');
+            const triggers = chartCard.querySelectorAll('.website-elevation-trigger');
+            const nodes = chartCard.querySelectorAll('.website-elevation-node');
+            const dayLabels = chartCard.querySelectorAll('.website-elevation-day-label');
+            const dayItems = chartCard.querySelectorAll('.website-elevation-day-item');
+            const vGuides = chartCard.querySelectorAll('.website-elevation-vguide');
+            const chartWrapper = chartCard.querySelector('.website-elevation-card__chart-wrapper');
 
-            const showTooltipAtTarget = () => {
-                if (!tooltip || !chartWrapper) return;
-
-                tooltipDay.textContent = `Day ${day}`;
-                tooltipTitle.textContent = title;
-                tooltipRoute.textContent = route || '';
-                tooltipAlt.textContent = alt;
-
-                if (isAcclimatization) {
-                    tooltipBadge.textContent = 'Acclimatization Rest Day';
-                    tooltipBadge.style.display = 'inline-block';
-                } else if (hours) {
-                    tooltipBadge.textContent = `Walking: ~${hours}`;
-                    tooltipBadge.style.display = 'inline-block';
-                } else {
-                    tooltipBadge.textContent = '';
-                    tooltipBadge.style.display = 'none';
+            const hideTooltip = () => {
+                if (tooltip) {
+                    tooltip.classList.remove('is-visible');
                 }
-
-                // Locate the elevation node on the graph curve for this day
-                const targetNode = chartCard.querySelector(`.website-elevation-node[data-day="${day}"]`) || target;
-                const nodeRect = targetNode.getBoundingClientRect();
-                const wrapperRect = chartWrapper.getBoundingClientRect();
-
-                const left = nodeRect.left - wrapperRect.left + (nodeRect.width / 2);
-                const top = nodeRect.top - wrapperRect.top;
-
-                // Make visible to accurately measure rendered dimensions
-                tooltip.classList.add('is-visible');
-
-                const tooltipWidth = tooltip.offsetWidth || 240;
-
-                // Clamping tooltip within wrapper boundaries
-                const halfWidth = tooltipWidth / 2;
-                const minLeft = halfWidth + 10;
-                const maxLeft = Math.max(minLeft, wrapperRect.width - halfWidth - 10);
-                const clampedLeft = Math.max(minLeft, Math.min(maxLeft, left));
-
-                // Always position on top above the node
-                tooltip.style.left = `${clampedLeft}px`;
-                tooltip.style.top = `${top}px`;
-
-                // Highlight active node, day label, day item, and vertical guideline
-                nodes.forEach(n => {
-                    if (n.getAttribute('data-day') === day) {
-                        n.classList.add('is-active');
-                    } else {
-                        n.classList.remove('is-active');
-                    }
-                });
-                dayLabels.forEach(l => {
-                    if (l.getAttribute('data-day') === day) {
-                        l.classList.add('is-active');
-                    } else {
-                        l.classList.remove('is-active');
-                    }
-                });
-                dayItems.forEach(i => {
-                    if (i.getAttribute('data-day') === day) {
-                        i.classList.add('is-active');
-                    } else {
-                        i.classList.remove('is-active');
-                    }
-                });
-                vGuides.forEach(g => {
-                    if (g.getAttribute('data-day') === day) {
-                        g.style.opacity = '1';
-                    } else {
-                        g.style.opacity = '0';
-                    }
-                });
+                nodes.forEach(n => n.classList.remove('is-active'));
+                dayLabels.forEach(l => l.classList.remove('is-active'));
+                dayItems.forEach(i => i.classList.remove('is-active'));
+                vGuides.forEach(g => { g.style.opacity = '0'; });
             };
 
-            target.addEventListener('mouseenter', showTooltipAtTarget);
-            target.addEventListener('focus', showTooltipAtTarget);
+            triggers.forEach(target => {
+                const day = target.getAttribute('data-day');
+                const title = target.getAttribute('data-title');
+                const route = target.getAttribute('data-route');
+                const alt = target.getAttribute('data-alt');
+                const hours = target.getAttribute('data-hours');
+                const isAcclimatization = target.getAttribute('data-acclimatization') === '1';
 
-            target.addEventListener('mouseleave', hideTooltip);
-            target.addEventListener('blur', hideTooltip);
+                const showTooltipAtTarget = () => {
+                    if (!tooltip || !chartWrapper) return;
 
-            // Click node or day item to scroll to day in itinerary and open details
-            const handleDayAction = (e) => {
-                e.preventDefault();
-                const card = document.getElementById(`itinerary-day-${day}`);
-                if (card) {
-                    card.open = true;
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Highlight card temporarily
-                    card.style.transition = 'border-color 0.3s ease, background-color 0.3s ease';
-                    const origBg = card.style.backgroundColor;
-                    card.style.borderColor = 'var(--color-primary)';
-                    card.style.backgroundColor = 'var(--color-primary-soft)';
-                    setTimeout(() => {
-                        card.style.borderColor = '';
-                        card.style.backgroundColor = origBg;
-                    }, 1200);
-                }
-            };
+                    if (tooltipDay) tooltipDay.textContent = `Day ${day}`;
+                    if (tooltipTitle) tooltipTitle.textContent = title;
+                    if (tooltipRoute) tooltipRoute.textContent = route || '';
+                    if (tooltipAlt) tooltipAlt.textContent = alt;
 
-            target.addEventListener('click', handleDayAction);
-            target.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    handleDayAction(e);
+                    if (tooltipBadge) {
+                        if (isAcclimatization) {
+                            tooltipBadge.textContent = 'Acclimatization Rest Day';
+                            tooltipBadge.style.display = 'inline-block';
+                        } else if (hours) {
+                            tooltipBadge.textContent = `Walking: ~${hours}`;
+                            tooltipBadge.style.display = 'inline-block';
+                        } else {
+                            tooltipBadge.textContent = '';
+                            tooltipBadge.style.display = 'none';
+                        }
+                    }
+
+                    // Locate the elevation node on the graph curve for this day
+                    const targetNode = chartCard.querySelector(`.website-elevation-node[data-day="${day}"]`) || target;
+                    const nodeRect = targetNode.getBoundingClientRect();
+                    const wrapperRect = chartWrapper.getBoundingClientRect();
+
+                    const left = nodeRect.left - wrapperRect.left + (nodeRect.width / 2);
+                    const top = nodeRect.top - wrapperRect.top;
+
+                    // Make visible to accurately measure rendered dimensions
+                    tooltip.classList.add('is-visible');
+
+                    const tooltipWidth = tooltip.offsetWidth || 240;
+
+                    // Clamping tooltip within wrapper boundaries
+                    const halfWidth = tooltipWidth / 2;
+                    const minLeft = halfWidth + 10;
+                    const maxLeft = Math.max(minLeft, wrapperRect.width - halfWidth - 10);
+                    const clampedLeft = Math.max(minLeft, Math.min(maxLeft, left));
+
+                    // Always position on top above the node
+                    tooltip.style.left = `${clampedLeft}px`;
+                    tooltip.style.top = `${top}px`;
+
+                    // Highlight active node, day label, day item, and vertical guideline
+                    nodes.forEach(n => {
+                        if (n.getAttribute('data-day') === day) {
+                            n.classList.add('is-active');
+                        } else {
+                            n.classList.remove('is-active');
+                        }
+                    });
+                    dayLabels.forEach(l => {
+                        if (l.getAttribute('data-day') === day) {
+                            l.classList.add('is-active');
+                        } else {
+                            l.classList.remove('is-active');
+                        }
+                    });
+                    dayItems.forEach(i => {
+                        if (i.getAttribute('data-day') === day) {
+                            i.classList.add('is-active');
+                        } else {
+                            i.classList.remove('is-active');
+                        }
+                    });
+                    vGuides.forEach(g => {
+                        if (g.getAttribute('data-day') === day) {
+                            g.style.opacity = '1';
+                        } else {
+                            g.style.opacity = '0';
+                        }
+                    });
+                };
+
+                target.addEventListener('mouseenter', showTooltipAtTarget);
+                target.addEventListener('focus', showTooltipAtTarget);
+
+                target.addEventListener('mouseleave', hideTooltip);
+                target.addEventListener('blur', hideTooltip);
+
+                // Click node or day item to scroll to day in itinerary and open details
+                const handleDayAction = (e) => {
+                    e.preventDefault();
+                    const scope = chartCard.closest('.modal-content') || document;
+                    const card = scope.querySelector(`#itinerary-day-${day}`) || document.getElementById(`itinerary-day-${day}`);
+                    if (card) {
+                        if (card.tagName.toLowerCase() === 'details') {
+                            card.open = true;
+                        }
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Highlight card temporarily
+                        card.style.transition = 'border-color 0.3s ease, background-color 0.3s ease';
+                        const origBg = card.style.backgroundColor;
+                        const origBorder = card.style.borderColor;
+                        card.style.borderColor = 'var(--color-primary)';
+                        card.style.backgroundColor = 'var(--color-primary-soft, #e0f2fe)';
+                        setTimeout(() => {
+                            card.style.borderColor = origBorder;
+                            card.style.backgroundColor = origBg;
+                        }, 1200);
+                    }
+                };
+
+                target.addEventListener('click', handleDayAction);
+                target.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        handleDayAction(e);
+                    }
+                });
+            });
+
+            // Hide on touch outside
+            document.addEventListener('touchstart', (e) => {
+                if (!chartCard.contains(e.target)) {
+                    hideTooltip();
                 }
             });
         });
+    };
 
-        // Hide on touch outside
-        document.addEventListener('touchstart', (e) => {
-            if (!chartCard.contains(e.target)) {
-                hideTooltip();
-            }
-        });
-    }
+    // Initialize any page-level elevation charts
+    window.initElevationProfile(document);
 
     // Initial reconciliation
     reconcileCompareUI();
