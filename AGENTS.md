@@ -56,6 +56,21 @@ Before modifying code:
 
 ---
 
+## Laravel Model Location Rule
+
+* All Eloquent model files must live under:
+
+  ```text
+  packages/admin/src/Models/
+  ```
+
+* Models must use the `Admin\Models` namespace.
+* Website code, services, controllers, tests, and other packages must import models from `Admin\Models`.
+* Do not create model files under `packages/website/src/Models/`, `app/Models/`, or any other model directory unless the user explicitly changes this project convention.
+* This applies even when the model is only used by public website or demo functionality.
+
+---
+
 ## Ponytail Coding Principles
 
 Follow `.agents/rules/ponytail.md`.

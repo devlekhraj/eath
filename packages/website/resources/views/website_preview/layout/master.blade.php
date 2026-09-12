@@ -85,10 +85,22 @@
 
     @include('website_preview.layout.footer')
 
+    @php
+        $compareEndpoints = [
+            'state' => route('website.compare.state'),
+            'store' => route('website.compare.items.store'),
+            'set' => route('website.compare.items.set'),
+            'replace' => route('website.compare.items.replace'),
+            'clear' => route('website.compare.items.clear'),
+            'destroyBase' => url('/compare-treks/items'),
+        ];
+    @endphp
+
     <!-- Lightweight Server-Emitted Whitelist for Shared Client Comparison State -->
     <script id="website-trek-whitelist" type="application/json" data-whitelist="{{ base64_encode(json_encode(\Website\Services\WebsiteCatalogRepository::getTrekWhitelist())) }}"></script>
     <script>
         window.__WEBSITE_COMPARE_URL__ = "{{ route('website.compare') }}";
+        window.__WEBSITE_COMPARE_ENDPOINTS__ = {!! json_encode($compareEndpoints, JSON_UNESCAPED_SLASHES) !!};
     </script>
 
     @stack('scripts')

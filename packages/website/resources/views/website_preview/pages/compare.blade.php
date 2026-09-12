@@ -59,13 +59,13 @@
                         Quick Comparison Presets
                     </span>
                     <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
-                        <a href="{{ route('website.compare', ['treks' => ['t-ebc', 't-abc', 't-langtang']]) }}" class="website-btn website-btn--outline website-btn--compact">
+                        <a href="{{ route('website.compare', ['treks' => ['t-ebc', 't-abc', 't-langtang']]) }}" class="website-btn website-btn--outline website-btn--compact website-compare-set-link">
                             Classic Trio: EBC vs ABC vs Langtang
                         </a>
-                        <a href="{{ route('website.compare', ['treks' => ['t-mardi', 't-khopra']]) }}" class="website-btn website-btn--outline website-btn--compact">
+                        <a href="{{ route('website.compare', ['treks' => ['t-mardi', 't-khopra']]) }}" class="website-btn website-btn--outline website-btn--compact website-compare-set-link">
                             Annapurna Ridges: Mardi Himal vs Khopra
                         </a>
-                        <a href="{{ route('website.compare', ['treks' => ['t-ebc', 't-gokyo']]) }}" class="website-btn website-btn--outline website-btn--compact">
+                        <a href="{{ route('website.compare', ['treks' => ['t-ebc', 't-gokyo']]) }}" class="website-btn website-btn--outline website-btn--compact website-compare-set-link">
                             Everest Routes: Base Camp vs Gokyo Lakes
                         </a>
                     </div>
@@ -96,7 +96,13 @@
                                 <span class="website-h4" style="color: var(--color-primary); font-weight: 600; margin: 0;">
                                     {{ \Website\Support\WebsiteMoneyFormatter::format($trek['price_minor']) }} <span class="website-micro website-text-muted">USD</span>
                                 </span>
-                                <a href="{{ route('website.compare', ['treks' => [$trek['id']]]) }}" class="website-btn website-btn--primary website-btn--compact" aria-label="Add {{ $trek['name'] }} to comparison">
+                                <a href="{{ route('website.compare', ['treks' => [$trek['id']]]) }}"
+                                   role="button"
+                                   class="website-btn website-btn--primary website-btn--compact website-compare-btn"
+                                   data-trek-id="{{ $trek['id'] }}"
+                                   data-compare-mode="add"
+                                   aria-pressed="false"
+                                   aria-label="Add {{ $trek['name'] }} to comparison">
                                     + Add to Compare
                                 </a>
                             </div>

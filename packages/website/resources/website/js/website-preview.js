@@ -463,6 +463,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     const EATH_COMPARE_KEY = 'eath.website.v1.compare';
     const MAX_COMPARE_ITEMS = 3;
+    const LEGACY_TREK_IDS = {
+        't-ebc': 'everest-base-camp',
+        't-abc': 'annapurna-base-camp',
+        't-langtang': 'langtang-valley',
+        't-mardi': 'mardi-himal',
+        'mardi-himal-ridge': 'mardi-himal',
+        't-gokyo': 'gokyo-lakes',
+        'gokyo-ri-lakes': 'gokyo-lakes',
+        't-manaslu': 'manaslu-circuit',
+        't-khopra': 'khopra-ridge',
+        't-mustang': 'upper-mustang'
+    };
 
     // Read server-emitted trek whitelist
     function getTrekWhitelist() {
@@ -480,53 +492,128 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const trekWhitelist = getTrekWhitelist();
-    let inMemoryIds = [];
+    const compareEndpoints = window.__WEBSITE_COMPARE_ENDPOINTS__ || {};
+    const EATH_COMPARE_VISITOR_KEY = 'eath.website.v1.compare.visitor';
+    let serverCompareState = {
+        ids: [],
+        items: [],
+        count: 0,
+        max: MAX_COMPARE_ITEMS,
+        compare_url: window.__WEBSITE_COMPARE_URL__ || '/compare-treks'
+    };
 
-    // Storage access with quota & private-mode safety
-    function readStoredIds() {
+    function normalizeCompareId(id) {
+        return LEGACY_TREK_IDS[id] || id;
+    }
+
+    function compareVisitorKey() {
         try {
-            const raw = localStorage.getItem(EATH_COMPARE_KEY);
-            if (!raw) return inMemoryIds;
-            const parsed = JSON.parse(raw);
-            if (!Array.isArray(parsed)) return [];
-            // Normalize: unique, known in whitelist, max 3
-            const valid = [];
-            for (const id of parsed) {
-                if (typeof id === 'string' && trekWhitelist[id] && !valid.includes(id)) {
-                    valid.push(id);
-                    if (valid.length === MAX_COMPARE_ITEMS) break;
-                }
+            let key = localStorage.getItem(EATH_COMPARE_VISITOR_KEY);
+            if (!/^[a-f0-9]{40}$/.test(key || '')) {
+                const bytes = new Uint8Array(20);
+                window.crypto.getRandomValues(bytes);
+                key = Array.from(bytes).map(byte => byte.toString(16).padStart(2, '0')).join('');
+                localStorage.setItem(EATH_COMPARE_VISITOR_KEY, key);
             }
-            inMemoryIds = valid;
-            return valid;
+            return key;
         } catch {
-            return inMemoryIds;
+            return document.cookie.match(/(?:^|;\s*)eath_compare_visitor=([^;]+)/)?.[1] || '';
         }
     }
 
-    function writeStoredIds(ids) {
-        // Normalize
-        const valid = [];
-        for (const id of ids) {
-            if (typeof id === 'string' && trekWhitelist[id] && !valid.includes(id)) {
-                valid.push(id);
-                if (valid.length === MAX_COMPARE_ITEMS) break;
+    let compareCoordinates = null;
+    let compareCoordinatesRequested = false;
+
+    function withCompareMetadata(config, callback) {
+        const method = (config.method || 'GET').toUpperCase();
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        if (method === 'POST' && timezone) {
+            config.data = $.extend({}, config.data || {}, { request_timezone: timezone });
+        }
+
+        if (method !== 'POST' || !navigator.geolocation || compareCoordinatesRequested) {
+            if (compareCoordinates) {
+                config.data = $.extend({}, config.data || {}, compareCoordinates);
             }
+            return callback(config);
         }
-        inMemoryIds = valid;
-        try {
-            localStorage.setItem(EATH_COMPARE_KEY, JSON.stringify(valid));
-        } catch {
-            // Graceful in-memory fallback
-        }
+
+        compareCoordinatesRequested = true;
+        navigator.geolocation.getCurrentPosition((position) => {
+            compareCoordinates = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+            config.data = $.extend({}, config.data || {}, compareCoordinates);
+            callback(config);
+        }, () => {
+            callback(config);
+        }, {
+            enableHighAccuracy: false,
+            maximumAge: 10 * 60 * 1000,
+            timeout: 8000
+        });
+    }
+
+    function readStoredIds() {
+        return serverCompareState.ids || [];
+    }
+
+    function applyCompareState(state, focusTargetSelector) {
+        if (!state || !Array.isArray(state.ids)) return;
+        serverCompareState = $.extend({}, serverCompareState, state);
+        reconcileCompareUI(focusTargetSelector);
+    }
+
+    function isComparePage() {
+        return window.location.pathname.includes('/compare-treks') || window.location.pathname.endsWith('/compare');
+    }
+
+    function refreshComparePageContent() {
+        if (!isComparePage()) return;
+
+        $.get(buildCompareUrl()).done((html) => {
+            const nextMain = $('<div>').append($.parseHTML(html)).find('#website-main-content').html();
+            if (nextMain) {
+                $('#website-main-content').html(nextMain);
+                reconcileCompareUI();
+            }
+        });
+    }
+
+    function compareRequest(config, success) {
+        config.headers = $.extend({}, config.headers || {}, {
+            'X-Compare-Visitor': compareVisitorKey()
+        });
+
+        return withCompareMetadata(config, (requestConfig) => {
+            return window.http(requestConfig, (resp) => {
+                applyCompareState(resp);
+                if (typeof success === 'function') success(resp);
+                if (requestConfig.refreshComparePage === true) {
+                    refreshComparePageContent();
+                }
+            });
+        });
+    }
+
+    function fetchCompareState() {
+        if (!compareEndpoints.state) return;
+        compareRequest({
+            url: compareEndpoints.state,
+            method: 'GET'
+        });
     }
 
     function buildCompareUrl(ids) {
-        const baseUrl = window.__WEBSITE_COMPARE_URL__ || '/compare-treks';
-        if (!ids || ids.length === 0) return baseUrl;
-        const params = new URLSearchParams();
-        ids.forEach(id => params.append('treks[]', id));
-        return `${baseUrl}?${params.toString()}`;
+        return serverCompareState.compare_url || window.__WEBSITE_COMPARE_URL__ || '/compare-treks';
+    }
+
+    function redirectToComparePage(state) {
+        if (isComparePage()) return;
+        if ((state?.count || 0) < 2) return;
+
+        window.location.href = state.compare_url || buildCompareUrl();
     }
 
     // Modal elements for 4th trek replacement
@@ -607,43 +694,54 @@ document.addEventListener('DOMContentLoaded', () => {
     window.WebsiteCompare = {
         getIds: readStoredIds,
         setIds: (ids) => {
-            writeStoredIds(ids);
-            reconcileCompareUI();
+            return compareRequest({
+                url: compareEndpoints.set,
+                method: 'POST',
+                refreshComparePage: true,
+                data: { treks: ids }
+            });
         },
-        has: (id) => readStoredIds().includes(id),
+        has: (id) => readStoredIds().includes(normalizeCompareId(id)),
         add: (id) => {
-            if (!trekWhitelist[id]) return false;
+            const normalizedId = normalizeCompareId(id);
             const current = readStoredIds();
-            if (current.includes(id)) return true;
-            if (current.length >= MAX_COMPARE_ITEMS) {
-                openReplaceModal(id);
-                return false;
-            }
-            current.push(id);
-            writeStoredIds(current);
-            reconcileCompareUI();
-            return true;
+            if (current.includes(normalizedId)) return true;
+            return compareRequest({
+                url: compareEndpoints.store,
+                method: 'POST',
+                refreshComparePage: isComparePage(),
+                data: { trek_id: normalizedId }
+            }, redirectToComparePage);
         },
         remove: (id, focusTargetSelector) => {
-            const current = readStoredIds().filter(existing => existing !== id);
-            writeStoredIds(current);
-            reconcileCompareUI(focusTargetSelector);
+            const normalizedId = normalizeCompareId(id);
+            return compareRequest({
+                url: `${compareEndpoints.destroyBase}/${encodeURIComponent(normalizedId)}`,
+                method: 'DELETE',
+                refreshComparePage: true
+            }, (resp) => {
+                applyCompareState(resp, focusTargetSelector);
+            });
         },
         replace: (oldId, newId) => {
-            if (!trekWhitelist[newId]) return;
-            const current = readStoredIds();
-            const index = current.indexOf(oldId);
-            if (index !== -1) {
-                current[index] = newId;
-            } else if (current.length < MAX_COMPARE_ITEMS) {
-                current.push(newId);
-            }
-            writeStoredIds(current);
-            reconcileCompareUI();
+            const normalizedOldId = normalizeCompareId(oldId);
+            const normalizedNewId = normalizeCompareId(newId);
+            return compareRequest({
+                url: compareEndpoints.replace,
+                method: 'POST',
+                refreshComparePage: true,
+                data: {
+                    old_trek_id: normalizedOldId,
+                    new_trek_id: normalizedNewId
+                }
+            });
         },
         clear: () => {
-            writeStoredIds([]);
-            reconcileCompareUI();
+            return compareRequest({
+                url: compareEndpoints.clear,
+                method: 'DELETE',
+                refreshComparePage: true
+            });
         },
         buildCompareUrl: buildCompareUrl,
         reconcile: reconcileCompareUI
@@ -688,6 +786,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('a[href*="/compare-treks"], a[aria-label*="Compare"]').forEach(link => {
             // Avoid modifying internal tray compare links or card compare buttons
             if (link.id !== 'website-compare-tray-cta' && !link.classList.contains('website-compare-btn')) {
+                const linkUrl = new URL(link.href, window.location.origin);
+                if (linkUrl.searchParams.has('treks[]') || linkUrl.searchParams.has('treks') || linkUrl.searchParams.has('clear')) {
+                    return;
+                }
                 link.href = buildCompareUrl(ids);
             }
         });
@@ -700,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trayItems = document.getElementById('website-compare-tray-items');
 
         if (tray) {
-            if (count === 0) {
+            if (isComparePage() || count === 0) {
                 tray.style.display = 'none';
                 document.body.classList.remove('has-compare-tray');
             } else {
@@ -731,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (trayItems) {
                     trayItems.innerHTML = '';
                     ids.forEach(id => {
-                        const trek = trekWhitelist[id] || { name: id, duration: '' };
+                        const trek = (serverCompareState.items || []).find(item => item.id === id) || trekWhitelist[id] || { name: id, duration: '' };
                         const chip = document.createElement('div');
                         chip.className = 'website-compare-tray__chip';
                         chip.setAttribute('role', 'listitem');
@@ -772,12 +874,41 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) {
             e.preventDefault();
             const id = btn.getAttribute('data-trek-id');
-            if (WebsiteCompare.has(id)) {
+            const addOnly = btn.getAttribute('data-compare-mode') === 'add';
+            if (!addOnly && WebsiteCompare.has(id)) {
                 WebsiteCompare.remove(id);
             } else {
                 WebsiteCompare.add(id);
             }
+            return;
         }
+
+        const compareLink = e.target.closest('a.website-compare-set-link[href*="/compare-treks"], a#website-compare-page-clear[href*="/compare-treks"]');
+        if (compareLink && !compareLink.classList.contains('website-compare-btn') && compareLink.id !== 'website-compare-tray-cta') {
+            const linkUrl = new URL(compareLink.href, window.location.origin);
+            const queryTreks = linkUrl.searchParams.getAll('treks[]').concat(linkUrl.searchParams.getAll('treks'));
+            if (queryTreks.length > 0 || linkUrl.searchParams.get('clear') === '1') {
+                e.preventDefault();
+                if (linkUrl.searchParams.get('clear') === '1') {
+                    WebsiteCompare.clear();
+                } else {
+                    WebsiteCompare.setIds(queryTreks);
+                }
+            }
+        }
+    });
+
+    $(document).on('submit', 'form[action*="/compare-treks"]', function(e) {
+        const $form = $(this);
+        const values = $form.serializeArray()
+            .filter(field => field.name === 'treks[]' || field.name === 'treks')
+            .map(field => field.value)
+            .filter(Boolean);
+
+        if (values.length === 0) return;
+
+        e.preventDefault();
+        WebsiteCompare.setIds(values);
     });
 
     // Clear All button in tray
@@ -786,32 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
         WebsiteCompare.clear();
     });
 
-    // Multi-tab synchronization
-    window.addEventListener('storage', (e) => {
-        if (e.key === EATH_COMPARE_KEY) {
-            reconcileCompareUI();
-        }
-    });
-
-    // URL parameter synchronization when on compare page
-    if (window.location.pathname.includes('/compare-treks') || window.location.pathname.endsWith('/compare')) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const queryTreks = urlParams.getAll('treks[]').concat(urlParams.getAll('treks'));
-
-        if (urlParams.get('clear') === '1') {
-            writeStoredIds([]);
-        } else if (queryTreks.length > 0) {
-            // Authoritative query IDs synchronize storage
-            const validQueryIds = [];
-            for (const id of queryTreks) {
-                if (trekWhitelist[id] && !validQueryIds.includes(id)) {
-                    validQueryIds.push(id);
-                    if (validQueryIds.length === MAX_COMPARE_ITEMS) break;
-                }
-            }
-            writeStoredIds(validQueryIds);
-        }
-    }
+    fetchCompareState();
 
     // Differences Toggle on Compare Page (Phase 09)
     const diffToggle = document.getElementById('website-toggle-diffs');
@@ -837,7 +943,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Compare Page Clear Action
-    document.getElementById('website-compare-page-clear')?.addEventListener('click', () => {
+    document.getElementById('website-compare-page-clear')?.addEventListener('click', (e) => {
+        e.preventDefault();
         WebsiteCompare.clear();
     });
 

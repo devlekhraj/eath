@@ -168,26 +168,17 @@ class WebsiteCatalogRepository
 
     public static function findTrek(string $idOrSlug): ?array
     {
+        $normalizedSlug = self::normalizeTrekIdentifier($idOrSlug);
+
         $journey = Journey::query()
             ->with(['destination', 'experiences', 'travelMonths', 'itineraryDays', 'highlights', 'services', 'departures'])
-            ->where(function ($query) use ($idOrSlug) {
+            ->where(function ($query) use ($idOrSlug, $normalizedSlug) {
                 $query->where('slug', $idOrSlug);
                 if (is_numeric($idOrSlug)) {
                     $query->orWhere('id', (int) $idOrSlug);
                 }
-                $slugFromId = match ($idOrSlug) {
-                    't-ebc' => 'everest-base-camp',
-                    't-abc' => 'annapurna-base-camp',
-                    't-langtang' => 'langtang-valley',
-                    't-mardi', 'mardi-himal-ridge' => 'mardi-himal',
-                    't-gokyo', 'gokyo-ri-lakes' => 'gokyo-lakes',
-                    't-manaslu' => 'manaslu-circuit',
-                    't-khopra' => 'khopra-ridge',
-                    't-mustang' => 'upper-mustang',
-                    default => null,
-                };
-                if ($slugFromId) {
-                    $query->orWhere('slug', $slugFromId);
+                if ($normalizedSlug !== $idOrSlug) {
+                    $query->orWhere('slug', $normalizedSlug);
                 }
             })
             ->first();
@@ -429,11 +420,15 @@ class WebsiteCatalogRepository
 
         foreach ($trekIds as $id) {
             $id = trim((string) $id);
-            if ($id === '' || in_array($id, $selectedIds, true)) {
+            if ($id === '') {
                 continue;
             }
-            if ($allTreks->has($id)) {
-                $selectedIds[] = $id;
+            $normalizedId = self::normalizeTrekIdentifier($id);
+            if (in_array($normalizedId, $selectedIds, true)) {
+                continue;
+            }
+            if ($allTreks->has($normalizedId)) {
+                $selectedIds[] = $normalizedId;
             } else {
                 $notices[] = 'One or more unrecognized trek IDs were ignored.';
             }
@@ -446,6 +441,12 @@ class WebsiteCatalogRepository
 
         $selectedTreks = array_map(fn ($id) => $allTreks[$id], $selectedIds);
         $unselectedTreks = $allTreks->except($selectedIds)->values()->all();
+        $rowGroups = self::buildComparisonRowGroups($selectedTreks);
+        $totalRowsCount = array_sum(array_map('count', $rowGroups));
+        $differencesCount = array_sum(array_map(
+            fn ($rows) => count(array_filter($rows, fn ($row) => $row['is_different'])),
+            $rowGroups
+        ));
 
         return [
             'selected_ids' => $selectedIds,
@@ -456,7 +457,69 @@ class WebsiteCatalogRepository
             'treks' => $selectedTreks,
             'notices' => array_values(array_unique($notices)),
             'has_selection' => !empty($selectedTreks),
+            'rowGroups' => $rowGroups,
+            'totalRowsCount' => $totalRowsCount,
+            'differencesCount' => $differencesCount,
         ];
+    }
+
+    protected static function buildComparisonRowGroups(array $treks): array
+    {
+        return [
+            'Route Overview' => [
+                self::comparisonRow($treks, 'Duration', fn ($trek) => "{$trek['duration_days']} days / {$trek['duration_nights']} nights"),
+                self::comparisonRow($treks, 'Region', fn ($trek) => $trek['region']['name'] ?? 'Not specified'),
+                self::comparisonRow($treks, 'Difficulty', fn ($trek) => ucfirst((string) $trek['difficulty']), 'badge'),
+                self::comparisonRow($treks, 'Pace', fn ($trek) => $trek['pace'] ?: 'Not specified'),
+            ],
+            'Altitude & Walking' => [
+                self::comparisonRow($treks, 'Maximum Altitude', fn ($trek) => number_format((int) $trek['max_altitude_m']) . ' m'),
+                self::comparisonRow($treks, 'Maximum Walking Hours', fn ($trek) => "{$trek['walking_hours_max']} hrs/day"),
+                self::comparisonRow($treks, 'Accommodation', fn ($trek) => $trek['accommodation'] ?: 'Not specified'),
+            ],
+            'Season & Price' => [
+                self::comparisonRow($treks, 'Suitable Months', fn ($trek) => implode(', ', array_map(fn ($month) => date('M', mktime(0, 0, 0, (int) $month, 1)), $trek['suitable_months']))),
+                self::comparisonRow($treks, 'Starting Price', fn ($trek) => WebsiteMoneyFormatter::format($trek['price_minor']) . ' USD', 'price'),
+                self::comparisonRow($treks, 'Pricing Basis', fn ($trek) => $trek['pricing_basis'] ?: 'Not specified'),
+            ],
+            'Included Experience' => [
+                self::comparisonRow($treks, 'Highlights', fn ($trek) => $trek['highlights'], 'list'),
+                self::comparisonRow($treks, 'Inclusions', fn ($trek) => $trek['inclusions'], 'list'),
+                self::comparisonRow($treks, 'Exclusions', fn ($trek) => $trek['exclusions'], 'list'),
+            ],
+            'Planning Notes' => [
+                self::comparisonRow($treks, 'Logistics', fn ($trek) => $trek['logistics_note'] ?: 'Discuss route logistics with the planning team.'),
+                self::comparisonRow($treks, 'Safety', fn ($trek) => $trek['safety_note'] ?: 'Review altitude and pacing suitability before booking.'),
+            ],
+        ];
+    }
+
+    protected static function comparisonRow(array $treks, string $label, callable $valueResolver, string $renderType = 'text'): array
+    {
+        $values = array_map($valueResolver, $treks);
+        $normalizedValues = array_map(fn ($value) => is_array($value) ? array_values($value) : $value, $values);
+
+        return [
+            'label' => $label,
+            'values' => $values,
+            'render_type' => $renderType,
+            'is_different' => count(array_unique(array_map(fn ($value) => json_encode($value), $normalizedValues))) > 1,
+        ];
+    }
+
+    protected static function normalizeTrekIdentifier(string $idOrSlug): string
+    {
+        return match ($idOrSlug) {
+            't-ebc' => 'everest-base-camp',
+            't-abc' => 'annapurna-base-camp',
+            't-langtang' => 'langtang-valley',
+            't-mardi', 'mardi-himal-ridge' => 'mardi-himal',
+            't-gokyo', 'gokyo-ri-lakes' => 'gokyo-lakes',
+            't-manaslu' => 'manaslu-circuit',
+            't-khopra' => 'khopra-ridge',
+            't-mustang' => 'upper-mustang',
+            default => $idOrSlug,
+        };
     }
 
     protected static function journeyToArray(Journey $journey): array

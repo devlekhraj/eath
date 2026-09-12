@@ -42,6 +42,12 @@ Route::name('website.')->middleware([EnsureWebsiteAllowed::class])->group(functi
 
     // P10: Compare Treks
     Route::get('/compare-treks', [ComparisonController::class, 'index'])->name('compare');
+    Route::get('/compare-treks/state', [ComparisonController::class, 'state'])->name('compare.state');
+    Route::post('/compare-treks/items', [ComparisonController::class, 'store'])->name('compare.items.store');
+    Route::post('/compare-treks/items/set', [ComparisonController::class, 'set'])->name('compare.items.set');
+    Route::post('/compare-treks/items/replace', [ComparisonController::class, 'replace'])->name('compare.items.replace');
+    Route::delete('/compare-treks/items/{trekId}', [ComparisonController::class, 'destroy'])->name('compare.items.destroy');
+    Route::delete('/compare-treks/items', [ComparisonController::class, 'clear'])->name('compare.items.clear');
 
     // P11 - P14: Guided Planner
     Route::get('/plan-my-trek', [PlannerController::class, 'index'])->name('planner.start');
