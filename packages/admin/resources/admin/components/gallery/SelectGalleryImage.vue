@@ -34,10 +34,10 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import SelectGalleryExisting from './SelectGalleryExisting.vue'
 import SelectGalleryUpload from './SelectGalleryUpload.vue'
+import { getGalleryImagesApi } from '@/api/gallery.api'
 
 const props = defineProps({
   onSelect: {
@@ -120,7 +120,7 @@ const activeTabListeners = computed(() => {
 
 async function fetchImages() {
   try {
-    const resp = await http.get('/admin/galleries')
+    const resp = await getGalleryImagesApi()
     images.value = resp.data?.data ?? resp.data ?? []
   } catch (error) {
     console.error('Failed to load gallery images', error)

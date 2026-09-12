@@ -1,13 +1,13 @@
 <template>
-  <v-card class="rounded-0 elevation-0">
+  <v-card>
     <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
       <div class="d-flex align-center ga-2">
         <span class="text-uppercase font-weight-medium text-slate-800">Trip Planner Submission</span>
-        <v-chip size="small" variant="tonal" color="primary" class="rounded-0">
+        <v-chip size="small" variant="tonal" color="primary">
           {{ submission.reference_code }}
         </v-chip>
       </div>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleClose">
+      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -78,13 +78,12 @@
                   :items="statusOptions"
                   density="compact"
                   variant="outlined"
-                  class="rounded-0 flex-grow-1"
+                  class="flex-grow-1"
                   hide-details
                 />
                 <v-btn
                   color="primary"
                   variant="elevated"
-                  class="rounded-0"
                   :loading="savingStatus"
                   :disabled="currentStatus === submission.status || savingStatus"
                   @click="handleStatusUpdate"
@@ -109,7 +108,6 @@
                 size="small"
                 variant="outlined"
                 color="secondary"
-                class="rounded-0"
               >
                 <strong>{{ key }}:</strong>&nbsp;{{ typeof val === 'object' ? JSON.stringify(val) : val }}
               </v-chip>
@@ -134,7 +132,7 @@
 
     <v-divider />
     <v-card-actions class="pa-3 justify-end">
-      <v-btn variant="text" class="rounded-0" @click="handleClose">Close</v-btn>
+      <v-btn variant="text" @click="handleClose">Close</v-btn>
     </v-card-actions>
   </v-card>
 </template>

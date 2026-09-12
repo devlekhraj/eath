@@ -4,9 +4,6 @@
       <v-col cols="12" md="12" lg="8" offset-lg="2">
         <v-form v-if="destination" class="mt-4">
           <SummarnoteEditor v-model="descriptionValue" />
-          <!-- <div class="mt-4">
-             <SummarnoteViewer :value="descriptionValue" />
-          </div> -->
           <div class="text-center py-4">
             <v-btn color="primary" :loading="submitting" :disabled="submitting" @click="handleUpdate()">
               Update Description

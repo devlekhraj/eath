@@ -1,8 +1,8 @@
 <template>
-    <v-card class="rounded-0 elevation-0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-3">
             <span class="text-subtitle-1 font-weight-bold text-uppercase">{{ form.id ? 'Edit Destination' : 'Add Destination' }}</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
+            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -17,7 +17,6 @@
                             label="Destination Name"
                             :rules="[rules.required]"
                             :error-messages="serverErrors.name"
-                            class="rounded-0"
                             required
                         />
                     </v-col>
@@ -27,7 +26,6 @@
                             v-model="form.slug"
                             label="URL Slug (optional)"
                             :error-messages="serverErrors.slug"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -36,7 +34,6 @@
                             v-model="form.region_label"
                             label="Region Label (e.g. Khumbu, Annapurna)"
                             :error-messages="serverErrors.region_label"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -46,7 +43,6 @@
                             label="Sort Order"
                             type="number"
                             min="0"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -57,7 +53,6 @@
                             rows="3"
                             auto-grow
                             :error-messages="serverErrors.summary"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -67,7 +62,6 @@
                             label="Active"
                             color="primary"
                             inset
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -77,7 +71,6 @@
                             label="Featured Destination"
                             color="primary"
                             inset
-                            class="rounded-0"
                         />
                     </v-col>
                 </v-row>
@@ -86,8 +79,8 @@
 
         <v-divider />
         <v-card-actions class="justify-end pa-3">
-            <v-btn variant="text" class="rounded-0" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" variant="flat" class="px-6 rounded-0 font-weight-medium" :loading="loading" :disabled="loading" @click="submitForm">
+            <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
+            <v-btn color="primary" variant="flat" class="px-6 font-weight-medium" :loading="loading" :disabled="loading" @click="submitForm">
                 <v-icon start>mdi-check</v-icon>
                 {{ form.id ? 'Save Changes' : 'Create Destination' }}
             </v-btn>

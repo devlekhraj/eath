@@ -17,10 +17,6 @@
                         <v-textarea v-model="form.title" label="Title" placeholder="E.g. Hotel Accommodation" :rules="[rules.required]" :error="!!serverErrors.title" :error-messages="serverErrors.title" required />
                     </v-col>
 
-                    <!-- <v-col cols="12">
-                        <v-textarea label="Description" v-model="form.description" :error="!!serverErrors.description" :error-messages="serverErrors.description" />
-                    </v-col> -->
-
                     <v-col cols="6" md="6">
                         <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" :error="!!serverErrors.sort_order" :error-messages="serverErrors.sort_order" />
                     </v-col>
@@ -51,6 +47,7 @@
 <script setup>
 import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
+import { saveJourneyService, deleteJourneyService } from '@/api/journeys.api'
 
 const emit = defineEmits(['close', 'saved'])
 const props = defineProps({
@@ -104,7 +101,7 @@ function handleCancel() {
 async function handleDelete() {
     try {
         loading_delete.value = true
-        await http.delete(`/admin/journey-services/${form.id}/delete`)
+        await deleteJourneyService(form.id)
         emit('close')
     } catch (err) {
         console.error('Failed to delete:', err)
@@ -122,7 +119,7 @@ async function submitForm() {
 
     try {
         loading.value = true
-        const resp = await http.post(
+        await http.post(
             `/admin/journeys/${props.journeyId || props.item.journey_id}/services`,
             form
         )

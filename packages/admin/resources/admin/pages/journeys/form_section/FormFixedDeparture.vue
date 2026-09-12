@@ -1,11 +1,11 @@
 <template>
-<v-card class="rounded-0 elevation-0">
+<v-card>
 	<v-card-title class="d-flex align-center justify-space-between py-3">
 		<div>
 			<div class="text-h6 font-semibold">Fixed Departures</div>
 			<div class="text-body-2 text-slate-600">Manage fixed departure dates, capacity, status, and pricing for this journey.</div>
 		</div>
-		<v-btn color="primary" variant="flat" class="rounded-0" @click="addDeparture">
+		<v-btn color="primary" variant="flat" @click="addDeparture">
 			<v-icon start>mdi-plus</v-icon>
 			Add Departure
 		</v-btn>
@@ -37,25 +37,28 @@
 			<span>{{ item.booking_count ?? item.bookings?.length ?? 0 }}</span>
 		</template>
 		<template #item.status="{ item }">
-			<v-chip :color="getStatusColor(item.status)" size="small" label class="rounded-0 text-uppercase font-weight-medium">
+			<v-chip :color="getStatusColor(item.status)" size="small" label class="text-uppercase font-weight-medium">
 				{{ item.status || 'open' }}
 			</v-chip>
 		</template>
 		<template #item.actions="{ item }">
-			<div class="d-flex align-center justify-center">
-				<v-btn icon size="small" variant="text" color="secondary" class="rounded-0" @click="toggleExpand(item)" :title="isExpanded(item) ? 'Collapse bookings' : 'View bookings'">
-					<v-icon>{{ isExpanded(item) ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+			<div class="d-flex align-center justify-center ga-1">
+				<v-btn size="small" variant="outlined" color="secondary" @click="toggleExpand(item)" :title="isExpanded(item) ? 'Collapse bookings' : 'View bookings'">
+					<v-icon start size="14">{{ isExpanded(item) ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+					Bookings
 				</v-btn>
-				<v-btn icon size="small" variant="text" color="primary" class="rounded-0" @click="editDeparture(item)" title="Edit departure">
-					<v-icon>mdi-pencil</v-icon>
+				<v-btn size="small" variant="outlined" color="primary" @click="editDeparture(item)" title="Edit departure">
+					<v-icon start size="14">mdi-pencil</v-icon>
+					Edit
 				</v-btn>
-				<v-btn icon size="small" variant="text" color="error" class="rounded-0" @click="deleteDeparture(item)" :loading="deletingId === item.id" title="Delete departure">
-					<v-icon>mdi-delete</v-icon>
+				<v-btn size="small" variant="outlined" color="error" @click="deleteDeparture(item)" :loading="deletingId === item.id" title="Delete departure">
+					<v-icon start size="14">mdi-delete</v-icon>
+					Delete
 				</v-btn>
 			</div>
 		</template>
 		<template #no-data>
-			<v-alert type="info" variant="tonal" border="start" class="rounded-0 my-4">
+			<v-alert type="info" variant="tonal" border="start" class="my-4">
 				No departures configured yet. Click "Add Departure" above to create scheduled dates.
 			</v-alert>
 		</template>
@@ -71,10 +74,10 @@
 						<!-- Top Section: Contact & Booking Details -->
 						<v-row class="mb-4">
 							<v-col cols="12" md="6">
-								<div class="pa-4 border rounded-0 h-100 bg-white">
+								<div class="pa-4 border h-100 bg-white">
 									<div class="text-overline mb-3 text-primary font-weight-bold">Contact Information</div>
 									<div class="d-flex align-start gap-4">
-										<v-avatar color="primary" size="40" class="rounded-0 text-white font-weight-bold">
+										<v-avatar color="primary" size="40" class="text-white font-weight-bold">
 											<span>{{ (booking.user?.name || 'G').charAt(0).toUpperCase() }}</span>
 										</v-avatar>
 										<div>
@@ -93,7 +96,7 @@
 							</v-col>
 
 							<v-col cols="12" md="6">
-								<div class="pa-4 border rounded-0 h-100 bg-white">
+								<div class="pa-4 border h-100 bg-white">
 									<div class="text-overline mb-3 text-primary font-weight-bold">Logistics & Notes</div>
 									<div class="text-body-2">
 										<v-row no-gutters class="mb-2">
@@ -118,9 +121,9 @@
 						</v-row>
 
 						<!-- Bottom Section: Traveler Table -->
-						<div class="border rounded-0 pa-4 bg-white">
+						<div class="border pa-4 bg-white">
 							<div class="text-overline mb-3 text-primary font-weight-bold">Travelers ({{ booking.total_travellers }})</div>
-							<v-table density="comfortable" class="bg-transparent rounded-0">
+							<v-table density="comfortable" class="bg-transparent">
 								<thead>
 									<tr class="bg-slate-100">
 										<th class="text-left text-slate-700 uppercase tracking-wider text-caption font-weight-bold">#</th>
@@ -136,7 +139,7 @@
 										<td class="text-slate-500">{{ tIdx + 1 }}</td>
 										<td style="min-width: 180px;">{{ trav.name }}</td>
 										<td class="text-caption text-slate-600" style="min-width: 140px;">{{ trav.email }}</td>
-										<td class="text-caption text-slate-600" style="min-width: 100px;">{{ trav.phone }}</td>
+										<td class="text-caption text-slate-600">{{ trav.phone }}</td>
 										<td class="text-caption" style="min-width: 60px;">{{ trav.country }}</td>
 										<td class="text-caption font-mono text-primary" style="min-width: 120px;">{{ trav.passport || '—' }}</td>
 									</tr>
@@ -145,28 +148,26 @@
 						</div>
 					</div>
 				</div>
-				<div v-else class="pa-10 text-center bg-slate-50 border rounded-0">
+				<div v-else class="pa-10 text-center bg-slate-50 border">
 					<v-icon size="48" color="slate-400" class="mb-2">mdi-calendar-remove-outline</v-icon>
 					<div class="text-body-2 text-slate-500 uppercase tracking-wider">No Bookings Found for this Departure</div>
 				</div>
 			</td>
 		</template>
 	</v-data-table>
-	<modal-template ref="globalModal" @saved="emit('refresh')" @close="emit('refresh')" />
 </v-card>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
 import { formatHuman } from './modal/utils'
-import { deleteTrekDeparture } from '@/api/journeys.api'
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import FixedDepartureForm from './modal/FixedDepartureForm.vue'
 import EditFixedDepartureForm from './modal/EditFixedDepartureForm.vue'
 import ConfirmDeleteModal from './modal/ConfirmDeleteModal.vue'
 
 const props = defineProps({
-	travelPackage: {
+	journey: {
 		type: Object,
 		required: false,
 		default: () => ({}),
@@ -175,9 +176,9 @@ const props = defineProps({
 
 const emit = defineEmits(['refresh'])
 
-const globalModal = ref(null)
 const deletingId = ref(null)
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 
 const headers = [
 	{ title: 'Start Date', key: 'start_date' },
@@ -190,7 +191,7 @@ const headers = [
 	{ title: 'Actions', key: 'actions', sortable: false, align: 'center' },
 ]
 
-const departures = computed(() => props.travelPackage?.departures ?? [])
+const departures = computed(() => props.journey?.departures ?? [])
 const expanded = ref([])
 
 const isExpanded = (item) => expanded.value.includes(item.id)
@@ -224,13 +225,13 @@ const getStatusColor = (status) => {
 
 const openDepartureModal = (item = {}, mode = 'create') => {
 	const isEdit = mode === 'edit'
-	globalModal.value?.open({
+	openModal({
 		title: isEdit ? 'Edit Fixed Departure' : 'Add Fixed Departure',
 		component: isEdit ? EditFixedDepartureForm : FixedDepartureForm,
 		size: 'lg',
 		props: {
 			item: isEdit ? item : undefined,
-			travelPackageId: props.travelPackage?.id ?? null,
+			journeyId: props.journey?.id ?? null,
 		},
 	})
 }
@@ -239,14 +240,14 @@ const addDeparture = () => openDepartureModal({}, 'create')
 const editDeparture = (item = {}) => openDepartureModal(item, 'edit')
 
 const deleteDeparture = (item) => {
-	if (!item?.id || !props.travelPackage?.id) return
-	globalModal.value?.open({
+	if (!item?.id || !props.journey?.id) return
+	openModal({
 		title: 'Confirm Deletion',
 		component: ConfirmDeleteModal,
 		size: 'md',
 		props: {
 			item,
-			travelPackageId: props.travelPackage.id,
+			journeyId: props.journey.id,
 		},
 	})
 }

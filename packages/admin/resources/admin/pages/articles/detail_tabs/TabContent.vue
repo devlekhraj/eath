@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="text-center mt-6">
-                    <v-btn type="button" color="primary" rounded="0" :loading="isSubmitting" @click="submitContent">
+                    <v-btn type="button" color="primary" :loading="isSubmitting" @click="submitContent">
                         Save Content
                     </v-btn>
                 </div>
@@ -30,13 +30,13 @@ const props = defineProps({
     form: { type: Object, required: true },
     errors: { type: Object, required: true },
     contentError: { type: Boolean, default: false },
-    blogId: { type: [String, Number], default: null },
+    articleId: { type: [String, Number], default: null },
     submitting: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['saved'])
 
-const { form, errors, contentError, blogId, submitting } = toRefs(props)
+const { form, errors, contentError, articleId, submitting } = toRefs(props)
 const localSubmitting = ref(false)
 const isSubmitting = computed(() => submitting.value || localSubmitting.value)
 
@@ -47,8 +47,8 @@ async function submitContent() {
             content: form.value.content,
         }
 
-        const resp = blogId.value
-            ? await updateBlogApi(blogId.value, payload)
+        const resp = articleId.value
+            ? await updateBlogApi(articleId.value, payload)
             : await createBlogApi(payload)
         emit('saved', { message: resp?.message || 'Blog saved successfully' })
     } catch (error) {

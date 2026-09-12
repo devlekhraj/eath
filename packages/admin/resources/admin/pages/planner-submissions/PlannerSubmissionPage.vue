@@ -17,7 +17,6 @@
               placeholder="Search by code, traveler, email..."
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -30,7 +29,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -69,7 +67,7 @@
 
       <template #item.travelers="{ item }">
         <div>
-          <v-chip size="small" variant="tonal" color="secondary" class="rounded-0">
+          <v-chip size="small" variant="tonal" color="secondary">
             {{ item.adults }} adult{{ item.adults > 1 ? 's' : '' }}<template v-if="item.children">, {{ item.children }} child</template>
           </v-chip>
         </div>
@@ -98,7 +96,7 @@
         <div>
           <v-chip
             size="small"
-            class="rounded-0 text-capitalize"
+            class="text-capitalize"
             :color="getStatusColor(item.status)"
             variant="flat"
           >
@@ -116,37 +114,35 @@
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
           <v-btn
-            size="x-small"
-            icon
-            variant="tonal"
+            size="small"
+            variant="outlined"
             color="primary"
-            class="rounded-0"
             title="Inspect Planner Request"
             @click="handleViewDetail(item)"
           >
-            <v-icon size="15">mdi-eye</v-icon>
+            <v-icon start size="14">mdi-eye</v-icon>
+            View
           </v-btn>
           <v-btn
-            size="x-small"
-            icon
-            variant="tonal"
+            size="small"
+            variant="outlined"
             color="error"
-            class="rounded-0"
             title="Delete Request"
             @click="handleDelete(item)"
           >
-            <v-icon size="15">mdi-delete</v-icon>
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>
     </v-data-table>
-
-    <modal-template ref="globalModal" @saved="fetchSubmissions" @close="fetchSubmissions" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
 import { getPlannerSubmissionsApi } from '@/api/planner-submissions.api'
 import PlannerDetailModal from './modal/PlannerDetailModal.vue'
 import PlannerDeleteModal from './modal/PlannerDeleteModal.vue'
@@ -155,7 +151,6 @@ const loading = ref(false)
 const search = ref('')
 const selectedStatus = ref(null)
 const submissions = ref([])
-const globalModal = ref(null)
 
 const headers = [
   { title: 'SN', key: 'sn', sortable: false, width: '50px' },
@@ -167,7 +162,7 @@ const headers = [
   { title: 'Target Journey / Region', key: 'journey', sortable: false },
   { title: 'Status', key: 'status', sortable: true, width: '110px' },
   { title: 'Submitted', key: 'created_at', sortable: true, width: '120px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '90px' },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
 ]
 
 const statusFilterOptions = [
@@ -222,25 +217,29 @@ function formatDate(val) {
 }
 
 function handleViewDetail(item) {
-  globalModal.value.open({
+  openModal({
     title: `Planner Request ${item.reference_code}`,
     component: PlannerDetailModal,
     size: 'lg',
     props: {
       item,
     },
-  })
+        onSaved: fetchSubmissions,
+        onClose: fetchSubmissions,
+    })
 }
 
 function handleDelete(item) {
-  globalModal.value.open({
+  openModal({
     title: 'Delete Planner Request',
     component: PlannerDeleteModal,
     size: 'sm',
     props: {
       item,
     },
-  })
+        onSaved: fetchSubmissions,
+        onClose: fetchSubmissions,
+    })
 }
 
 async function fetchSubmissions() {

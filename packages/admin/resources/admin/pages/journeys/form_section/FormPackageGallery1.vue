@@ -15,7 +15,7 @@
                         <v-file-input prepend-icon="" v-model="selected_file" accept="image/*" @change="handleUploadImage()" prepend-inner-icon="mdi-image" label="File input"></v-file-input>
                         <div>
                             <v-row>
-                                <v-col cols="6" md="4" v-for="(image, index) in travelPackage.images" :key="index">
+                                <v-col cols="6" md="4" v-for="(image, index) in journey.images" :key="index">
                                     <div class="position-relative">
                                         <img :src="image.url" alt="Image" style="width: 100%; object-fit: contain;">
 
@@ -37,22 +37,23 @@
             </v-card-text>
         </v-card>
         <!-- Modal -->
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 <script setup>
 import http from '@/http.config'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh', 'close'])
 
 
+const { open: openModal } = useGlobalModal()
+
 const { showSuccess, showError } = useSnackbar()
 const selected_file = ref(null);
-const globalModal = ref(null);
 
 const props = defineProps({
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
@@ -62,13 +63,14 @@ import DeleteImage from '../modal/DeleteImage.vue'
 
 function handleDelete(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: 'Delete Item',
         component: DeleteImage,
         size: 'sm',
         props: {
             imageItem: item,
         },
+        onClose: handleClose,
     })
 }
 
@@ -82,7 +84,7 @@ function handleUploadImage() {
 
     const formData = new FormData();
 
-    formData.append('usage_id', props.travelPackage.id);
+    formData.append('usage_id', props.journey.id);
     formData.append('usage_type', 'travel_packages');
 
     formData.append('image', selected_file.value);

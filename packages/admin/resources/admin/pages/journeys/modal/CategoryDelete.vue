@@ -22,9 +22,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { deletePackageCategoryApi } from '@/api/destinations.api'
 
 const { showSuccess, showError } = useSnackbar()
 const props = defineProps({
@@ -45,7 +45,7 @@ function handleClose() {
 async function deleteCategory() {
     submitting.value = true
     try {
-        const resp = await http.delete(`/admin/package-categories/${props.item.id}/delete`)
+        const resp = await deletePackageCategoryApi(props.item.id)
         console.log(resp)
         submitting.value = false
         showSuccess(resp.message || 'success');

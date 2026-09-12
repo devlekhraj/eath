@@ -17,7 +17,6 @@
               placeholder="Search question, answer..."
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -30,7 +29,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -43,13 +41,12 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
 
           <v-col cols="auto" class="mt-2 mt-sm-0">
-            <v-btn color="primary" variant="elevated" class="rounded-0" @click="handleOpen()">
+            <v-btn color="primary" variant="elevated" @click="handleOpen()">
               <v-icon start>mdi-plus</v-icon> Add FAQ
             </v-btn>
           </v-col>
@@ -68,7 +65,7 @@
 
       <template #item.category="{ item }">
         <div>
-          <v-chip size="small" variant="tonal" color="primary" class="rounded-0">
+          <v-chip size="small" variant="tonal" color="primary">
             {{ item.category || 'General' }}
           </v-chip>
         </div>
@@ -77,19 +74,19 @@
       <template #item.scope="{ item }">
         <div>
           <template v-if="item.journey">
-            <v-chip size="small" variant="outlined" color="secondary" class="rounded-0">
+            <v-chip size="small" variant="outlined" color="secondary">
               <v-icon start size="12">mdi-hiking</v-icon>
               {{ item.journey.name }}
             </v-chip>
           </template>
           <template v-else-if="item.destination">
-            <v-chip size="small" variant="outlined" color="info" class="rounded-0">
+            <v-chip size="small" variant="outlined" color="info">
               <v-icon start size="12">mdi-map-marker</v-icon>
               {{ item.destination.name }}
             </v-chip>
           </template>
           <template v-else-if="item.experience">
-            <v-chip size="small" variant="outlined" color="warning" class="rounded-0">
+            <v-chip size="small" variant="outlined" color="warning">
               <v-icon start size="12">mdi-compass</v-icon>
               {{ item.experience.name }}
             </v-chip>
@@ -108,7 +105,6 @@
         <div>
           <v-chip
             size="small"
-            class="rounded-0"
             :color="item.is_active ? 'success' : 'default'"
             variant="flat"
             style="cursor: pointer;"
@@ -122,26 +118,29 @@
 
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
-          <v-btn size="x-small" icon variant="tonal" color="warning" class="rounded-0" @click="handleOpen(item)">
-            <v-icon size="15">mdi-pencil</v-icon>
+          <v-btn size="small" variant="outlined" color="primary" @click="handleOpen(item)" title="Edit FAQ">
+            <v-icon start size="14">mdi-pencil</v-icon>
+            Edit
           </v-btn>
-          <v-btn size="x-small" icon variant="tonal" color="error" class="rounded-0" @click="handleDelete(item)">
-            <v-icon size="15">mdi-delete</v-icon>
+          <v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete FAQ">
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>
     </v-data-table>
-
-    <modal-template ref="globalModal" @saved="fetchFaqs" @close="fetchFaqs" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import { getFaqsApi, toggleFaqActiveApi, getFaqCategoriesApi } from '@/api/faqs.api'
 import FaqForm from './modal/FaqForm.vue'
 import FaqDelete from './modal/FaqDelete.vue'
+
+const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -152,11 +151,10 @@ const headers = [
   { title: 'Association / Scope', key: 'scope', sortable: false },
   { title: 'Order', key: 'sort_order', sortable: true, width: '80px' },
   { title: 'Status', key: 'is_active', sortable: false, width: '100px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '100px' },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
 ]
 
 const faqs = ref([])
-const globalModal = ref(null)
 const search = ref('')
 const selectedCategory = ref(null)
 const selectedScope = ref(null)
@@ -206,7 +204,7 @@ const filteredItems = computed(() => {
 })
 
 function handleOpen(item = null) {
-  globalModal.value.open({
+  openModal({
     title: item?.id ? 'Edit FAQ' : 'Add FAQ',
     component: FaqForm,
     size: 'lg',
@@ -217,14 +215,16 @@ function handleOpen(item = null) {
 }
 
 function handleDelete(item = {}) {
-  globalModal.value.open({
+  openModal({
     title: 'Delete FAQ',
     component: FaqDelete,
     size: 'sm',
     props: {
       item,
     },
-  })
+        onSaved: fetchFaqs,
+        onClose: fetchFaqs,
+    })
 }
 
 async function fetchFaqs() {

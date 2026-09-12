@@ -18,14 +18,13 @@
               density="compact"
               variant="outlined"
               hide-details
-              rounded="0"
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by title, traveler, country..."
             />
           </v-col>
 
           <v-col cols="auto">
-            <v-btn color="primary" rounded="0" @click="handleOpen()">
+            <v-btn color="primary" @click="handleOpen()">
               <v-icon start>mdi-plus</v-icon> Add Traveler Story
             </v-btn>
           </v-col>
@@ -33,11 +32,11 @@
       </template>
 
       <template #item.sn="{ index }">
-        <div style="min-width: max-content;">{{ index + 1 }}</div>
+        <div>{{ index + 1 }}</div>
       </template>
 
       <template #item.title="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <a href="#" class="text-primary text-decoration-underline" @click.prevent="handleOpen(item)">
             {{ item.title }}
           </a>
@@ -45,36 +44,35 @@
       </template>
 
       <template #item.traveler_name="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span>{{ item.traveler_name || '—' }}</span>
         </div>
       </template>
 
       <template #item.traveler_country="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span>{{ item.traveler_country || '—' }}</span>
         </div>
       </template>
 
       <template #item.traveled_on="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span>{{ item.traveled_on || '—' }}</span>
         </div>
       </template>
 
       <template #item.journey="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span v-if="item.journey">{{ item.journey.title || item.journey.slug }}</span>
           <span v-else class="text-medium-emphasis">—</span>
         </div>
       </template>
 
       <template #item.status="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <v-chip
             size="small"
             label
-            rounded="0"
             class="text-capitalize"
             :color="item.is_active ? 'success' : 'warning'"
           >
@@ -87,12 +85,14 @@
       </template>
 
       <template #item.actions="{ item }">
-        <div class="d-flex align-center justify-center ga-2" style="min-width: max-content;">
-          <v-btn size="x-small" color="primary" icon variant="tonal" rounded="0" @click="handleOpen(item)">
-            <v-icon size="16">mdi-pencil</v-icon>
+        <div class="d-flex align-center justify-center ga-1">
+          <v-btn size="small" color="primary" variant="outlined" @click="handleOpen(item)" title="Edit story">
+            <v-icon start size="14">mdi-pencil</v-icon>
+            Edit
           </v-btn>
-          <v-btn size="x-small" color="error" icon variant="tonal" rounded="0" @click="handleDelete(item)">
-            <v-icon size="16">mdi-delete</v-icon>
+          <v-btn size="small" color="error" variant="outlined" @click="handleDelete(item)" title="Delete story">
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>
@@ -103,12 +103,10 @@
 <script setup>
 import http from '@/http.config'
 import { ref, onMounted, computed } from 'vue'
-import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import TravelerStoryForm from './modal/TravelerStoryForm.vue'
 import TravelerStoryDelete from './modal/TravelerStoryDelete.vue'
 
-const { showSuccess, showError } = useSnackbar()
 
 const headers = [
   { title: 'SN', key: 'sn', sortable: false, width: '60px' },

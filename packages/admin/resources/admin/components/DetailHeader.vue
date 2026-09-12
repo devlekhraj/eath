@@ -1,5 +1,5 @@
 <template>
-	<v-card class="elevation-0">
+	<v-card>
 		<div class="pa-4 d-flex align-center">
 			<div class="mr-4 detail-header-thumb">
 				<v-img :src="imageUrl" cover class="rounded" style="width: 100%; height: 100%;" />

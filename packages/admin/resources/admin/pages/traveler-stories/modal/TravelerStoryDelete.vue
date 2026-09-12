@@ -1,5 +1,5 @@
 <template>
-    <v-card rounded="0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
             <span class="text-uppercase font-weight-medium text-slate-800">Confirm Delete</span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
@@ -13,8 +13,8 @@
         </v-card-text>
         <v-divider />
         <v-card-actions class="pa-3 justify-end">
-            <v-btn variant="text" rounded="0" @click="handleClose">Cancel</v-btn>
-            <v-btn color="error" rounded="0" :loading="submitting" @click="deleteStory">Delete</v-btn>
+            <v-btn variant="text" @click="handleClose">Cancel</v-btn>
+            <v-btn color="error" :loading="submitting" @click="deleteStory">Delete</v-btn>
         </v-card-actions>
     </v-card>
 </template>

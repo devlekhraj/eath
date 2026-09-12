@@ -1,13 +1,13 @@
 <template>
-  <v-card class="rounded-0 elevation-0">
+  <v-card>
     <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
       <div class="d-flex align-center ga-2">
         <span class="text-uppercase font-weight-medium text-slate-800">Inquiry Details</span>
-        <v-chip size="small" variant="tonal" color="primary" class="rounded-0">
+        <v-chip size="small" variant="tonal" color="primary">
           {{ inquiry.reference_code }}
         </v-chip>
       </div>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleClose">
+      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -42,7 +42,7 @@
             </div>
             <div class="mb-2">
               <strong>Inquiry Type:</strong>
-              <v-chip size="small" variant="flat" color="secondary" class="rounded-0 text-capitalize ml-2">
+              <v-chip size="small" variant="flat" color="secondary" class="text-capitalize ml-2">
                 {{ inquiry.inquiry_type }}
               </v-chip>
             </div>
@@ -65,13 +65,12 @@
                   :items="statusOptions"
                   density="compact"
                   variant="outlined"
-                  class="rounded-0 flex-grow-1"
+                  class="flex-grow-1"
                   hide-details
                 />
                 <v-btn
                   color="primary"
                   variant="elevated"
-                  class="rounded-0"
                   :loading="savingStatus"
                   :disabled="currentStatus === inquiry.status || savingStatus"
                   @click="handleStatusUpdate"
@@ -107,7 +106,7 @@
 
     <v-divider />
     <v-card-actions class="pa-3 justify-end">
-      <v-btn variant="text" class="rounded-0" @click="handleClose">Close</v-btn>
+      <v-btn variant="text" @click="handleClose">Close</v-btn>
     </v-card-actions>
   </v-card>
 </template>

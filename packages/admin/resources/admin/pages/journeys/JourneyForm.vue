@@ -5,13 +5,13 @@
 
 				<DetailHeader
 					v-if="formReady"
-					:title="packageTitle"
-					:url="packageUrl"
-					:image-url="packageImageUrl"
+					:title="journeyTitle"
+					:url="journeyUrl"
+					:image-url="journeyImageUrl"
 				>
 					<template #meta>
 						<v-chip size="small" color="primary" variant="tonal" label>
-							{{ travelPackage?.destination?.name || '-' }}
+							{{ journey?.destination?.name || '-' }}
 						</v-chip>
 					</template>
 				</DetailHeader>
@@ -32,8 +32,8 @@
 							<component
 								:is="activeComponent"
 								:key="activeTab"
-								:travelPackage="travelPackage"
-								@refresh="fetchPackage"
+								:journey="journey"
+								@refresh="fetchJourney"
 							/>
 						</KeepAlive>
 					</v-card-text>
@@ -45,7 +45,6 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { computed, reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import DetailHeader from '@/components/DetailHeader.vue'
@@ -56,16 +55,16 @@ import FormPackageItinery from './form_section/FormPackageItinery.vue'
 import FormPackageInclude from './form_section/FormInclude.vue'
 import FormHighlights from './form_section/FormHighlights.vue'
 import FormPackageGallery from './form_section/FormPackageGallery.vue'
-// import FormPackageBanner from './form_section/FormPackageBanner.vue'
 import FormPricing from './form_section/FormPricing.vue'
 import FormFixedDeparture from './form_section/FormFixedDeparture.vue'
+import { getJourney } from '@/api/journeys.api'
 
-// Get package ID from route
+// Get journey ID from route
 const route = useRoute()
-const packageId = route.query.id
+const journeyId = route.query.id
 
 // Reactive state
-const travelPackage = reactive({})
+const journey = reactive({})
 const formReady = ref(false)
 const activeTab = ref('overview')
 const tabs = [
@@ -91,28 +90,28 @@ const tabComponents = {
 }
 const activeComponent = computed(() => tabComponents[activeTab.value] || null)
 const publicBaseUrl = window?.location?.origin ?? ''
-const packageTitle = computed(() => travelPackage?.name || '')
-const packageUrl = computed(() => {
-	if (!travelPackage?.slug) return ''
-	return `${publicBaseUrl}/journeys/${travelPackage.slug}`
+const journeyTitle = computed(() => journey?.name || '')
+const journeyUrl = computed(() => {
+	if (!journey?.slug) return ''
+	return `${publicBaseUrl}/journeys/${journey.slug}`
 })
-const packageImageUrl = computed(() =>
-	travelPackage?.thumb
-	|| travelPackage?.cover_image
-	|| travelPackage?.featured_image
-	|| travelPackage?.galleries?.[0]?.url
-	|| travelPackage?.images?.[0]?.url
+const journeyImageUrl = computed(() =>
+	journey?.thumb
+	|| journey?.cover_image
+	|| journey?.featured_image
+	|| journey?.galleries?.[0]?.url
+	|| journey?.images?.[0]?.url
 	|| ''
 )
 
-// Fetch single travel package
-async function fetchPackage() {
+// Fetch single journey
+async function fetchJourney() {
 	try {
-		const { data } = await http.get(`/admin/journeys/${packageId}`)
-		Object.assign(travelPackage, data)
+		const { data } = await getJourney(journeyId)
+		Object.assign(journey, data)
 		formReady.value = true
 	} catch (err) {
-		console.error('Failed to fetch package:', err)
+		console.error('Failed to fetch journey:', err)
 		formReady.value = false
 	}
 }
@@ -120,6 +119,6 @@ async function fetchPackage() {
 
 // Fetch on load
 onMounted(() => {
-	if (packageId) fetchPackage()
+	if (journeyId) fetchJourney()
 })
 </script>

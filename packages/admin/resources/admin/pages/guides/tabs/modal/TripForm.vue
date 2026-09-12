@@ -51,8 +51,8 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
+import { saveGuideTripApi, getTravelPackagesListApi } from '@/api/guides.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -103,7 +103,7 @@ onMounted(async () => {
 })
 async function fetchData(){
     try {
-        const resp = await http.get('/admin/travel-packages') // Adjust your API endpoint here
+        const resp = await getTravelPackagesListApi() // Adjust your API endpoint here
         travelPackages.value = resp.data || []
     } catch (error) {
         showError('Failed to load travel packages')
@@ -131,7 +131,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await http.post(`admin/guides/${props.guide.id}/trip`, form)
+        const resp = await saveGuideTripApi(props.guide.id, form)
         showSuccess(resp.message || 'Trip added successfully')
         emit('saved')
         emit('close')

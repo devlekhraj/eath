@@ -1,5 +1,5 @@
 <template>
-    <v-card class="rounded-0 elevation-0">
+    <v-card>
         <v-data-table
             :headers="headers"
             :items="filteredItems"
@@ -18,12 +18,11 @@
                             prepend-inner-icon="mdi-magnify"
                             density="compact"
                             hide-details
-                            class="rounded-0"
                         />
                     </v-col>
 
                     <v-col cols="auto">
-                        <v-btn color="primary" variant="flat" class="rounded-0" @click="handleOpen()">
+                        <v-btn color="primary" variant="flat" @click="handleOpen()">
                             <v-icon start>mdi-plus</v-icon> Add Experience
                         </v-btn>
                     </v-col>
@@ -64,7 +63,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="rounded-0 text-uppercase font-weight-medium"
+                    class="text-uppercase font-weight-medium"
                     :color="item.is_featured ? 'primary' : 'secondary'"
                 >
                     {{ item.is_featured ? 'Featured' : 'Standard' }}
@@ -75,7 +74,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="rounded-0 text-uppercase font-weight-medium"
+                    class="text-uppercase font-weight-medium"
                     :color="item.is_active ? 'success' : 'secondary'"
                     @click="toggleActive(item)"
                     style="cursor: pointer;"
@@ -86,23 +85,23 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center ga-1">
-                    <v-btn size="small" color="secondary" icon variant="text" class="rounded-0" @click="handleOpen(item)" title="Edit experience">
-                        <v-icon size="18">mdi-pencil</v-icon>
+                    <v-btn size="small" color="primary" variant="outlined" @click="handleOpen(item)" title="Edit experience">
+                        <v-icon start size="14">mdi-pencil</v-icon>
+                        Edit
                     </v-btn>
-                    <v-btn size="small" color="error" icon variant="text" class="rounded-0" @click="handleDelete(item)" title="Delete experience">
-                        <v-icon size="18">mdi-delete</v-icon>
+                    <v-btn size="small" color="error" variant="outlined" @click="handleDelete(item)" title="Delete experience">
+                        <v-icon start size="14">mdi-delete</v-icon>
+                        Delete
                     </v-btn>
                 </div>
             </template>
 
             <template #no-data>
-                <v-alert type="info" variant="tonal" border="start" class="rounded-0 my-4">
+                <v-alert type="info" variant="tonal" border="start" class="my-4">
                     No experiences found. Click "Add Experience" above to create tags.
                 </v-alert>
             </template>
         </v-data-table>
-
-        <modal-template ref="globalModal" @saved="fetchExperiences" @close="fetchExperiences" />
     </v-card>
 </template>
 
@@ -110,8 +109,12 @@
 import { ref, onMounted, computed } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import Form from './modal/Form.vue'
 import FormDelete from './modal/FormDelete.vue'
+import { getExperiencesApi, toggleExperienceActiveApi } from '@/api/experiences.api'
+
+const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -127,7 +130,6 @@ const headers = [
 ]
 
 const experiences = ref([])
-const globalModal = ref(null)
 const search = ref('')
 const fetching_data = ref(false)
 
@@ -142,7 +144,7 @@ const filteredItems = computed(() => {
 })
 
 function handleOpen(item = null) {
-    globalModal.value?.open({
+    openModal({
         title: item?.id ? 'Edit Experience' : 'Add Experience',
         component: Form,
         size: 'md',
@@ -153,7 +155,7 @@ function handleOpen(item = null) {
 }
 
 function handleDelete(item = {}) {
-    globalModal.value?.open({
+    openModal({
         title: 'Delete Experience',
         component: FormDelete,
         size: 'sm',
@@ -166,7 +168,7 @@ function handleDelete(item = {}) {
 async function fetchExperiences() {
     try {
         fetching_data.value = true
-        const resp = await http.get('admin/experiences')
+        const resp = await getExperiencesApi()
         experiences.value = resp.data?.data ?? resp.data ?? []
     } catch (error) {
         console.error('Failed to load experiences', error)

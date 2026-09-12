@@ -5,9 +5,7 @@
                 :items-per-page="-1" :loading="is_fetching">
                 <template #top>
                     <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
-                        <!-- <v-col cols="12" sm="6" md="4" lg="3" xl="3">
-                            <v-text-field v-model="search" label="Search" clearable prepend-inner-icon="mdi-magnify" placeholder="Search" />
-                        </v-col> -->
+                        
 
                         <v-col cols="auto">
                             <v-btn color="primary" @click="openForm()"> <v-icon>mdi-plus</v-icon>
@@ -16,7 +14,7 @@
                     </v-row>
                 </template>
                 <template #item.name="{ item }">
-                    <div style="min-width: max-content;">
+                    <div>
                         <a href="#" class="text-primary text-decoration-underline" @click.prevent="openForm(item)">
                             {{ item.name }}
                         </a>
@@ -24,13 +22,13 @@
                 </template>
 
                 <template #item.code="{ item }">
-                    <div style="min-width: max-content;">
+                    <div>
                         <span>{{ item.code }}</span>
                     </div>
                 </template>
 
                 <template #item.value="{ item }">
-                    <div style="min-width: max-content; max-width: 500px;">
+                    <div style="max-width: 500px;">
                         <div v-if="item.type == 'image'" class="d-flex align-center">
                             <v-img :src="item.value" height="40" width="40" class="rounded mr-2 flex-shrink-0" />
                             <span class="text-caption text-truncate">{{ item.value }}</span>
@@ -42,25 +40,27 @@
                 </template>
 
                 <template #item.actions="{ item }">
-                    <div class="d-flex align-center ga-2" style="min-width: max-content;">
-                        <v-btn icon size="x-small" color="primary" variant="tonal" @click="openForm(item)">
-                            <v-icon size="16">mdi-pencil</v-icon>
+                    <div class="d-flex align-center justify-center ga-1">
+                        <v-btn size="small" color="primary" variant="outlined" @click="openForm(item)" title="Edit setting">
+                            <v-icon start size="14">mdi-pencil</v-icon>
+                            Edit
                         </v-btn>
-                        <v-btn icon size="x-small" color="error" variant="tonal" @click="deleteItem(item)">
-                            <v-icon size="16">mdi-delete</v-icon>
+                        <v-btn size="small" color="error" variant="outlined" @click="deleteItem(item)" title="Delete setting">
+                            <v-icon start size="14">mdi-delete</v-icon>
+                            Delete
                         </v-btn>
                     </div>
                 </template>
             </v-data-table>
         </div>
-        <modal-template ref="globalModal" @close="fetchData"></modal-template>
     </div>
 </template>
 
 <script setup>
 import http from '@/http.config'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
 import { ref, onMounted } from 'vue'
-const globalModal = ref(null)
 const data_list = ref([])
 const is_fetching = ref(false)
 
@@ -76,28 +76,31 @@ const headers = [
 
 import SettingForm from './modal/SettingForm.vue';
 import SettingDelete from './modal/SettingDelete.vue';
+import { getSettingsApi } from '@/api/settings.api'
 
 
 function openForm(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Item' : 'Add New Item',
         component: SettingForm,
         size: 'md',
         props: {
             item,
         },
+        onClose: fetchData,
     })
 }
 function deleteItem(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: 'Delete ' + item.name,
         component: SettingDelete,
         size: 'sm',
         props: {
             item,
         },
+        onClose: fetchData,
     })
 }
 async function fetchData() {

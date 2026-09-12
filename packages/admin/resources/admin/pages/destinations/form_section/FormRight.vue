@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="elevation-0">
+        <v-card>
             <v-card-title class="d-flex align-center justify-space-between py-0">
                 <h2>Itineraries</h2>
                 <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()">
@@ -34,7 +34,7 @@
         <div v-if="travelPackageId">
             <!-- Included Items -->
             <div class="mt-4">
-                <v-card class="elevation-0">
+                <v-card>
                     <v-card-title class="d-flex align-center justify-space-between py-0">
                         <h2>Included Items</h2>
                         <v-btn color="primary" size="small" icon @click="editItem({}, false)">
@@ -74,7 +74,7 @@
 
             <!-- Excluded Items -->
             <div class="mt-4">
-                <v-card class="elevation-0">
+                <v-card>
                     <v-card-title class="d-flex align-center justify-space-between py-0">
                         <h2 class="font-medium">Excluded Items</h2>
                         <v-btn color="primary" size="small" icon @click="editItem({}, true)">
@@ -113,13 +113,14 @@
             </div>
 
             <!-- Modal -->
-            <modal-template ref="globalModal" @saved="handleSaved" @close="handleClose"></modal-template>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
 import ItineraryForm from '../modal/ItineraryForm.vue'
 import IncludeExcludeForm from '../modal/IncludeExcludeForm.vue'
 
@@ -136,10 +137,9 @@ const props = defineProps({
     },
 })
 
-const globalModal = ref(null)
 
 function handleOpen(item = {}) {
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Category' : 'Add New Category',
         component: ItineraryForm,
         size: 'lg',
@@ -147,11 +147,13 @@ function handleOpen(item = {}) {
             item,
             travelPackageId: props.travelPackageId,
         },
+        onSaved: handleSaved,
+        onClose: handleClose,
     })
 }
 
 function editItem(item, is_excluded) {
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Item' : 'Add Item',
         component: IncludeExcludeForm,
         size: 'lg',
@@ -160,6 +162,8 @@ function editItem(item, is_excluded) {
             isExcluded: is_excluded,
             travelPackageId: props.travelPackageId,
         },
+        onSaved: handleSaved,
+        onClose: handleClose,
     })
 }
 

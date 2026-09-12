@@ -18,14 +18,13 @@
               density="compact"
               variant="outlined"
               hide-details
-              rounded="0"
               prepend-inner-icon="mdi-magnify"
               placeholder="Search category name..."
             />
           </v-col>
 
           <v-col cols="auto">
-            <v-btn color="primary" rounded="0" @click="handleOpen()">
+            <v-btn color="primary" @click="handleOpen()">
               <v-icon start>mdi-plus</v-icon> Add Category
             </v-btn>
           </v-col>
@@ -33,11 +32,11 @@
       </template>
 
       <template #item.sn="{ index }">
-        <div style="min-width: max-content;">{{ index + 1 }}</div>
+        <div>{{ index + 1 }}</div>
       </template>
 
       <template #item.name="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <a href="#" class="text-primary text-decoration-underline" @click.prevent="handleOpen(item)">
             {{ item.name }}
           </a>
@@ -45,43 +44,44 @@
       </template>
 
       <template #item.slug="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span class="text-caption text-medium-emphasis">/articles/category/{{ item.slug }}</span>
         </div>
       </template>
 
       <template #item.articles_count="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span>{{ item.articles_count ?? 0 }}</span>
         </div>
       </template>
 
       <template #item.sort_order="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span>{{ item.sort_order ?? 0 }}</span>
         </div>
       </template>
 
       <template #item.is_active="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <v-switch
             v-model="item.is_active"
             density="compact"
             color="success"
             hide-details
-            rounded="0"
             @change="toggleActive(item)"
           />
         </div>
       </template>
 
       <template #item.actions="{ item }">
-        <div class="d-flex align-center justify-center ga-2" style="min-width: max-content;">
-          <v-btn size="x-small" color="primary" icon variant="tonal" rounded="0" @click="handleOpen(item)">
-            <v-icon size="16">mdi-pencil</v-icon>
+        <div class="d-flex align-center justify-center ga-1">
+          <v-btn size="small" color="primary" variant="outlined" @click="handleOpen(item)" title="Edit category">
+            <v-icon start size="14">mdi-pencil</v-icon>
+            Edit
           </v-btn>
-          <v-btn size="x-small" color="error" icon variant="tonal" rounded="0" @click="handleDelete(item)">
-            <v-icon size="16">mdi-delete</v-icon>
+          <v-btn size="small" color="error" variant="outlined" @click="handleDelete(item)" title="Delete category">
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>

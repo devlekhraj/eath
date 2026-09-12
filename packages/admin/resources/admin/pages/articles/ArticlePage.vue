@@ -18,14 +18,13 @@
                             density="compact"
                             variant="outlined"
                             hide-details
-                            rounded="0"
                             prepend-inner-icon="mdi-magnify"
                             placeholder="Search by title..."
                         />
                     </v-col>
 
                     <v-col cols="auto">
-                        <v-btn color="primary" rounded="0" @click="addBlog()">
+                        <v-btn color="primary" @click="addArticle()">
                             <v-icon start>mdi-plus</v-icon> Add Article
                         </v-btn>
                     </v-col>
@@ -33,13 +32,13 @@
             </template>
 
             <template #item.sn="{ index }">
-                <div style="min-width: max-content;">{{ index + 1 }}</div>
+                <div>{{ index + 1 }}</div>
             </template>
 
             <template #item.title="{ item }">
-                <div class="d-flex align-center ga-3" style="min-width: max-content;">
+                <div class="d-flex align-center ga-3">
                     <div v-if="item.banner_url" style="height: 36px; width: 36px;" class="overflow-hidden flex-shrink-0">
-                        <v-img :src="item.banner_url" height="36" width="36" cover rounded="0" />
+                        <v-img :src="item.banner_url" height="36" width="36" cover />
                     </div>
                     <router-link :to="{ name: 'adminArticleDetailPage', params: { id: item.id } }" class="text-primary text-decoration-underline text-capitalize">
                         {{ item.title }}
@@ -48,28 +47,27 @@
             </template>
 
             <template #item.category="{ item }">
-                <div v-if="item?.category?.name" class="d-flex align-center ga-2" style="min-width: max-content;">
+                <div v-if="item?.category?.name" class="d-flex align-center ga-2">
                     <span class="d-inline-block flex-shrink-0 square-indicator" :style="squareStyle(item.category)"></span>
                     <span class="text-capitalize">{{ item.category.name }}</span>
                 </div>
-                <div v-else class="d-flex align-center ga-2 text-grey" style="min-width: max-content;">
+                <div v-else class="d-flex align-center ga-2 text-grey">
                     <span class="d-inline-block flex-shrink-0 square-indicator" :style="squareStyle(null)"></span>
                     <span>Uncategorized</span>
                 </div>
             </template>
 
             <template #item.author="{ item }">
-                <div style="min-width: max-content;">
+                <div>
                     <span>{{ item.author_name || item.author || '—' }}</span>
                 </div>
             </template>
 
             <template #item.status="{ item }">
-                <div style="min-width: max-content;">
+                <div>
                     <v-chip
                         size="small"
                         label
-                        rounded="0"
                         class="text-capitalize"
                         :color="item.is_active || item.status ? 'success' : 'warning'"
                     >
@@ -82,29 +80,31 @@
             </template>
 
             <template #item.actions="{ item }">
-                <div class="d-flex align-center justify-center ga-2" style="min-width: max-content;">
-                    <v-btn variant="tonal" icon size="x-small" color="primary" rounded="0" :to="{ name: 'adminArticleDetailPage', params: { id: item.id } }">
-                        <v-icon size="16">mdi-eye</v-icon>
+                <div class="d-flex align-center justify-center ga-1">
+                    <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminArticleDetailPage', params: { id: item.id } }" title="View article">
+                        <v-icon start size="14">mdi-eye</v-icon>
+                        View
                     </v-btn>
-                    <v-btn variant="tonal" icon size="x-small" color="error" rounded="0" @click="deleteItem(item)">
-                        <v-icon size="16">mdi-delete</v-icon>
+                    <v-btn size="small" color="error" variant="outlined" @click="deleteItem(item)" title="Delete article">
+                        <v-icon start size="14">mdi-delete</v-icon>
+                        Delete
                     </v-btn>
                 </div>
             </template>
         </v-data-table>
-        <modal-template ref="globalModal" @close="fetchBlogs"></modal-template>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import http from '@/http.config'
 import { dotStyle } from '@/utils/utils'
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import ArticleAdd from './modal/ArticleAdd.vue'
 import ArticleDelete from './modal/ArticleDelete.vue'
+import { getArticlesApi } from '@/api/articles.api'
 
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 
 const headers = [
     { title: 'SN', key: 'sn', sortable: false, width: '60px' },
@@ -115,15 +115,14 @@ const headers = [
     { title: 'Actions', key: 'actions', sortable: false, align: 'center' },
 ]
 
-const blogList = ref([])
+const articles = ref([])
 const search = ref('')
-const globalModal = ref(null)
 const fetching_data = ref(false)
 
 const filteredItems = computed(() => {
-    if (!search.value) return blogList.value
+    if (!search.value) return articles.value
     const term = search.value.toLowerCase()
-    return blogList.value.filter(item =>
+    return articles.value.filter(item =>
         item.title?.toLowerCase().includes(term) ||
         item.category?.name?.toLowerCase().includes(term) ||
         item.author_name?.toLowerCase().includes(term)
@@ -138,23 +137,24 @@ function squareStyle(category) {
     }
 }
 
-function addBlog(item = {}) {
-    globalModal.value.open({
+function addArticle(item = {}) {
+    openModal({
         title: 'Add New Article',
         component: ArticleAdd,
         size: 'md',
         props: {
             item,
         },
+        onClose: fetchArticles,
     })
 }
 
-const fetchBlogs = async () => {
+const fetchArticles = async () => {
     try {
         fetching_data.value = true
-        const resp = await http.get('admin/articles')
+        const resp = await getArticlesApi()
         fetching_data.value = false
-        blogList.value = resp.data || []
+        articles.value = resp.data || []
     } catch (error) {
         console.error(error)
         fetching_data.value = false
@@ -162,45 +162,18 @@ const fetchBlogs = async () => {
 }
 
 const deleteItem = (item) => {
-    globalModal.value.open({
+    openModal({
         title: 'Delete ' + item.title,
         component: ArticleDelete,
         size: 'sm',
         props: {
             item,
         },
+        onClose: fetchArticles,
     })
 }
 
-async function toggleActive(item) {
-    try {
-        const resp = await http.patch(`admin/articles/${item.id}/toggle-active`, {
-            is_active: item.is_active
-        })
-        showSuccess(resp.message || 'Updated status')
-        fetchBlogs()
-    } catch (error) {
-        showError(error?.response?.data?.message || 'Failed to update')
-        item.is_active = !item.is_active
-        console.error('Failed to update status:', error)
-    }
-}
-
-const togglePublished = async (item) => {
-    try {
-        const resp = await http.patch(`admin/articles/${item.id}/toggle-publish`, {
-            is_published: item.is_published
-        })
-        showSuccess(resp.message || 'Updated publish status')
-        fetchBlogs()
-    } catch (error) {
-        showError(error?.response?.data?.message || 'Failed to update')
-        item.is_published = !item.is_published
-        console.error('Failed to update status:', error)
-    }
-}
-
-onMounted(fetchBlogs)
+onMounted(fetchArticles)
 </script>
 
 <style scoped>

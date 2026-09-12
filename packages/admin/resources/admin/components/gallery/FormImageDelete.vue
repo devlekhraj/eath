@@ -19,6 +19,7 @@
 
 <script>
 import http from '@/http.config'
+import { deleteMediaUsageApi } from '@/api/gallery.api'
 export default {
     props: {
         imageItem: {

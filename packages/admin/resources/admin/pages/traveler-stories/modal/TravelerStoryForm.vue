@@ -1,5 +1,5 @@
 <template>
-    <v-card rounded="0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
             <span class="text-uppercase font-weight-medium text-slate-800">
                 {{ form.id ? 'Edit Traveler Story' : 'Add Traveler Story' }}
@@ -19,7 +19,6 @@
                             label="Story Title"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required]"
                             required
                             @input="onTitleInput"
@@ -32,7 +31,6 @@
                             label="URL Slug"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required, rules.slug]"
                             hint="URL slug e.g. conquering-thorong-la"
                             persistent-hint
@@ -47,7 +45,6 @@
                             prepend-inner-icon="mdi-account"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             placeholder="e.g. Sarah Jenkins"
                         />
                     </v-col>
@@ -59,7 +56,6 @@
                             prepend-inner-icon="mdi-earth"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             placeholder="e.g. United Kingdom"
                         />
                     </v-col>
@@ -71,7 +67,6 @@
                             type="date"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                         />
                     </v-col>
 
@@ -84,7 +79,6 @@
                             label="Related Journey / Trek"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             clearable
                             :loading="loadingOptions"
                         />
@@ -99,7 +93,6 @@
                             label="Destination / Region"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             clearable
                             :loading="loadingOptions"
                         />
@@ -113,7 +106,6 @@
                             auto-grow
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             hint="A captivating 1-2 sentence excerpt shown in cards and quotes"
                             persistent-hint
                         />
@@ -130,7 +122,6 @@
                             inset
                             label="Active"
                             color="success"
-                            rounded="0"
                         />
                     </v-col>
 
@@ -140,7 +131,6 @@
                             inset
                             label="Published"
                             color="primary"
-                            rounded="0"
                         />
                     </v-col>
 
@@ -150,7 +140,6 @@
                             inset
                             label="Featured Story"
                             color="accent"
-                            rounded="0"
                         />
                     </v-col>
 
@@ -160,7 +149,6 @@
                             label="Meta Title (SEO)"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                         />
                     </v-col>
 
@@ -170,7 +158,6 @@
                             label="Meta Description (SEO)"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                         />
                     </v-col>
                 </v-row>
@@ -179,8 +166,8 @@
         <v-divider />
 
         <v-card-actions class="pa-3 justify-end">
-            <v-btn variant="text" rounded="0" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" rounded="0" :loading="loading" @click="submitForm">Save Story</v-btn>
+            <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
+            <v-btn color="primary" :loading="loading" @click="submitForm">Save Story</v-btn>
         </v-card-actions>
     </v-card>
 </template>

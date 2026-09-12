@@ -17,7 +17,6 @@
 				</div>
 			</div>
 			<div v-if="uploadFile" class="mt-2 text-caption text-grey">
-				<!-- <div><strong>File:</strong> {{ formatUploadFilename?.() }}</div> -->
 				<div>
 					<strong>Size:</strong> {{ formatBytes?.(uploadInfo?.size) }}
 					<span v-if="sizeError" class="text-error"> - {{ sizeError }}</span>
@@ -117,7 +116,7 @@ const aspectRatioWarning = computed(() => {
 	return Math.abs(ratio - target) > tolerance ? 'Recommended aspect ratio is 16:9.' : ''
 })
 const route = useRoute()
-const bannerId = route.params.id || route.query.id
+const sectionId = route.params.id || route.query.id
 
 function updateMetaField(key, value) {
 	if (fieldErrors.value?.[key]) {
@@ -181,7 +180,7 @@ async function handleUpload() {
 		formData.append('caption', props.meta?.caption || '')
 		formData.append('description', props.meta?.description || '')
 
-		const resp = await http.post(`/admin/banners/${bannerId}/save-image`, formData)
+		const resp = await http.post(`/admin/banners/${sectionId}/save-image`, formData)
 		const uploaded = resp.data?.data ?? resp.data
 		console.log('Uploaded image', { uploaded })
 		if (uploaded) {

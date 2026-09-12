@@ -45,7 +45,6 @@ const credentials = reactive({
 const loading = ref(false)
 const router = useRouter()
 const formRef = ref<any>(null)
-const isFormValid = ref(false)
 
 // Server validation errors per field
 let serverErrors = reactive({

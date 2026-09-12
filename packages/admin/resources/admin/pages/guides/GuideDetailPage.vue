@@ -57,7 +57,6 @@
                     </div>
                 </v-card-text>
             </v-card>
-            <modal-template ref="globalModal" @close="fetchData"></modal-template>
         </div>
 
         <!-- Loading State -->
@@ -70,9 +69,14 @@ import { ref, onMounted, defineAsyncComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import GuideForm from './modal/GuideForm.vue'
+import { getGuideByIdApi } from '@/api/guides.api'
+import { uploadGalleryImageApi } from '@/api/gallery.api'
 
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
+const { showError } = useSnackbar()
 
 const guide = ref(null)
 const activeTab = ref('bio')
@@ -124,23 +128,23 @@ onMounted(async () => {
 })
 async function fetchData(){
     try {
-        const { data } = await http.get(`/admin/guides/${route.params.id}`)
+        const { data } = await getGuideByIdApi(route.params.id)
         guide.value = data
     } catch (error) {
         console.error('Error fetching guide details:', error)
     }
 }
-const globalModal = ref(null);
 
 function openForm(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Item' : 'Add New Item',
         component: GuideForm,
         size: 'md',
         props: {
             item,
         },
+        onClose: fetchData,
     })
 }
 

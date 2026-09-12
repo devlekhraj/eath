@@ -49,8 +49,8 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
+import { saveJourneyItineraryHighlight, deleteJourneyItineraryHighlight } from '@/api/journeys.api'
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -130,7 +130,7 @@ async function submitForm() {
 
     loading.value = true
     try {
-        const response = await http.post(`/admin/journey-itinerary-days/${props.itinerary.id}/highlights`, form)
+        const response = await saveJourneyItineraryHighlight(props.itinerary.id, form)
         showSuccess(response.message || 'Saved successfully')
         emit('saved')
         emit('close')
@@ -156,7 +156,7 @@ async function handleDelete() {
 
     loading_delete.value = true
     try {
-        const resp = await http.delete(`/admin/journey-itinerary-highlights/${form.id}/delete`)
+        const resp = await deleteJourneyItineraryHighlight(form.id)
         showSuccess(resp.message || 'Deleted successfully')
         emit('saved')
         emit('close')

@@ -21,7 +21,6 @@
                     clearable
                     variant="outlined"
                     density="comfortable"
-                    rounded="0"
                     :loading="loadingJourneys"
                 />
 
@@ -39,7 +38,7 @@
                                 <td>{{ j.title }}</td>
                                 <td class="text-caption text-medium-emphasis">{{ j.slug }}</td>
                                 <td class="text-center">
-                                    <v-btn size="x-small" icon variant="tonal" color="error" rounded="0" @click="removeJourney(j.id)">
+                                    <v-btn size="x-small" icon variant="tonal" color="error" @click="removeJourney(j.id)">
                                         <v-icon size="16">mdi-close</v-icon>
                                     </v-btn>
                                 </td>
@@ -49,7 +48,7 @@
                 </div>
 
                 <div class="text-center mt-6">
-                    <v-btn color="primary" rounded="0" :loading="saving" @click="saveJourneys">
+                    <v-btn color="primary" :loading="saving" @click="saveJourneys">
                         Save Related Journeys
                     </v-btn>
                 </div>
@@ -65,7 +64,7 @@ import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({
     form: { type: Object, required: true },
-    blogId: { type: [String, Number], default: null },
+    articleId: { type: [String, Number], default: null },
 })
 
 const emit = defineEmits(['saved'])
@@ -114,7 +113,7 @@ function removeJourney(id) {
 }
 
 async function saveJourneys() {
-    if (!props.blogId) {
+    if (!props.articleId) {
         props.form.journey_ids = [...selectedJourneyIds.value]
         showSuccess('Journeys selected for article')
         return
@@ -122,7 +121,7 @@ async function saveJourneys() {
 
     saving.value = true
     try {
-        const resp = await http.post(`/admin/articles/${props.blogId}/journeys`, {
+        const resp = await http.post(`/admin/articles/${props.articleId}/journeys`, {
             journey_ids: selectedJourneyIds.value,
         })
         showSuccess(resp.message || 'Related journeys updated')

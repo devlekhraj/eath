@@ -18,9 +18,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { deleteJourney } from '@/api/journeys.api'
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -42,7 +42,7 @@ const handleClose = () => {
 const deleteCategory = async () => {
     submitting.value = true
     try {
-        const resp = await http.delete(`/admin/journeys/${props.item.id}/delete`)
+        const resp = await deleteJourney(props.item.id)
         showSuccess(resp.message || "Deleted successfully");
         submitting.value = false
         handleClose()

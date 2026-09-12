@@ -52,8 +52,8 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
+import { saveJourneyHighlight, deleteJourneyHighlight } from '@/api/journeys.api'
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -64,7 +64,7 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
@@ -103,7 +103,7 @@ onMounted(() => {
             sort_order: props.item.sort_order || null,
         })
     } else {
-        form.journey_id = props.travelPackage.id
+        form.journey_id = props.journey.id
     }
 })
 
@@ -136,7 +136,7 @@ async function submitForm() {
 
     loading.value = true
     try {
-        const response = await http.post(`/admin/journeys/${props.travelPackage.id}/highlights`, form)
+        const response = await saveJourneyHighlight(props.journey.id, form)
         showSuccess(response.message || 'Saved successfully')
         emit('saved')
         emit('close')
@@ -161,7 +161,7 @@ async function handleDelete() {
 
     loading_delete.value = true
     try {
-        const resp = await http.delete(`/admin/journey-highlights/${props.item.id}/delete`)
+        const resp = await deleteJourneyHighlight(props.item.id)
 
         showSuccess(resp.message || 'Deleted successfully');
         emit('saved')

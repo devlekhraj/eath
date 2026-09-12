@@ -1,5 +1,5 @@
 <template>
-    <v-card rounded="0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
             <span class="text-uppercase font-weight-medium text-slate-800">
                 {{ form.id ? 'Edit Article Category' : 'Add Article Category' }}
@@ -19,7 +19,6 @@
                             label="Category Name"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required]"
                             required
                             @input="onNameInput"
@@ -32,7 +31,6 @@
                             label="URL Slug"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required, rules.slug]"
                             hint="URL slug e.g. trekking-guide, alpine-culture"
                             persistent-hint
@@ -47,7 +45,6 @@
                             type="number"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                         />
                     </v-col>
 
@@ -58,7 +55,6 @@
                                 inset
                                 label="Active Status"
                                 color="success"
-                                rounded="0"
                             />
                         </div>
                     </v-col>
@@ -73,17 +69,17 @@
         <v-divider />
 
         <v-card-actions class="pa-3 justify-end">
-            <v-btn variant="text" rounded="0" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" rounded="0" :loading="loading" @click="submitForm">Save Category</v-btn>
+            <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
+            <v-btn color="primary" :loading="loading" @click="submitForm">Save Category</v-btn>
         </v-card-actions>
     </v-card>
 </template>
 
 <script setup>
 import SummarnoteEditor from '@components/SummarnoteEditor.vue'
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { createArticleCategoryApi } from '@/api/articles.api'
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -151,7 +147,7 @@ async function submitForm() {
     loading.value = true
     try {
         form.sort_order = parseInt(form.sort_order) || 0
-        const resp = await http.post('admin/article-categories', form)
+        const resp = await createArticleCategoryApi(form)
         loading.value = false
         showSuccess(resp.message || 'Category saved successfully')
         emit('saved')

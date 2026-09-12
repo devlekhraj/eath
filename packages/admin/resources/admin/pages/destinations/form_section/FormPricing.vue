@@ -1,10 +1,6 @@
 <template>
     <div class="mb-4">
         <v-card>
-            <!-- <v-card-title class="d-flex align-center justify-space-between py-0">
-                <h2 class="font-medium">Pricing Form</h2>
-            </v-card-title>
-            <v-divider /> -->
             <v-card-text>
                 <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation class="mb-6">
                     <div>
@@ -39,10 +35,6 @@
                 </v-form>
                 <div class="mb-4">
                     <div v-if="travelPackage?.prices?.length" class="mt-4">
-                        <!-- <div>
-                            <p class="font-weight-bold">Price List</p>
-                        </div> -->
-
                         <v-table density="compact" class="mt-2">
                             <thead>
                                 <tr>
@@ -86,7 +78,6 @@
             </v-card-text>
         </v-card>
         <!-- Modal -->
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 <script setup>
@@ -94,10 +85,13 @@ import http from '@/http.config'
 import { formatAmount } from '@utils/utils'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh', 'close'])
 
 
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
+const { showError } = useSnackbar()
 
 const props = defineProps({
     travelPackage: {
@@ -113,7 +107,6 @@ const rules = {
 const formRef = ref(null)
 const loading = ref(false);
 const serverErrors = reactive({})
-const globalModal = ref(null)
 
 const form = reactive({
     title: '',
@@ -138,7 +131,7 @@ async function handleSubmit() {
 
     try {
         loading.value = true
-        const resp = await http.post(
+        await http.post(
             `/admin/travel-packages/${props.travelPackage.id}/prices`,
             form
         )
@@ -161,30 +154,31 @@ async function handleSubmit() {
     }
 }
 
-// const globalModal = ref(null)
 
 import PackagePriceDelete from '../modal/PackagePriceDelete.vue'
 import PackagePriceForm from '../modal/PackagePriceForm.vue'
 
 function deleteItem(item) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: 'Delete Item',
         component: PackagePriceDelete,
         size: 'sm',
         props: {
             item,
         },
+        onClose: handleClose,
     })
 }
 function editItem(item) {
-    globalModal.value.open({
+    openModal({
         title: 'Edit ' + item.title,
         component: PackagePriceForm,
         size: 'md',
         props: {
             item,
         },
+        onClose: handleClose,
     })
 }
 

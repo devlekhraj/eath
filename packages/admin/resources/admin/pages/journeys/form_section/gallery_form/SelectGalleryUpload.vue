@@ -17,7 +17,6 @@
 				</div>
 			</div>
 			<div v-if="uploadFile" class="mt-2 text-caption text-grey">
-				<!-- <div><strong>File:</strong> {{ formatUploadFilename?.() }}</div> -->
 				<div>
 					<strong>Size:</strong> {{ formatBytes?.(uploadInfo?.size) }}
 					<span v-if="sizeError" class="text-error"> - {{ sizeError }}</span>

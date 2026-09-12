@@ -27,9 +27,9 @@
 
 <script setup>
 import SummarnoteEditor from '@components/SummarnoteEditor.vue';
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { updateGuideBioApi } from '@/api/guides.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -76,7 +76,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await http.patch(`admin/guides/${props.item.id}/bio`, form)
+        const resp = await updateGuideBioApi(props.item.id, form)
         showSuccess(resp.message || 'Bio updated successfully')
         emit('close')
     } catch (error) {

@@ -1,14 +1,12 @@
 <template>
     <div class="mb-4">
-        <v-card class="elevation-0">
+        <v-card>
             <v-card-title class="d-flex align-center justify-space-between py-0">
-                <!-- <h2 class="font-medium">Itineraries</h2> -->
-                <v-btn color="primary" title="Add Itinerary" @click="handleOpen()">
+                                <v-btn color="primary" title="Add Itinerary" @click="handleOpen()">
                     <v-icon>mdi-plus</v-icon> Add Itinerary
                 </v-btn>
             </v-card-title>
-            <!-- <v-divider /> -->
-            <v-expansion-panels multiple elevation="1">
+                        <v-expansion-panels multiple elevation="1">
                 <v-expansion-panel v-for="(itinerary, index) in travelPackage?.itineraries" :key="index">
                     <v-expansion-panel-title>
                         {{ itinerary.title }}
@@ -27,8 +25,7 @@
                             </div>
                             <div class="mt-6">
                                 <div class="d-flex align-center">
-                                    <!-- <p class="text-primary">Highlights</p> -->
-                                    <v-btn color="primary" @click="handleHighlights(itinerary)" variant="tonal">
+                                                                        <v-btn color="primary" @click="handleHighlights(itinerary)" variant="tonal">
                                         <v-icon>mdi-plus-circle</v-icon> Add Highlight
                                     </v-btn>
                                 </div>
@@ -65,15 +62,15 @@
             </v-expansion-panels>
         </v-card>
     </div>
-    <modal-template ref="globalModal" @close="handleRefresh"></modal-template>
 </template>
 <script setup>
 import { reactive, ref, watch, onMounted } from 'vue'
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh'])
 
 
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 
 const props = defineProps({
     travelPackage: {
@@ -84,7 +81,6 @@ const props = defineProps({
 
 
 // Update form when prop travelPackage changes
-// watch(
 //     () => props.travelPackage,
 //     (newVal) => {
 //         if (newVal && Object.keys(newVal).length) {
@@ -98,8 +94,6 @@ function handleRefresh() {
     emit('refresh')
 }
 
-const submitting = ref(false)
-const globalModal = ref(null)
 
 
 import ItineraryForm from '../modal/ItineraryForm.vue'
@@ -108,7 +102,7 @@ import ItineraryHighlightsForm from '../modal/ItineraryHighlightsForm.vue'
 
 function handleOpen(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Category' : 'Add New Category',
         component: ItineraryForm,
         size: 'xl',
@@ -116,11 +110,12 @@ function handleOpen(item = {}) {
             item,
             travelPackageId: props.travelPackage.id,
         },
+        onClose: handleRefresh,
     })
 }
 function handleHighlights(itinerary = {}, item = {}) {
     console.log({ itinerary });
-    globalModal.value.open({
+    openModal({
         title: 'Highlights',
         component: ItineraryHighlightsForm,
         size: 'lg',
@@ -128,11 +123,12 @@ function handleHighlights(itinerary = {}, item = {}) {
             itinerary,
             item,
         },
+        onClose: handleRefresh,
     })
 }
 function editHighlight(itinerary = {}, item = {}) {
     console.log({ itinerary }, { item});
-    globalModal.value.open({
+    openModal({
         title: 'Highlights',
         component: ItineraryHighlightsForm,
         size: 'lg',
@@ -140,6 +136,7 @@ function editHighlight(itinerary = {}, item = {}) {
             itinerary,
             item,
         },
+        onClose: handleRefresh,
     })
 }
 

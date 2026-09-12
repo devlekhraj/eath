@@ -52,9 +52,10 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { saveSettingApi } from '@/api/settings.api'
+import { uploadGalleryImageApi } from '@/api/gallery.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -112,7 +113,7 @@ async function handleIconUpload(event) {
     formData.append('image', file)
 
     try {
-        const uploadResp = await http.post('/admin/gallery-upload', formData, {
+        const uploadResp = await uploadGalleryImageApi(formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
         form.value = uploadResp.data?.url || '';
@@ -130,7 +131,7 @@ async function handleSubmit() {
         loading.value = true
 
 
-        const resp = await http.post('admin/settings', form)
+        const resp = await saveSettingApi(form)
         showSuccess(resp.message || 'Setting saved successfully')
         emit('close')
     } catch (error) {

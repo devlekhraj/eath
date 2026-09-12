@@ -3,17 +3,17 @@
 		<v-row>
 			<v-col cols="12" lg="10" offset-lg="1">
 				<!-- Header Card -->
-				<v-card class="pa-4 mb-4" flat rounded="0">
+				<v-card class="pa-4 mb-4">
 					<div class="d-flex align-center justify-space-between">
 						<div>
 							<div class="text-h6 text-capitalize">{{ form.title || 'Untitled Page' }}</div>
 							<div class="text-caption text-medium-emphasis mt-1">/{{ form.slug || 'page-slug' }}</div>
 						</div>
 						<div class="d-flex align-center ga-2">
-							<v-chip size="small" label rounded="0" variant="tonal" color="primary" class="text-uppercase">
+							<v-chip size="small" label variant="tonal" color="primary" class="text-uppercase">
 								{{ form.type || 'standard' }}
 							</v-chip>
-							<v-chip size="small" label rounded="0" :color="form.is_published ? 'success' : 'warning'">
+							<v-chip size="small" label :color="form.is_published ? 'success' : 'warning'">
 								{{ form.is_published ? 'Published' : 'Draft' }}
 							</v-chip>
 						</div>
@@ -21,16 +21,16 @@
 				</v-card>
 
 				<!-- Tabs Card -->
-				<v-card class="pa-4" flat rounded="0">
+				<v-card class="pa-4">
 					<v-form ref="formRef" v-model="valid" @submit.prevent="submitForm" validate-on="submit">
 						<v-tabs v-model="tab" color="primary">
-							<v-tab value="overview" rounded="0">
+							<v-tab value="overview">
 								<v-icon start>mdi-information-outline</v-icon> Overview & SEO
 							</v-tab>
-							<v-tab value="content" rounded="0">
+							<v-tab value="content">
 								<v-icon start>mdi-file-document-outline</v-icon> Content
 							</v-tab>
-							<v-tab value="sections" rounded="0">
+							<v-tab value="sections">
 								<v-icon start>mdi-format-list-numbered</v-icon> Page Sections ({{ form.sections?.length || 0 }})
 							</v-tab>
 						</v-tabs>
@@ -46,7 +46,6 @@
 											label="Page Title"
 											variant="outlined"
 											density="comfortable"
-											rounded="0"
 											:rules="[rules.required]"
 										/>
 									</v-col>
@@ -57,7 +56,6 @@
 											label="URL Slug"
 											variant="outlined"
 											density="comfortable"
-											rounded="0"
 											:rules="[rules.slug]"
 											hint="URL slug without leading slash"
 											persistent-hint
@@ -71,7 +69,6 @@
 											label="Page Type"
 											variant="outlined"
 											density="comfortable"
-											rounded="0"
 										/>
 									</v-col>
 
@@ -81,7 +78,6 @@
 											inset
 											label="Active"
 											color="success"
-											rounded="0"
 										/>
 									</v-col>
 
@@ -91,7 +87,6 @@
 											inset
 											label="Published"
 											color="primary"
-											rounded="0"
 										/>
 									</v-col>
 
@@ -103,7 +98,6 @@
 											auto-grow
 											variant="outlined"
 											density="comfortable"
-											rounded="0"
 											hint="Short overview shown in previews and search results"
 											persistent-hint
 										/>
@@ -115,7 +109,6 @@
 											label="Meta Title (SEO)"
 											variant="outlined"
 											density="comfortable"
-											rounded="0"
 										/>
 									</v-col>
 
@@ -125,7 +118,6 @@
 											label="Meta Description (SEO)"
 											variant="outlined"
 											density="comfortable"
-											rounded="0"
 										/>
 									</v-col>
 								</v-row>
@@ -146,7 +138,7 @@
 										<div class="text-subtitle-1 font-weight-medium">Page Content Blocks</div>
 										<div class="text-caption text-medium-emphasis">Ordered modular sections that build up this page.</div>
 									</div>
-									<v-btn color="primary" rounded="0" @click="openSectionDialog()">
+									<v-btn color="primary" @click="openSectionDialog()">
 										<v-icon start>mdi-plus</v-icon> Add Section
 									</v-btn>
 								</div>
@@ -170,10 +162,10 @@
 												<td class="text-caption text-medium-emphasis">{{ sec.layout_key || 'standard' }}</td>
 												<td class="text-center">
 													<div class="d-flex align-center justify-center ga-2">
-														<v-btn size="x-small" icon variant="tonal" color="primary" rounded="0" @click="openSectionDialog(sec)">
+														<v-btn size="x-small" icon variant="tonal" color="primary" @click="openSectionDialog(sec)">
 															<v-icon size="16">mdi-pencil</v-icon>
 														</v-btn>
-														<v-btn size="x-small" icon variant="tonal" color="error" rounded="0" @click="deleteSection(sec)">
+														<v-btn size="x-small" icon variant="tonal" color="error" @click="deleteSection(sec)">
 															<v-icon size="16">mdi-delete</v-icon>
 														</v-btn>
 													</div>
@@ -190,7 +182,7 @@
 						</v-window>
 
 						<div class="text-center mt-6">
-							<v-btn type="submit" color="primary" rounded="0" :loading="submitting">
+							<v-btn type="submit" color="primary" :loading="submitting">
 								Save Page
 							</v-btn>
 						</div>
@@ -199,7 +191,7 @@
 
 				<!-- Section Dialog -->
 				<v-dialog v-model="sectionDialog" max-width="700" persistent>
-					<v-card rounded="0">
+					<v-card>
 						<v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
 							<span class="text-uppercase font-weight-medium text-slate-800">
 								{{ editingSection.id ? 'Edit Section' : 'Add Section' }}
@@ -217,7 +209,6 @@
 										label="Section Heading"
 										variant="outlined"
 										density="compact"
-										rounded="0"
 									/>
 								</v-col>
 								<v-col cols="12" sm="4">
@@ -227,7 +218,6 @@
 										type="number"
 										variant="outlined"
 										density="compact"
-										rounded="0"
 									/>
 								</v-col>
 								<v-col cols="12">
@@ -238,8 +228,8 @@
 						</v-card-text>
 						<v-divider />
 						<v-card-actions class="pa-3 justify-end">
-							<v-btn variant="text" rounded="0" @click="closeSectionDialog">Cancel</v-btn>
-							<v-btn color="primary" rounded="0" :loading="savingSection" @click="saveSection">Save Section</v-btn>
+							<v-btn variant="text" @click="closeSectionDialog">Cancel</v-btn>
+							<v-btn color="primary" :loading="savingSection" @click="saveSection">Save Section</v-btn>
 						</v-card-actions>
 					</v-card>
 				</v-dialog>

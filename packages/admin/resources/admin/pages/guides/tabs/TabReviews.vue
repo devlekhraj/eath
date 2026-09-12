@@ -33,17 +33,16 @@
                 </v-card>
             </v-col>
         </v-row>
-
-        <modal-template ref="globalModal" @close="handleClose" />
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import ReviewForm from './modal/ReviewForm.vue'
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['close', 'saved'])
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 const props = defineProps({
     guide: {
         type: Object,
@@ -51,16 +50,16 @@ const props = defineProps({
     },
 })
 
-const globalModal = ref(null)
 
 
 function openForm() {
-    globalModal.value.open({
+    openModal({
         component: ReviewForm,
         size: 'md',
         props: {
             item: props.guide,
         },
+        onClose: handleClose,
     })
 }
 

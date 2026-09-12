@@ -1,8 +1,8 @@
 <template>
-    <v-card class="rounded-0 elevation-0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-3">
             <span class="text-subtitle-1 font-weight-bold text-uppercase">Edit {{ form.name }} (Month #{{ form.month_number }})</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
+            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -18,7 +18,6 @@
                             label="Season"
                             :rules="[rules.required]"
                             :error-messages="serverErrors.season"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -28,7 +27,6 @@
                             label="Active (Available in Planning)"
                             color="primary"
                             inset
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -37,7 +35,6 @@
                             v-model="form.conditions_note"
                             label="Weather & Trail Conditions Note"
                             placeholder="e.g. Crisp skies, excellent mountain clarity, moderate temperatures."
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -47,7 +44,6 @@
                             label="Summary"
                             rows="2"
                             auto-grow
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -57,7 +53,6 @@
                             label="Full Description"
                             rows="4"
                             auto-grow
-                            class="rounded-0"
                         />
                     </v-col>
                 </v-row>
@@ -66,8 +61,8 @@
 
         <v-divider />
         <v-card-actions class="justify-end pa-3">
-            <v-btn variant="text" class="rounded-0" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" variant="flat" class="px-6 rounded-0 font-weight-medium" :loading="loading" :disabled="loading" @click="submitForm">
+            <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
+            <v-btn color="primary" variant="flat" class="px-6 font-weight-medium" :loading="loading" :disabled="loading" @click="submitForm">
                 <v-icon start>mdi-check</v-icon>
                 Save Changes
             </v-btn>
@@ -76,9 +71,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { updateTravelMonthApi } from '@/api/travel-months.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -139,7 +134,7 @@ async function submitForm() {
 
     try {
         loading.value = true
-        const resp = await http.patch(`admin/travel-months/${form.id}`, {
+        const resp = await updateTravelMonthApi(form.id, {
             season: form.season,
             conditions_note: form.conditions_note,
             summary: form.summary,

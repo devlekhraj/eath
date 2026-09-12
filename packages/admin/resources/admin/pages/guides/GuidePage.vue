@@ -18,11 +18,11 @@
                     </v-row>
                 </template>
                 <template #item.sn="{ index }">
-                    <div style="min-width: max-content;">{{ index + 1 }}</div>
+                    <div>{{ index + 1 }}</div>
                 </template>
 
                 <template #item.name="{ item }">
-                    <div class="d-flex align-center ga-2" style="min-width: max-content;">
+                    <div class="d-flex align-center ga-2">
                         <v-avatar size="36">
                             <v-img :src="item.avatar" contain />
                         </v-avatar>
@@ -33,7 +33,7 @@
                 </template>
 
                 <template #item.language_spoken="{ item }">
-                    <div class="d-flex align-center ga-1" style="min-width: max-content;">
+                    <div class="d-flex align-center ga-1">
                         <v-chip color="green" size="small" label class="text-capitalize" v-for="lang in item.language_spoken" :key="lang">
                             {{ lang }}
                         </v-chip>
@@ -41,7 +41,7 @@
                 </template>
 
                 <template #item.status="{ item }">
-                    <div style="min-width: max-content;">
+                    <div>
                         <v-chip :color="getStatusColor(item.status)" size="small" label class="text-capitalize">
                             {{ item.status }}
                         </v-chip>
@@ -49,39 +49,36 @@
                 </template>
 
                 <template #item.actions="{ item }">
-                    <div class="d-flex align-center ga-2" style="min-width: max-content;">
-                        <v-btn size="x-small" color="primary" icon variant="tonal" :to="{ name: 'adminGuideDetailPage', params: { id: item.id } }">
-                            <v-icon size="16">mdi-eye</v-icon>
+                    <div class="d-flex align-center justify-center ga-1">
+                        <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminGuideDetailPage', params: { id: item.id } }" title="View guide details">
+                            <v-icon start size="14">mdi-eye</v-icon>
+                            View
                         </v-btn>
-                        <v-btn size="x-small" color="warning" icon variant="tonal" @click="openForm(item)">
-                            <v-icon size="16">mdi-pencil</v-icon>
+                        <v-btn size="small" color="secondary" variant="outlined" @click="openForm(item)" title="Edit guide">
+                            <v-icon start size="14">mdi-pencil</v-icon>
+                            Edit
                         </v-btn>
-                        <v-btn size="x-small" color="error" icon variant="tonal" @click="deleteItem(item)">
-                            <v-icon size="16">mdi-delete</v-icon>
+                        <v-btn size="small" color="error" variant="outlined" @click="deleteItem(item)" title="Delete guide">
+                            <v-icon start size="14">mdi-delete</v-icon>
+                            Delete
                         </v-btn>
                     </div>
                 </template>
             </v-data-table>
         </div>
-
-        <modal-template ref="globalModal" @close="fetchGuideList"></modal-template>
     </div>
 </template>
 
 <script setup>
-import http from '@/http.config'
-import { reactive, ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
+import { ref, onMounted, computed } from 'vue'
 
 import GuideForm from './modal/GuideForm.vue'
 import GuideDeleteForm from './modal/GuideDeleteForm.vue'
-// Get package ID from route
-const route = useRoute()
-const globalModal = ref(null)
-const lookupCodes = ref([])
+import { getGuidesApi } from '@/api/guides.api'
 
 
-const formReady = ref(false)
 const loading = ref(false)
 const search = ref('');
 const guide_list = ref([])
@@ -127,7 +124,7 @@ function getStatusColor(status) {
 
 function openForm(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Item' : 'Add New Item',
         component: GuideForm,
         size: 'md',
@@ -135,17 +132,19 @@ function openForm(item = {}) {
             item,
             lookup_codes,
         },
+        onClose: fetchGuideList,
     })
 }
 function deleteItem(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: 'Delete ' + item.name,
         component: GuideDeleteForm,
         size: 'sm',
         props: {
             item,
         },
+        onClose: fetchGuideList,
     })
 }
 
@@ -154,7 +153,7 @@ function deleteItem(item = {}) {
 async function fetchGuideList() {
     try {
         loading.value = true;
-        const resp = await http.get('/admin/guides');
+        const resp = await getGuidesApi();
         loading.value = false;
         guide_list.value = resp.data;
         console.log(resp);
@@ -167,7 +166,6 @@ async function fetchGuideList() {
 
 // Fetch on load
 onMounted(() => {
-    // if (packageId) fetchGuideList()
-    fetchGuideList();
+        fetchGuideList();
 })
 </script>

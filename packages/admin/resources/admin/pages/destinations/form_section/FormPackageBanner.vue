@@ -1,12 +1,6 @@
 <template>
     <div class="mb-4">
         <v-card>
-            <!-- <v-card-title class="d-flex align-center justify-space-between py-0">
-                <div>
-                    <h5>Package Images</h5>
-                </div>
-            </v-card-title>
-            <v-divider /> -->
             <v-card-text>
                 <v-row>
                     <v-col cols="12">
@@ -32,22 +26,23 @@
         </v-card>
 
         <!-- Modal -->
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import http from '@/http.config'
 
 const emit = defineEmits(['refresh', 'close'])
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
+const { showSuccess } = useSnackbar()
 
 const selected_file = ref(null)
 const imageError = ref('') // For validation error message
 
-const globalModal = ref(null)
 
 const props = defineProps({
     travelPackage: {
@@ -59,13 +54,14 @@ const props = defineProps({
 import DeleteImage from '../modal/DeleteImage.vue'
 
 function handleDelete(item = {}) {
-    globalModal.value.open({
+    openModal({
         title: 'Delete Item',
         component: DeleteImage,
         size: 'sm',
         props: {
             imageItem: item,
         },
+        onClose: handleClose,
     })
 }
 

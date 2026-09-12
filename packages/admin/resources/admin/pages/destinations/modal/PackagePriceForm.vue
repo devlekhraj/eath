@@ -129,7 +129,7 @@ async function submitForm() {
 
     try {
         loading.value = true
-        const resp = await http.post(
+        await http.post(
             `/admin/travel-packages/${props.item.travel_package_id}/prices`,
             form
         )

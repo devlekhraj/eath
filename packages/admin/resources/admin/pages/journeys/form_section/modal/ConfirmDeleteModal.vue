@@ -1,8 +1,8 @@
 <template>
-	<v-card class="rounded-0 elevation-0">
+	<v-card>
 		<v-card-title class="d-flex align-center justify-space-between py-3">
 			<span class="text-subtitle-1 font-weight-bold text-uppercase">Confirm Deletion</span>
-			<v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="$emit('close')">
+			<v-btn icon variant="text" size="small" aria-label="Close dialog" @click="$emit('close')">
 				<v-icon>mdi-close</v-icon>
 			</v-btn>
 		</v-card-title>
@@ -14,8 +14,8 @@
 		</v-card-text>
 		<v-divider />
 		<v-card-actions class="justify-end px-4 py-3">
-			<v-btn variant="text" class="rounded-0" @click="emit('close')" :disabled="loading">Cancel</v-btn>
-			<v-btn color="error" variant="flat" class="rounded-0" :loading="loading" @click="handleDelete">
+			<v-btn variant="text" @click="emit('close')" :disabled="loading">Cancel</v-btn>
+			<v-btn color="error" variant="flat" :loading="loading" @click="handleDelete">
 				Confirm Delete
 			</v-btn>
 		</v-card-actions>
@@ -32,7 +32,7 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
-	travelPackageId: {
+	journeyId: {
 		type: [String, Number],
 		required: true,
 	},
@@ -45,7 +45,7 @@ const loading = ref(false)
 const handleDelete = async () => {
 	try {
 		loading.value = true
-		await deleteTrekDeparture(props.travelPackageId, props.item.id)
+		await deleteTrekDeparture(props.journeyId, props.item.id)
 		showSuccess('Departure deleted successfully')
 		emit('saved')
 		emit('close')

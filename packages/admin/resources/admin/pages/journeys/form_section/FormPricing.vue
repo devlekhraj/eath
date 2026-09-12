@@ -1,10 +1,6 @@
 <template>
     <div class="mb-4">
         <v-card>
-            <!-- <v-card-title class="d-flex align-center justify-space-between py-0">
-                <h2 class="font-medium">Pricing Form</h2>
-            </v-card-title>
-            <v-divider /> -->
             <v-card-text>
                 <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation class="mb-6">
                     <div>
@@ -38,11 +34,7 @@
                     </div>
                 </v-form>
                 <div class="mb-4">
-                    <div v-if="travelPackage?.prices?.length" class="mt-4">
-                        <!-- <div>
-                            <p class="font-weight-bold">Price List</p>
-                        </div> -->
-
+                    <div v-if="journey?.prices?.length" class="mt-4">
                         <v-table density="compact" class="mt-2">
                             <thead>
                                 <tr>
@@ -54,7 +46,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, index) in travelPackage.prices" :key="index">
+                                <tr v-for="(item, index) in journey.prices" :key="index">
                                     <td class="py-2">
                                         <p class="text-capitalize ">{{ item.name || item.title }}</p>
                                     </td>
@@ -86,7 +78,6 @@
             </v-card-text>
         </v-card>
         <!-- Modal -->
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 <script setup>
@@ -94,13 +85,16 @@ import http from '@/http.config'
 import { formatAmount } from '@utils/utils'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh', 'close'])
 
+
+const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
 
 const props = defineProps({
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
@@ -113,12 +107,11 @@ const rules = {
 const formRef = ref(null)
 const loading = ref(false);
 const serverErrors = reactive({})
-const globalModal = ref(null)
 
 const form = reactive({
     name: '',
     price: '',
-    journey_id: props.travelPackage.id,
+    journey_id: props.journey.id,
 })
 
 async function handleSubmit() {
@@ -139,7 +132,7 @@ async function handleSubmit() {
     try {
         loading.value = true
         const resp = await http.post(
-            `/admin/journeys/${props.travelPackage.id}/prices`,
+            `/admin/journeys/${props.journey.id}/prices`,
             form
         )
         Object.assign(form, {
@@ -162,31 +155,33 @@ async function handleSubmit() {
     }
 }
 
-// const globalModal = ref(null)
 
-import PackagePriceDelete from '../modal/PackagePriceDelete.vue'
-import PackagePriceForm from '../modal/PackagePriceForm.vue'
+import JourneyPriceDelete from '../modal/PackagePriceDelete.vue'
+import JourneyPriceForm from '../modal/PackagePriceForm.vue'
+import { saveJourneyPrice, deleteJourneyPrice } from '@/api/journeys.api'
 
 function deleteItem(item) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: 'Delete Item',
-        component: PackagePriceDelete,
+        component: JourneyPriceDelete,
         size: 'sm',
         props: {
             item,
         },
+        onClose: handleClose,
     })
 }
 function editItem(item) {
-    globalModal.value.open({
+    openModal({
         title: 'Edit ' + (item.name || item.title),
-        component: PackagePriceForm,
+        component: JourneyPriceForm,
         size: 'md',
         props: {
             item,
-            journeyId: props.travelPackage.id,
+            journeyId: props.journey.id,
         },
+        onClose: handleClose,
     })
 }
 

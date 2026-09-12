@@ -14,9 +14,6 @@
         <v-row>
           <v-col cols="12" md="4">
             <div>
-              <!-- <pre>
-                {{ imageItem }}
-              </pre> -->
               <div class="mb-3">
                 <div>
                   <v-img v-if="imageItem" :src="imageItem.url || imageItem.image_url" aspect-ratio="16/9" contain
@@ -30,8 +27,7 @@
                   <div><strong>Height:</strong> {{ imageItem.height }}px</div>
                   <div><strong>Size:</strong> {{ imageItem.size }}</div>
                   <div><strong>Aspect Ratio:</strong> {{ formatAspectRatio(imageItem) }}</div>
-                  <!-- <div><strong>Dimensions:</strong> {{ formatDimensions(imageItem) }}</div> -->
-                </div>
+                  </div>
               </div>
 
             </div>
@@ -111,12 +107,6 @@ function formatAspectRatio(item) {
   return `${label}`
 }
 
-function slugifyName(input) {
-  return input
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '')
-}
 
 
 async function handleUpdate() {

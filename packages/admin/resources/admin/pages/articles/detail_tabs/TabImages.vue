@@ -10,43 +10,45 @@
         <div v-if="galleryItems.length">
             <v-data-table :headers="tableHeaders" :items="galleryItems" item-key="id">
                 <template #item.image="{ item }">
-                    <div class="py-2" style="min-width: max-content;">
+                    <div class="py-2">
                         <v-img :src="item?.url || item?.image_url || item" height="60" width="100" cover class="rounded" />
                     </div>
                 </template>
 
                 <template #item.size="{ item }">
-                    <div class="text-caption" style="min-width: max-content;">
+                    <div class="text-caption">
                         <div>{{ formatDimensions(item) }}</div>
                         <div>{{ formatAspectRatio(item) }}</div>
                     </div>
                 </template>
 
                 <template #item.alt_text="{ item }">
-                    <div class="text-caption" style="min-width: max-content;">
+                    <div class="text-caption">
                         {{ resolveMeta(item, 'alt_text') }}
                     </div>
                 </template>
 
                 <template #item.caption="{ item }">
-                    <div class="text-caption" style="min-width: max-content;">
+                    <div class="text-caption">
                         {{ resolveMeta(item, 'caption') }}
                     </div>
                 </template>
 
                 <template #item.description="{ item }">
-                    <div class="text-caption" style="min-width: max-content;">
+                    <div class="text-caption">
                         {{ resolveMeta(item, 'description') }}
                     </div>
                 </template>
 
                 <template #item.actions="{ item }">
-                    <div class="d-flex align-center ga-2" style="min-width: max-content;">
-                        <v-btn size="x-small" icon variant="tonal" color="primary" @click="handleEdit(item)">
-                            <v-icon size="16">mdi-pencil</v-icon>
+                    <div class="d-flex align-center justify-center ga-1">
+                        <v-btn size="small" variant="outlined" color="primary" @click="handleEdit(item)" title="Edit image">
+                            <v-icon start size="14">mdi-pencil</v-icon>
+                            Edit
                         </v-btn>
-                        <v-btn size="x-small" icon variant="tonal" color="error" @click="handleDelete(item)">
-                            <v-icon size="16">mdi-delete</v-icon>
+                        <v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete image">
+                            <v-icon start size="14">mdi-delete</v-icon>
+                            Delete
                         </v-btn>
                     </div>
                 </template>
@@ -73,7 +75,7 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    blogId: {
+    articleId: {
         type: [String, Number],
         default: null,
     },
@@ -141,9 +143,9 @@ async function handleSelectImage(payload) {
     const meta = payload?.meta || {}
     const file = payload?.file
     let image = payload?.image ?? payload
-    const blogId = props.blogId
+    const articleId = props.articleId
 
-    if (!blogId) return
+    if (!articleId) return
 
     if (file instanceof File) {
         const formData = new FormData()
@@ -152,7 +154,7 @@ async function handleSelectImage(payload) {
         formData.append('caption', meta.caption || '')
         formData.append('description', meta.description || '')
 
-        const response = await http.post(`/admin/blogs/${blogId}/save-image`, formData, {
+        const response = await http.post(`/admin/blogs/${articleId}/save-image`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
 
@@ -164,7 +166,7 @@ async function handleSelectImage(payload) {
         }
     } else {
         if (!image?.id) return
-        await http.post(`/admin/blogs/${blogId}/use-image`, {
+        await http.post(`/admin/blogs/${articleId}/use-image`, {
             gallery_id: image.id,
             alt_text: meta.alt_text || '',
             caption: meta.caption || '',

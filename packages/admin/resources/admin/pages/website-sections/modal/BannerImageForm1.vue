@@ -23,26 +23,13 @@
                         </div>
                         <p>{{ banner.aspect_ratio }} Aspect Ratio Image Needed</p>
                     </v-col>
-                    <!-- <v-col cols="12">
-                        <v-text-field v-model="form.title" label="Item title" :rules="[rules.required]" :error-messages="serverErrors.title" required />
-                    </v-col>
-                    <v-col cols="12">
-                        <v-text-field v-model="form.title" label="Item Description" :rules="[rules.required]" :error-messages="serverErrors.description" required />
-                    </v-col>
-
-                    <v-col cols="12">
-                        <v-text-field v-model="form.link_url" label="URL" :rules="[rules.required]" :error-messages="serverErrors.url" required />
-                    </v-col> -->
-
-                </v-row>
+                    </v-row>
             </v-form>
         </v-card-text>
 
         <v-card-actions>
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-            <!-- <v-spacer></v-spacer>
-            <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn> -->
-        </v-card-actions>
+            </v-card-actions>
     </v-card>
 </template>
 

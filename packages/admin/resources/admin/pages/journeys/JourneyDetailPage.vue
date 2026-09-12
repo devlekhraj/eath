@@ -5,31 +5,31 @@
                 <v-card class="pa-4">
                     <div>
                         <v-carousel height="420" hide-delimiters>
-                            <v-carousel-item v-for="(image, index) in packageData.images" :key="index"
+                            <v-carousel-item v-for="(image, index) in journey.images" :key="index"
                                 :src="image"></v-carousel-item>
                         </v-carousel>
                     </div>
                     <div class="pt-2">
-                        <h1 class="font-weight-bold mb-2">{{ packageData.name }}</h1>
-                        <p class="text-subtitle-1 text-grey-darken-1 mb-4">{{ packageData.slug }}</p>
+                        <h1 class="font-weight-bold mb-2">{{ journey.name }}</h1>
+                        <p class="text-subtitle-1 text-grey-darken-1 mb-4">{{ journey.slug }}</p>
                     </div>
 
                     <v-chip class="mr-2" color="primary" text-color="white">
-                        {{ packageData.duration_days }} Days / {{ packageData.duration_nights }} Nights
+                        {{ journey.duration_days }} Days / {{ journey.duration_nights }} Nights
                     </v-chip>
 
                     <v-chip color="success" text-color="white">
-                        ${{ packageData.price }}
+                        ${{ journey.price }}
                     </v-chip>
 
                     <v-divider class="my-6"></v-divider>
 
                     <h2 class="text-h6 mb-2">Description</h2>
-                    <div v-html="packageData.description" class="mb-6" />
+                    <div v-html="journey.description" class="mb-6" />
 
                     <h2 class="text-h6 mb-2">Itinerary</h2>
                     <v-timeline side="end" density="compact" class="mb-6">
-                        <v-timeline-item v-for="(item, index) in packageData.itinerary" :key="index"
+                        <v-timeline-item v-for="(item, index) in journey.itinerary" :key="index"
                             :title="'Day ' + item.sort_order + ': ' + item.title">
                             <div>{{ item.description }}</div>
                         </v-timeline-item>
@@ -37,14 +37,14 @@
 
                     <h2 class="text-h6 mb-2">Inclusions</h2>
                     <ul class="mb-6">
-                        <li v-for="(inc, index) in packageData.inclusions" :key="index">
+                        <li v-for="(inc, index) in journey.inclusions" :key="index">
                             {{ inc }}
                         </li>
                     </ul>
 
                     <h2 class="text-h6 mb-2">Exclusions</h2>
                     <ul class="mb-6">
-                        <li v-for="(exc, index) in packageData.exclusions" :key="index">
+                        <li v-for="(exc, index) in journey.exclusions" :key="index">
                             {{ exc }}
                         </li>
                     </ul>
@@ -62,7 +62,7 @@
 export default {
     data() {
         return {
-            packageData: {
+            journey: {
                 name: 'Everest Base Camp Trek',
                 slug: 'everest-base-camp-trek',
                 duration_days: 14,

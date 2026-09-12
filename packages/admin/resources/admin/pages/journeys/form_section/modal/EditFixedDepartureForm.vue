@@ -1,8 +1,8 @@
 <template>
-	<v-card class="rounded-0 elevation-0">
+	<v-card>
 		<v-card-title class="d-flex align-center justify-space-between py-3">
 			<span class="text-subtitle-1 font-weight-bold text-uppercase">Edit Fixed Departure</span>
-			<v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="$emit('close')">
+			<v-btn icon variant="text" size="small" aria-label="Close dialog" @click="$emit('close')">
 				<v-icon>mdi-close</v-icon>
 			</v-btn>
 		</v-card-title>
@@ -13,7 +13,7 @@
 					<v-col cols="12" md="6">
 						<v-date-input
 							v-model="formData.start_date"
-							class="w-100 rounded-0"
+							class="w-100"
 							label="Start Date"
 							prepend-icon=""
 							:min="minStartIso"
@@ -25,7 +25,7 @@
 					<v-col cols="12" md="6">
 						<v-date-input
 							v-model="formData.end_date"
-							class="w-100 rounded-0"
+							class="w-100"
 							label="End Date"
 							prepend-icon=""
 							:min="formData.start_date || minStartIso"
@@ -41,7 +41,6 @@
 							min="0"
 							label="Total Seats"
 							:rules="[rules.required]"
-							class="rounded-0"
 						/>
 					</v-col>
 					<v-col cols="12" md="4">
@@ -50,7 +49,6 @@
 							type="number"
 							min="0"
 							label="Available Seats"
-							class="rounded-0"
 						/>
 					</v-col>
 					<v-col cols="12" md="4">
@@ -61,7 +59,6 @@
 							label="Cost ($)"
 							prefix="$"
 							:rules="[rules.required]"
-							class="rounded-0"
 						/>
 					</v-col>
 					<v-col cols="12" md="6">
@@ -70,7 +67,6 @@
 							:items="statusOptions"
 							label="Status"
 							:rules="[rules.required]"
-							class="rounded-0"
 						/>
 					</v-col>
 					<v-col cols="12" md="6">
@@ -78,7 +74,6 @@
 							v-model="formData.code"
 							label="Departure Code (optional)"
 							placeholder="e.g. DEP-2026-10"
-							class="rounded-0"
 						/>
 					</v-col>
 					<v-col cols="12">
@@ -86,7 +81,6 @@
 							v-model="formData.notes"
 							label="Notes / Special Instructions"
 							rows="2"
-							class="rounded-0"
 						/>
 					</v-col>
 				</v-row>
@@ -94,8 +88,8 @@
 		</v-card-text>
 		<v-divider />
 		<v-card-actions class="justify-end pa-3">
-			<v-btn variant="text" class="rounded-0" @click="emit('close')">Cancel</v-btn>
-			<v-btn color="primary" class="px-4 rounded-0" variant="flat" :loading="loading" @click="submit">
+			<v-btn variant="text" @click="emit('close')">Cancel</v-btn>
+			<v-btn color="primary" class="px-4" variant="flat" :loading="loading" @click="submit">
 				<v-icon start>mdi-content-save</v-icon> Save Changes
 			</v-btn>
 		</v-card-actions>
@@ -113,7 +107,7 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
-	travelPackageId: {
+	journeyId: {
 		type: [String, Number],
 		required: true,
 	},
@@ -167,7 +161,7 @@ const submit = async () => {
 
 	try {
 		loading.value = true
-		await updateTrekDeparture(props.travelPackageId, props.item.id, {
+		await updateTrekDeparture(props.journeyId, props.item.id, {
 			start_date: formatYmd(formData.start_date),
 			end_date: formatYmd(formData.end_date),
 			total_seats: Number(formData.total_seat) || null,

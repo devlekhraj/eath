@@ -40,9 +40,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { saveGuideReviewApi } from '@/api/guides.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -95,7 +95,7 @@ async function handleSubmit() {
 
         loading.value = true
         // Adjust endpoint as needed
-        const resp = await http.post(`admin/guides/${props.item.id}/review`, form)
+        const resp = await saveGuideReviewApi(props.item.id, form)
         showSuccess(resp.message || 'Review submitted successfully')
         emit('close')
     } catch (error) {

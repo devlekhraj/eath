@@ -1,5 +1,5 @@
 <template>
-    <v-card rounded="0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
             <span class="text-uppercase font-weight-medium text-slate-800">Confirm Delete</span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
@@ -13,16 +13,16 @@
         </v-card-text>
         <v-divider />
         <v-card-actions class="pa-3 justify-end">
-            <v-btn variant="text" rounded="0" @click="handleClose">Cancel</v-btn>
-            <v-btn color="error" rounded="0" :loading="submitting" @click="deleteCategory">Delete</v-btn>
+            <v-btn variant="text" @click="handleClose">Cancel</v-btn>
+            <v-btn color="error" :loading="submitting" @click="deleteCategory">Delete</v-btn>
         </v-card-actions>
     </v-card>
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { deleteArticleCategoryApi } from '@/api/articles.api'
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -44,7 +44,7 @@ function handleClose() {
 async function deleteCategory() {
     submitting.value = true
     try {
-        const resp = await http.delete(`/admin/article-categories/${props.item.id}/delete`)
+        const resp = await deleteArticleCategoryApi(props.item.id)
         showSuccess(resp.message || 'Category deleted successfully')
         submitting.value = false
         emit('saved')

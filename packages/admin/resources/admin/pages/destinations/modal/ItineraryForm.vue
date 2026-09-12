@@ -51,7 +51,6 @@ import { useSnackbar } from '@/composables/snackbar'
 
 const { showSuccess, showError } = useSnackbar()
 
-const travelPackageStore = useTravelPackageStore()
 
 
 const emit = defineEmits(['close', 'saved'])

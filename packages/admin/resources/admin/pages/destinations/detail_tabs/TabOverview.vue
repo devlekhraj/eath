@@ -13,14 +13,6 @@
                 <v-text-field v-model="destination.slug" label="Slug" />
               </v-col>
       
-              <!-- <v-col cols="12" md="12">
-                <v-text-field v-model="destination.region" label="Region" />
-              </v-col>
-      
-              <v-col cols="12" md="12">
-                <v-text-field v-model="destination.district" label="District" />
-              </v-col> -->
-      
               <v-col cols="12" md="12" class="py-0">
                 <v-text-field v-model="destination.best_season" label="Best Season" placeholder="Mar–May, Sep–Nov" />
               </v-col>

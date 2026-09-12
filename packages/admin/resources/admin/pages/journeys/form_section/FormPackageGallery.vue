@@ -10,40 +10,50 @@
 		<div v-if="galleryItems.length">
 			<v-data-table :headers="tableHeaders" :items="galleryItems" item-key="id">
 				<template #item.image="{ item }"> <div class="py-4"> <v-img :src="item?.url || item?.image_url || item" height="60" width="100" contain class="rounded" /> </div> </template>
-				<template #item.size="{ item }"> <div class="text-caption" style="min-width: 100px;"> <div>{{ formatDimensions(item) }}</div> <div>{{ formatAspectRatio(item) }}</div> </div> </template>
+				<template #item.size="{ item }"> <div class="text-caption"> <div>{{ formatDimensions(item) }}</div> <div>{{ formatAspectRatio(item) }}</div> </div> </template>
 				<template #item.alt_text="{ item }"> <div class="text-caption" style="min-width: 240px;"> {{ resolveMeta(item, 'alt_text') }} </div> </template>
 				<template #item.caption="{ item }"> <div class="text-caption" style="min-width: 290px;"> {{ resolveMeta(item, 'caption') }} </div> </template>
 				<template #item.description="{ item }"> <div class="text-caption" style="min-width: 350px;"> {{ resolveMeta(item, 'description') }} </div> </template>
-				<template #item.actions="{ item }"> <div style="min-width: 100px;"> <v-btn size="x-small" icon variant="tonal" color="primary" @click="handleEdit(item)"><v-icon>mdi-pencil</v-icon></v-btn> <v-btn size="x-small" icon variant="tonal" color="error" class="ml-2" @click="handleDelete(item)"><v-icon>mdi-delete</v-icon></v-btn> </div> </template>
+				<template #item.actions="{ item }">
+					<div class="d-flex align-center justify-center ga-1">
+						<v-btn size="small" variant="outlined" color="primary" @click="handleEdit(item)" title="Edit image">
+							<v-icon start size="14">mdi-pencil</v-icon>
+							Edit
+						</v-btn>
+						<v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete image">
+							<v-icon start size="14">mdi-delete</v-icon>
+							Delete
+						</v-btn>
+					</div>
+				</template>
 			</v-data-table>
 		</div>
 		<div v-else>
 			<p>No gallery items found.</p>
 		</div>
-
-		<modal-template ref="globalModal" />
 	</div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
 import SelectGalleryImage from './gallery_form/SelectGalleryImage.vue'
 import FormGalleryUpdate from './gallery_form/FormGalleryUpdate.vue'
 import FormImageDelete from './gallery_form/FormImageDelete.vue'
 
 const props = defineProps({
-	 travelPackage: {
+	 journey: {
         type: Object,
         default: () => ({}),
     },
 })
 
 const emit = defineEmits(['refresh'])
-const globalModal = ref(null)
 
 const galleryItems = computed(() => {
-	// if (Array.isArray(props.travelPackage?.galleries)) return props.travelPackage.galleries
-	if (Array.isArray(props.travelPackage?.images)) return props.travelPackage.images
+	// if (Array.isArray(props.journey?.galleries)) return props.journey.galleries
+	if (Array.isArray(props.journey?.images)) return props.journey.images
 	return []
 })
 
@@ -57,18 +67,18 @@ const tableHeaders = [
 ]
 
 function openSelectModal() {
-	globalModal.value.open({
+	openModal({
 		title: 'Select Image',
 		component: SelectGalleryImage,
 		size: 'lg',
 		props: {
 			onSelect: handleSelectImage,
 		},
-	})
+    })
 }
 
 function handleEdit(item = {}) {
-	globalModal.value.open({
+	openModal({
 		title: item ? 'Edit Category' : 'Add New Category',
 		component: FormGalleryUpdate,
 		size: 'lg',
@@ -76,10 +86,10 @@ function handleEdit(item = {}) {
 			imageItem: item,
 			onUpdated: () => emit('refresh'),
 		},
-	});
+    });
 }
 function handleDelete(item = {}) {
-	globalModal.value.open({
+	openModal({
 		title: 'Delete Photo',
 		component: FormImageDelete,
 		size: 'sm',
@@ -87,7 +97,7 @@ function handleDelete(item = {}) {
 			imageItem: item,
 			onDeleted: removeImage,
 		},
-	});
+    });
 }
 
 
@@ -97,12 +107,12 @@ function handleSelectImage(payload) {
 	if (!image) return
 
 	const listKey = 'images'
-	if (!Array.isArray(props.travelPackage[listKey])) {
-		props.travelPackage[listKey] = []
+	if (!Array.isArray(props.journey[listKey])) {
+		props.journey[listKey] = []
 	}
 
 	const imageUrl = image.url || image.image_url || image
-	const exists = props.travelPackage[listKey].some((item) => {
+	const exists = props.journey[listKey].some((item) => {
 		const existingUrl = item?.url || item?.image_url || item
 		return item?.id === image?.id || existingUrl === imageUrl
 	})
@@ -116,7 +126,7 @@ function handleSelectImage(payload) {
 				description: meta.description || '',
 			}
 		}
-		props.travelPackage[listKey].push(image)
+		props.journey[listKey].push(image)
 	}
 
 	emit('refresh')
@@ -151,8 +161,8 @@ function formatAspectRatio(item) {
 
 function removeImage(item) {
 	const listKey = 'images'
-	if (!Array.isArray(props.travelPackage[listKey])) return
-	props.travelPackage[listKey] = props.travelPackage[listKey].filter((entry) => {
+	if (!Array.isArray(props.journey[listKey])) return
+	props.journey[listKey] = props.journey[listKey].filter((entry) => {
 		if (entry?.id && item?.id) return entry.id !== item.id
 		const entryUrl = entry?.url || entry?.image_url || entry
 		const itemUrl = item?.url || item?.image_url || item

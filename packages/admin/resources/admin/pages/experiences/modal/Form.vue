@@ -1,8 +1,8 @@
 <template>
-    <v-card class="rounded-0 elevation-0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-3">
             <span class="text-subtitle-1 font-weight-bold text-uppercase">{{ form.id ? 'Edit Experience' : 'Add Experience' }}</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
+            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -17,7 +17,6 @@
                             label="Experience Name"
                             :rules="[rules.required]"
                             :error-messages="serverErrors.name"
-                            class="rounded-0"
                             required
                         />
                     </v-col>
@@ -27,7 +26,6 @@
                             v-model="form.slug"
                             label="Slug (optional)"
                             :error-messages="serverErrors.slug"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -38,7 +36,6 @@
                             rows="2"
                             auto-grow
                             :error-messages="serverErrors.summary"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -49,7 +46,6 @@
                             rows="4"
                             auto-grow
                             :error-messages="serverErrors.description"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -59,7 +55,6 @@
                             label="Sort Order"
                             type="number"
                             min="0"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -69,7 +64,6 @@
                             label="Active"
                             color="primary"
                             inset
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -79,7 +73,6 @@
                             label="Featured Experience"
                             color="primary"
                             inset
-                            class="rounded-0"
                         />
                     </v-col>
                 </v-row>
@@ -88,8 +81,8 @@
 
         <v-divider />
         <v-card-actions class="justify-end pa-3">
-            <v-btn variant="text" class="rounded-0" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" variant="flat" class="px-6 rounded-0 font-weight-medium" :loading="loading" :disabled="loading" @click="submitForm">
+            <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
+            <v-btn color="primary" variant="flat" class="px-6 font-weight-medium" :loading="loading" :disabled="loading" @click="submitForm">
                 <v-icon start>mdi-check</v-icon>
                 {{ form.id ? 'Save Changes' : 'Create Experience' }}
             </v-btn>
@@ -98,9 +91,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { createExperienceApi } from '@/api/experiences.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -161,7 +154,7 @@ async function submitForm() {
         loading.value = true
         form.sort_order = parseInt(form.sort_order, 10) || 0
 
-        const resp = await http.post('admin/experiences', form)
+        const resp = await createExperienceApi(form)
 
         showSuccess(resp.data?.message ?? resp.message ?? 'Experience saved successfully')
         emit('saved')

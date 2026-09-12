@@ -94,12 +94,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const loading = ref(false)
 const fetching_data = ref(false)
 const formRef = ref(null)
@@ -210,29 +208,7 @@ async function onImageChange() {
 
 
 
-const slugEdited = ref(false)
 const { showSuccess, showError } = useSnackbar()
-
-// Auto-generate slug from name
-// function slugify(text) {
-//     return text
-//         .toLowerCase()
-//         .trim()
-//         .replace(/[\s_]+/g, '-')
-//         .replace(/[^\w\-]+/g, '')
-//         .replace(/\-\-+/g, '-')
-//         .replace(/^-+|-+$/g, '')
-// }
-
-// watch(() => form.title, (newTitle) => {
-//     if (!slugEdited.value) {
-//         form.slug = slugify(newTitle)
-//     }
-// })
-
-function onSlugInput() {
-    slugEdited.value = true
-}
 
 // Validation rules
 const rules = {

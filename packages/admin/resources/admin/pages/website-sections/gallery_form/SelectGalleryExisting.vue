@@ -58,6 +58,7 @@
 import http from '@/http.config'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { uploadGalleryImageApi, getGalleryImagesApi } from '@/api/gallery.api'
 const props = defineProps({
 	images: {
 		type: Array,
@@ -89,7 +90,7 @@ const emit = defineEmits(['select-image', 'update:meta', 'confirm'])
 const fieldErrors = ref({})
 
 const route = useRoute()
-const bannerId = route.params.id || route.query.id || null
+const sectionId = route.params.id || route.query.id || null
 const uploading = ref(false)
 
 function emitSelect(image) {
@@ -122,7 +123,7 @@ async function confirmSelect() {
 
 	try {
 		uploading.value = true;
-		const resp = await http.post(`/admin/banners/${bannerId}/use-image`, {
+		const resp = await http.post(`/admin/banners/${sectionId}/use-image`, {
 			gallery_id: props.selectedImage.id,
 			alt_text: props.meta?.alt_text,
 			caption: props.meta?.caption,

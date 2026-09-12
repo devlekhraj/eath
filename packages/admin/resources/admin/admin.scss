@@ -185,6 +185,7 @@ main.v-main {
     tbody td {
         font-size: 0.82rem !important;
         font-weight: 400 !important;
+        white-space: nowrap;
     }
 
     .v-data-table-footer {

@@ -7,7 +7,7 @@
           <h1 class="text-h5 font-weight-bold text-slate-800">
             Website Operations Dashboard
           </h1>
-          <v-chip size="small" color="primary" variant="tonal" class="rounded-0 font-weight-medium">
+          <v-chip size="small" color="primary" variant="tonal" class="font-weight-medium">
             Live Operations
           </v-chip>
         </div>
@@ -23,7 +23,7 @@
           color="primary"
           prepend-icon="mdi-refresh"
           :loading="loading"
-          class="rounded-0 text-capitalize"
+          class="text-capitalize"
           @click="loadDashboard"
         >
           Refresh
@@ -32,7 +32,7 @@
         <v-btn
           color="primary"
           prepend-icon="mdi-calendar-check-outline"
-          class="rounded-0 text-capitalize"
+          class="text-capitalize"
           :to="{ name: 'adminPlannerSubmissionPage' }"
         >
           Planner Requests
@@ -42,7 +42,7 @@
           variant="tonal"
           color="primary"
           prepend-icon="mdi-hiking"
-          class="rounded-0 text-capitalize"
+          class="text-capitalize"
           :to="{ name: 'adminJourneyForm' }"
         >
           Add Journey
@@ -53,13 +53,13 @@
     <!-- Loading Skeleton Overlay -->
     <v-row v-if="loading && !dashboardData">
       <v-col v-for="i in 6" :key="`skel-kpi-${i}`" cols="6" sm="6" md="4" lg="2">
-        <v-skeleton-loader type="card" height="110" class="rounded-0 border" />
+        <v-skeleton-loader type="card" height="110" class="border" />
       </v-col>
       <v-col cols="12" lg="8">
-        <v-skeleton-loader type="table" height="320" class="rounded-0 border" />
+        <v-skeleton-loader type="table" height="320" class="border" />
       </v-col>
       <v-col cols="12" lg="4">
-        <v-skeleton-loader type="article" height="320" class="rounded-0 border" />
+        <v-skeleton-loader type="article" height="320" class="border" />
       </v-col>
     </v-row>
 
@@ -68,13 +68,13 @@
       v-else-if="error"
       type="error"
       variant="tonal"
-      class="mb-6 rounded-0"
+      class="mb-6"
       closable
       @click:close="error = null"
     >
       <div class="d-flex align-center justify-space-between">
         <span>{{ error }}</span>
-        <v-btn size="small" variant="text" color="error" class="rounded-0" @click="loadDashboard">Retry</v-btn>
+        <v-btn size="small" variant="text" color="error" @click="loadDashboard">Retry</v-btn>
       </div>
     </v-alert>
 
@@ -84,10 +84,10 @@
       <v-row class="mb-4" dense>
         <!-- Metric 1: Journeys -->
         <v-col cols="6" sm="6" md="4" lg="2">
-          <v-card class="pa-4 h-100 rounded-0 elevation-0 border" :to="{ name: 'adminJourneyPage' }">
+          <v-card class="pa-4 h-100" :to="{ name: 'adminJourneyPage' }">
             <div class="d-flex align-center justify-space-between mb-2">
               <span class="text-caption font-weight-medium text-slate-500 text-uppercase">Journeys</span>
-              <v-avatar color="primary" variant="tonal" size="30" rounded="0">
+              <v-avatar color="primary" variant="tonal" size="30" rounded>
                 <v-icon size="16">mdi-hiking</v-icon>
               </v-avatar>
             </div>
@@ -103,10 +103,10 @@
 
         <!-- Metric 2: Departures -->
         <v-col cols="6" sm="6" md="4" lg="2">
-          <v-card class="pa-4 h-100 rounded-0 elevation-0 border" :to="{ name: 'adminDeparturePage' }">
+          <v-card class="pa-4 h-100" :to="{ name: 'adminDeparturePage' }">
             <div class="d-flex align-center justify-space-between mb-2">
               <span class="text-caption font-weight-medium text-slate-500 text-uppercase">Departures</span>
-              <v-avatar color="info" variant="tonal" size="30" rounded="0">
+              <v-avatar color="info" variant="tonal" size="30" rounded>
                 <v-icon size="16">mdi-calendar-range-outline</v-icon>
               </v-avatar>
             </div>
@@ -122,10 +122,10 @@
 
         <!-- Metric 3: Planner Submissions -->
         <v-col cols="6" sm="6" md="4" lg="2">
-          <v-card class="pa-4 h-100 rounded-0 elevation-0 border" :to="{ name: 'adminPlannerSubmissionPage' }">
+          <v-card class="pa-4 h-100" :to="{ name: 'adminPlannerSubmissionPage' }">
             <div class="d-flex align-center justify-space-between mb-2">
               <span class="text-caption font-weight-medium text-slate-500 text-uppercase">Planner</span>
-              <v-avatar color="primary" variant="tonal" size="30" rounded="0">
+              <v-avatar color="primary" variant="tonal" size="30" rounded>
                 <v-icon size="16">mdi-calendar-check-outline</v-icon>
               </v-avatar>
             </div>
@@ -141,10 +141,10 @@
 
         <!-- Metric 4: Inquiries -->
         <v-col cols="6" sm="6" md="4" lg="2">
-          <v-card class="pa-4 h-100 rounded-0 elevation-0 border" :to="{ name: 'adminInquiryPage' }">
+          <v-card class="pa-4 h-100" :to="{ name: 'adminInquiryPage' }">
             <div class="d-flex align-center justify-space-between mb-2">
               <span class="text-caption font-weight-medium text-slate-500 text-uppercase">Inquiries</span>
-              <v-avatar color="warning" variant="tonal" size="30" rounded="0">
+              <v-avatar color="warning" variant="tonal" size="30" rounded>
                 <v-icon size="16">mdi-email-fast-outline</v-icon>
               </v-avatar>
             </div>
@@ -160,10 +160,10 @@
 
         <!-- Metric 5: Destinations -->
         <v-col cols="6" sm="6" md="4" lg="2">
-          <v-card class="pa-4 h-100 rounded-0 elevation-0 border" :to="{ name: 'adminDestinationPage' }">
+          <v-card class="pa-4 h-100" :to="{ name: 'adminDestinationPage' }">
             <div class="d-flex align-center justify-space-between mb-2">
               <span class="text-caption font-weight-medium text-slate-500 text-uppercase">Destinations</span>
-              <v-avatar color="secondary" variant="tonal" size="30" rounded="0">
+              <v-avatar color="secondary" variant="tonal" size="30" rounded>
                 <v-icon size="16">mdi-map-marker-radius-outline</v-icon>
               </v-avatar>
             </div>
@@ -179,10 +179,10 @@
 
         <!-- Metric 6: Subscribers -->
         <v-col cols="6" sm="6" md="4" lg="2">
-          <v-card class="pa-4 h-100 rounded-0 elevation-0 border" :to="{ name: 'adminNewsletterSubscriptionPage' }">
+          <v-card class="pa-4 h-100" :to="{ name: 'adminNewsletterSubscriptionPage' }">
             <div class="d-flex align-center justify-space-between mb-2">
               <span class="text-caption font-weight-medium text-slate-500 text-uppercase">Subscribers</span>
-              <v-avatar color="primary" variant="tonal" size="30" rounded="0">
+              <v-avatar color="primary" variant="tonal" size="30" rounded>
                 <v-icon size="16">mdi-email-newsletter</v-icon>
               </v-avatar>
             </div>
@@ -201,10 +201,10 @@
       <v-row>
         <!-- Upcoming Group Departures Table -->
         <v-col cols="12" lg="8">
-          <v-card class="h-100 rounded-0 elevation-0 border">
+          <v-card class="h-100">
             <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
               <div class="d-flex align-center ga-2">
-                <v-avatar size="24" color="primary" variant="tonal" rounded="0">
+                <v-avatar size="24" color="primary" variant="tonal" rounded>
                   <v-icon size="14">mdi-calendar-clock-outline</v-icon>
                 </v-avatar>
                 <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
@@ -215,7 +215,7 @@
                 variant="text"
                 color="primary"
                 size="small"
-                class="rounded-0 text-capitalize"
+                class="text-capitalize"
                 :to="{ name: 'adminDeparturePage' }"
               >
                 View Departures &rarr;
@@ -264,7 +264,7 @@
                     </td>
                     <td>
                       <div>
-                        <v-chip size="x-small" class="rounded-0" color="secondary" variant="tonal">
+                        <v-chip size="x-small" color="secondary" variant="tonal">
                           <v-icon start size="12">mdi-seat-passenger</v-icon>
                           {{ dep.available_seats }} / {{ dep.total_seats }} seats
                         </v-chip>
@@ -279,7 +279,7 @@
                       <div>
                         <v-chip
                           size="x-small"
-                          class="rounded-0 text-capitalize"
+                          class="text-capitalize"
                           :color="getDepartureStatusColor(dep.status)"
                         >
                           {{ dep.status || 'Active' }}
@@ -295,11 +295,11 @@
 
         <!-- Destination Regional Distribution -->
         <v-col cols="12" lg="4">
-          <v-card class="h-100 d-flex flex-column justify-space-between rounded-0 elevation-0 border">
+          <v-card class="h-100 d-flex flex-column justify-space-between">
             <div>
               <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
                 <div class="d-flex align-center ga-2">
-                  <v-avatar size="24" color="primary" variant="tonal" rounded="0">
+                  <v-avatar size="24" color="primary" variant="tonal" rounded>
                     <v-icon size="14">mdi-compass-outline</v-icon>
                   </v-avatar>
                   <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
@@ -310,7 +310,7 @@
                   variant="text"
                   color="primary"
                   size="small"
-                  class="rounded-0 text-capitalize"
+                  class="text-capitalize"
                   :to="{ name: 'adminDestinationPage' }"
                 >
                   Manage
@@ -323,7 +323,7 @@
                   <div
                     v-for="dest in dashboardData.destinations_summary"
                     :key="dest.id"
-                    class="pa-3 rounded-0 border bg-slate-50 mb-2"
+                    class="pa-3 rounded-lg border bg-slate-50 mb-2"
                   >
                     <div class="d-flex align-center justify-space-between mb-1">
                       <router-link
@@ -332,7 +332,7 @@
                       >
                         {{ dest.name }}
                       </router-link>
-                      <v-chip size="x-small" class="rounded-0" color="primary" variant="flat">
+                      <v-chip size="x-small" color="primary" variant="flat">
                         {{ dest.journeys_count }} {{ dest.journeys_count === 1 ? 'Journey' : 'Journeys' }}
                       </v-chip>
                     </div>
@@ -340,7 +340,6 @@
                       :model-value="calcDestPercentage(dest.journeys_count)"
                       color="primary"
                       height="6"
-                      rounded="0"
                       class="bg-slate-200"
                     />
                   </div>
@@ -358,7 +357,7 @@
                   size="small"
                   variant="tonal"
                   color="primary"
-                  class="rounded-0 text-capitalize"
+                  class="text-capitalize"
                   :to="{ name: 'adminDestinationPage' }"
                 >
                   Explore Regions
@@ -373,10 +372,10 @@
       <v-row class="mt-2">
         <!-- Recent Planner Submissions Table -->
         <v-col cols="12" lg="6">
-          <v-card class="h-100 rounded-0 elevation-0 border">
+          <v-card class="h-100">
             <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
               <div class="d-flex align-center ga-2">
-                <v-avatar size="24" color="success" variant="tonal" rounded="0">
+                <v-avatar size="24" color="success" variant="tonal" rounded>
                   <v-icon size="14">mdi-ticket-confirmation-outline</v-icon>
                 </v-avatar>
                 <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
@@ -387,7 +386,7 @@
                 variant="text"
                 color="primary"
                 size="small"
-                class="rounded-0 text-capitalize"
+                class="text-capitalize"
                 :to="{ name: 'adminPlannerSubmissionPage' }"
               >
                 View All &rarr;
@@ -436,7 +435,7 @@
                     </td>
                     <td class="text-center">
                       <div>
-                        <v-chip size="x-small" class="rounded-0" color="primary" variant="tonal">
+                        <v-chip size="x-small" color="primary" variant="tonal">
                           {{ req.traveller_count }}
                         </v-chip>
                       </div>
@@ -445,7 +444,7 @@
                       <div>
                         <v-chip
                           size="x-small"
-                          class="rounded-0 text-capitalize"
+                          class="text-capitalize"
                           :color="getLeadStatusColor(req.status)"
                         >
                           {{ req.status }}
@@ -461,10 +460,10 @@
 
         <!-- Recent Inquiries Table -->
         <v-col cols="12" lg="6">
-          <v-card class="h-100 rounded-0 elevation-0 border">
+          <v-card class="h-100">
             <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
               <div class="d-flex align-center ga-2">
-                <v-avatar size="24" color="warning" variant="tonal" rounded="0">
+                <v-avatar size="24" color="warning" variant="tonal" rounded>
                   <v-icon size="14">mdi-message-text-clock-outline</v-icon>
                 </v-avatar>
                 <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
@@ -475,7 +474,7 @@
                 variant="text"
                 color="primary"
                 size="small"
-                class="rounded-0 text-capitalize"
+                class="text-capitalize"
                 :to="{ name: 'adminInquiryPage' }"
               >
                 View All &rarr;
@@ -524,7 +523,7 @@
                     </td>
                     <td class="text-center">
                       <div>
-                        <v-chip size="x-small" class="rounded-0 text-capitalize" variant="tonal" color="secondary">
+                        <v-chip size="x-small" class="text-capitalize" variant="tonal" color="secondary">
                           {{ inq.type }}
                         </v-chip>
                       </div>
@@ -533,7 +532,7 @@
                       <div>
                         <v-chip
                           size="x-small"
-                          class="rounded-0 text-capitalize"
+                          class="text-capitalize"
                           :color="getLeadStatusColor(inq.status)"
                         >
                           {{ inq.status }}
@@ -552,10 +551,10 @@
       <v-row class="mt-2">
         <!-- Monthly Inflow Chart -->
         <v-col cols="12" lg="8">
-          <v-card class="h-100 rounded-0 elevation-0 border">
+          <v-card class="h-100">
             <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
               <div class="d-flex align-center ga-2">
-                <v-avatar size="24" color="primary" variant="tonal" rounded="0">
+                <v-avatar size="24" color="primary" variant="tonal" rounded>
                   <v-icon size="14">mdi-chart-timeline-variant</v-icon>
                 </v-avatar>
                 <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
@@ -586,7 +585,7 @@
                   <div class="d-flex align-end ga-1 mb-2" style="height: 130px;">
                     <!-- Planner Bar -->
                     <div
-                      class="transition-swing rounded-0"
+                      class="rounded-t-sm transition-swing"
                       :style="{
                         width: '16px',
                         height: `${calcBarHeight(trend.planner_submissions ?? trend.bookings)}px`,
@@ -597,7 +596,7 @@
                     />
                     <!-- Inquiries Bar -->
                     <div
-                      class="transition-swing rounded-0"
+                      class="rounded-t-sm transition-swing"
                       :style="{
                         width: '16px',
                         height: `${calcBarHeight(trend.inquiries)}px`,
@@ -618,10 +617,10 @@
 
         <!-- Content & Operations Hub -->
         <v-col cols="12" lg="4">
-          <v-card class="h-100 d-flex flex-column justify-space-between rounded-0 elevation-0 border">
+          <v-card class="h-100 d-flex flex-column justify-space-between">
             <div>
               <v-card-title class="d-flex align-center ga-2 pa-3 text-primary">
-                <v-avatar size="24" color="info" variant="tonal" rounded="0">
+                <v-avatar size="24" color="info" variant="tonal" rounded>
                   <v-icon size="14">mdi-folder-cog-outline</v-icon>
                 </v-avatar>
                 <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
@@ -636,7 +635,7 @@
                     prepend-icon="mdi-post-outline"
                     title="Articles & Stories"
                     :subtitle="`${dashboardData.metrics.published_articles ?? dashboardData.metrics.total_articles} Articles Published`"
-                    class="px-2 rounded-0 border mb-2"
+                    class="px-2 rounded-lg border mb-2"
                     link
                     :to="{ name: 'adminArticlePage' }"
                   >
@@ -649,7 +648,7 @@
                     prepend-icon="mdi-image-multiple-outline"
                     title="Media Manager"
                     subtitle="Photos, galleries, and website assets"
-                    class="px-2 rounded-0 border mb-2"
+                    class="px-2 rounded-lg border mb-2"
                     link
                     :to="{ name: 'adminMediaAssetPage' }"
                   >
@@ -662,7 +661,7 @@
                     prepend-icon="mdi-email-newsletter"
                     title="Newsletter Subscribers"
                     :subtitle="`${dashboardData.metrics.newsletter_subscribers} Active Subscribers`"
-                    class="px-2 rounded-0 border mb-2"
+                    class="px-2 rounded-lg border mb-2"
                     link
                     :to="{ name: 'adminNewsletterSubscriptionPage' }"
                   >

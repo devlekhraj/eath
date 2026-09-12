@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="elevation-0">
+        <v-card>
             <v-card-title class="d-flex align-center justify-space-between py-0">
                 <h2>Itineraries</h2>
                 <v-btn color="primary" size="small" title="Add Itinerary" icon @click="handleOpen()">
@@ -9,7 +9,7 @@
             </v-card-title>
             <v-divider />
             <v-expansion-panels multiple elevation="1">
-                <v-expansion-panel v-for="(itinerary, index) in travelPackage?.itineraries" :key="index">
+                <v-expansion-panel v-for="(itinerary, index) in journey?.itineraries" :key="index">
                     <v-expansion-panel-title>
                         {{ itinerary.title }}
                     </v-expansion-panel-title>
@@ -31,10 +31,10 @@
             </v-expansion-panels>
         </v-card>
 
-        <div v-if="travelPackageId">
+        <div v-if="journeyId">
             <!-- Included Items -->
             <div class="mt-4">
-                <v-card class="elevation-0">
+                <v-card>
                     <v-card-title class="d-flex align-center justify-space-between py-0">
                         <h2>Included Items</h2>
                         <v-btn color="primary" size="small" icon @click="editItem({}, false)">
@@ -43,9 +43,9 @@
                     </v-card-title>
 
                     <v-card-text>
-                        <div v-if="travelPackage?.inclusions?.length">
+                        <div v-if="journey?.inclusions?.length">
                             <v-list density="compact" class="mb-4">
-                                <v-list-item v-for="(item, index) in travelPackage?.inclusions" :key="'inc-' + item.id"
+                                <v-list-item v-for="(item, index) in journey?.inclusions" :key="'inc-' + item.id"
                                     class="py-4 position-relative border mb-4 rounded">
                                     <div class="position-absolute top-0 right-0 mr-1 d-flex" :class="item.description ? 'mt-1':''">
                                         <v-btn icon size="x-small" variant="tonal" color="primary" @click="editItem(item, false)">
@@ -74,7 +74,7 @@
 
             <!-- Excluded Items -->
             <div class="mt-4">
-                <v-card class="elevation-0">
+                <v-card>
                     <v-card-title class="d-flex align-center justify-space-between py-0">
                         <h2 class="font-medium">Excluded Items</h2>
                         <v-btn color="primary" size="small" icon @click="editItem({}, true)">
@@ -83,9 +83,9 @@
                     </v-card-title>
 
                     <v-card-text>
-                        <div v-if="travelPackage?.exclusions?.length">
+                        <div v-if="journey?.exclusions?.length">
                             <v-list density="compact" class="mb-4">
-                                <v-list-item v-for="(item, index) in travelPackage?.exclusions" :key="'exc-' + item.id"
+                                <v-list-item v-for="(item, index) in journey?.exclusions" :key="'exc-' + item.id"
                                     class="py-4 position-relative border mb-4 rounded">
                                     <div class="position-absolute top-0 right-0 mr-1 d-flex" :class="item.description ? 'mt-1':''">
                                         <v-btn icon size="x-small" variant="tonal" color="primary" @click="editItem(item, true)">
@@ -113,53 +113,57 @@
             </div>
 
             <!-- Modal -->
-            <modal-template ref="globalModal" @saved="handleSaved" @close="handleClose"></modal-template>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
 import ItineraryForm from '../modal/ItineraryForm.vue'
 import IncludeExcludeForm from '../modal/IncludeExcludeForm.vue'
 
 const emit = defineEmits(['close'])
 
 const props = defineProps({
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
-    travelPackageId: {
+    journeyId: {
         type: Number,
         required: true,
     },
 })
 
-const globalModal = ref(null)
 
 function handleOpen(item = {}) {
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Category' : 'Add New Category',
         component: ItineraryForm,
         size: 'lg',
         props: {
             item,
-            travelPackageId: props.travelPackageId,
+            journeyId: props.journeyId,
         },
+        onSaved: handleSaved,
+        onClose: handleClose,
     })
 }
 
 function editItem(item, is_excluded) {
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Item' : 'Add Item',
         component: IncludeExcludeForm,
         size: 'lg',
         props: {
             item,
             isExcluded: is_excluded,
-            travelPackageId: props.travelPackageId,
+            journeyId: props.journeyId,
         },
+        onSaved: handleSaved,
+        onClose: handleClose,
     })
 }
 

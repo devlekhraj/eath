@@ -1,8 +1,8 @@
 <template>
-    <v-card class="rounded-0 elevation-0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-3">
             <span class="text-subtitle-1 font-weight-bold text-uppercase">Confirm Deletion</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
+            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -16,8 +16,8 @@
 
         <v-divider />
         <v-card-actions class="justify-end pa-3">
-            <v-btn variant="text" class="rounded-0" @click="handleCancel" :disabled="loading">Cancel</v-btn>
-            <v-btn color="error" variant="flat" class="rounded-0 px-6 font-weight-medium" :loading="loading" @click="handleDelete">
+            <v-btn variant="text" @click="handleCancel" :disabled="loading">Cancel</v-btn>
+            <v-btn color="error" variant="flat" class="px-6 font-weight-medium" :loading="loading" @click="handleDelete">
                 Delete Experience
             </v-btn>
         </v-card-actions>
@@ -25,9 +25,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { deleteExperienceApi } from '@/api/experiences.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -47,7 +47,7 @@ function handleCancel() {
 async function handleDelete() {
     try {
         loading.value = true
-        const resp = await http.delete(`admin/experiences/${props.item.id}/delete`)
+        const resp = await deleteExperienceApi(props.item.id)
         showSuccess(resp.data?.message ?? resp.message ?? 'Experience deleted successfully')
         emit('saved')
         emit('close')

@@ -7,7 +7,7 @@
                         <div class="text-subtitle-1 font-weight-medium">Article Sections</div>
                         <div class="text-caption text-medium-emphasis">Structured editorial headings and detailed content blocks.</div>
                     </div>
-                    <v-btn color="primary" rounded="0" @click="openSectionDialog()">
+                    <v-btn color="primary" @click="openSectionDialog()">
                         <v-icon start>mdi-plus</v-icon> Add Section
                     </v-btn>
                 </div>
@@ -33,10 +33,10 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex align-center justify-center ga-2">
-                                        <v-btn size="x-small" icon variant="tonal" color="primary" rounded="0" @click="openSectionDialog(sec)">
+                                        <v-btn size="x-small" icon variant="tonal" color="primary" @click="openSectionDialog(sec)">
                                             <v-icon size="16">mdi-pencil</v-icon>
                                         </v-btn>
-                                        <v-btn size="x-small" icon variant="tonal" color="error" rounded="0" @click="deleteSection(sec)">
+                                        <v-btn size="x-small" icon variant="tonal" color="error" @click="deleteSection(sec)">
                                             <v-icon size="16">mdi-delete</v-icon>
                                         </v-btn>
                                     </div>
@@ -52,7 +52,7 @@
 
                 <!-- Section Dialog -->
                 <v-dialog v-model="dialog" max-width="700" persistent>
-                    <v-card rounded="0">
+                    <v-card>
                         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
                             <span class="text-uppercase font-weight-medium text-slate-800">
                                 {{ editingSection.id ? 'Edit Section' : 'Add Section' }}
@@ -70,7 +70,6 @@
                                         label="Section Heading"
                                         variant="outlined"
                                         density="compact"
-                                        rounded="0"
                                         :rules="[v => !!v || 'Heading is required']"
                                     />
                                 </v-col>
@@ -81,7 +80,6 @@
                                         type="number"
                                         variant="outlined"
                                         density="compact"
-                                        rounded="0"
                                     />
                                 </v-col>
                                 <v-col cols="12">
@@ -92,8 +90,8 @@
                         </v-card-text>
                         <v-divider />
                         <v-card-actions class="pa-3 justify-end">
-                            <v-btn variant="text" rounded="0" @click="closeDialog">Cancel</v-btn>
-                            <v-btn color="primary" rounded="0" :loading="saving" @click="saveSection">Save Section</v-btn>
+                            <v-btn variant="text" @click="closeDialog">Cancel</v-btn>
+                            <v-btn color="primary" :loading="saving" @click="saveSection">Save Section</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -110,7 +108,7 @@ import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({
     form: { type: Object, required: true },
-    blogId: { type: [String, Number], default: null },
+    articleId: { type: [String, Number], default: null },
 })
 
 const emit = defineEmits(['saved'])
@@ -162,7 +160,7 @@ async function saveSection() {
         return
     }
 
-    if (!props.blogId) {
+    if (!props.articleId) {
         // If article not created yet, push to local array
         if (!props.form.sections) props.form.sections = []
         if (editingSection.value.id) {
@@ -177,7 +175,7 @@ async function saveSection() {
 
     saving.value = true
     try {
-        const resp = await http.post(`/admin/articles/${props.blogId}/sections`, editingSection.value)
+        const resp = await http.post(`/admin/articles/${props.articleId}/sections`, editingSection.value)
         showSuccess(resp.message || 'Section saved')
         closeDialog()
         emit('saved', { message: 'Section updated' })
@@ -191,13 +189,13 @@ async function saveSection() {
 async function deleteSection(sec) {
     if (!confirm(`Delete section "${sec.heading}"?`)) return
 
-    if (!props.blogId || !sec.id) {
+    if (!props.articleId || !sec.id) {
         props.form.sections = props.form.sections.filter(s => s !== sec)
         return
     }
 
     try {
-        const resp = await http.delete(`/admin/articles/${props.blogId}/sections/${sec.id}`)
+        const resp = await http.delete(`/admin/articles/${props.articleId}/sections/${sec.id}`)
         showSuccess(resp.message || 'Section deleted')
         emit('saved', { message: 'Section deleted' })
     } catch (error) {

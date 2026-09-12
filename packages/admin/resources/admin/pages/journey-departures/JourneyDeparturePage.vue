@@ -1,9 +1,9 @@
 <template>
 	<div class="pa-4">
-		<v-card class="rounded-0 border" elevation="0">
+		<v-card>
 			<v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
 				<div class="d-flex align-center ga-2">
-					<v-avatar size="24" rounded="0" variant="tonal" color="primary">
+					<v-avatar size="24" rounded variant="tonal" color="primary">
 						<v-icon size="14">mdi-calendar-check</v-icon>
 					</v-avatar>
 					<span class="text-uppercase font-weight-medium text-slate-800">Journey Departures</span>
@@ -12,7 +12,6 @@
 					color="primary"
 					variant="outlined"
 					size="small"
-					class="rounded-0"
 					:to="{ name: 'adminJourneyPage' }"
 					prepend-icon="mdi-map-search-outline"
 				>
@@ -33,7 +32,6 @@
 							density="compact"
 							variant="outlined"
 							hide-details
-							class="rounded-0"
 						/>
 					</v-col>
 					<v-col cols="12" sm="6" md="3">
@@ -47,7 +45,6 @@
 							density="compact"
 							variant="outlined"
 							hide-details
-							class="rounded-0"
 						/>
 					</v-col>
 				</v-row>
@@ -57,7 +54,6 @@
 					:items="filteredItems"
 					:loading="fetchingData"
 					:items-per-page="25"
-					class="rounded-0"
 					hover
 				>
 					<template #item.sn="{ index }">
@@ -104,7 +100,7 @@
 					<template #item.status="{ item }">
 						<v-chip
 							size="x-small"
-							class="rounded-0 text-uppercase"
+							class="text-uppercase"
 							:color="statusColor(item.status)"
 							variant="tonal"
 						>
@@ -125,26 +121,24 @@
 					<template #item.actions="{ item }">
 						<div class="d-flex align-center justify-center ga-1">
 							<v-btn
-								size="x-small"
-								icon
-								variant="tonal"
+								size="small"
+								variant="outlined"
 								color="primary"
-								class="rounded-0"
 								title="Edit in Journey detail"
 								:to="{ name: 'adminJourneyDetailPage', params: { id: item.journey_id } }"
 							>
-								<v-icon size="14">mdi-open-in-new</v-icon>
+								<v-icon start size="14">mdi-open-in-new</v-icon>
+								Edit
 							</v-btn>
 							<v-btn
-								size="x-small"
-								icon
-								variant="tonal"
+								size="small"
+								variant="outlined"
 								color="error"
-								class="rounded-0"
 								title="Delete departure"
 								@click="openDeleteDialog(item)"
 							>
-								<v-icon size="14">mdi-delete-outline</v-icon>
+								<v-icon start size="14">mdi-delete-outline</v-icon>
+								Delete
 							</v-btn>
 						</div>
 					</template>
@@ -153,16 +147,16 @@
 		</v-card>
 
 		<!-- Confirmation Dialog -->
-		<v-dialog v-model="deleteDialogOpen" max-width="450" class="rounded-0">
-			<v-card class="rounded-0" elevation="0">
+		<v-dialog v-model="deleteDialogOpen" max-width="480px">
+			<v-card>
 				<v-card-title class="d-flex align-center justify-space-between pa-3 text-error">
 					<div class="d-flex align-center ga-2">
-						<v-avatar size="24" rounded="0" variant="tonal" color="error">
+						<v-avatar size="24" rounded variant="tonal" color="error">
 							<v-icon size="14">mdi-alert-outline</v-icon>
 						</v-avatar>
 						<span class="text-uppercase font-weight-medium">Delete Departure</span>
 					</div>
-					<v-btn icon="mdi-close" variant="text" size="small" class="rounded-0" @click="deleteDialogOpen = false" />
+					<v-btn icon="mdi-close" variant="text" size="small" @click="deleteDialogOpen = false" />
 				</v-card-title>
 				<v-divider />
 				<v-card-text class="pt-4">
@@ -174,10 +168,10 @@
 				</v-card-text>
 				<v-divider />
 				<v-card-actions class="pa-3 justify-end ga-2">
-					<v-btn variant="outlined" class="rounded-0" @click="deleteDialogOpen = false">
+					<v-btn variant="outlined" @click="deleteDialogOpen = false">
 						Cancel
 					</v-btn>
-					<v-btn color="error" class="rounded-0" :loading="deleting" @click="confirmDelete">
+					<v-btn color="error" :loading="deleting" @click="confirmDelete">
 						Delete Departure
 					</v-btn>
 				</v-card-actions>
@@ -188,8 +182,9 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import http from '@/http.config';
+;
 import { useSnackbar } from '@/composables/snackbar';
+import { getDeparturesApi, toggleDepartureActiveApi, deleteJourneyDepartureApi } from '@/api/journey-departures.api'
 
 const { showSuccess, showError } = useSnackbar();
 
@@ -204,7 +199,7 @@ const headers = [
 	{ title: 'Price', key: 'price', sortable: false },
 	{ title: 'Status', key: 'status', sortable: true },
 	{ title: 'Active', key: 'is_active', sortable: false },
-	{ title: 'Actions', key: 'actions', sortable: false, align: 'center', width: '90px' },
+	{ title: 'Actions', key: 'actions', sortable: false, align: 'center', width: '160px' },
 ];
 
 const dataList = ref([]);
@@ -258,7 +253,7 @@ const filteredItems = computed(() => {
 async function fetchData() {
 	try {
 		fetchingData.value = true;
-		const resp = await http.get('admin/departures');
+		const resp = await getDeparturesApi();
 		dataList.value = resp.data || [];
 	} catch (error) {
 		console.error('Failed to load departures', error);
@@ -270,9 +265,7 @@ async function fetchData() {
 
 async function toggleActive(item) {
 	try {
-		await http.patch(`admin/departures/${item.id}/toggle-active`, {
-			is_active: item.is_active,
-		});
+		await toggleDepartureActiveApi(item.id, item.is_active);
 		showSuccess(`Departure ${item.is_active ? 'activated' : 'deactivated'}`);
 	} catch (error) {
 		showError('Failed to update departure status');
@@ -289,7 +282,7 @@ async function confirmDelete() {
 	if (!activeItem.value) return;
 	try {
 		deleting.value = true;
-		await http.delete(`admin/journey-departures/${activeItem.value.id}/delete`);
+		await deleteJourneyDepartureApi(activeItem.value.id);
 		showSuccess('Departure deleted successfully');
 		deleteDialogOpen.value = false;
 		dataList.value = dataList.value.filter((dep) => dep.id !== activeItem.value.id);
@@ -305,12 +298,3 @@ onMounted(() => {
 	fetchData();
 });
 </script>
-
-<style scoped>
-:deep(.v-btn),
-:deep(.v-card),
-:deep(.v-chip),
-:deep(.v-field) {
-	border-radius: 0 !important;
-}
-</style>

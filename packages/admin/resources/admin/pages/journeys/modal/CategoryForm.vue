@@ -47,6 +47,7 @@
 import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { getPackageCategoriesApi, savePackageCategoryApi } from '@/api/destinations.api'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])
@@ -92,7 +93,7 @@ onMounted(() => {
 
 async function fetchParentCategories() {
     try {
-        const resp = await http.get('admin/package-categories?type=parent')
+        const resp = await getPackageCategoriesApi({ type: 'parent' })
         parentOptions.value = resp.data || []
     } catch (error) {
         console.error('Failed to load parent categories', error)

@@ -6,16 +6,16 @@
         <div>
             <SummarnoteViewer :value="guide.bio"/>
         </div>
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
 import ModalBioForm from './modal/ModalBioForm.vue'
 
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['close', 'saved'])
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 
 const props = defineProps({
     guide: {
@@ -25,17 +25,17 @@ const props = defineProps({
 })
 
 
-const globalModal = ref(null);
 
 
 function editBio() {
-    globalModal.value.open({
+    openModal({
         title: 'Update Bio',
         component: ModalBioForm,
         size: 'xl',
         props: {
             item: props.guide, // <-- correctly passed as a prop
         },
+        onClose: handleClose,
     });
 }
 function handleClose() {

@@ -17,7 +17,6 @@
               placeholder="Search by key, heading..."
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -30,13 +29,12 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
 
           <v-col cols="auto" class="mt-2 mt-sm-0">
-            <v-btn color="primary" variant="elevated" class="rounded-0" @click="handleOpen()">
+            <v-btn color="primary" variant="elevated" @click="handleOpen()">
               <v-icon start>mdi-plus</v-icon> Add Section
             </v-btn>
           </v-col>
@@ -49,7 +47,7 @@
 
       <template #item.page_key="{ item }">
         <div>
-          <v-chip size="small" variant="tonal" color="secondary" class="rounded-0">
+          <v-chip size="small" variant="tonal" color="secondary">
             {{ item.page_key }}
           </v-chip>
         </div>
@@ -81,7 +79,6 @@
         <div>
           <v-chip
             size="small"
-            class="rounded-0"
             :color="item.is_active ? 'success' : 'default'"
             variant="flat"
             style="cursor: pointer;"
@@ -95,26 +92,29 @@
 
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
-          <v-btn size="x-small" icon variant="tonal" color="warning" class="rounded-0" @click="handleOpen(item)">
-            <v-icon size="15">mdi-pencil</v-icon>
+          <v-btn size="small" variant="outlined" color="primary" @click="handleOpen(item)" title="Edit section">
+            <v-icon start size="14">mdi-pencil</v-icon>
+            Edit
           </v-btn>
-          <v-btn size="x-small" icon variant="tonal" color="error" class="rounded-0" @click="handleDelete(item)">
-            <v-icon size="15">mdi-delete</v-icon>
+          <v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete section">
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>
     </v-data-table>
-
-    <modal-template ref="globalModal" @saved="fetchSections" @close="fetchSections" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import { getWebsiteSectionsApi, toggleWebsiteSectionActiveApi } from '@/api/website-sections.api'
 import WebsiteSectionForm from './modal/WebsiteSectionForm.vue'
 import WebsiteSectionDelete from './modal/WebsiteSectionDelete.vue'
+
+const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -126,11 +126,10 @@ const headers = [
   { title: 'Eyebrow', key: 'eyebrow', sortable: false },
   { title: 'Order', key: 'sort_order', sortable: true, width: '80px' },
   { title: 'Status', key: 'is_active', sortable: false, width: '110px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '100px' },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
 ]
 
 const sections = ref([])
-const globalModal = ref(null)
 const search = ref('')
 const selectedPageKey = ref(null)
 const fetchingData = ref(false)
@@ -165,7 +164,7 @@ const filteredItems = computed(() => {
 })
 
 function handleOpen(item = null) {
-  globalModal.value.open({
+  openModal({
     title: item?.id ? 'Edit Website Section' : 'Add Website Section',
     component: WebsiteSectionForm,
     size: 'md',
@@ -176,14 +175,16 @@ function handleOpen(item = null) {
 }
 
 function handleDelete(item = {}) {
-  globalModal.value.open({
+  openModal({
     title: 'Delete Website Section',
     component: WebsiteSectionDelete,
     size: 'sm',
     props: {
       item,
     },
-  })
+        onSaved: fetchSections,
+        onClose: fetchSections,
+    })
 }
 
 async function fetchSections() {

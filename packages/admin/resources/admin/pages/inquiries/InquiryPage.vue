@@ -17,7 +17,6 @@
               placeholder="Search by code, name, email..."
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -30,7 +29,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -43,7 +41,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -82,7 +79,7 @@
 
       <template #item.inquiry_type="{ item }">
         <div>
-          <v-chip size="small" variant="tonal" color="secondary" class="rounded-0 text-capitalize">
+          <v-chip size="small" variant="tonal" color="secondary" class="text-capitalize">
             {{ item.inquiry_type }}
           </v-chip>
         </div>
@@ -108,7 +105,7 @@
         <div>
           <v-chip
             size="small"
-            class="rounded-0 text-capitalize"
+            class="text-capitalize"
             :color="getStatusColor(item.status)"
             variant="flat"
           >
@@ -126,37 +123,35 @@
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
           <v-btn
-            size="x-small"
-            icon
-            variant="tonal"
+            size="small"
+            variant="outlined"
             color="primary"
-            class="rounded-0"
             title="Inspect Inquiry"
             @click="handleViewDetail(item)"
           >
-            <v-icon size="15">mdi-eye</v-icon>
+            <v-icon start size="14">mdi-eye</v-icon>
+            View
           </v-btn>
           <v-btn
-            size="x-small"
-            icon
-            variant="tonal"
+            size="small"
+            variant="outlined"
             color="error"
-            class="rounded-0"
             title="Delete Inquiry"
             @click="handleDelete(item)"
           >
-            <v-icon size="15">mdi-delete</v-icon>
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>
     </v-data-table>
-
-    <modal-template ref="globalModal" @saved="fetchInquiries" @close="fetchInquiries" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
 import { getInquiriesApi } from '@/api/inquiries.api'
 import InquiryDetailModal from './modal/InquiryDetailModal.vue'
 import InquiryDeleteModal from './modal/InquiryDeleteModal.vue'
@@ -166,7 +161,6 @@ const search = ref('')
 const selectedStatus = ref(null)
 const selectedType = ref(null)
 const inquiries = ref([])
-const globalModal = ref(null)
 
 const headers = [
   { title: 'SN', key: 'sn', sortable: false, width: '50px' },
@@ -178,7 +172,7 @@ const headers = [
   { title: 'Journey', key: 'journey', sortable: false },
   { title: 'Status', key: 'status', sortable: true, width: '110px' },
   { title: 'Received', key: 'created_at', sortable: true, width: '120px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '90px' },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
 ]
 
 const statusFilterOptions = [
@@ -244,25 +238,29 @@ function formatDate(val) {
 }
 
 function handleViewDetail(item) {
-  globalModal.value.open({
+  openModal({
     title: `Inquiry ${item.reference_code}`,
     component: InquiryDetailModal,
     size: 'lg',
     props: {
       item,
     },
-  })
+        onSaved: fetchInquiries,
+        onClose: fetchInquiries,
+    })
 }
 
 function handleDelete(item) {
-  globalModal.value.open({
+  openModal({
     title: 'Delete Inquiry',
     component: InquiryDeleteModal,
     size: 'sm',
     props: {
       item,
     },
-  })
+        onSaved: fetchInquiries,
+        onClose: fetchInquiries,
+    })
 }
 
 async function fetchInquiries() {

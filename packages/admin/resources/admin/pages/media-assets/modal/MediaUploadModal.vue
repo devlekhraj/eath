@@ -1,8 +1,8 @@
 <template>
-  <v-card class="rounded-0 elevation-0">
+  <v-card>
     <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
       <span class="text-uppercase font-weight-medium text-slate-800">Upload Media Asset</span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
+      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -29,13 +29,13 @@
 
             <template v-if="previewUrl">
               <div class="position-relative w-100" style="max-height: 240px; overflow: hidden;">
-                <v-img :src="previewUrl" height="220" cover class="rounded-0 border" />
+                <v-img :src="previewUrl" height="220" cover class="border" />
                 <v-btn
                   icon
                   size="x-small"
                   color="error"
                   variant="elevated"
-                  class="position-absolute rounded-0"
+                  class="position-absolute"
                   style="top: 8px; right: 8px; z-index: 5;"
                   @click.stop="clearFile"
                 >
@@ -55,7 +55,7 @@
                 variant="outlined"
                 color="primary"
                 size="small"
-                class="mt-3 rounded-0"
+                class="mt-3"
                 @click.stop="triggerFileInput"
               >
                 Browse File
@@ -80,7 +80,7 @@
               placeholder="e.g. Everest Base Camp Sunrise"
               variant="outlined"
               density="compact"
-              class="rounded-0 mb-2"
+              class="mb-2"
               :error-messages="serverErrors.title"
             />
 
@@ -90,7 +90,7 @@
               placeholder="Descriptive alt text for screen readers and SEO"
               variant="outlined"
               density="compact"
-              class="rounded-0 mb-2"
+              class="mb-2"
               :error-messages="serverErrors.alt_text"
             />
 
@@ -101,7 +101,7 @@
               rows="4"
               variant="outlined"
               density="compact"
-              class="rounded-0 mb-2"
+              class="mb-2"
               :error-messages="serverErrors.caption"
             />
           </v-form>
@@ -111,12 +111,11 @@
 
     <v-divider />
     <v-card-actions class="pa-3">
-      <v-btn variant="text" class="rounded-0" @click="handleCancel">Cancel</v-btn>
+      <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer />
       <v-btn
         color="primary"
         variant="elevated"
-        class="rounded-0"
         :loading="uploading"
         :disabled="!selectedFile || uploading"
         @click="handleUpload"

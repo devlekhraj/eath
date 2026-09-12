@@ -49,9 +49,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { createGuideApi } from '@/api/guides.api'
 
 const emit = defineEmits(['close', 'saved'])
 const { showSuccess, showError } = useSnackbar()
@@ -131,7 +131,7 @@ async function handleSubmit() {
   try {
     loading.value = true
     // Replace with your actual API endpoint and method
-    const resp = await http.post('/admin/guides', form)
+    const resp = await createGuideApi(form)
 
     showSuccess(resp.data.message || 'Guide saved successfully')
     emit('close')

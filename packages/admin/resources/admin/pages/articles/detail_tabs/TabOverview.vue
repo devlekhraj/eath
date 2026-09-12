@@ -9,7 +9,6 @@
                             label="Title"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required]"
                             :error-messages="errors.title"
                             @input="handleTitleInput"
@@ -22,7 +21,6 @@
                             label="Slug"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.slug]"
                             hint="URL-friendly string with lowercase letters, numbers, and hyphens"
                             persistent-hint
@@ -38,7 +36,6 @@
                             auto-grow
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             hint="Brief overview displayed in article cards and meta snippets"
                             persistent-hint
                         />
@@ -47,13 +44,12 @@
                     <v-col cols="12" md="6">
                         <v-select
                             v-model="form.category_id"
-                            :items="blogCategories"
+                            :items="articleCategories"
                             item-title="name"
                             item-value="id"
                             label="Article Category"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             clearable
                             :error-messages="errors.category_id"
                         />
@@ -66,7 +62,6 @@
                             prepend-inner-icon="mdi-account"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required]"
                             :error-messages="errors.author"
                         />
@@ -78,7 +73,6 @@
                             label="Is Active"
                             color="success"
                             inset
-                            rounded="0"
                         />
                     </v-col>
 
@@ -88,7 +82,6 @@
                             label="Is Published"
                             color="primary"
                             inset
-                            rounded="0"
                         />
                     </v-col>
 
@@ -98,7 +91,6 @@
                             label="Featured Article"
                             color="accent"
                             inset
-                            rounded="0"
                         />
                     </v-col>
 
@@ -107,7 +99,6 @@
                             <v-btn
                                 type="button"
                                 color="primary"
-                                rounded="0"
                                 :loading="isSubmitting"
                                 @click="submitOverview"
                             >
@@ -129,15 +120,15 @@ const props = defineProps({
     form: { type: Object, required: true },
     rules: { type: Object, required: true },
     errors: { type: Object, required: true },
-    blogCategories: { type: Array, default: () => [] },
-    blogCategory: { type: [Number, String], default: null },
-    blogId: { type: [String, Number], default: null },
+    articleCategories: { type: Array, default: () => [] },
+    articleCategory: { type: [Number, String], default: null },
+    articleId: { type: [String, Number], default: null },
     submitting: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['saved'])
 
-const { form, rules, errors, blogCategories, blogCategory, blogId, submitting } = toRefs(props)
+const { form, rules, errors, articleCategories, articleCategory, articleId, submitting } = toRefs(props)
 const localSubmitting = ref(false)
 const isSubmitting = computed(() => submitting.value || localSubmitting.value)
 
@@ -145,8 +136,8 @@ watch(
     () => form.value,
     (value) => {
         if (!value) return
-        if (!value.category_id && (blogCategory.value || value?.category?.id || value?.article_category_id)) {
-            value.category_id = blogCategory.value ?? value?.category?.id ?? value?.article_category_id ?? null
+        if (!value.category_id && (articleCategory.value || value?.category?.id || value?.article_category_id)) {
+            value.category_id = articleCategory.value ?? value?.category?.id ?? value?.article_category_id ?? null
         }
         if (value.sub_title && !value.summary) {
             value.summary = value.sub_title
@@ -185,8 +176,8 @@ async function submitOverview() {
             is_featured: form.value.is_featured,
         }
 
-        const resp = blogId.value
-            ? await updateBlogApi(blogId.value, payload)
+        const resp = articleId.value
+            ? await updateBlogApi(articleId.value, payload)
             : await createBlogApi(payload)
         emit('saved', { message: resp?.message || 'Article saved successfully' })
     } catch (error) {

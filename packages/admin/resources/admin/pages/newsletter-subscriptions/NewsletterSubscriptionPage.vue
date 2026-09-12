@@ -17,7 +17,6 @@
               placeholder="Search by email, name..."
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
@@ -30,13 +29,12 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               hide-details
             />
           </v-col>
 
           <v-col cols="auto" class="mt-2 mt-sm-0">
-            <v-btn color="primary" variant="elevated" class="rounded-0" @click="openAddDialog = true">
+            <v-btn color="primary" variant="elevated" @click="openAddDialog = true">
               <v-icon start>mdi-plus</v-icon> Add Subscriber
             </v-btn>
           </v-col>
@@ -65,7 +63,6 @@
         <div>
           <v-chip
             size="small"
-            class="rounded-0"
             :color="item.is_subscribed ? 'success' : 'default'"
             variant="flat"
             style="cursor: pointer;"
@@ -86,15 +83,14 @@
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
           <v-btn
-            size="x-small"
-            icon
-            variant="tonal"
+            size="small"
+            variant="outlined"
             color="error"
-            class="rounded-0"
             title="Delete Subscriber"
             @click="confirmDelete(item)"
           >
-            <v-icon size="15">mdi-delete</v-icon>
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>
@@ -102,10 +98,10 @@
 
     <!-- Quick Add Dialog -->
     <v-dialog v-model="openAddDialog" max-width="460">
-      <v-card class="rounded-0 elevation-0">
+      <v-card>
         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
           <span class="text-uppercase font-weight-medium text-slate-800">Add Newsletter Subscriber</span>
-          <v-btn icon variant="text" size="small" class="rounded-0" @click="openAddDialog = false">
+          <v-btn icon variant="text" size="small" @click="openAddDialog = false">
             <v-icon size="18">mdi-close</v-icon>
           </v-btn>
         </v-card-title>
@@ -117,7 +113,7 @@
             type="email"
             variant="outlined"
             density="compact"
-            class="rounded-0 mb-3"
+            class="mb-3"
             :error-messages="addErrors.email"
           />
           <v-text-field
@@ -126,17 +122,15 @@
             placeholder="e.g. John Doe"
             variant="outlined"
             density="compact"
-            class="rounded-0"
             :error-messages="addErrors.name"
           />
         </v-card-text>
         <v-divider />
         <v-card-actions class="pa-3 justify-end">
-          <v-btn variant="text" class="rounded-0" @click="openAddDialog = false">Cancel</v-btn>
+          <v-btn variant="text" @click="openAddDialog = false">Cancel</v-btn>
           <v-btn
             color="primary"
             variant="elevated"
-            class="rounded-0"
             :loading="adding"
             @click="handleAddSubscriber"
           >
@@ -148,10 +142,10 @@
 
     <!-- Delete Confirmation Dialog -->
     <v-dialog v-model="openDeleteDialog" max-width="420">
-      <v-card class="rounded-0 elevation-0">
+      <v-card>
         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
           <span class="text-uppercase font-weight-medium text-slate-800">Delete Subscriber</span>
-          <v-btn icon variant="text" size="small" class="rounded-0" @click="openDeleteDialog = false">
+          <v-btn icon variant="text" size="small" @click="openDeleteDialog = false">
             <v-icon size="18">mdi-close</v-icon>
           </v-btn>
         </v-card-title>
@@ -164,11 +158,10 @@
         </v-card-text>
         <v-divider />
         <v-card-actions class="pa-3 justify-end">
-          <v-btn variant="text" class="rounded-0" @click="openDeleteDialog = false">Cancel</v-btn>
+          <v-btn variant="text" @click="openDeleteDialog = false">Cancel</v-btn>
           <v-btn
             color="error"
             variant="elevated"
-            class="rounded-0"
             :loading="deleting"
             @click="handleDeleteSubscriber"
           >
@@ -212,7 +205,7 @@ const headers = [
   { title: 'Name', key: 'name', sortable: true },
   { title: 'Status', key: 'is_subscribed', sortable: true, width: '130px' },
   { title: 'Subscribed On', key: 'subscribed_at', sortable: true, width: '130px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '80px' },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '110px' },
 ]
 
 const statusFilterOptions = [

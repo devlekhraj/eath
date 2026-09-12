@@ -1,5 +1,5 @@
 <template>
-    <v-card rounded="0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
             <span class="text-uppercase font-weight-medium text-slate-800">Add New Page</span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
@@ -17,7 +17,6 @@
                             label="Title"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required]"
                         />
                     </v-col>
@@ -28,7 +27,6 @@
                             label="Slug"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                             :rules="[rules.required, rules.slug]"
                             hint="URL-friendly string with lowercase letters, numbers, and hyphens"
                             persistent-hint
@@ -43,7 +41,6 @@
                             label="Page Type"
                             variant="outlined"
                             density="comfortable"
-                            rounded="0"
                         />
                     </v-col>
                 </v-row>
@@ -52,8 +49,8 @@
         <v-divider />
 
         <v-card-actions class="pa-3 justify-end">
-            <v-btn variant="text" rounded="0" @click="handleCancel">Cancel</v-btn>
-            <v-btn color="primary" rounded="0" :loading="loading" @click="submitForm">Save</v-btn>
+            <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
+            <v-btn color="primary" :loading="loading" @click="submitForm">Save</v-btn>
         </v-card-actions>
     </v-card>
 </template>

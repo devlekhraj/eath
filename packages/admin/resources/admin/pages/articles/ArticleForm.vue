@@ -31,7 +31,7 @@
 			<v-col cols="12" md="4">
 				<v-card class="pa-4">
 					<!-- Featured Image -->
-					<v-file-input v-if="blog_id" v-model="selected_image" accept="image/*" label="Featured Image" prepend-inner-icon="mdi-image" @change="onImageChange" class="mb-4 truncate-file-name" />
+					<v-file-input v-if="articleId" v-model="selected_image" accept="image/*" label="Featured Image" prepend-inner-icon="mdi-image" @change="onImageChange" class="mb-4 truncate-file-name" />
 
 					<v-img
 						v-if="previewImage"
@@ -96,14 +96,14 @@ export default {
 					!v || /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(v) ||
 					'Slug must contain only lowercase letters, numbers, and hyphens',
 			},
-			blog_id: null,
+			articleId: null,
 			blog_categories: [],
 		}
 	},
 
 	mounted() {
 		if (this.$route.query.id) {
-			this.blog_id = this.$route.query.id;
+			this.articleId = this.$route.query.id;
 			this.fetchBlog();
 		}
 		this.fetchBlogCategory();
@@ -134,7 +134,7 @@ export default {
 		},
 
 		async fetchBlog() {
-			const resp = await http.get(`/admin/blogs/${this.blog_id}`);
+			const resp = await http.get(`/admin/blogs/${this.articleId}`);
 			this.form = resp.data;
 			this.previewImage = resp.data.banner_url;
 		},
@@ -144,8 +144,8 @@ export default {
 
 			if (selected instanceof File) {
 				const formData = new FormData();
-				if (this.blog_id) {
-					formData.append('usage_id', this.blog_id);
+				if (this.articleId) {
+					formData.append('usage_id', this.articleId);
 					formData.append('usage_type', 'blogs');
 				}
 				formData.append('image', selected);

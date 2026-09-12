@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="pa-4 mb-4" flat rounded="0">
+        <v-card class="pa-4 mb-4">
             <div class="blog-header-grid">
                 <div class="blog-header-image">
                     <v-img
@@ -8,7 +8,6 @@
                         width="300"
                         style="aspect-ratio: 16/9;"
                         cover
-                        rounded="0"
                     />
                 </div>
                 <div class="blog-header-meta">
@@ -24,7 +23,6 @@
                             color="primary"
                             icon
                             variant="tonal"
-                            rounded="0"
                             :href="articleUrl"
                             target="_blank"
                             rel="noopener"
@@ -39,10 +37,10 @@
             </div>
         </v-card>
 
-        <v-card class="pa-4" flat rounded="0">
+        <v-card class="pa-4">
             <v-form ref="formRef" v-model="valid" @submit.prevent="submitForm" validate-on="submit">
                 <v-tabs v-model="tab" color="primary">
-                    <v-tab v-for="tabItem in tabs" :key="tabItem.value" :value="tabItem.value" rounded="0">
+                    <v-tab v-for="tabItem in tabs" :key="tabItem.value" :value="tabItem.value">
                         <v-icon start color="primary">{{ tabItem.icon }}</v-icon>
                         {{ tabItem.label }}
                     </v-tab>
@@ -60,7 +58,7 @@
                                 :blog-categories="blog_categories"
                                 :blog-category="form.category_id || form.article_category_id || form?.category?.id || null"
                                 :content-error="contentError"
-                                :blog-id="blog_id"
+                                :article-id="articleId"
                                 :submitting="submitting"
                                 @saved="handleChildSaved"
                             />
@@ -125,7 +123,7 @@ export default {
                     !v || /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(v) ||
                     'Slug must contain only lowercase letters, numbers, and hyphens',
             },
-            blog_id: null,
+            articleId: null,
             blog_categories: [],
             tabs: [
                 { value: 'tab_overview', label: 'Overview', icon: 'mdi-lightbulb-outline' },
@@ -139,7 +137,7 @@ export default {
     mounted() {
         const id = this.$route.params.id || this.$route.query.id
         if (id) {
-            this.blog_id = id
+            this.articleId = id
             this.fetchBlog()
         }
         this.fetchBlogCategory()
@@ -157,7 +155,7 @@ export default {
 
         handleChildSaved(payload) {
             this.showSuccess(payload?.message || 'Saved')
-            if (this.blog_id) {
+            if (this.articleId) {
                 this.fetchBlog()
             }
         },
@@ -178,7 +176,7 @@ export default {
 
         async fetchBlog() {
             try {
-                const resp = await getArticleByIdApi(this.blog_id)
+                const resp = await getArticleByIdApi(this.articleId)
                 const data = resp?.data?.data || resp?.data || resp?.article || {}
                 this.form = {
                     ...this.form,
@@ -203,8 +201,8 @@ export default {
 
             this.submitting = true
             try {
-                const resp = this.blog_id
-                    ? await updateArticleApi(this.blog_id, this.form)
+                const resp = this.articleId
+                    ? await updateArticleApi(this.articleId, this.form)
                     : await createArticleApi(this.form)
                 this.showSuccess(resp.message || 'Article saved successfully')
             } catch (error) {

@@ -37,19 +37,20 @@
             </v-card-text>
         </v-card>
         <!-- Modal -->
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 <script setup>
 import http from '@/http.config'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh', 'close'])
 
 
+const { open: openModal } = useGlobalModal()
+
 const { showSuccess, showError } = useSnackbar()
 const selected_file = ref(null);
-const globalModal = ref(null);
 
 const props = defineProps({
     travelPackage: {
@@ -62,13 +63,14 @@ import DeleteImage from '../modal/DeleteImage.vue'
 
 function handleDelete(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: 'Delete Item',
         component: DeleteImage,
         size: 'sm',
         props: {
             imageItem: item,
         },
+        onClose: handleClose,
     })
 }
 

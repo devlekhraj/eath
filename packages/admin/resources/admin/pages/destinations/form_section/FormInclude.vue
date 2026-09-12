@@ -1,10 +1,6 @@
 <template>
     <div class="mb-4">
         <v-card>
-            <!-- <v-card-title class="d-flex align-center justify-space-between py-0">
-                <h2 class="font-medium">Include / Exclude Items</h2>
-            </v-card-title>
-            <v-divider /> -->
             <v-card-text>
                 <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation class="border pa-4 rounded">
                     <div>
@@ -41,9 +37,7 @@
                                         </v-icon>
                                         <div>
                                             <div class="font-weight-medium">{{ item.title }}</div>
-                                            <!-- <div class="text-body-2 text-medium-emphasis" v-if="item?.description">{{
-                                                item.description }}</div> -->
-                                        </div>
+                                            </div>
                                     </div>
                                     <div>
                                         <v-btn icon size="x-small" variant="tonal" color="primary" @click="editItem(item, false)">
@@ -76,9 +70,7 @@
                                         </v-icon>
                                         <div>
                                             <div class="font-weight-medium">{{ item.title }}</div>
-                                            <!-- <div class="text-body-2 text-medium-emphasis" v-if="item?.description">{{
-                                                item.description }}</div> -->
-                                        </div>
+                                            </div>
                                     </div>
                                     <div>
                                         <v-btn icon size="x-small" variant="tonal" color="primary" @click="editItem(item, false)">
@@ -96,17 +88,19 @@
             </v-card-text>
         </v-card>
         <!-- Modal -->
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 <script setup>
 import http from '@/http.config'
 import { reactive, ref, watch, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh', 'close'])
 
 
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
+const { showError } = useSnackbar()
 
 const props = defineProps({
     travelPackage: {
@@ -122,7 +116,6 @@ const rules = {
 const formRef = ref(null)
 const loading = ref(false);
 const serverErrors = reactive({})
-const globalModal = ref(null)
 
 const form = reactive({
     title: '',
@@ -147,7 +140,7 @@ async function handleSubmit() {
 
     try {
         loading.value = true
-        const resp = await http.post(
+        await http.post(
             `/admin/travel-packages/${props.travelPackage.id}/inlusions`,
             form
         )
@@ -169,29 +162,30 @@ async function handleSubmit() {
     }
 }
 
-// const globalModal = ref(null)
 
 import DeleteIncludeItem from '../modal/DeleteIncludeItem.vue'
 import IncludeExcludeForm from '../modal/IncludeExcludeForm.vue'
 
 function deleteItem(item) {
-    globalModal.value.open({
+    openModal({
         title: 'Delete Item',
         component: DeleteIncludeItem,
         size: 'sm',
         props: {
             item,
         },
+        onClose: handleClose,
     })
 }
 function editItem(item) {
-    globalModal.value.open({
+    openModal({
         title: 'Edit ' + item.title,
         component: IncludeExcludeForm,
         size: 'md',
         props: {
             item,
         },
+        onClose: handleClose,
     })
 }
 

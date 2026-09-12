@@ -7,7 +7,6 @@
                     label="Meta Title"
                     variant="outlined"
                     density="comfortable"
-                    rounded="0"
                     counter="60"
                     hint="Max 60 characters for best SEO"
                     persistent-hint
@@ -21,7 +20,6 @@
                     rows="3"
                     variant="outlined"
                     density="comfortable"
-                    rounded="0"
                     counter="160"
                     hint="Max 160 characters for search engines"
                     persistent-hint
@@ -30,7 +28,7 @@
                 />
 
                 <div class="text-center mt-6">
-                    <v-btn type="button" color="primary" rounded="0" :loading="isSubmitting" @click="submitSeo">
+                    <v-btn type="button" color="primary" :loading="isSubmitting" @click="submitSeo">
                         Save SEO Settings
                     </v-btn>
                 </div>
@@ -46,13 +44,13 @@ import { createBlogApi, updateBlogApi } from '@/api/articles.api'
 const props = defineProps({
     form: { type: Object, required: true },
     errors: { type: Object, required: true },
-    blogId: { type: [String, Number], default: null },
+    articleId: { type: [String, Number], default: null },
     submitting: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['saved'])
 
-const { form, errors, blogId, submitting } = toRefs(props)
+const { form, errors, articleId, submitting } = toRefs(props)
 const localSubmitting = ref(false)
 const isSubmitting = computed(() => submitting.value || localSubmitting.value)
 
@@ -73,8 +71,8 @@ async function submitSeo() {
             meta_keyword: seoKeyword.value,
         }
 
-        const resp = blogId.value
-            ? await updateBlogApi(blogId.value, payload)
+        const resp = articleId.value
+            ? await updateBlogApi(articleId.value, payload)
             : await createBlogApi(payload)
         emit('saved', { message: resp?.message || 'Blog saved successfully' })
     } catch (error) {

@@ -31,9 +31,9 @@
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useRouter } from 'vue-router'
+import { saveJourney } from '@/api/journeys.api'
 
 const router = useRouter()
 const loading = ref(false)
@@ -99,7 +99,7 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await http.post('/admin/journeys', form)
+        const resp = await saveJourney(form)
         showSuccess(resp.message || 'Journey created successfully')
         router.push({ name: 'adminJourneyForm', query: { id: resp.data.id } })
     } catch (error) {

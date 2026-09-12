@@ -1,6 +1,6 @@
 <template>
     <div class="mb-4">
-        <v-card class="pa-4 rounded-0 elevation-0">
+        <v-card class="pa-4">
             <v-card-text class="pt-2">
                 <v-row dense>
                     <v-col cols="12" md="8">
@@ -10,7 +10,6 @@
                             :rules="[rules.required]"
                             :error-messages="errors.name"
                             :disabled="submitting"
-                            class="rounded-0"
                             required
                         />
                     </v-col>
@@ -22,7 +21,6 @@
                             :rules="[rules.required, rules.slug]"
                             :error-messages="errors.slug"
                             :disabled="submitting"
-                            class="rounded-0"
                             required
                         />
                     </v-col>
@@ -33,7 +31,6 @@
                             label="Subtitle / Tagline"
                             :error-messages="errors.subtitle"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -46,7 +43,6 @@
                             auto-grow
                             :error-messages="errors.summary"
                             :disabled="submitting"
-                            class="rounded-0"
                             required
                         />
                     </v-col>
@@ -62,7 +58,6 @@
                             :rules="[rules.required]"
                             :error-messages="errors.destination_id"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -76,7 +71,6 @@
                             clearable
                             :error-messages="errors.guide_id"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -93,7 +87,6 @@
                             closable-chips
                             :error-messages="errors.experience_ids"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -109,7 +102,6 @@
                             closable-chips
                             :error-messages="errors.travel_month_ids"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -123,7 +115,6 @@
                             :rules="[rules.required, rules.numeric, rules.positive]"
                             :error-messages="errors.duration_days"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -136,7 +127,6 @@
                             :rules="[rules.numeric, rules.positive]"
                             :error-messages="errors.duration_nights"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -150,7 +140,6 @@
                             :rules="[rules.numeric, rules.positive]"
                             :error-messages="errors.price"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -163,7 +152,6 @@
                             label="Pricing Basis"
                             :error-messages="errors.pricing_basis"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -176,7 +164,6 @@
                             :rules="[rules.numeric, rules.positive]"
                             :error-messages="errors.max_altitude_m"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -190,7 +177,6 @@
                             :rules="[rules.numeric, rules.positive]"
                             :error-messages="errors.walking_hours_min"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -204,7 +190,6 @@
                             :rules="[rules.numeric, rules.positive]"
                             :error-messages="errors.walking_hours_max"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -216,7 +201,6 @@
                             min="0"
                             :error-messages="errors.featured_rank"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -228,7 +212,6 @@
                             label="Difficulty"
                             :error-messages="errors.difficulty"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -240,7 +223,6 @@
                             clearable
                             :error-messages="errors.accommodation_style"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -252,7 +234,6 @@
                             clearable
                             :error-messages="errors.pace"
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -264,7 +245,6 @@
                             color="primary"
                             inset
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -275,7 +255,6 @@
                             color="primary"
                             inset
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
 
@@ -286,7 +265,6 @@
                             color="primary"
                             inset
                             :disabled="submitting"
-                            class="rounded-0"
                         />
                     </v-col>
                 </v-row>
@@ -298,13 +276,13 @@
                         color="primary"
                         variant="flat"
                         size="large"
-                        class="px-8 rounded-0 font-weight-medium"
+                        class="px-8 font-weight-medium"
                         :loading="submitting"
                         :disabled="submitting"
-                        @click="submitPackage"
+                        @click="submitJourney"
                     >
                         <v-icon start>mdi-check</v-icon>
-                        {{ packageId ? 'Update Journey Overview' : 'Create Journey' }}
+                        {{ journeyId ? 'Update Journey Overview' : 'Create Journey' }}
                     </v-btn>
                 </div>
             </v-card-text>
@@ -320,7 +298,7 @@ import { useSnackbar } from '@/composables/snackbar'
 const { showSuccess, showError } = useSnackbar()
 
 const props = defineProps({
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
@@ -378,10 +356,10 @@ const pricingBasisOptions = [
     { title: 'Per Group', value: 'group' },
 ]
 
-const packageId = ref(null)
+const journeyId = ref(null)
 
 watch(
-    () => props.travelPackage,
+    () => props.journey,
     (newVal) => {
         if (newVal && Object.keys(newVal).length) {
             Object.assign(form, {
@@ -401,7 +379,7 @@ watch(
                 is_featured: Boolean(newVal.is_featured),
                 is_published: Boolean(newVal.is_published),
             })
-            packageId.value = newVal.id
+            journeyId.value = newVal.id
         }
     },
     { immediate: true }
@@ -450,7 +428,7 @@ async function fetchTravelMonths() {
     }
 }
 
-async function submitPackage() {
+async function submitJourney() {
     submitting.value = true
     errors.value = {}
 

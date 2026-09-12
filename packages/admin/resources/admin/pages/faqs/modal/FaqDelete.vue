@@ -1,8 +1,8 @@
 <template>
-  <v-card class="rounded-0 elevation-0">
+  <v-card>
     <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
       <span class="text-uppercase font-weight-medium text-slate-800">Delete FAQ</span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleClose">
+      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -17,8 +17,8 @@
 
     <v-divider />
     <v-card-actions class="pa-3 justify-end">
-      <v-btn variant="text" class="rounded-0" @click="handleClose">Cancel</v-btn>
-      <v-btn color="error" variant="elevated" class="rounded-0" :loading="submitting" @click="handleDelete">
+      <v-btn variant="text" @click="handleClose">Cancel</v-btn>
+      <v-btn color="error" variant="elevated" :loading="submitting" @click="handleDelete">
         Delete
       </v-btn>
     </v-card-actions>

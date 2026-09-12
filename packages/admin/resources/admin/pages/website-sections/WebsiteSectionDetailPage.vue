@@ -10,38 +10,40 @@
 		<div v-if="galleryItems.length">
 			<v-data-table :headers="tableHeaders" :items="galleryItems" item-key="id">
 				<template #item.image="{ item }">
-					<div class="py-2" style="min-width: max-content;">
+					<div class="py-2">
 						<v-img :src="item?.url || item?.image_url || item" height="60" width="100" cover class="rounded" />
 					</div>
 				</template>
 				<template #item.size="{ item }">
-					<div class="text-caption" style="min-width: max-content;">
+					<div class="text-caption">
 						<div>{{ formatDimensions(item) }}</div>
 						<div>{{ formatAspectRatio(item) }}</div>
 					</div>
 				</template>
 				<template #item.alt_text="{ item }">
-					<div class="text-caption" style="min-width: max-content;">
+					<div class="text-caption">
 						{{ resolveMeta(item, 'alt_text') }}
 					</div>
 				</template>
 				<template #item.caption="{ item }">
-					<div class="text-caption" style="min-width: max-content;">
+					<div class="text-caption">
 						{{ resolveMeta(item, 'caption') }}
 					</div>
 				</template>
 				<template #item.description="{ item }">
-					<div class="text-caption" style="min-width: max-content;">
+					<div class="text-caption">
 						{{ resolveMeta(item, 'description') }}
 					</div>
 				</template>
 				<template #item.actions="{ item }">
-					<div class="d-flex align-center ga-2" style="min-width: max-content;">
-						<v-btn size="x-small" icon variant="tonal" color="primary" @click="handleEdit(item)">
-							<v-icon size="16">mdi-pencil</v-icon>
+					<div class="d-flex align-center justify-center ga-1">
+						<v-btn size="small" variant="outlined" color="primary" @click="handleEdit(item)" title="Edit image">
+							<v-icon start size="14">mdi-pencil</v-icon>
+							Edit
 						</v-btn>
-						<v-btn size="x-small" icon variant="tonal" color="error" @click="handleDelete(item)">
-							<v-icon size="16">mdi-delete</v-icon>
+						<v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete image">
+							<v-icon start size="14">mdi-delete</v-icon>
+							Delete
 						</v-btn>
 					</div>
 				</template>
@@ -66,7 +68,7 @@ import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh'])
 const globalModal = useGlobalModal()
 const route = useRoute()
-const bannerId = route.params.id || route.query.id || null
+const sectionId = route.params.id || route.query.id || null
 const banner = ref({})
 
 const galleryItems = computed(() => {
@@ -121,9 +123,9 @@ function handleDelete(item = {}) {
 }
 
 async function fetchBanner() {
-	if (!bannerId) return
+	if (!sectionId) return
 	try {
-		const resp = await getBannerByIdApi(bannerId)
+		const resp = await getBannerByIdApi(sectionId)
 		banner.value = resp?.data ?? resp ?? {}
 	} catch (error) {
 		console.error('Failed to fetch banner', error)

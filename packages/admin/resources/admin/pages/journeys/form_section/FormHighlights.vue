@@ -1,20 +1,18 @@
 <template>
     <div class="mb-4">
-        <v-card class="elevation-0">
+        <v-card>
             <v-card-title class="d-flex align-center justify-space-between py-0">
-                <!-- <h2 class="font-medium">Highlights</h2> -->
                 <v-btn color="primary" title="Add Highlight" @click="openForm()">
                     <v-icon>mdi-plus</v-icon> Add Highlight
                 </v-btn>
             </v-card-title>
-            <!-- <v-divider /> -->
             <v-card-text>
 
 
                 <div class="mt-4">
 
                     <v-row>
-                        <v-col cols="12" md="6" v-for="(highlight, index) in travelPackage?.highlights" :key="index">
+                        <v-col cols="12" md="6" v-for="(highlight, index) in journey?.highlights" :key="index">
                             <div class="border pa-4">
                                 <div class="d-flex">
                                     <div v-if="highlight.icon || highlight.icon_url" style="width: 40px; height: 40px;">
@@ -42,32 +40,33 @@
             </v-card-text>
         </v-card>
         <!-- Modal -->
-        <modal-template ref="globalModal" @close="handleClose"></modal-template>
     </div>
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useGlobalModal } from '@/composables/globalModal'
+const { open: openModal } = useGlobalModal()
 const emit = defineEmits(['refresh', 'close'])
 
 const props = defineProps({
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
 })
 
-const globalModal = ref(null)
-import PackageHighlightForm from '../modal/PackageHighlightForm.vue'
+import JourneyHighlightForm from '../modal/PackageHighlightForm.vue'
 
 function openForm(item = {}) {
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit ' + (item.title || item.highlight_name) : 'Add Highlight',
-        component: PackageHighlightForm,
+        component: JourneyHighlightForm,
         size: 'lg',
         props: {
             item,
-            travelPackage: props.travelPackage,
+            journey: props.journey,
         },
+        onClose: handleClose,
     })
 }
 

@@ -11,7 +11,6 @@
           placeholder="Search by title, filename, alt..."
           variant="outlined"
           density="compact"
-          class="rounded-0"
           hide-details
         />
       </v-col>
@@ -23,18 +22,17 @@
           mandatory
           density="compact"
           color="primary"
-          class="rounded-0"
         >
-          <v-btn value="grid" variant="outlined" size="small" class="rounded-0">
+          <v-btn value="grid" variant="outlined" size="small">
             <v-icon size="18">mdi-view-grid-outline</v-icon>
           </v-btn>
-          <v-btn value="table" variant="outlined" size="small" class="rounded-0">
+          <v-btn value="table" variant="outlined" size="small">
             <v-icon size="18">mdi-view-list</v-icon>
           </v-btn>
         </v-btn-toggle>
 
         <!-- Upload Button -->
-        <v-btn color="primary" variant="elevated" class="rounded-0" @click="handleOpenUpload">
+        <v-btn color="primary" variant="elevated" @click="handleOpenUpload">
           <v-icon start>mdi-cloud-upload-outline</v-icon> Upload Media
         </v-btn>
       </v-col>
@@ -44,20 +42,20 @@
     <template v-if="loading">
       <v-row class="px-2">
         <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
-          <v-skeleton-loader type="card" class="rounded-0 border" />
+          <v-skeleton-loader type="card" class="border" />
         </v-col>
       </v-row>
     </template>
 
     <!-- Empty State -->
     <template v-else-if="filteredItems.length === 0">
-      <v-card class="rounded-0 elevation-0 border pa-12 text-center my-4 mx-4">
+      <v-card class="pa-12 text-center my-4 mx-4">
         <v-icon size="56" color="grey-lighten-1" class="mb-3">mdi-image-multiple-outline</v-icon>
         <div class="text-h6 text-slate-800 font-weight-medium">No media assets found</div>
         <p class="text-body-2 text-medium-emphasis mt-1 mb-4">
           {{ search ? 'No results matched your search query.' : 'Upload photos, banners, and hero assets to get started.' }}
         </p>
-        <v-btn color="primary" variant="elevated" class="rounded-0" @click="handleOpenUpload">
+        <v-btn color="primary" variant="elevated" @click="handleOpenUpload">
           <v-icon start>mdi-cloud-upload</v-icon> Upload First Media Asset
         </v-btn>
       </v-card>
@@ -74,14 +72,13 @@
           md="4"
           lg="3"
         >
-          <v-card class="rounded-0 elevation-0 border h-100 d-flex flex-column media-card">
+          <v-card class="h-100 d-flex flex-column media-card">
             <div class="media-thumb-container position-relative bg-slate-100" style="aspect-ratio: 16/9; overflow: hidden;">
               <v-img
                 :src="asset.url"
                 height="100%"
                 width="100%"
                 cover
-                class="rounded-0"
               >
                 <template #placeholder>
                   <div class="d-flex align-center justify-center fill-height bg-slate-100">
@@ -96,7 +93,7 @@
                   size="x-small"
                   color="info"
                   variant="flat"
-                  class="rounded-0 font-weight-medium"
+                  class="font-weight-medium"
                 >
                   {{ asset.attachments_count }} used
                 </v-chip>
@@ -126,7 +123,6 @@
                 size="x-small"
                 variant="text"
                 color="primary"
-                class="rounded-0"
                 @click="copyAssetUrl(asset)"
               >
                 <v-icon start size="14">mdi-content-copy</v-icon> Copy URL
@@ -138,7 +134,6 @@
                   icon
                   variant="tonal"
                   color="warning"
-                  class="rounded-0"
                   title="Inspect / Edit Metadata"
                   @click="handleOpenDetail(asset)"
                 >
@@ -149,7 +144,6 @@
                   icon
                   variant="tonal"
                   color="error"
-                  class="rounded-0"
                   title="Delete Media"
                   @click="handleOpenDelete(asset)"
                 >
@@ -181,7 +175,7 @@
               width="64"
               height="40"
               cover
-              class="rounded-0 border bg-slate-100 cursor-pointer"
+              class="border bg-slate-100 cursor-pointer"
               @click="handleOpenDetail(item)"
             />
           </div>
@@ -210,7 +204,6 @@
               size="small"
               :color="item.attachments_count ? 'info' : 'default'"
               variant="tonal"
-              class="rounded-0"
             >
               {{ item.attachments_count ? `${item.attachments_count} use(s)` : 'Unattached' }}
             </v-chip>
@@ -220,54 +213,52 @@
         <template #item.actions="{ item }">
           <div class="d-flex align-center justify-center ga-1">
             <v-btn
-              size="x-small"
-              icon
-              variant="tonal"
+              size="small"
+              variant="outlined"
               color="primary"
-              class="rounded-0"
               title="Copy URL"
               @click="copyAssetUrl(item)"
             >
-              <v-icon size="15">mdi-content-copy</v-icon>
+              <v-icon start size="14">mdi-content-copy</v-icon>
+              Copy
             </v-btn>
             <v-btn
-              size="x-small"
-              icon
-              variant="tonal"
-              color="warning"
-              class="rounded-0"
+              size="small"
+              variant="outlined"
+              color="secondary"
               title="Edit Metadata"
               @click="handleOpenDetail(item)"
             >
-              <v-icon size="15">mdi-pencil</v-icon>
+              <v-icon start size="14">mdi-pencil</v-icon>
+              Edit
             </v-btn>
             <v-btn
-              size="x-small"
-              icon
-              variant="tonal"
+              size="small"
+              variant="outlined"
               color="error"
-              class="rounded-0"
               title="Delete"
               @click="handleOpenDelete(item)"
             >
-              <v-icon size="15">mdi-delete</v-icon>
+              <v-icon start size="14">mdi-delete</v-icon>
+              Delete
             </v-btn>
           </div>
         </template>
       </v-data-table>
     </template>
-
-    <modal-template ref="globalModal" @saved="fetchMedia" @close="fetchMedia" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import { getMediaAssetsApi } from '@/api/media-assets.api'
 import MediaUploadModal from './modal/MediaUploadModal.vue'
 import MediaDetailModal from './modal/MediaDetailModal.vue'
 import MediaDeleteModal from './modal/MediaDeleteModal.vue'
+
+const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -275,7 +266,6 @@ const mediaAssets = ref([])
 const loading = ref(false)
 const search = ref('')
 const viewMode = ref('grid')
-const globalModal = ref(null)
 
 const tableHeaders = [
   { title: 'SN', key: 'sn', sortable: false, width: '50px' },
@@ -284,7 +274,7 @@ const tableHeaders = [
   { title: 'Dimensions', key: 'dimensions', sortable: false, width: '130px' },
   { title: 'File Size', key: 'formatted_size', sortable: false, width: '100px' },
   { title: 'Attachments', key: 'attachments_count', sortable: true, width: '120px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '120px' },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '230px' },
 ]
 
 const filteredItems = computed(() => {
@@ -302,34 +292,40 @@ const filteredItems = computed(() => {
 })
 
 function handleOpenUpload() {
-  globalModal.value.open({
+  openModal({
     title: 'Upload Media Asset',
     component: MediaUploadModal,
     size: 'lg',
     props: {},
-  })
+        onSaved: fetchMedia,
+        onClose: fetchMedia,
+    })
 }
 
 function handleOpenDetail(asset) {
-  globalModal.value.open({
+  openModal({
     title: 'Media Asset Details',
     component: MediaDetailModal,
     size: 'lg',
     props: {
       item: asset,
     },
-  })
+        onSaved: fetchMedia,
+        onClose: fetchMedia,
+    })
 }
 
 function handleOpenDelete(asset) {
-  globalModal.value.open({
+  openModal({
     title: 'Delete Media Asset',
     component: MediaDeleteModal,
     size: 'sm',
     props: {
       item: asset,
     },
-  })
+        onSaved: fetchMedia,
+        onClose: fetchMedia,
+    })
 }
 
 function copyAssetUrl(asset) {

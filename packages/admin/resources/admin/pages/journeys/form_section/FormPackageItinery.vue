@@ -1,14 +1,12 @@
 <template>
     <div class="mb-4">
-        <v-card class="elevation-0">
+        <v-card>
             <v-card-title class="d-flex align-center justify-space-between py-0">
-                <!-- <h2 class="font-medium">Itineraries</h2> -->
-                <v-btn color="primary" title="Add Itinerary Day" @click="handleOpen()">
+                                <v-btn color="primary" title="Add Itinerary Day" @click="handleOpen()">
                     <v-icon>mdi-plus</v-icon> Add Day
                 </v-btn>
             </v-card-title>
-            <!-- <v-divider /> -->
-            <v-expansion-panels multiple elevation="1">
+                        <v-expansion-panels multiple elevation="1">
                 <v-expansion-panel v-for="(itinerary, index) in itineraryDays" :key="itinerary.id || index">
                     <v-expansion-panel-title>
                         Day {{ itinerary.day_number }} - {{ itinerary.title }}
@@ -34,8 +32,7 @@
                             </div>
                             <div class="mt-6">
                                 <div class="d-flex align-center">
-                                    <!-- <p class="text-primary">Highlights</p> -->
-                                    <v-btn color="primary" @click="handleHighlights(itinerary)" variant="tonal">
+                                                                        <v-btn color="primary" @click="handleHighlights(itinerary)" variant="tonal">
                                         <v-icon>mdi-plus-circle</v-icon> Add Highlight
                                     </v-btn>
                                 </div>
@@ -69,27 +66,26 @@
             </v-expansion-panels>
         </v-card>
     </div>
-    <modal-template ref="globalModal" @close="handleRefresh"></modal-template>
 </template>
 <script setup>
 import { computed, ref } from 'vue'
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['refresh'])
 
 
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 
 const props = defineProps({
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
 })
 
 
-// Update form when prop travelPackage changes
-// watch(
-//     () => props.travelPackage,
+// Update form when prop journey changes
+//     () => props.journey,
 //     (newVal) => {
 //         if (newVal && Object.keys(newVal).length) {
 //             Object.assign(form, newVal)
@@ -102,9 +98,7 @@ function handleRefresh() {
     emit('refresh')
 }
 
-const submitting = ref(false)
-const globalModal = ref(null)
-const itineraryDays = computed(() => props.travelPackage?.itinerary_days ?? [])
+const itineraryDays = computed(() => props.journey?.itinerary_days ?? [])
 
 
 import ItineraryForm from '../modal/ItineraryForm.vue'
@@ -113,19 +107,20 @@ import ItineraryHighlightsForm from '../modal/ItineraryHighlightsForm.vue'
 
 function handleOpen(item = {}) {
     console.log({ item });
-    globalModal.value.open({
+    openModal({
         title: item?.id ? 'Edit Itinerary Day' : 'Add Itinerary Day',
         component: ItineraryForm,
         size: 'xl',
         props: {
             item,
-            travelPackageId: props.travelPackage.id,
+            journeyId: props.journey.id,
         },
+        onClose: handleRefresh,
     })
 }
 function handleHighlights(itinerary = {}, item = {}) {
     console.log({ itinerary });
-    globalModal.value.open({
+    openModal({
         title: 'Highlights',
         component: ItineraryHighlightsForm,
         size: 'lg',
@@ -133,11 +128,12 @@ function handleHighlights(itinerary = {}, item = {}) {
             itinerary,
             item,
         },
+        onClose: handleRefresh,
     })
 }
 function editHighlight(itinerary = {}, item = {}) {
     console.log({ itinerary }, { item});
-    globalModal.value.open({
+    openModal({
         title: 'Highlights',
         component: ItineraryHighlightsForm,
         size: 'lg',
@@ -145,6 +141,7 @@ function editHighlight(itinerary = {}, item = {}) {
             itinerary,
             item,
         },
+        onClose: handleRefresh,
     })
 }
 

@@ -1,10 +1,10 @@
 <template>
-  <v-card class="rounded-0 elevation-0">
+  <v-card>
     <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
       <span class="text-uppercase font-weight-medium text-slate-800">
         {{ props.item?.id ? 'Edit FAQ' : 'Add FAQ' }}
       </span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
+      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -22,7 +22,6 @@
               :error-messages="serverErrors.question"
               variant="outlined"
               density="compact"
-              class="rounded-0"
               required
             />
           </v-col>
@@ -38,7 +37,6 @@
               :error-messages="serverErrors.answer"
               variant="outlined"
               density="compact"
-              class="rounded-0"
               required
             />
           </v-col>
@@ -52,7 +50,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               :error-messages="serverErrors.category"
             />
           </v-col>
@@ -65,7 +62,6 @@
               min="0"
               variant="outlined"
               density="compact"
-              class="rounded-0"
               :error-messages="serverErrors.sort_order"
             />
           </v-col>
@@ -86,7 +82,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               :loading="loadingOptions"
             />
           </v-col>
@@ -101,7 +96,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               :loading="loadingOptions"
             />
           </v-col>
@@ -116,7 +110,6 @@
               clearable
               variant="outlined"
               density="compact"
-              class="rounded-0"
               :loading="loadingOptions"
             />
           </v-col>
@@ -136,12 +129,11 @@
 
     <v-divider />
     <v-card-actions class="pa-3">
-      <v-btn variant="text" class="rounded-0" @click="handleCancel">Cancel</v-btn>
+      <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer />
       <v-btn
         color="primary"
         variant="elevated"
-        class="rounded-0"
         :loading="loading"
         :disabled="loading"
         @click="handleSubmit"

@@ -9,9 +9,9 @@
                 </div>
 
                 <div class="mt-6 text-center">
-                    <v-btn color="primary" :loading="submitting" :disabled="submitting" @click="submitPackage">
+                    <v-btn color="primary" :loading="submitting" :disabled="submitting" @click="submitJourney">
                         <v-icon left>mdi-check</v-icon>
-                        {{ packageId ? 'Update Description' : 'Create Description' }}
+                        {{ journeyId ? 'Update Description' : 'Create Description' }}
                     </v-btn>
                 </div>
             </v-card-text>
@@ -21,14 +21,14 @@
 
 <script setup>
 import SummarnoteEditor from '@components/SummarnoteEditor.vue';
-import http from '@/http.config'
 import { reactive, ref, watch } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { saveJourney } from '@/api/journeys.api'
 
 const { showSuccess, showError } = useSnackbar()
 
 const props = defineProps({
-    travelPackage: {
+    journey: {
         type: Object,
         default: () => ({}),
     },
@@ -54,10 +54,10 @@ const form = reactive({
     route_map_note: '',
 })
 
-const packageId = ref(null)
+const journeyId = ref(null)
 
 watch(
-    () => props.travelPackage,
+    () => props.journey,
     (newVal) => {
         if (newVal && Object.keys(newVal).length) {
             Object.assign(form, {
@@ -70,13 +70,13 @@ watch(
                 safety_note: newVal.safety_note ?? '',
                 route_map_note: newVal.route_map_note ?? '',
             })
-            packageId.value = newVal.id
+            journeyId.value = newVal.id
         }
     },
     { immediate: true }
 )
 
-async function submitPackage() {
+async function submitJourney() {
     descriptionError.value = !form.description || form.description.trim() === ''
     if (descriptionError.value) return
 
@@ -98,7 +98,7 @@ async function submitPackage() {
             route_map_note: form.route_map_note,
         }
 
-        const resp = await http.post('/admin/journeys', payload)
+        const resp = await saveJourney(payload)
 
         showSuccess(resp.message || 'Journey description saved successfully')
         emit('refresh')

@@ -18,14 +18,13 @@
               density="compact"
               variant="outlined"
               hide-details
-              rounded="0"
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by title, slug..."
             />
           </v-col>
 
           <v-col cols="auto">
-            <v-btn color="primary" rounded="0" @click="addPage()">
+            <v-btn color="primary" @click="addPage()">
               <v-icon start>mdi-plus</v-icon> Add New Page
             </v-btn>
           </v-col>
@@ -33,11 +32,11 @@
       </template>
 
       <template #item.sn="{ index }">
-        <div style="min-width: max-content;">{{ index + 1 }}</div>
+        <div>{{ index + 1 }}</div>
       </template>
 
       <template #item.title="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <router-link :to="{ name: 'adminWebPageDetail', params: { id: item.id } }" class="text-primary text-decoration-underline text-capitalize">
             {{ item.title }}
           </router-link>
@@ -45,38 +44,36 @@
       </template>
 
       <template #item.slug="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <span class="text-caption text-medium-emphasis">/{{ item.slug }}</span>
         </div>
       </template>
 
       <template #item.type="{ item }">
-        <div style="min-width: max-content;">
-          <v-chip size="small" label rounded="0" variant="tonal" color="primary" class="text-uppercase">
+        <div>
+          <v-chip size="small" label variant="tonal" color="primary" class="text-uppercase">
             {{ item.type || 'standard' }}
           </v-chip>
         </div>
       </template>
 
       <template #item.is_active="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <v-switch
             v-model="item.is_active"
             density="compact"
             color="success"
             hide-details
-            rounded="0"
             @change="toggleActive(item)"
           />
         </div>
       </template>
 
       <template #item.is_published="{ item }">
-        <div style="min-width: max-content;">
+        <div>
           <v-chip
             size="small"
             label
-            rounded="0"
             :color="item.is_published ? 'success' : 'warning'"
           >
             <v-icon start size="14">
@@ -88,17 +85,18 @@
       </template>
 
       <template #item.actions="{ item }">
-        <div class="d-flex align-center justify-center ga-2" style="min-width: max-content;">
-          <v-btn size="x-small" icon variant="tonal" color="primary" rounded="0" :to="{ name: 'adminWebPageDetail', params: { id: item.id } }">
-            <v-icon size="16">mdi-pencil</v-icon>
+        <div class="d-flex align-center justify-center ga-1">
+          <v-btn size="small" variant="outlined" color="primary" :to="{ name: 'adminWebPageDetail', params: { id: item.id } }" title="Edit website page">
+            <v-icon start size="14">mdi-pencil</v-icon>
+            Edit
           </v-btn>
-          <v-btn size="x-small" icon variant="tonal" color="error" rounded="0" @click="deleteItem(item)">
-            <v-icon size="16">mdi-delete</v-icon>
+          <v-btn size="small" variant="outlined" color="error" @click="deleteItem(item)" title="Delete website page">
+            <v-icon start size="14">mdi-delete</v-icon>
+            Delete
           </v-btn>
         </div>
       </template>
     </v-data-table>
-    <modal-template ref="globalModal" @close="fetchData"></modal-template>
   </div>
 </template>
 
@@ -106,8 +104,11 @@
 import { ref, onMounted, computed } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import PageForm from './modal/PageForm.vue'
 import PageDelete from './modal/PageDelete.vue'
+
+const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -123,7 +124,6 @@ const headers = [
 
 const data_list = ref([])
 const search = ref('')
-const globalModal = ref(null)
 const fetching_data = ref(false)
 
 const filteredItems = computed(() => {
@@ -137,14 +137,15 @@ const filteredItems = computed(() => {
 })
 
 function addPage(item = {}) {
-  globalModal.value.open({
+  openModal({
     title: 'Add New Website Page',
     component: PageForm,
     size: 'md',
     props: {
       item,
     },
-  })
+        onClose: fetchData,
+    })
 }
 
 const fetchData = async () => {
@@ -166,14 +167,15 @@ const fetchData = async () => {
 }
 
 const deleteItem = (item) => {
-  globalModal.value.open({
+  openModal({
     title: 'Delete ' + item.title,
     component: PageDelete,
     size: 'sm',
     props: {
       item,
     },
-  })
+        onClose: fetchData,
+    })
 }
 
 async function toggleActive(item) {

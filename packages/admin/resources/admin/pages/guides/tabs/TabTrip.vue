@@ -8,7 +8,7 @@
 
         <v-row dense>
             <v-col v-for="(trip, index) in guide.trips" :key="trip.id || index" cols="12" md="6">
-                <v-card class="pa-4 mb-4 border">
+                <v-card class="pa-4 mb-4">
                     <v-row align="center" no-gutters>
                         <v-col>
                             <div class="d-flex align-center justify-space-between">
@@ -39,18 +39,16 @@
                 </v-card>
             </v-col>
         </v-row>
-
-
-        <modal-template ref="globalModal" @close="handleClose" />
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import TripForm from './modal/TripForm.vue'
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['close'])
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 const props = defineProps({
     guide: {
         type: Object,
@@ -58,17 +56,17 @@ const props = defineProps({
     },
 })
 
-const globalModal = ref(null)
 
 
 function openForm(item = {}) {
-    globalModal.value.open({
+    openModal({
         component: TripForm,
         size: 'md',
         props: {
             guide: props.guide,
             item: item,
         },
+        onClose: handleClose,
     })
 }
 

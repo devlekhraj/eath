@@ -22,9 +22,9 @@
 </template>
 
 <script setup>
-import http from '@/http.config'
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { deleteJourneyService } from '@/api/journeys.api'
 
 const { showSuccess, showError } = useSnackbar()
 const props = defineProps({
@@ -47,7 +47,7 @@ async function handleDelete() {
 
     console.log(props.item);
     try {
-        const resp = await http.delete(`/admin/journey-services/${props.item.id}/delete`)
+        const resp = await deleteJourneyService(props.item.id)
         submitting.value = false
         showSuccess(resp.message || 'success');
         handleClose()

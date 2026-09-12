@@ -2,7 +2,7 @@
     <div>
         <v-data-table-server
             :headers="headers"
-            :items="travelPackages"
+            :items="journeys"
             :loading="fetching_data"
             :items-per-page="itemsPerPage"
             :items-length="totalItems"
@@ -20,7 +20,7 @@
                     </v-col>
 
                     <v-col cols="auto">
-                        <v-btn color="primary" @click="addPackage">
+                        <v-btn color="primary" @click="addJourney">
                             <v-icon left>mdi-plus</v-icon> Add Journey
                         </v-btn>
                     </v-col>
@@ -28,15 +28,15 @@
             </template>
 
             <template #item.start_date="{ item }">
-                <div style="min-width: max-content;">{{ formatDate(item.start_date) }}</div>
+                <div>{{ formatDate(item.start_date) }}</div>
             </template>
 
             <template #item.sn="{ index }">
-                <div style="min-width: max-content;">{{ (page - 1) * itemsPerPage + index + 1 }}</div>
+                <div>{{ (page - 1) * itemsPerPage + index + 1 }}</div>
             </template>
 
             <template #item.name="{ item }">
-                <div style="min-width: max-content;">
+                <div>
                     <router-link :to="{ name: 'adminJourneyForm', query: { id: item.id } }" class="text-primary text-decoration-underline">
                         {{ item.name }}
                     </router-link>
@@ -44,14 +44,14 @@
             </template>
 
             <template #item.region="{ item }">
-                <div v-if="item?.destination?.name" class="d-flex align-center ga-2" style="min-width: max-content;">
+                <div v-if="item?.destination?.name" class="d-flex align-center ga-2">
                     <span
                         class="d-inline-block rounded-circle flex-shrink-0"
                         :style="dotStyle(item.destination)"
                     ></span>
                     <span class="text-capitalize">{{ item.destination.name }}</span>
                 </div>
-                <div v-else class="d-flex align-center ga-2 text-grey" style="min-width: max-content;">
+                <div v-else class="d-flex align-center ga-2 text-grey">
                     <span
                         class="d-inline-block rounded-circle flex-shrink-0"
                         :style="dotStyle(null)"
@@ -61,7 +61,7 @@
             </template>
 
             <template #item.duration_days="{ item }">
-                <div style="min-width: max-content;">
+                <div>
                     <span class="text-primary">
                         {{ item.duration_days }} days
                     </span>
@@ -69,13 +69,13 @@
             </template>
 
             <template #item.price="{ item }">
-                <div style="min-width: max-content;">
+                <div>
                     {{ formatAmount(item.price) }}
                 </div>
             </template>
 
             <template #item.is_active="{ item }">
-                <div style="min-width: max-content;">
+                <div>
                     <v-chip size="small" label class="text-capitalize" :color="item.is_active ? 'success' : 'warning'">
                         <v-icon start size="16">{{ item.is_active ? 'mdi-check-circle' : 'mdi-alert-circle' }}</v-icon>
                         {{ item.is_active ? 'Active' : 'Draft' }}
@@ -84,7 +84,7 @@
             </template>
 
             <template #item.is_featured="{ item }">
-                <div style="min-width: max-content;">
+                <div>
                     <v-chip size="small" label class="text-capitalize" :color="item.is_featured ? 'success' : 'warning'">
                         <v-icon start size="16">{{ item.is_featured ? 'mdi-check-circle' : 'mdi-alert-circle' }}</v-icon>
                         {{ item.is_featured ? 'Yes' : 'No' }}
@@ -93,146 +93,99 @@
             </template>
 
             <template #item.actions="{ item }">
-                <div class="d-flex align-center ga-2" style="min-width: max-content;">
-                    <v-btn variant="tonal" icon size="x-small" color="primary" :to="{ name: 'adminJourneyForm', query: { id: item.id } }">
-                        <v-icon size="16">mdi-eye</v-icon>
+                <div class="d-flex align-center justify-center ga-1">
+                    <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminJourneyForm', query: { id: item.id } }" title="View / Edit Journey">
+                        <v-icon start size="14">mdi-eye</v-icon>
+                        View
                     </v-btn>
-                    <v-btn variant="tonal" icon size="x-small" color="error" @click="deleteItem(item)">
-                        <v-icon size="16">mdi-delete</v-icon>
+                    <v-btn size="small" color="error" variant="outlined" @click="deleteJourney(item)" title="Delete Journey">
+                        <v-icon start size="14">mdi-delete</v-icon>
+                        Delete
                     </v-btn>
-                </div> <!-- <v-menu location="bottom"> <template #activator="{ props }"> <div style="width: max-content;"> <v-btn v-bind="props" icon variant="text" color="primary"> <v-icon>mdi-dots-vertical</v-icon> </v-btn> </div> </template>
-
-                    <v-list density="compact" elevation="1">
-
-                        <v-list-item :to="{ name: 'adminPackageForm', query: { id: item.id } }">
-                            <v-list-item-title>
-                                <v-icon start icon="mdi-pencil" class="mr-2" /> Edit
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="deleteItem(item)">
-                            <v-list-item-title>
-                                <v-icon start icon="mdi-delete" class="mr-2" /> Delete
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu> -->
+                </div>
             </template>
         </v-data-table-server>
-
-        <modal-template ref="globalModal" @saved="fetchPackages" @close="fetchPackages" />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import http from '@/http.config'
-import { formatDate, formatAmount, formatDateTime, dotStyle } from '@/utils/utils'
-import PackageDelete from './modal/PackageDelete.vue'
-import PackageAdd from './modal/PackageAdd.vue'
+import { ref, onMounted } from 'vue'
+import { formatDate, formatAmount, dotStyle } from '@/utils/utils'
+import JourneyDelete from './modal/PackageDelete.vue'
+import JourneyAdd from './modal/PackageAdd.vue'
 
-import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
+import { getJourneys } from '@/api/journeys.api'
 
-const { showSuccess, showError } = useSnackbar()
+const { open: openModal } = useGlobalModal()
+
 
 
 const headers = [
     { title: 'SN', key: 'sn', sortable: false, width: '60px' },
-    // { title: 'Created', key: 'created_at', sortable: false },
     { title: 'Name', key: 'name', sortable: false },
     { title: 'Region', key: 'region', sortable: false,  },
     { title: 'Active', key: 'is_active', sortable: false,  },
     { title: 'Featured', key: 'is_featured', sortable: false,  },
-    // { title: 'Published', key: 'is_published', sortable: false },
-    // { title: 'Published On', key: 'published_at', sortable: false },
-    { title: 'Actions', key: 'actions', sortable: false, width: '100px', align: 'end' },
+    { title: 'Actions', key: 'actions', sortable: false, width: '160px', align: 'center' },
 ]
 
-const travelPackages = ref([])
+const journeys = ref([])
 const page = ref(1)
 const itemsPerPage = ref(20)
 const totalItems = ref(0)
-const globalModal = ref(null);
 const search = ref('');
-const publicBaseUrl = window?.location?.origin ?? ''
 
 
 const fetching_data = ref(false);
 
-async function fetchPackages() {
+async function fetchJourneys() {
     try {
         fetching_data.value = true;
-        const resp = await http.get('admin/journeys', {
-            params: {
+        const resp = await getJourneys({
                 page: page.value,
                 per_page: itemsPerPage.value,
-            },
-        })
+            })
         fetching_data.value = false;
-        travelPackages.value = resp.data ?? []
-        totalItems.value = resp?.meta?.total ?? travelPackages.value.length
+        journeys.value = resp.data ?? []
+        totalItems.value = resp?.meta?.total ?? journeys.value.length
     } catch (error) {
         fetching_data.value = false;
-        console.error('Failed to fetch travel packages', error)
+        console.error('Failed to fetch journeys', error)
     }
 }
 function handleOptions() {
-    fetchPackages()
+    fetchJourneys()
 }
 
-async function toggleActive(item) {
-    try {
-        const resp = await http.patch(`admin/journeys/${item.id}/toggle-active`, {
-            is_active: item.is_active
-        });
-        console.log({ resp });
-        showSuccess(resp.message || 'success');
-        fetchPackages();
-    } catch (error) {
-        showError(error?.response?.data?.message || 'Failed to update');
-        item.is_active = !item.is_active; // Revert back if failed
-        console.error('Failed to update status:', error);
-    }
-}
-
-const togglePublished = async (item) => {
-    try {
-        const resp = await http.patch(`admin/journeys/${item.id}/toggle-publish`, {
-            is_published: item.is_published
-        });
-        showSuccess(resp.message || 'success');
-        fetchPackages();
-    } catch (error) {
-        showError(error?.response?.data?.message || 'Failed to update');
-        item.is_published = !item.is_published; // Revert back if failed
-        console.error('Failed to update status:', error);
-    }
-}
-
-function addPackage(item) {
-    globalModal.value.open({
+function addJourney(item) {
+    openModal({
         title: 'Add New Journey',
-        component: PackageAdd,
+        component: JourneyAdd,
         size: 'md',
         props: {
             item, // <-- correctly passed as a prop
         },
+        onSaved: fetchJourneys,
+        onClose: fetchJourneys,
     });
 }
-function deleteItem(item) {
-    globalModal.value.open({
+function deleteJourney(item) {
+    openModal({
         title: 'Delete Journey',
-        component: PackageDelete,
+        component: JourneyDelete,
         size: 'sm',
         props: {
             item, // <-- correctly passed as a prop
         },
+        onSaved: fetchJourneys,
+        onClose: fetchJourneys,
     });
 }
 
 
 onMounted(() => {
-    fetchPackages()
+    fetchJourneys()
 })
 </script>
 

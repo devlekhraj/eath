@@ -58,6 +58,7 @@
 <script setup>
 import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
+import { saveJourneyPrice, deleteJourneyPrice } from '@/api/journeys.api'
 
 const emit = defineEmits(['close', 'saved'])
 const props = defineProps({
@@ -115,7 +116,7 @@ function handleCancel() {
 async function handleDelete() {
     try {
         loading_delete.value = true
-        await http.delete(`/admin/journey-prices/${form.id}/delete`)
+        await deleteJourneyPrice(form.id)
         emit('close')
     } catch (err) {
         console.error('Failed to delete:', err)
@@ -133,7 +134,7 @@ async function submitForm() {
 
     try {
         loading.value = true
-        const resp = await http.post(
+        await http.post(
             `/admin/journeys/${props.journeyId || props.item.journey_id}/prices`,
             form
         )

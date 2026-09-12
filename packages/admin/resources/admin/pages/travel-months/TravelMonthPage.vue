@@ -1,5 +1,5 @@
 <template>
-    <v-card class="rounded-0 elevation-0">
+    <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-3 px-4">
             <div>
                 <span class="text-h6 font-weight-bold">Travel Months</span>
@@ -31,7 +31,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="rounded-0 text-uppercase font-weight-medium"
+                    class="text-uppercase font-weight-medium"
                     :color="getSeasonColor(item.season)"
                 >
                     {{ item.season }}
@@ -54,7 +54,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="rounded-0 text-uppercase font-weight-medium"
+                    class="text-uppercase font-weight-medium"
                     :color="item.is_active ? 'success' : 'secondary'"
                     @click="toggleActive(item)"
                     style="cursor: pointer;"
@@ -65,20 +65,19 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center">
-                    <v-btn size="small" color="primary" icon variant="text" class="rounded-0" @click="handleOpen(item)" title="Edit month details">
-                        <v-icon size="18">mdi-pencil</v-icon>
+                    <v-btn size="small" color="primary" variant="outlined" @click="handleOpen(item)" title="Edit month details">
+                        <v-icon start size="14">mdi-pencil</v-icon>
+                        Edit
                     </v-btn>
                 </div>
             </template>
 
             <template #no-data>
-                <v-alert type="info" variant="tonal" border="start" class="rounded-0 my-4">
+                <v-alert type="info" variant="tonal" border="start" class="my-4">
                     No travel months found.
                 </v-alert>
             </template>
         </v-data-table>
-
-        <modal-template ref="globalModal" @saved="fetchMonths" @close="fetchMonths" />
     </v-card>
 </template>
 
@@ -86,7 +85,11 @@
 import { ref, onMounted } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import Form from './modal/Form.vue'
+import { getTravelMonthsApi, toggleTravelMonthActiveApi } from '@/api/travel-months.api'
+
+const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -101,7 +104,6 @@ const headers = [
 ]
 
 const months = ref([])
-const globalModal = ref(null)
 const fetching_data = ref(false)
 
 const getSeasonColor = (season) => {
@@ -120,7 +122,7 @@ const getSeasonColor = (season) => {
 }
 
 function handleOpen(item) {
-    globalModal.value?.open({
+    openModal({
         title: `Edit ${item.name}`,
         component: Form,
         size: 'md',
@@ -133,7 +135,7 @@ function handleOpen(item) {
 async function fetchMonths() {
     try {
         fetching_data.value = true
-        const resp = await http.get('admin/travel-months')
+        const resp = await getTravelMonthsApi()
         months.value = resp.data?.data ?? resp.data ?? []
     } catch (error) {
         console.error('Failed to load travel months', error)

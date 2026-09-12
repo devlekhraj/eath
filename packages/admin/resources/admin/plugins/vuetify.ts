@@ -22,7 +22,7 @@ export default createVuetify({
       flat: true,
       elevation: 0,
       border: 0,
-      rounded: 'lg',
+      rounded: true,
     },
     VNavigationDrawer: {
       elevation: 0,
@@ -100,11 +100,26 @@ export default createVuetify({
     VBtn: {
       elevation: 0,
     },
+    VAvatar: {
+      rounded: true,
+      variant: 'tonal',
+    },
     VChip: {
       size: 'small',
       variant: 'tonal',
       label: true,
       class: 'text-capitalize',
+    },
+    VProgressLinear: {
+      height: 6,
+      rounded: true,
+    },
+    VAlert: {
+      density: 'comfortable',
+      variant: 'tonal',
+    },
+    VTooltip: {
+      location: 'top',
     },
     VListItem: {
       style: {

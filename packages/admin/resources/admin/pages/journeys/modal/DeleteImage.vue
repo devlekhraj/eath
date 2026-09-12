@@ -37,7 +37,7 @@ export default {
         },
         async deleteCategory() {
             this.submitting = true;
-            const resp = await http.delete('/admin/galleries/'+this.imageItem.id+"/delete");
+            await http.delete('/admin/galleries/'+this.imageItem.id+"/delete");
             this.submitting = false;
             this.handleClose();
         }

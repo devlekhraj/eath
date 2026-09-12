@@ -1,8 +1,8 @@
 <template>
-  <v-card class="rounded-0 elevation-0">
+  <v-card>
     <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
       <span class="text-uppercase font-weight-medium text-slate-800">Media Asset Details</span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
+      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -16,7 +16,7 @@
               :src="asset.url"
               max-height="280"
               contain
-              class="rounded-0 w-100"
+              class="w-100"
             />
           </div>
 
@@ -27,13 +27,12 @@
               readonly
               variant="outlined"
               density="compact"
-              class="rounded-0 flex-grow-1"
+              class="flex-grow-1"
               hide-details
             />
             <v-btn
               color="primary"
               variant="tonal"
-              class="rounded-0"
               @click="copyUrl"
             >
               <v-icon start size="16">mdi-content-copy</v-icon> Copy
@@ -59,7 +58,7 @@
               placeholder="Descriptive title"
               variant="outlined"
               density="compact"
-              class="rounded-0 mb-3"
+              class="mb-3"
             />
 
             <v-text-field
@@ -68,7 +67,7 @@
               placeholder="Descriptive alt text for screen readers"
               variant="outlined"
               density="compact"
-              class="rounded-0 mb-3"
+              class="mb-3"
             />
 
             <v-textarea
@@ -78,7 +77,7 @@
               rows="5"
               variant="outlined"
               density="compact"
-              class="rounded-0 mb-3"
+              class="mb-3"
             />
           </v-form>
         </v-col>
@@ -87,12 +86,11 @@
 
     <v-divider />
     <v-card-actions class="pa-3">
-      <v-btn variant="text" class="rounded-0" @click="handleCancel">Cancel</v-btn>
+      <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer />
       <v-btn
         color="primary"
         variant="elevated"
-        class="rounded-0"
         :loading="saving"
         @click="handleSave"
       >

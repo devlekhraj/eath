@@ -59,9 +59,9 @@
 <script setup>
 import SummarnoteEditor from '@components/SummarnoteEditor.vue';
 
-import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { saveJourneyItineraryDay, deleteJourneyItineraryDay } from '@/api/journeys.api'
 
 const { showSuccess, showError } = useSnackbar()
 
@@ -71,7 +71,7 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    travelPackageId: {
+    journeyId: {
         type: Number,
         required: true,
     }
@@ -117,7 +117,7 @@ onMounted(() => {
         })
     }
     Object.assign(form, {
-        journey_id: props.travelPackageId
+        journey_id: props.journeyId
     })
 })
 
@@ -130,7 +130,7 @@ async function handleDelete(item) {
         loading_delete.value = true
 
         // Submit logic here, for example:
-        const resp = await http.delete(`/admin/journey-itinerary-days/${props.item.id}/delete`)
+        const resp = await deleteJourneyItineraryDay(props.item.id)
         showSuccess(resp.message || "Itinerary day deleted successfully");
         console.log(resp.data);
         emit('close')
@@ -157,7 +157,7 @@ async function submitForm() {
         loading.value = true
 
         // Submit logic here, for example:
-        const resp = await http.post(`/admin/journeys/${props.travelPackageId}/itinerary-days`, form)
+        const resp = await saveJourneyItineraryDay(props.journeyId, form)
         console.log(resp.data);
         showSuccess(resp.message || "Itinerary day saved successfully");
         emit('saved')
