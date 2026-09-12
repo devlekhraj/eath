@@ -14,21 +14,27 @@
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
                 <v-row>
                     <v-col cols="12">
-                        <v-textarea v-model="form.title" label="Title" placeholder="E.g. Hotel Accommodation" :rules="[rules.required]" :error="!!serverErrors.title" :error-messages="serverErrors.title" required />
+                        <div class="mb-2">
+                            <v-textarea v-model="form.title" label="Title" placeholder="E.g. Hotel Accommodation" :rules="[rules.required]" :error="!!serverErrors.title" :error-messages="serverErrors.title" required />
+                        </div>
                     </v-col>
 
                     <v-col cols="6" md="6">
-                        <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" :error="!!serverErrors.sort_order" :error-messages="serverErrors.sort_order" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" :error="!!serverErrors.sort_order" :error-messages="serverErrors.sort_order" />
+                        </div>
                     </v-col>
 
                     <v-col cols="6" md="6">
-                        <v-switch v-model="form.is_excluded" label="Is Excluded?" inset color="error" :true-value="true" :false-value="false" />
+                        <div class="mb-2">
+                            <v-switch v-model="form.is_excluded" label="Is Excluded?" inset color="error" :true-value="true" :false-value="false" />
+                        </div>
                     </v-col>
                 </v-row>
             </v-form>
         </v-card-text>
 
-        <v-card-actions class="justify-space-between">
+        <v-card-actions class="justify-end">
             <div>
                 <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
                 <v-btn v-if="props.item?.id" variant="text" color="error" class="ml-4" :loading="loading_delete" :disabled="loading_delete" @click="handleDelete">

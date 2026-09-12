@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('hero_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->foreignId('card_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->string('region_label')->nullable();
-            $table->string('gateway')->nullable();
+            $table->text('gateway')->nullable();
             $table->text('trailheads')->nullable();
             $table->text('permits')->nullable();
             $table->text('pacing_note')->nullable();

@@ -13,25 +13,35 @@
                 <v-row>
                     <!-- Setting Name -->
                     <v-col cols="12">
-                        <v-text-field v-model="form.name" label="Setting Name" :rules="[rules.required]" :error-messages="serverErrors.name" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.name" label="Setting Name" :rules="[rules.required]" :error-messages="serverErrors.name" />
+                        </div>
                     </v-col>
 
                     <!-- Type -->
                     <v-col cols="12">
-                        <v-select v-model="form.type" :items="input_types" item-title="name" item-value="id" label="Input Type" clearable :error-messages="serverErrors.type" />
+                        <div class="mb-2">
+                            <v-select v-model="form.type" :items="input_types" item-title="name" item-value="id" label="Input Type" clearable :error-messages="serverErrors.type" />
+                        </div>
                     </v-col>
 
                     <!-- Conditional Value Field -->
                     <v-col cols="12" v-if="form.type === 'text'">
-                        <v-text-field v-model="form.value" label="Value" :error-messages="serverErrors.value" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.value" label="Value" :error-messages="serverErrors.value" />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" v-if="form.type === 'textarea'">
-                        <v-textarea v-model="form.value" label="Value" :error-messages="serverErrors.value" />
+                        <div class="mb-2">
+                            <v-textarea v-model="form.value" label="Value" :error-messages="serverErrors.value" />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" v-if="form.type === 'image'">
-                        <v-file-input v-model="form.value" label="Upload Image" accept="image/*" show-size :error-messages="serverErrors.value" prepend-icon="" prepend-inner-icon="mdi-camera" @change="handleIconUpload" />
+                        <div class="mb-2">
+                            <v-file-input v-model="form.value" label="Upload Image" accept="image/*" show-size :error-messages="serverErrors.value" prepend-icon="" prepend-inner-icon="mdi-camera" @change="handleIconUpload" />
+                        </div>
 
                         <!-- Image Preview -->
                         <div v-if="form.value" style="height: 100px; width: 100px;" class="mt-2">

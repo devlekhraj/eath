@@ -23,17 +23,7 @@ $heroImage = $trek['image'] ?? \Website\Support\WebsiteAssetRegistry::resolve("t
 
 
 @php
-$trekTaglines = [
-'t-ebc' => 'Walk through Sherpa country to the foot of the world\'s highest mountain.',
-'t-abc' => 'Trek into the heart of the Annapurna Sanctuary surrounded by 8,000m giants.',
-'t-langtang' => 'Journey through sacred alpine valleys and Tamang heritage villages.',
-'t-mardi' => 'A pristine ridge trek with dramatic close-up views of Machapuchare.',
-'t-gokyo' => 'Ascend past cobalt turquoise glacial lakes to panoramic Gokyo Ri.',
-'t-manaslu' => 'An epic remote circuit around the world\'s eighth highest peak.',
-'t-khopra' => 'Panoramic ridge walking high above the Kali Gandaki gorge.',
-'t-mustang' => 'Explore the walled medieval kingdom of Lo Manthang in the high rain shadow.',
-];
-$tagline = $trekTaglines[$trek['id']] ?? ($trek['tagline'] ?? 'Experience authentic Himalayan trails with licensed local Sherpa guides.');
+$tagline = $trek['subtitle'] ?? $trek['tagline'] ?? ($trek['summary'] ?? 'Experience authentic Himalayan trails with licensed local Sherpa guides.');
 
 // Best season calculation
 if (in_array(3, $trek['suitable_months'] ?? []) && in_array(4, $trek['suitable_months'] ?? [])) {

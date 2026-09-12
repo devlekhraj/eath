@@ -34,7 +34,7 @@
 
                 <template #item.language_spoken="{ item }">
                     <div class="d-flex align-center ga-1">
-                        <v-chip color="green" size="small" label class="text-capitalize" v-for="lang in item.language_spoken" :key="lang">
+                        <v-chip color="green" size="small" label class="text-uppercase" v-for="lang in item.language_spoken" :key="lang">
                             {{ lang }}
                         </v-chip>
                     </div>
@@ -42,7 +42,7 @@
 
                 <template #item.status="{ item }">
                     <div>
-                        <v-chip :color="getStatusColor(item.status)" size="small" label class="text-capitalize">
+                        <v-chip :color="getStatusColor(item.status)" size="small" label class="text-uppercase">
                             {{ item.status }}
                         </v-chip>
                     </div>
@@ -71,6 +71,7 @@
 
 <script setup>
 import { useGlobalModal } from '@/composables/globalModal'
+import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
 import { ref, onMounted, computed } from 'vue'
 
@@ -93,7 +94,7 @@ const filteredItems = computed(() => {
 })
 
 const headers = [
-    { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+    { title: 'SN', key: 'sn', sortable: false },
     { title: 'Name', key: 'name' },
     { title: 'Email', key: 'email' },
     { title: 'Phone', key: 'phone_no' },
@@ -103,24 +104,6 @@ const headers = [
     { title: 'Status', key: 'status' },
     { title: 'Actions', key: 'actions', sortable: false },
 ]
-
-function getStatusColor(status) {
-    switch (status) {
-        case 'active':
-            return 'green';
-        case 'inactive':
-            return 'grey';
-        case 'pending':
-            return 'orange';
-        case 'suspended':
-            return 'red';
-        case 'deleted':
-            return 'black';
-        default:
-            return 'default';
-    }
-}
-
 
 function openForm(item = {}) {
     console.log({ item });

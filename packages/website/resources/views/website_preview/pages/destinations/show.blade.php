@@ -1,7 +1,7 @@
 @extends('website_preview.layout.master')
 
-@section('title', $region['name'] . ' Trekking Region · EATH Website')
-@section('meta_description', 'Explore sample trekking routes, seasonal calendars, altitude profiles, and planning details for the ' . $region['name'] . ' region in Nepal.')
+@section('title', ($region['meta_title'] ?? ($region['name'] . ' Trekking Region · EATH Travels')))
+@section('meta_description', ($region['meta_description'] ?? ($region['summary'] ?? ('Explore trekking routes, seasonal calendars, altitude profiles, and planning details for the ' . $region['name'] . ' region in Nepal.'))))
 
 @section('content')
 <div class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12);">
@@ -23,7 +23,7 @@
         <div style="position: relative; z-index: 2; padding: var(--space-6) var(--space-8); color: #ffffff; max-width: 860px;">
             <div style="display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2); flex-wrap: wrap;">
                 <span class="website-badge website-badge--warm" style="background: rgba(255, 255, 255, 0.22); color: #ffffff; border-color: rgba(255, 255, 255, 0.35);">
-                    Himalayan Destination Profile
+                    {{ $region['region_label'] ?? 'Himalayan Destination Profile' }}
                 </span>
                 <span class="website-micro" style="color: rgba(255, 255, 255, 0.85);">
                     {{ count($allRegionTreks) }} Sample {{ \Illuminate\Support\Str::plural('Itinerary', count($allRegionTreks)) }}
@@ -35,7 +35,7 @@
             </h1>
 
             <p class="website-body" style="color: rgba(255, 255, 255, 0.92); margin: 0; line-height: 1.6; font-size: 1.125rem;">
-                {{ $region['intro'] }}
+                {{ $region['summary'] ?? $region['intro'] }}
             </p>
         </div>
     </header>
@@ -46,19 +46,8 @@
             About the {{ $region['name'] }} Region
         </h2>
 
-        <div class="website-notice website-notice--info" style="margin-bottom: var(--space-5); padding: var(--space-3) var(--space-4);">
-            <span class="website-micro" style="display: block; line-height: 1.4;">
-                <strong>Sample Content Notice:</strong> Geographical descriptions, altitude ceilings, and trekking windows are mock fixture records. Real Himalayan expedition planning requires current route verification and professional guiding consultation.
-            </span>
-        </div>
-
         <div style="color: var(--color-text-secondary); line-height: 1.7; font-size: 1rem;">
-            <p style="margin-bottom: var(--space-4);">
-                The {{ $region['name'] }} corridor represents one of Nepal’s premier alpine environments, featuring distinctive ecological transitions, ancient ethnic settlements, and dramatic high-altitude vistas. Whether traversing classic teahouse routes or exploring remote lateral valleys, trekking here demands thoughtful seasonal timing and disciplined acclimatization.
-            </p>
-            <p style="margin: 0;">
-                Below you will find catalog route samples, trail difficulty ranges, illustrative logistics guidance, and recommended planning questions to help structure your itinerary.
-            </p>
+            {!! $region['description'] ?? ('<p>' . e($region['summary'] ?? $region['intro']) . '</p>') !!}
         </div>
     </section>
 

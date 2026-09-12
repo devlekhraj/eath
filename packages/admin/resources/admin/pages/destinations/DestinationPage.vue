@@ -16,7 +16,6 @@
                             label="Search destinations..."
                             clearable
                             prepend-inner-icon="mdi-magnify"
-                            density="compact"
                             hide-details
                         />
                     </v-col>
@@ -35,22 +34,13 @@
             </template>
 
             <template #item.name="{ item }">
-                <router-link :to="{ name: 'admin.destination.detail', params: { id: item.id } }" class="text-primary font-weight-medium text-decoration-underline">
+                <router-link :to="{ name: 'admin.destination.detail', params: { id: item.id } }" class="text-primary text-decoration-underline">
                     {{ item.name }}
                 </router-link>
             </template>
 
             <template #item.region_label="{ item }">
                 <span class="text-caption">{{ item.region_label || item.region || '—' }}</span>
-            </template>
-
-            <template #item.slug="{ item }">
-                <div class="d-flex align-center ga-1">
-                    <span class="text-caption text-slate-500 font-mono">{{ item.slug ? `/destinations/${item.slug}` : '—' }}</span>
-                    <v-btn v-if="item.slug" size="x-small" color="primary" icon variant="text" :href="`${publicBaseUrl}/destinations/${item.slug}`" target="_blank" rel="noopener">
-                        <v-icon size="14">mdi-open-in-new</v-icon>
-                    </v-btn>
-                </div>
             </template>
 
             <template #item.journeys_count="{ item }">
@@ -63,7 +53,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="text-uppercase font-weight-medium"
+                    class="text-uppercase"
                     :color="item.is_active ? 'success' : 'secondary'"
                     @click="toggleActive(item)"
                     style="cursor: pointer;"
@@ -109,13 +99,11 @@ import FormDelete from './modal/FormDelete.vue'
 const { open: openModal } = useGlobalModal()
 
 const { showSuccess, showError } = useSnackbar()
-const publicBaseUrl = window?.location?.origin ?? ''
 
 const headers = [
-    { title: 'SN', key: 'sn', sortable: false, width: '50px' },
+    { title: 'SN', key: 'sn', sortable: false },
     { title: 'Destination', key: 'name', sortable: true },
     { title: 'Region', key: 'region_label', sortable: true },
-    { title: 'Slug', key: 'slug', sortable: false },
     { title: 'Journeys', key: 'journeys_count', sortable: true },
     { title: 'Status', key: 'is_active', sortable: true },
     { title: 'Actions', key: 'actions', sortable: false, align: 'center' },

@@ -15,7 +15,9 @@
                 <v-row>
                     <!-- Icon Upload Field -->
                     <v-col cols="12">
-                        <v-file-input label="Select Image" accept="image/*" prepend-icon="" :error-messages="serverErrors.image_url" @change="handleUploadImage" prepend-inner-icon="mdi-upload" required />
+                        <div class="mb-2">
+                            <v-file-input label="Select Image" accept="image/*" prepend-icon="" :error-messages="serverErrors.image_url" @change="handleUploadImage" prepend-inner-icon="mdi-upload" required />
+                        </div>
 
                         <!-- Image Preview -->
                         <div v-if="form.image_url" style="height: 200px;" class="mt-2">
@@ -27,7 +29,7 @@
             </v-form>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             </v-card-actions>
     </v-card>

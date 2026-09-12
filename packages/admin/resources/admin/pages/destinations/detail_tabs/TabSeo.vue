@@ -4,20 +4,28 @@
       <v-col cols="12" md="12" lg="8" offset-lg="2">
         <v-form v-if="destination" class="mt-4">
           <v-row>
-            <v-col cols="12" md="12" class="py-0">
-              <v-text-field v-model="destination.meta_title" label="Meta Title" placeholder="Enter meta title" />
+            <v-col cols="12" md="12">
+              <div class="mb-2">
+                <v-text-field v-model="destination.meta_title" label="Meta Title" placeholder="Enter meta title" />
+              </div>
             </v-col>
 
-            <v-col cols="12" md="12" class="py-0">
-              <v-text-field v-model="destination.meta_keywords" label="Meta Keywords" placeholder="keyword1, keyword2, keyword3" />
+            <v-col cols="12" md="12">
+              <div class="mb-2">
+                <v-text-field v-model="destination.meta_keywords" label="Meta Keywords" placeholder="keyword1, keyword2, keyword3" />
+              </div>
             </v-col>
 
-            <v-col cols="12" md="12" class="py-0">
-              <v-textarea v-model="destination.meta_description" label="Meta Description" rows="4" auto-grow placeholder="Write a concise meta description" />
+            <v-col cols="12" md="12">
+              <div class="mb-2">
+                <v-textarea v-model="destination.meta_description" label="Meta Description" rows="4" auto-grow placeholder="Write a concise meta description" />
+              </div>
             </v-col>
 
-            <v-col cols="12" md="12" class="py-0">
-              <v-text-field v-model="destination.canonical_url" label="Canonical URL" placeholder="https://example.com/destinations/slug" />
+            <v-col cols="12" md="12">
+              <div class="mb-2">
+                <v-text-field v-model="destination.canonical_url" label="Canonical URL" placeholder="https://example.com/destinations/slug" />
+              </div>
             </v-col>
           </v-row>
         </v-form>

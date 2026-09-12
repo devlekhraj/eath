@@ -113,45 +113,12 @@ class DestinationController extends Controller
         }
         $matchedArticles = array_slice($matchedArticles, 0, 3);
 
-        // Regional logistics notes
-        $logisticsMap = [
-            'everest' => [
-                'gateway' => 'Lukla (Tenzing-Hillary Airport) via Kathmandu or Ramechhap flight',
-                'trailheads' => 'Lukla, Phakding, Namche Bazaar',
-                'permits' => 'Sagarmatha National Park Permit, Khumbu Pasang Lhamu Rural Municipality Card',
-                'pacing' => 'Strict acclimatization rest days in Namche Bazaar (3,440m) and Dingboche (4,410m) recommended.',
-            ],
-            'annapurna' => [
-                'gateway' => 'Pokhara via road or domestic flight from Kathmandu',
-                'trailheads' => 'Nayapul, Kande, Besisahar, Jagat',
-                'permits' => 'Annapurna Conservation Area Project (ACAP), TIMS Card',
-                'pacing' => 'Flexible route networks allowing both moderate ridge hikes and high-pass traverses.',
-            ],
-            'langtang' => [
-                'gateway' => 'Syabrubesi via overland scenic drive (approx. 7–9 hrs north of Kathmandu)',
-                'trailheads' => 'Syabrubesi, Lama Hotel, Kyanjin Gompa',
-                'permits' => 'Langtang National Park Entry Permit, TIMS Card',
-                'pacing' => 'Moderate gradient following the Langtang Khola river gorge, with basecamp exploration at Kyanjin Gompa.',
-            ],
-            'manaslu' => [
-                'gateway' => 'Soti Khola / Machha Khola via vehicular drive from Kathmandu or Pokhara',
-                'trailheads' => 'Machha Khola, Jagat, Deng, Samagaon',
-                'permits' => 'Manaslu Restricted Area Permit (RAP), MCAP, ACAP (licensed guide required)',
-                'pacing' => 'Methodical multi-week circuit requiring sustained stamina for Larkya La (5,106m) pass day.',
-            ],
-            'mustang' => [
-                'gateway' => 'Jomsom via mountain flight from Pokhara or high-clearance 4WD corridor',
-                'trailheads' => 'Kagbeni, Chele, Charang, Lo Manthang',
-                'permits' => 'Upper Mustang Restricted Area Permit ($500 USD / 10 days baseline), ACAP',
-                'pacing' => 'High-plateau walking in rain-shadow conditions; dry climate with afternoon canyon wind considerations.',
-            ],
-        ];
-
-        $logistics = $logisticsMap[$region['slug']] ?? [
-            'gateway' => 'Kathmandu transit connection',
-            'trailheads' => 'Regional access points',
-            'permits' => 'Local conservation and national park permits',
-            'pacing' => 'Tailored to route altitude profiles.',
+        // Regional logistics notes directly from database model
+        $logistics = [
+            'gateway' => $region['gateway'] ?? 'Kathmandu transit connection',
+            'trailheads' => $region['trailheads'] ?? 'Regional access points',
+            'permits' => $region['permits'] ?? 'Local conservation and national park permits',
+            'pacing' => $region['pacing'] ?? 'Tailored to route altitude profiles.',
         ];
 
         // Regional FAQs

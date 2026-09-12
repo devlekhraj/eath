@@ -2,30 +2,28 @@
     <v-container fluid>
         <v-row>
             <v-col cols="12" lg="8" offset-lg="2">
-                <v-text-field
-                    v-model="form.meta_title"
-                    label="Meta Title"
-                    variant="outlined"
-                    density="comfortable"
-                    counter="60"
-                    hint="Max 60 characters for best SEO"
-                    persistent-hint
-                    class="mb-4"
-                    :error-messages="errors.meta_title"
-                />
+                <div class="mb-2">
+                    <v-text-field
+                        v-model="form.meta_title"
+                        label="Meta Title"
+                        counter="60"
+                        hint="Max 60 characters for best SEO"
+                        persistent-hint
+                        :error-messages="errors.meta_title"
+                    />
+                </div>
 
-                <v-textarea
-                    v-model="form.meta_description"
-                    label="Meta Description"
-                    rows="3"
-                    variant="outlined"
-                    density="comfortable"
-                    counter="160"
-                    hint="Max 160 characters for search engines"
-                    persistent-hint
-                    class="mb-4"
-                    :error-messages="errors.meta_description"
-                />
+                <div class="mb-2">
+                    <v-textarea
+                        v-model="form.meta_description"
+                        label="Meta Description"
+                        rows="3"
+                        counter="160"
+                        hint="Max 160 characters for search engines"
+                        persistent-hint
+                        :error-messages="errors.meta_description"
+                    />
+                </div>
 
                 <div class="text-center mt-6">
                     <v-btn type="button" color="primary" :loading="isSubmitting" @click="submitSeo">

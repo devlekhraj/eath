@@ -54,6 +54,7 @@ class WebsiteCatalogRepository
                     'db_id' => $destination->id,
                     'slug' => $destination->slug,
                     'name' => $destination->name,
+                    'region_label' => $destination->region_label,
                     'intro' => $destination->summary,
                     'summary' => $destination->summary,
                     'description' => $destination->description,
@@ -61,6 +62,8 @@ class WebsiteCatalogRepository
                     'trailheads' => $destination->trailheads,
                     'permits' => $destination->permits,
                     'pacing' => $destination->pacing_note,
+                    'meta_title' => $destination->meta_title,
+                    'meta_description' => $destination->meta_description,
                     'trek_count' => count($regionTreks),
                     'treks' => $regionTreks,
                     'image' => WebsiteAssetRegistry::resolve("region-{$destination->slug}", $destination->name),
@@ -171,6 +174,20 @@ class WebsiteCatalogRepository
                 $query->where('slug', $idOrSlug);
                 if (is_numeric($idOrSlug)) {
                     $query->orWhere('id', (int) $idOrSlug);
+                }
+                $slugFromId = match ($idOrSlug) {
+                    't-ebc' => 'everest-base-camp',
+                    't-abc' => 'annapurna-base-camp',
+                    't-langtang' => 'langtang-valley',
+                    't-mardi', 'mardi-himal-ridge' => 'mardi-himal',
+                    't-gokyo', 'gokyo-ri-lakes' => 'gokyo-lakes',
+                    't-manaslu' => 'manaslu-circuit',
+                    't-khopra' => 'khopra-ridge',
+                    't-mustang' => 'upper-mustang',
+                    default => null,
+                };
+                if ($slugFromId) {
+                    $query->orWhere('slug', $slugFromId);
                 }
             })
             ->first();
@@ -477,11 +494,25 @@ class WebsiteCatalogRepository
 
         $services = $journey->services->where('is_active', true);
 
+        $imageKey = match ($journey->slug) {
+            'everest-base-camp' => 'trek-t-ebc',
+            'annapurna-base-camp' => 'trek-t-abc',
+            'langtang-valley' => 'trek-t-langtang',
+            'mardi-himal', 'mardi-himal-ridge' => 'trek-t-mardi',
+            'gokyo-lakes', 'gokyo-ri-lakes' => 'trek-t-gokyo',
+            'manaslu-circuit' => 'trek-t-manaslu',
+            'khopra-ridge' => 'trek-t-khopra',
+            'upper-mustang' => 'trek-t-mustang',
+            default => "trek-{$journey->slug}",
+        };
+
         return [
             'id' => $journey->slug,
             'db_id' => $journey->id,
             'slug' => $journey->slug,
             'name' => $journey->name,
+            'subtitle' => $journey->subtitle,
+            'tagline' => $journey->subtitle ?? $journey->summary,
             'summary' => $journey->summary,
             'description' => $journey->description,
             'overview_secondary' => $journey->overview_secondary,
@@ -509,10 +540,12 @@ class WebsiteCatalogRepository
             'inclusions' => $services->where('type', 'inclusion')->pluck('title')->values()->all(),
             'exclusions' => $services->where('type', 'exclusion')->pluck('title')->values()->all(),
             'accommodation_note' => $journey->accommodation_note,
+            'logistics_note' => $journey->logistics_note,
+            'safety_note' => $journey->safety_note,
             'logistics_safety_note' => trim(($journey->logistics_note ?? '') . ' ' . ($journey->safety_note ?? '')),
             'route_map_note' => $journey->route_map_note,
             'related_trek_ids' => self::relatedJourneySlugs($journey),
-            'image' => WebsiteAssetRegistry::resolve("trek-{$journey->slug}", $journey->name),
+            'image' => WebsiteAssetRegistry::resolve($imageKey, $journey->name),
             'gallery' => [],
             'meta_title' => $journey->meta_title,
             'meta_description' => $journey->meta_description,

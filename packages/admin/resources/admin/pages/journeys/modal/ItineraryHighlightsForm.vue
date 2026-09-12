@@ -12,25 +12,29 @@
             <v-form ref="formRef" lazy-validation>
                 <v-row>
                     <v-col cols="12" md="8">
-                        <v-text-field v-model="form.title" label="Title" :rules="[rules.required]" :error-messages="fieldErrors.title" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.title" label="Title" :rules="[rules.required]" :error-messages="fieldErrors.title" />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="4">
-                        <v-text-field v-model="form.sort_order" label="Sort Order" placeholder="1" :error-messages="fieldErrors.sort_order" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.sort_order" label="Sort Order" placeholder="1" :error-messages="fieldErrors.sort_order" />
+                        </div>
 
                     </v-col>
 
                     <v-col cols="12" md="12">
 
-                        <v-textarea v-model="form.description" label="Description" :rules="[rules.required]" :error-messages="fieldErrors.description" />
+                        <div class="mb-2">
+                            <v-textarea v-model="form.description" label="Description" :rules="[rules.required]" :error-messages="fieldErrors.description" />
+                        </div>
 
                     </v-col>
                 </v-row>
             </v-form>
         </v-card-text>
 
-        <v-divider />
-
-        <v-card-actions class="justify-space-between">
+        <v-card-actions class="justify-end">
             <div>
                 <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
                 <v-btn v-if="props.item?.id" variant="text" class="ml-4" color="error" :loading="loading_delete" :disabled="loading_delete" @click="handleDelete">

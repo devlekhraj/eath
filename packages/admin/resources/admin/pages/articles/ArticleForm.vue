@@ -1,68 +1,85 @@
 <template>
 	<div>
-		<v-row>
-			<!-- Blog Form Content Area -->
-			<v-col cols="12" md="8">
-				<v-card class="pa-4">
-					<v-form ref="formRef" v-model="valid" @submit.prevent="submitForm" validate-on="submit">
+		<v-form ref="formRef" v-model="valid" @submit.prevent="submitForm" validate-on="submit">
+			<v-row>
+				<!-- Blog Form Content Area -->
+				<v-col cols="12" md="8">
+					<v-card class="pa-4">
 						<!-- Title -->
-						<v-text-field v-model="form.title" label="Title" :rules="[rules.required]" class="mb-4" :error-messages="errors.title" @input="handleTitleInput" />
+						<div class="mb-2">
+							<v-text-field v-model="form.title" label="Title" :rules="[rules.required]" :error-messages="errors.title" @input="handleTitleInput" />
+						</div>
 
 						<!-- Slug -->
-						<v-text-field v-model="form.slug" label="Slug" :rules="[rules.slug]" class="mb-4" hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint :disabled="form.published_at" :error-messages="errors.slug" />
+						<div class="mb-2">
+							<v-text-field v-model="form.slug" label="Slug" :rules="[rules.slug]" hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint :disabled="form.published_at" :error-messages="errors.slug" />
+						</div>
 
 						<!-- Subtitle -->
-						<v-textarea v-model="form.sub_title" label="Sub Title" :rules="[rules.required]" class="mb-4" :error-messages="errors.sub_title" />
+						<div class="mb-2">
+							<v-textarea v-model="form.sub_title" label="Sub Title" :rules="[rules.required]" :error-messages="errors.sub_title" />
+						</div>
 
 						<!-- Content -->
-						<div class="mb-4">
+						<div class="mb-2">
 							<label class="text-subtitle-1 mb-2 d-block">Content</label>
 							<SummarnoteEditor v-model="form.content" />
 							<span v-if="contentError || errors.content" class="text-error text-caption">
 								{{ errors.content || 'Content is required' }}
 							</span>
 						</div>
-						<!-- <SummarnoteViewer :value="form.content"></SummarnoteViewer> -->
-					</v-form>
-				</v-card>
-			</v-col>
+					</v-card>
+				</v-col>
 
-			<!-- Side Controls -->
-			<v-col cols="12" md="4">
-				<v-card class="pa-4">
-					<!-- Featured Image -->
-					<v-file-input v-if="articleId" v-model="selected_image" accept="image/*" label="Featured Image" prepend-inner-icon="mdi-image" @change="onImageChange" class="mb-4 truncate-file-name" />
+				<!-- Side Controls -->
+				<v-col cols="12" md="4">
+					<v-card class="pa-4">
+						<!-- Featured Image -->
+						<div class="mb-2" v-if="articleId">
+							<v-file-input v-model="selected_image" accept="image/*" label="Featured Image" prepend-inner-icon="mdi-image" @change="onImageChange" class="truncate-file-name" />
+						</div>
 
-					<v-img
-						v-if="previewImage"
-						:src="form.banner_url"
-						height="200"
-						contain
-						class="rounded mb-4"
-					/>
+						<v-img
+							v-if="previewImage"
+							:src="form.banner_url"
+							height="200"
+							contain
+							class="rounded mb-2"
+						/>
 
-					<!-- Author -->
-					<v-text-field v-model="form.author" label="Author" prepend-inner-icon="mdi-account" :rules="[rules.required]" class="mb-4" :error-messages="errors.author" />
+						<!-- Author -->
+						<div class="mb-2">
+							<v-text-field v-model="form.author" label="Author" prepend-inner-icon="mdi-account" :rules="[rules.required]" :error-messages="errors.author" />
+						</div>
 
-					<!-- Categories -->
-					<v-select v-model="form.category_ids" :items="blog_categories" item-title="name" item-value="id" label="Select Categories" multiple chips clearable :error-messages="errors.category_ids" />
+						<!-- Categories -->
+						<div class="mb-2">
+							<v-select v-model="form.category_ids" :items="blog_categories" item-title="name" item-value="id" label="Select Categories" multiple chips clearable :error-messages="errors.category_ids" />
+						</div>
 
-					<!-- Meta Title -->
-					<v-text-field v-model="form.meta_title" label="Meta Title" counter="60" hint="Max 60 characters for best SEO" persistent-hint class="mb-4" :error-messages="errors.meta_title" />
+						<!-- Meta Title -->
+						<div class="mb-2">
+							<v-text-field v-model="form.meta_title" label="Meta Title" counter="60" hint="Max 60 characters for best SEO" persistent-hint :error-messages="errors.meta_title" />
+						</div>
 
-					<!-- Meta Description -->
-					<v-textarea v-model="form.meta_description" label="Meta Description" rows="3" counter="160" hint="Max 160 characters for search engines" persistent-hint class="mb-4" :error-messages="errors.meta_description" />
+						<!-- Meta Description -->
+						<div class="mb-2">
+							<v-textarea v-model="form.meta_description" label="Meta Description" rows="3" counter="160" hint="Max 160 characters for search engines" persistent-hint :error-messages="errors.meta_description" />
+						</div>
 
-					<!-- Meta Keywords -->
-					<v-textarea v-model="form.meta_keywords" label="Meta Keywords" rows="2" hint="Separate keywords with commas" persistent-hint class="mb-4" :error-messages="errors.meta_keywords" />
+						<!-- Meta Keywords -->
+						<div class="mb-2">
+							<v-textarea v-model="form.meta_keywords" label="Meta Keywords" rows="2" hint="Separate keywords with commas" persistent-hint :error-messages="errors.meta_keywords" />
+						</div>
 
-					<!-- Submit -->
-					<v-btn type="submit" color="primary" block @click="submitForm" :loading="submitting">
-						Submit
-					</v-btn>
-				</v-card>
-			</v-col>
-		</v-row>
+						<!-- Submit -->
+						<v-btn type="submit" color="primary" block @click="submitForm" :loading="submitting">
+							Submit
+						</v-btn>
+					</v-card>
+				</v-col>
+			</v-row>
+		</v-form>
 	</div>
 </template>
 

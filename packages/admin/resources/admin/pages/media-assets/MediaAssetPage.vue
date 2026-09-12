@@ -9,8 +9,6 @@
           clearable
           prepend-inner-icon="mdi-magnify"
           placeholder="Search by title, filename, alt..."
-          variant="outlined"
-          density="compact"
           hide-details
         />
       </v-col>
@@ -182,10 +180,7 @@
         </template>
 
         <template #item.title="{ item }">
-          <div>
-            <div class="text-slate-800">{{ item.title || item.filename }}</div>
-            <div class="text-caption text-medium-emphasis">{{ item.filename }}</div>
-          </div>
+          <span class="text-slate-800">{{ item.title || item.filename }}</span>
         </template>
 
         <template #item.dimensions="{ item }">
@@ -268,13 +263,13 @@ const search = ref('')
 const viewMode = ref('grid')
 
 const tableHeaders = [
-  { title: 'SN', key: 'sn', sortable: false, width: '50px' },
-  { title: 'Preview', key: 'preview', sortable: false, width: '80px' },
-  { title: 'Title & Filename', key: 'title', sortable: true },
-  { title: 'Dimensions', key: 'dimensions', sortable: false, width: '130px' },
-  { title: 'File Size', key: 'formatted_size', sortable: false, width: '100px' },
-  { title: 'Attachments', key: 'attachments_count', sortable: true, width: '120px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '230px' },
+  { title: 'SN', key: 'sn', sortable: false },
+  { title: 'Preview', key: 'preview', sortable: false },
+  { title: 'Title', key: 'title', sortable: true },
+  { title: 'Dimensions', key: 'dimensions', sortable: false },
+  { title: 'File Size', key: 'formatted_size', sortable: false },
+  { title: 'Attachments', key: 'attachments_count', sortable: true },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center' },
 ]
 
 const filteredItems = computed(() => {

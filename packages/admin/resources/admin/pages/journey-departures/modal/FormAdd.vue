@@ -29,25 +29,35 @@
                 <v-row>
                     <!-- Package Name -->
                     <v-col cols="12">
-                        <v-text-field v-model="form.title" label="Title" :rules="[rules.required]" :error-messages="serverErrors.title" prepend-inner-icon="mdi-package-variant" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.title" label="Title" :rules="[rules.required]" :error-messages="serverErrors.title" prepend-inner-icon="mdi-package-variant" />
+                        </div>
                     </v-col>
 
                     <!-- Slug -->
                     <v-col cols="12">
-                        <v-text-field v-model="form.slug" label="Slug URL" :rules="[rules.required, rules.slug]" :error-messages="serverErrors.slug" hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint prepend-inner-icon="mdi-link-variant" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.slug" label="Slug URL" :rules="[rules.required, rules.slug]" :error-messages="serverErrors.slug" hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint prepend-inner-icon="mdi-link-variant" />
+                        </div>
                     </v-col>
                     <!-- Slug -->
                     <v-col cols="12">
-                        <v-select v-model="form.package_id" :items="package_list" item-title="name" item-value="id" label="Select Package" :rules="[rules.required]" :error-messages="serverErrors.package_id" prepend-inner-icon="mdi-package-variant" />
+                        <div class="mb-2">
+                            <v-select v-model="form.package_id" :items="package_list" item-title="name" item-value="id" label="Select Package" :rules="[rules.required]" :error-messages="serverErrors.package_id" prepend-inner-icon="mdi-package-variant" />
+                        </div>
                     </v-col>
 
                     <!-- Highlight -->
                     <v-col cols="12">
-                        <v-textarea v-model="form.highlight" label="Highlight" auto-grow :rules="[rules.required]" :error-messages="serverErrors.highlight" prepend-inner-icon="mdi-text" />
+                        <div class="mb-2">
+                            <v-textarea v-model="form.highlight" label="Highlight" auto-grow :rules="[rules.required]" :error-messages="serverErrors.highlight" prepend-inner-icon="mdi-text" />
+                        </div>
                     </v-col>
                     <!-- Description -->
                     <v-col cols="12">
-                        <v-textarea v-model="form.description" label="Description" auto-grow :rules="[rules.required]" :error-messages="serverErrors.description" prepend-inner-icon="mdi-text" />
+                        <div class="mb-2">
+                            <v-textarea v-model="form.description" label="Description" auto-grow :rules="[rules.required]" :error-messages="serverErrors.description" prepend-inner-icon="mdi-text" />
+                        </div>
                     </v-col>
 
                     <!-- Start Date -->
@@ -62,19 +72,25 @@
 
                     <!-- Group Size -->
                     <v-col cols="12" md="6">
-                        <v-text-field v-model="form.group_size" label="Group Size" type="number" :rules="[rules.required, rules.positiveNumber]" :error-messages="serverErrors.group_size" prepend-inner-icon="mdi-account-group" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.group_size" label="Group Size" type="number" :rules="[rules.required, rules.positiveNumber]" :error-messages="serverErrors.group_size" prepend-inner-icon="mdi-account-group" />
+                        </div>
                     </v-col>
 
                     <!-- Price -->
                     <v-col cols="12" md="6">
-                        <v-text-field v-model="form.price" label="Price" type="number" :rules="[rules.required, rules.positiveNumber]" :error-messages="serverErrors.price" prepend-inner-icon="mdi-currency-usd" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.price" label="Price" type="number" :rules="[rules.required, rules.positiveNumber]" :error-messages="serverErrors.price" prepend-inner-icon="mdi-currency-usd" />
+                        </div>
                     </v-col>
                     <!-- Price -->
                     <v-col cols="12" md="12">
-                        <v-text-field v-model="form.duration" label="Duration" placeholder="eg. 3 Days, 2 Nights" :rules="[rules.required]" :error-messages="serverErrors.duration" prepend-inner-icon="mdi-clock" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.duration" label="Duration" placeholder="eg. 3 Days, 2 Nights" :rules="[rules.required]" :error-messages="serverErrors.duration" prepend-inner-icon="mdi-clock" />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="12">
-                        <div>
+                        <div class="mb-2">
                             <v-file-input v-if="item?.id" v-model="selected_image" accept="image/*" prepend-icon="" label="Featured Image" prepend-inner-icon="mdi-image" @change="onImageChange" class="mb-4 truncate-file-name" />
 
                             <v-img v-if="item?.banner_url || form?.banner_url" :src="form.banner_url" height="200"
@@ -85,7 +101,7 @@
             </v-form>
         </v-card-text>
 
-        <v-card-actions class="" v-if="!fetching_data">
+        <v-card-actions class="justify-end" v-if="!fetching_data">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             <v-spacer></v-spacer>
             <v-btn color="primary" :loading="loading" @click="submitForm">Save</v-btn>

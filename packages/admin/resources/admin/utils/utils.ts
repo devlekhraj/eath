@@ -175,3 +175,68 @@ export function dotStyle(
 export const colorStyle = dotStyle;
 export const regionStyle = dotStyle;
 export const categoryStyle = dotStyle;
+
+// ==========================================
+// 4. Date & Status Helpers
+// ==========================================
+
+const humanDateFormatter = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+export const formatHuman = (val?: string | Date | null): string => {
+  if (!val) return '';
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return String(val);
+  return humanDateFormatter.format(d);
+};
+
+export const formatYmd = (val?: string | Date | null): string => {
+  if (!val) return '';
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return String(val);
+  return d.toISOString().slice(0, 10);
+};
+
+/**
+ * Universal Status Color Resolver for Vuetify Chips across all admin pages.
+ */
+export function getStatusColor(status?: string | boolean | number | null): string {
+  if (status === null || status === undefined) return 'primary';
+  if (typeof status === 'boolean') return status ? 'success' : 'secondary';
+  
+  const key = String(status).trim().toLowerCase();
+  switch (key) {
+    case 'open':
+    case 'active':
+    case 'replied':
+    case 'published':
+    case '1':
+    case 'true':
+      return 'success';
+    case 'limited':
+    case 'filling_fast':
+    case 'reviewing':
+    case 'pending':
+    case 'draft':
+      return 'warning';
+    case 'guaranteed':
+      return 'info';
+    case 'full':
+    case 'cancelled':
+    case 'rejected':
+    case 'new':
+      return 'error';
+    case 'closed':
+    case 'inactive':
+    case 'completed':
+    case '0':
+    case 'false':
+      return 'secondary';
+    default:
+      return 'primary';
+  }
+}
+

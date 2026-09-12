@@ -13,7 +13,6 @@ export default defineConfig({
                 'packages/admin/resources/admin/main.ts',
                 'packages/admin/resources/admin/admin.scss',
 
-                'packages/website/resources/website/scss/tiptap-viewer.scss',
                 'packages/website/resources/website/scss/website.scss',
                 'packages/website/resources/website/js/website.js',
                 'packages/website/resources/website/scss/website-preview.scss',
@@ -30,6 +29,7 @@ export default defineConfig({
             '@pages': path.resolve(__dirname, 'packages/admin/resources/admin/pages'),
             '@components': path.resolve(__dirname, 'packages/admin/resources/admin/components'),
             '@utils': path.resolve(__dirname, 'packages/admin/resources/admin/utils'),
+            'v-phone-input/styles': path.resolve(__dirname, 'node_modules/v-phone-input/dist/v-phone-input.css'),
         }
     },
     css: {
@@ -44,13 +44,22 @@ export default defineConfig({
         include: ['jquery', 'summernote/dist/summernote-lite.js'],
     },
     build: {
+        chunkSizeWarningLimit: 1000,
         rollupOptions: {
             output: {
-                manualChunks: {
-                    'vendor-vue': ['vue', 'vue-router', 'pinia'],
-                    'vendor-vuetify': ['vuetify'],
-                    'vendor-swiper': ['swiper'],
-                    'vendor-bootstrap': ['bootstrap'],
+                manualChunks(id) {
+                    if (id.includes('node_modules/vuetify')) {
+                        return 'vendor-vuetify';
+                    }
+                    if (id.includes('node_modules/vue/') || id.includes('node_modules/@vue/') || id.includes('node_modules/vue-router') || id.includes('node_modules/pinia')) {
+                        return 'vendor-vue';
+                    }
+                    if (id.includes('node_modules/swiper')) {
+                        return 'vendor-swiper';
+                    }
+                    if (id.includes('node_modules/bootstrap')) {
+                        return 'vendor-bootstrap';
+                    }
                 }
             }
         }

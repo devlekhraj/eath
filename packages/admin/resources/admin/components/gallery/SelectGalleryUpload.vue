@@ -37,10 +37,15 @@
 		</v-col>
 
 		<v-col cols="12" md="7">
-
-			<v-text-field :model-value="meta?.alt_text" label="Alt Text - (SEO Friendly)" placeholder="e.g: Hikers at Everest Base Camp with Khumbu Glacier" :error-messages="fieldErrors.alt_text || []" @update:modelValue="(value) => updateMetaField('alt_text', value)" />
-			<v-text-field :model-value="meta?.caption" label="Caption - (SEO Friendly)" placeholder="e.g: Morning view at Everest Base Camp" :error-messages="fieldErrors.caption || []" @update:modelValue="(value) => updateMetaField('caption', value)" />
-			<v-textarea :model-value="meta?.description" label="Description - (SEO Friendly)" placeholder="e.g: A clear morning at Everest Base Camp with tents, prayer flags, and the Khumbu Glacier." rows="4" auto-grow :error-messages="fieldErrors.description || []" @update:modelValue="(value) => updateMetaField('description', value)" />
+			<div class="mb-2">
+				<v-text-field :model-value="meta?.alt_text" label="Alt Text - (SEO Friendly)" placeholder="e.g: Hikers at Everest Base Camp with Khumbu Glacier" :error-messages="fieldErrors.alt_text || []" @update:modelValue="(value) => updateMetaField('alt_text', value)" />
+			</div>
+			<div class="mb-2">
+				<v-text-field :model-value="meta?.caption" label="Caption - (SEO Friendly)" placeholder="e.g: Morning view at Everest Base Camp" :error-messages="fieldErrors.caption || []" @update:modelValue="(value) => updateMetaField('caption', value)" />
+			</div>
+			<div class="mb-2">
+				<v-textarea :model-value="meta?.description" label="Description - (SEO Friendly)" placeholder="e.g: A clear morning at Everest Base Camp with tents, prayer flags, and the Khumbu Glacier." rows="4" auto-grow :error-messages="fieldErrors.description || []" @update:modelValue="(value) => updateMetaField('description', value)" />
+			</div>
 		</v-col>
 	</v-row>
 	<v-divider class="my-4" />

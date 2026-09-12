@@ -12,24 +12,34 @@
             <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation>
                 <v-row>
                     <v-col cols="12" md="12">
-                        <v-text-field v-model="form.name" label="Category Name" :rules="[rules.required]" :error-messages="serverErrors.name" required />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.name" label="Category Name" :rules="[rules.required]" :error-messages="serverErrors.name" required />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="12">
-                        <v-select v-model="form.parent_id" :items="parentOptions" item-title="name" item-value="id" label="Parent Category" clearable :error-messages="serverErrors.parent_id" />
+                        <div class="mb-2">
+                            <v-select v-model="form.parent_id" :items="parentOptions" item-title="name" item-value="id" label="Parent Category" clearable :error-messages="serverErrors.parent_id" />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="12">
-                        <v-textarea v-model="form.description" label="Description" :error-messages="serverErrors.description" />
+                        <div class="mb-2">
+                            <v-textarea v-model="form.description" label="Description" :error-messages="serverErrors.description" />
+                        </div>
                     </v-col>
 
                     <v-col cols="6" md="6">
-                        <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" :error-messages="serverErrors.sort_order" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.sort_order" label="Sequence Number" type="number" :error-messages="serverErrors.sort_order" />
+                        </div>
                     </v-col>
 
                     <v-col cols="6" md="6">
                         <div class="text-right">
-                            <v-switch v-model="form.is_active" inset label="Active" color="success" />
+                            <div class="mb-2">
+                                <v-switch v-model="form.is_active" inset label="Active" color="success" />
+                            </div>
                         </div>
                     </v-col>
                 </v-row>

@@ -1,7 +1,7 @@
 <template>
     <v-card>
-        <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-            <span class="text-uppercase font-weight-medium text-slate-800">Add New Page</span>
+        <v-card-title class="d-flex align-center justify-space-between py-0">
+            <span>Add New Page</span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -12,43 +12,42 @@
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
                 <v-row>
                     <v-col cols="12">
-                        <v-text-field
-                            v-model="form.title"
-                            label="Title"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required]"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.title"
+                                label="Title"
+                                :rules="[rules.required]"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">
-                        <v-text-field
-                            v-model="form.slug"
-                            label="Slug"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required, rules.slug]"
-                            hint="URL-friendly string with lowercase letters, numbers, and hyphens"
-                            persistent-hint
-                            @input="onSlugInput"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.slug"
+                                label="Slug"
+                                :rules="[rules.required, rules.slug]"
+                                hint="URL-friendly string with lowercase letters, numbers, and hyphens"
+                                persistent-hint
+                                @input="onSlugInput"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">
-                        <v-select
-                            v-model="form.type"
-                            :items="typeOptions"
-                            label="Page Type"
-                            variant="outlined"
-                            density="comfortable"
-                        />
+                        <div class="mb-2">
+                            <v-select
+                                v-model="form.type"
+                                :items="typeOptions"
+                                label="Page Type"
+                            />
+                        </div>
                     </v-col>
                 </v-row>
             </v-form>
         </v-card-text>
-        <v-divider />
 
-        <v-card-actions class="pa-3 justify-end">
+        <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             <v-btn color="primary" :loading="loading" @click="submitForm">Save</v-btn>
         </v-card-actions>

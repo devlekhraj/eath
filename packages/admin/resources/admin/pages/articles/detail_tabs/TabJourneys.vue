@@ -9,34 +9,32 @@
                     </div>
                 </div>
 
-                <v-autocomplete
-                    v-model="selectedJourneyIds"
-                    :items="availableJourneys"
-                    item-title="title"
-                    item-value="id"
-                    label="Select Related Journeys"
-                    multiple
-                    chips
-                    closable-chips
-                    clearable
-                    variant="outlined"
-                    density="comfortable"
-                    :loading="loadingJourneys"
-                />
+                <div class="mb-2">
+                    <v-autocomplete
+                        v-model="selectedJourneyIds"
+                        :items="availableJourneys"
+                        item-title="title"
+                        item-value="id"
+                        label="Select Related Journeys"
+                        multiple
+                        chips
+                        closable-chips
+                        clearable
+                        :loading="loadingJourneys"
+                    />
+                </div>
 
                 <div v-if="selectedJourneyDetails.length > 0" class="mt-4">
-                    <v-table class="border">
+                    <v-table>
                         <thead>
                             <tr>
                                 <th>Journey Title</th>
-                                <th style="width: 150px;">Slug</th>
-                                <th class="text-center" style="width: 80px;">Action</th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="j in selectedJourneyDetails" :key="j.id">
                                 <td>{{ j.title }}</td>
-                                <td class="text-caption text-medium-emphasis">{{ j.slug }}</td>
                                 <td class="text-center">
                                     <v-btn size="x-small" icon variant="tonal" color="error" @click="removeJourney(j.id)">
                                         <v-icon size="16">mdi-close</v-icon>

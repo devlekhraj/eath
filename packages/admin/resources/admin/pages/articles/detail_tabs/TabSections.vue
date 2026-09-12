@@ -65,30 +65,31 @@
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12" sm="9">
-                                    <v-text-field
-                                        v-model="editingSection.heading"
-                                        label="Section Heading"
-                                        variant="outlined"
-                                        density="compact"
-                                        :rules="[v => !!v || 'Heading is required']"
-                                    />
+                                    <div class="mb-2">
+                                        <v-text-field
+                                            v-model="editingSection.heading"
+                                            label="Section Heading"
+                                            :rules="[v => !!v || 'Heading is required']"
+                                        />
+                                    </div>
                                 </v-col>
                                 <v-col cols="12" sm="3">
-                                    <v-text-field
-                                        v-model.number="editingSection.sort_order"
-                                        label="Sort Order"
-                                        type="number"
-                                        variant="outlined"
-                                        density="compact"
-                                    />
+                                    <div class="mb-2">
+                                        <v-text-field
+                                            v-model.number="editingSection.sort_order"
+                                            label="Sort Order"
+                                            type="number"
+                                        />
+                                    </div>
                                 </v-col>
                                 <v-col cols="12">
-                                    <label class="text-caption mb-1 d-block">Section Body</label>
-                                    <SummarnoteEditor v-model="editingSection.body" minHeight="200" />
+                                    <div class="mb-2">
+                                        <label class="text-caption mb-1 d-block">Section Body</label>
+                                        <SummarnoteEditor v-model="editingSection.body" minHeight="200" />
+                                    </div>
                                 </v-col>
                             </v-row>
                         </v-card-text>
-                        <v-divider />
                         <v-card-actions class="pa-3 justify-end">
                             <v-btn variant="text" @click="closeDialog">Cancel</v-btn>
                             <v-btn color="primary" :loading="saving" @click="saveSection">Save Section</v-btn>

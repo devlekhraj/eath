@@ -1,12 +1,12 @@
 <template>
   <v-card>
-    <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-      <span class="text-uppercase font-weight-medium text-slate-800">Media Asset Details</span>
+    <v-card-title class="d-flex align-center justify-space-between py-0">
+      <span>Media Asset Details</span>
       <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider />
+        <v-divider />
 
     <v-card-text>
       <v-row dense>
@@ -21,15 +21,15 @@
           </div>
 
           <div class="mt-3 d-flex align-center ga-2">
-            <v-text-field
-              :model-value="asset.url"
-              label="Direct Public URL"
-              readonly
-              variant="outlined"
-              density="compact"
-              class="flex-grow-1"
-              hide-details
-            />
+            <div class="mb-2">
+                <v-text-field
+                  :model-value="asset.url"
+                  label="Direct Public URL"
+                  readonly
+                  class="flex-grow-1"
+                  hide-details
+                />
+            </div>
             <v-btn
               color="primary"
               variant="tonal"
@@ -52,40 +52,38 @@
 
         <v-col cols="12" md="6">
           <v-form ref="formRef" @submit.prevent="handleSave">
-            <v-text-field
-              v-model="form.title"
-              label="Asset Title"
-              placeholder="Descriptive title"
-              variant="outlined"
-              density="compact"
-              class="mb-3"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.title"
+                  label="Asset Title"
+                  placeholder="Descriptive title"
+                  class="mb-3"
+                />
+            </div>
 
-            <v-text-field
-              v-model="form.alt_text"
-              label="Alt Text (SEO & Accessibility)"
-              placeholder="Descriptive alt text for screen readers"
-              variant="outlined"
-              density="compact"
-              class="mb-3"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.alt_text"
+                  label="Alt Text (SEO & Accessibility)"
+                  placeholder="Descriptive alt text for screen readers"
+                  class="mb-3"
+                />
+            </div>
 
-            <v-textarea
-              v-model="form.caption"
-              label="Caption"
-              placeholder="Optional photo caption or editorial context"
-              rows="5"
-              variant="outlined"
-              density="compact"
-              class="mb-3"
-            />
+            <div class="mb-2">
+                <v-textarea
+                  v-model="form.caption"
+                  label="Caption"
+                  placeholder="Optional photo caption or editorial context"
+                  rows="5"
+                  class="mb-3"
+                />
+            </div>
           </v-form>
         </v-col>
       </v-row>
     </v-card-text>
-
-    <v-divider />
-    <v-card-actions class="pa-3">
+    <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer />
       <v-btn

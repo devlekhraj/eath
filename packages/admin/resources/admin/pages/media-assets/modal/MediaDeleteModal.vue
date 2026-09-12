@@ -1,12 +1,12 @@
 <template>
   <v-card>
-    <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-      <span class="text-uppercase font-weight-medium text-slate-800">Delete Media Asset</span>
+    <v-card-title class="d-flex align-center justify-space-between py-0">
+      <span>Delete Media Asset</span>
       <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider />
+        <v-divider />
 
     <v-card-text class="pt-4">
       <div class="d-flex align-center ga-3 mb-3">
@@ -35,18 +35,17 @@
       </div>
 
       <div v-if="item?.attachments_count > 0" class="mt-2">
-        <v-checkbox
-          v-model="forceDelete"
-          label="Force delete and unlink all references"
-          density="compact"
-          color="error"
-          hide-details
-        />
+        <div class="mb-2">
+            <v-checkbox
+              v-model="forceDelete"
+              label="Force delete and unlink all references"
+              color="error"
+              hide-details
+            />
+        </div>
       </div>
     </v-card-text>
-
-    <v-divider />
-    <v-card-actions class="pa-3 justify-end">
+    <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleClose">Cancel</v-btn>
       <v-btn
         color="error"

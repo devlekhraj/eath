@@ -6,17 +6,16 @@
             <v-card-title class="d-flex align-center justify-space-between py-0">Login</v-card-title>
             <v-card-text>
                 <v-form ref="formRef" @submit.prevent="handleLogin" lazy-validation>
-                    <div class="mb-4">
-                        <label class="text-caption text-medium-emphasis d-block mb-2">Username</label>
-                        <v-text-field v-model="credentials.username" prepend-inner-icon="mdi-account" required :rules="[v => !!v || 'Username is required']" variant="outlined" density="comfortable"
-                            placeholder="john_cena" hide-details="auto"
+                    <div class="mb-2">
+                        <label class="text-caption text-medium-emphasis d-block mb-1">Username</label>
+                        <v-text-field v-model="credentials.username" prepend-inner-icon="mdi-account" required :rules="[v => !!v || 'Username is required']"
+                            placeholder="john_cena"
                             :error="!!serverErrors.username" :error-messages="serverErrors.username"
                             autocomplete="username" />
                     </div>
-                    <div class="mb-4">
-                        <label class="text-caption text-medium-emphasis d-block mb-2">Password</label>
+                    <div class="mb-2">
+                        <label class="text-caption text-medium-emphasis d-block mb-1">Password</label>
                         <v-text-field v-model="credentials.password" type="password" prepend-inner-icon="mdi-lock" required :rules="[v => !!v || 'Password is required']" placeholder="******"
-                            hide-details="auto"
                             :error="!!serverErrors.password" :error-messages="serverErrors.password"
                             autocomplete="current-password" />
                     </div>

@@ -15,32 +15,42 @@
         <v-row>
           <!-- Name -->
           <v-col cols="12" md="12">
-            <v-text-field v-model="form.name" prepend-inner-icon="mdi-account" label="Full Name" :rules="[rules.required]" :error-messages="serverErrors.name" required />
+            <div class="mb-2">
+                <v-text-field v-model="form.name" prepend-inner-icon="mdi-account" label="Full Name" :rules="[rules.required]" :error-messages="serverErrors.name" required />
+            </div>
           </v-col>
 
           <!-- Email -->
-          <v-col cols="12" md="6">
-            <v-text-field v-model="form.email" label="Email" prepend-inner-icon="mdi-email" :rules="[rules.required, rules.email]" :error-messages="serverErrors.email" required />
+          <v-col cols="12" md="12">
+            <div class="mb-2">
+                <v-text-field v-model="form.email" label="Email" prepend-inner-icon="mdi-email" :rules="[rules.required, rules.email]" :error-messages="serverErrors.email" required />
+            </div>
           </v-col>
 
           <!-- Phone -->
-          <v-col cols="12" md="6">
-            <v-text-field v-model="form.phone_no" prepend-inner-icon="mdi-phone" label="Phone" :rules="[rules.required, rules.phone]" :error-messages="serverErrors.phone_no" required />
+          <v-col cols="12" md="12">
+            <div class="mb-2">
+                <AppPhoneInput v-model="form.phone_no" label="Phone" :rules="[rules.required]" :error-messages="serverErrors.phone_no" required />
+            </div>
           </v-col>
 
           <!-- Language Spoken -->
           <v-col cols="12" md="12">
-            <v-select v-model="form.language_spoken" :items="languageOptions" label="Language Spoken" prepend-inner-icon="mdi-translate" multiple :rules="[rules.required]" :error-messages="serverErrors.language_spoken" required chips />
+            <div class="mb-2">
+                <v-select v-model="form.language_spoken" :items="languageOptions" label="Language Spoken" prepend-inner-icon="mdi-translate" multiple :rules="[rules.required]" :error-messages="serverErrors.language_spoken" required chips />
+            </div>
           </v-col>
           <v-col cols="12" md="12">
-            <v-select v-model="form.status" :items="status_list" item-title="label" item-value="id" class="text-capitalize" label="Status" prepend-inner-icon="mdi-translate" :rules="[rules.required]" :error-messages="serverErrors.status" required />
+            <div class="mb-2">
+                <v-select v-model="form.status" :items="status_list" item-title="label" item-value="id" class="text-capitalize" label="Status" prepend-inner-icon="mdi-translate" :rules="[rules.required]" :error-messages="serverErrors.status" required />
+            </div>
 
           </v-col>
         </v-row>
       </v-form>
     </v-card-text>
 
-    <v-card-actions>
+    <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer></v-spacer>
       <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn>
@@ -50,6 +60,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import AppPhoneInput from '@/components/AppPhoneInput.vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { createGuideApi } from '@/api/guides.api'
 

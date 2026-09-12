@@ -26,11 +26,10 @@
         <div class="relative mx-auto flex h-full w-full max-w-7xl flex-col items-center justify-end gap-6 px-6 pb-16 pt-24">
             <div class="blog-layout">
 
-                <div class="container py-5 vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                <div class="container py-5 content-viewer note-editable-content">
                     <div>
                         {!! $page->content !!}
                     </div>
-
                 </div>
             </div>
         </div>

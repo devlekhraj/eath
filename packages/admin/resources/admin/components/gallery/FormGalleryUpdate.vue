@@ -33,16 +33,13 @@
             </div>
           </v-col>
           <v-col cols="12" md="8">
-            <div class="mb-3">
+            <div class="mb-2">
               <v-text-field :model-value="draftMeta.alt_text" label="Alt Text" :disabled="!imageItem" @update:modelValue="(value) => updateMetaField('alt_text', value)" />
-
             </div>
-            <div class="mb-3">
-
+            <div class="mb-2">
               <v-text-field :model-value="draftMeta.caption" label="Caption" :disabled="!imageItem" @update:modelValue="(value) => updateMetaField('caption', value)" />
             </div>
-            <div class="mb-3">
-
+            <div class="mb-2">
               <v-textarea :model-value="draftMeta.description" label="Description" rows="4" auto-grow :disabled="!imageItem" @update:modelValue="(value) => updateMetaField('description', value)" />
             </div>
 

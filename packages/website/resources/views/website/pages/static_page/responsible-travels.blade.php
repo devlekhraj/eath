@@ -17,7 +17,7 @@
     </section>
 
      <section class="mx-auto grid w-full max-w-7xl gap-10 px-6 py-12">
-         <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
+         <div class="content-viewer note-editable-content">
              <div>
                  {!! $page->content !!}
              </div>

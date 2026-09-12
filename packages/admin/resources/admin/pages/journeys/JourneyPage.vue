@@ -76,7 +76,7 @@
 
             <template #item.is_active="{ item }">
                 <div>
-                    <v-chip size="small" label class="text-capitalize" :color="item.is_active ? 'success' : 'warning'">
+                    <v-chip size="small" label class="text-uppercase" :color="item.is_active ? 'success' : 'warning'">
                         <v-icon start size="16">{{ item.is_active ? 'mdi-check-circle' : 'mdi-alert-circle' }}</v-icon>
                         {{ item.is_active ? 'Active' : 'Draft' }}
                     </v-chip>
@@ -85,7 +85,7 @@
 
             <template #item.is_featured="{ item }">
                 <div>
-                    <v-chip size="small" label class="text-capitalize" :color="item.is_featured ? 'success' : 'warning'">
+                    <v-chip size="small" label class="text-uppercase" :color="item.is_featured ? 'success' : 'warning'">
                         <v-icon start size="16">{{ item.is_featured ? 'mdi-check-circle' : 'mdi-alert-circle' }}</v-icon>
                         {{ item.is_featured ? 'Yes' : 'No' }}
                     </v-chip>
@@ -111,8 +111,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { formatDate, formatAmount, dotStyle } from '@/utils/utils'
-import JourneyDelete from './modal/PackageDelete.vue'
-import JourneyAdd from './modal/PackageAdd.vue'
+import JourneyDelete from './modal/JourneyDelete.vue'
+import JourneyAdd from './modal/JourneyAdd.vue'
 
 import { useGlobalModal } from '@/composables/globalModal'
 import { getJourneys } from '@/api/journeys.api'
@@ -122,12 +122,12 @@ const { open: openModal } = useGlobalModal()
 
 
 const headers = [
-    { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+    { title: 'SN', key: 'sn', sortable: false },
     { title: 'Name', key: 'name', sortable: false },
     { title: 'Region', key: 'region', sortable: false,  },
     { title: 'Active', key: 'is_active', sortable: false,  },
     { title: 'Featured', key: 'is_featured', sortable: false,  },
-    { title: 'Actions', key: 'actions', sortable: false, width: '160px', align: 'center' },
+    { title: 'Actions', key: 'actions', sortable: false, align: 'center' },
 ]
 
 const journeys = ref([])

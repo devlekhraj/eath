@@ -15,8 +15,6 @@
                             v-model="search"
                             label="Search Articles"
                             clearable
-                            density="compact"
-                            variant="outlined"
                             hide-details
                             prepend-inner-icon="mdi-magnify"
                             placeholder="Search by title..."
@@ -68,7 +66,7 @@
                     <v-chip
                         size="small"
                         label
-                        class="text-capitalize"
+                        class="text-uppercase"
                         :color="item.is_active || item.status ? 'success' : 'warning'"
                     >
                         <v-icon start size="14">
@@ -107,7 +105,7 @@ const { open: openModal } = useGlobalModal()
 
 
 const headers = [
-    { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+    { title: 'SN', key: 'sn', sortable: false },
     { title: 'Title', key: 'title', sortable: false },
     { title: 'Category', key: 'category', sortable: false },
     { title: 'Author', key: 'author', sortable: false },

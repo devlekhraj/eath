@@ -49,14 +49,14 @@ import { computed, reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import DetailHeader from '@/components/DetailHeader.vue'
 
-import FormOverview from './form_section/FormOverview.vue'
-import FormDescription from './form_section/FormDescription.vue'
-import FormPackageItinery from './form_section/FormPackageItinery.vue'
-import FormPackageInclude from './form_section/FormInclude.vue'
-import FormHighlights from './form_section/FormHighlights.vue'
-import FormPackageGallery from './form_section/FormPackageGallery.vue'
-import FormPricing from './form_section/FormPricing.vue'
-import FormFixedDeparture from './form_section/FormFixedDeparture.vue'
+import JourneyOverviewForm from './form_section/JourneyOverviewForm.vue'
+import JourneyDescriptionForm from './form_section/JourneyDescriptionForm.vue'
+import JourneyItineraryForm from './form_section/JourneyItineraryForm.vue'
+import JourneyIncludeForm from './form_section/JourneyIncludeForm.vue'
+import JourneyHighlightsForm from './form_section/JourneyHighlightsForm.vue'
+import JourneyGalleryForm from './form_section/JourneyGalleryForm.vue'
+import JourneyPricingForm from './form_section/JourneyPricingForm.vue'
+import JourneyFixedDepartureForm from './form_section/JourneyFixedDepartureForm.vue'
 import { getJourney } from '@/api/journeys.api'
 
 // Get journey ID from route
@@ -78,15 +78,14 @@ const tabs = [
 	{ value: 'fixed_departure', label: 'Fixed Departure', icon: 'mdi-calendar-clock' },
 ]
 const tabComponents = {
-	overview: FormOverview,
-	description: FormDescription,
-	highlight: FormHighlights,
-	itinerary: FormPackageItinery,
-	price_list: FormPricing,
-	includes: FormPackageInclude,
-	// banners: FormPackageBanner,
-	gallery: FormPackageGallery,
-	fixed_departure: FormFixedDeparture,
+	overview: JourneyOverviewForm,
+	description: JourneyDescriptionForm,
+	highlight: JourneyHighlightsForm,
+	itinerary: JourneyItineraryForm,
+	price_list: JourneyPricingForm,
+	includes: JourneyIncludeForm,
+	gallery: JourneyGalleryForm,
+	fixed_departure: JourneyFixedDepartureForm,
 }
 const activeComponent = computed(() => tabComponents[activeTab.value] || null)
 const publicBaseUrl = window?.location?.origin ?? ''

@@ -14,7 +14,9 @@
       <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation>
         <v-row>
           <v-col cols="12">
-            <v-file-input label="Select Image" accept="image/*" prepend-icon="" :disabled="uploading" :error-messages="serverErrors.image_url" @change="handleUploadImage" prepend-inner-icon="mdi-upload" :loading="uploading" required />
+            <div class="mb-2">
+                <v-file-input label="Select Image" accept="image/*" prepend-icon="" :disabled="uploading" :error-messages="serverErrors.image_url" @change="handleUploadImage" prepend-inner-icon="mdi-upload" :loading="uploading" required />
+            </div>
 
             
             <!-- Image Preview -->
@@ -33,7 +35,7 @@
       </v-form>
     </v-card-text>
 
-    <v-card-actions>
+    <v-card-actions class="justify-end">
         <div class="text-center w-100">
             <v-btn variant="text" :disabled="uploading" @click="handleCancel">Cancel</v-btn>
         </div>

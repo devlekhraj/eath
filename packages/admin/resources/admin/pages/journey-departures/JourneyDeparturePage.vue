@@ -29,8 +29,6 @@
 							placeholder="Search by journey or code"
 							clearable
 							prepend-inner-icon="mdi-magnify"
-							density="compact"
-							variant="outlined"
 							hide-details
 						/>
 					</v-col>
@@ -42,8 +40,6 @@
 							item-title="label"
 							item-value="value"
 							clearable
-							density="compact"
-							variant="outlined"
 							hide-details
 						/>
 					</v-col>
@@ -101,7 +97,7 @@
 						<v-chip
 							size="x-small"
 							class="text-uppercase"
-							:color="statusColor(item.status)"
+							:color="getStatusColor(item.status)"
 							variant="tonal"
 						>
 							{{ item.status }}
@@ -112,7 +108,6 @@
 						<v-switch
 							v-model="item.is_active"
 							color="success"
-							density="compact"
 							hide-details
 							@change="toggleActive(item)"
 						/>
@@ -182,14 +177,14 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-;
 import { useSnackbar } from '@/composables/snackbar';
+import { getStatusColor } from '@/utils/utils';
 import { getDeparturesApi, toggleDepartureActiveApi, deleteJourneyDepartureApi } from '@/api/journey-departures.api'
 
 const { showSuccess, showError } = useSnackbar();
 
 const headers = [
-	{ title: 'SN', key: 'sn', sortable: false, width: '50px' },
+	{ title: 'SN', key: 'sn', sortable: false },
 	{ title: 'Journey', key: 'journey', sortable: false },
 	{ title: 'Code', key: 'code', sortable: true },
 	{ title: 'Start Date', key: 'start_date', sortable: true },
@@ -199,7 +194,7 @@ const headers = [
 	{ title: 'Price', key: 'price', sortable: false },
 	{ title: 'Status', key: 'status', sortable: true },
 	{ title: 'Active', key: 'is_active', sortable: false },
-	{ title: 'Actions', key: 'actions', sortable: false, align: 'center', width: '160px' },
+	{ title: 'Actions', key: 'actions', sortable: false, align: 'center' },
 ];
 
 const dataList = ref([]);
@@ -218,23 +213,6 @@ const statusOptions = [
 	{ label: 'Closed', value: 'closed' },
 	{ label: 'Cancelled', value: 'cancelled' },
 ];
-
-function statusColor(status) {
-	switch (status) {
-		case 'open':
-			return 'info';
-		case 'guaranteed':
-			return 'success';
-		case 'limited':
-			return 'warning';
-		case 'closed':
-			return 'secondary';
-		case 'cancelled':
-			return 'error';
-		default:
-			return 'primary';
-	}
-}
 
 const filteredItems = computed(() => {
 	return dataList.value.filter((item) => {

@@ -130,11 +130,8 @@
                 @if ($hasOverview)
                 <div id="tab-panel-overview" class="tab-panel p-6" data-tab-panel="overview" role="tabpanel">
                     <h2 class="text-2xl font-semibold text-slate-900">Overview</h2>
-                    <div class="tiptap-container">
-                        <div
-                            class="prose prose-slate mt-4 max-w-none vuetify-pro-tiptap-editor__content view markdown-theme-default">
-                            {!! $package->description !!}
-                        </div>
+                    <div class="prose prose-slate mt-4 max-w-none content-viewer note-editable-content">
+                        {!! $package->description !!}
                     </div>
                 </div>
                 @endif
@@ -146,7 +143,7 @@
                     <div class="mt-6 space-y-4">
                         @foreach ($package->itineraries as $key => $itinery)
                         <details
-                            class="group rounded-xl border border-slate-200 bg-slate-50/70 p-4 vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                            class="group rounded-xl border border-slate-200 bg-slate-50/70 p-4">
                             <summary class="flex cursor-pointer list-none items-center justify-between">
                                 <div class="flex items-center gap-3">
                                     <span
@@ -158,7 +155,7 @@
                                 </div>
                                 <span class="text-slate-400 transition group-open:rotate-45">+</span>
                             </summary>
-                            <div class="prose prose-slate mt-4 max-w-none">
+                            <div class="prose prose-slate mt-4 max-w-none content-viewer note-editable-content">
                                 {!! $itinery->description !!}
                             </div>
                             @if ($itinery->highlights->isNotEmpty())

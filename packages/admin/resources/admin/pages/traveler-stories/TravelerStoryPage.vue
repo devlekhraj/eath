@@ -15,8 +15,6 @@
               v-model="search"
               label="Search Stories"
               clearable
-              density="compact"
-              variant="outlined"
               hide-details
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by title, traveler, country..."
@@ -73,7 +71,7 @@
           <v-chip
             size="small"
             label
-            class="text-capitalize"
+            class="text-uppercase"
             :color="item.is_active ? 'success' : 'warning'"
           >
             <v-icon start size="14">
@@ -109,7 +107,7 @@ import TravelerStoryDelete from './modal/TravelerStoryDelete.vue'
 
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+  { title: 'SN', key: 'sn', sortable: false },
   { title: 'Title', key: 'title', sortable: false },
   { title: 'Traveler', key: 'traveler_name', sortable: false },
   { title: 'Country', key: 'traveler_country', sortable: false },

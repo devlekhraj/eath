@@ -5,25 +5,39 @@
         <div>
           <v-form v-if="destination" class="mt-4">
             <v-row>
-              <v-col cols="12" md="12" class="py-0">
-                <v-text-field v-model="destination.name" label="Name" />
+              <v-col cols="12" md="12">
+                <div class="mb-2">
+                  <v-text-field v-model="destination.name" label="Name" />
+                </div>
               </v-col>
       
-              <v-col cols="12" md="12" class="py-0">
-                <v-text-field v-model="destination.slug" label="Slug" />
+              <v-col cols="12" md="12">
+                <div class="mb-2">
+                  <v-text-field v-model="destination.slug" label="Slug" />
+                </div>
               </v-col>
       
-              <v-col cols="12" md="12" class="py-0">
-                <v-text-field v-model="destination.best_season" label="Best Season" placeholder="Mar–May, Sep–Nov" />
+              <v-col cols="12" md="12">
+                <div class="mb-2">
+                  <v-text-field v-model="destination.best_season" label="Best Season" placeholder="Mar–May, Sep–Nov" />
+                </div>
               </v-col>
       
-              <v-col cols="12" md="12" class="d-flex align-center">
-                <v-switch v-model="destination.is_active" label="Active" color="success" inset />
-                <v-switch v-model="destination.is_featured" label="Featured" color="success" inset class="ml-4" />
+              <v-col cols="12" md="12">
+                <div class="d-flex align-center">
+                  <div class="mb-2 mr-4">
+                    <v-switch v-model="destination.is_active" label="Active" color="success" inset />
+                  </div>
+                  <div class="mb-2">
+                    <v-switch v-model="destination.is_featured" label="Featured" color="success" inset />
+                  </div>
+                </div>
               </v-col>
       
-              <v-col cols="12" md="12" class="py-0">
-                <v-textarea v-model="destination.highlights" label="Highlights" rows="4" auto-grow placeholder="Enter highlights (one per line or JSON array)" />
+              <v-col cols="12" md="12">
+                <div class="mb-2">
+                  <v-textarea v-model="destination.highlights" label="Highlights" rows="4" auto-grow placeholder="Enter highlights (one per line or JSON array)" />
+                </div>
               </v-col>
             </v-row>
             <div class="text-center py-4">

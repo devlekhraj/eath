@@ -34,13 +34,13 @@
 					<div><strong>Dimensions:</strong> {{ formatDimensions?.(selectedImage) }}</div>
 				</div>
 			</div>
-			<div class="mb-3">
+			<div class="mb-2">
 				<v-text-field :model-value="meta?.alt_text" label="Alt Text" :disabled="!selectedImage" :error-messages="fieldErrors.alt_text || []" @update:modelValue="(value) => updateMetaField('alt_text', value)" />
 			</div>
-			<div class="mb-3">
+			<div class="mb-2">
 				<v-text-field :model-value="meta?.caption" label="Caption" :disabled="!selectedImage" :error-messages="fieldErrors.caption || []" @update:modelValue="(value) => updateMetaField('caption', value)" />
 			</div>
-			<div class="mb-3">
+			<div class="mb-2">
 				<v-textarea :model-value="meta?.description" label="Description" rows="4" auto-grow :disabled="!selectedImage" :error-messages="fieldErrors.description || []" @update:modelValue="(value) => updateMetaField('description', value)" />
 				<div v-if="!selectedImage" class="text-caption text-grey">
 					Select an image to edit its meta info.

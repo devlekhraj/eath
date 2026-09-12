@@ -41,12 +41,18 @@ class WebsiteDemoSeeder extends Seeder
 
         $catalog = $this->readJson('packages/website/src/Data/website-catalog.json');
         $content = $this->readJson('packages/website/src/Data/website-content.json');
+        $detailedCatalog = file_exists(base_path('packages/website/src/Data/trek-detailed-catalog.php'))
+            ? require base_path('packages/website/src/Data/trek-detailed-catalog.php')
+            : [];
+        $detailedDestinations = file_exists(base_path('packages/website/src/Data/destination-detailed-catalog.php'))
+            ? require base_path('packages/website/src/Data/destination-detailed-catalog.php')
+            : [];
 
-        $destinationIds = $this->seedDestinations($catalog['regions'] ?? []);
+        $destinationIds = $this->seedDestinations($catalog['regions'] ?? [], $detailedDestinations);
         $experienceIds = $this->seedExperiences($catalog['experiences'] ?? []);
         $monthIds = $this->seedMonths($catalog['months'] ?? []);
         $guideIds = $this->seedGuides($content['guides'] ?? []);
-        $journeyIds = $this->seedJourneys($catalog['treks'] ?? [], $destinationIds, $guideIds);
+        $journeyIds = $this->seedJourneys($catalog['treks'] ?? [], $destinationIds, $guideIds, $detailedCatalog);
 
         $this->seedJourneyRelations($catalog['treks'] ?? [], $journeyIds, $experienceIds, $monthIds, $catalog['departure_templates'] ?? []);
         $articleIds = $this->seedArticles($content['articles'] ?? [], $journeyIds);
@@ -61,15 +67,25 @@ class WebsiteDemoSeeder extends Seeder
         return json_decode(file_get_contents(base_path($path)), true) ?: [];
     }
 
-    protected function seedDestinations(array $regions): array
+    protected function seedDestinations(array $regions, array $detailedDestinations = []): array
     {
         $ids = [];
         foreach ($regions as $index => $region) {
+            $key = $region['id'] ?? $region['slug'];
+            $detailed = $detailedDestinations[$key] ?? $detailedDestinations[$region['slug']] ?? [];
+
             $id = DB::table('destinations')->insertGetId([
-                'name' => $region['name'],
-                'slug' => $region['slug'],
-                'summary' => $region['intro'] ?? null,
-                'description' => $region['intro'] ?? null,
+                'name' => $detailed['name'] ?? $region['name'],
+                'slug' => $detailed['slug'] ?? $region['slug'],
+                'region_label' => $detailed['region_label'] ?? null,
+                'summary' => $detailed['summary'] ?? ($region['intro'] ?? null),
+                'description' => $detailed['description'] ?? ($region['intro'] ?? null),
+                'gateway' => $detailed['gateway'] ?? null,
+                'trailheads' => $detailed['trailheads'] ?? null,
+                'permits' => $detailed['permits'] ?? null,
+                'pacing_note' => $detailed['pacing_note'] ?? null,
+                'meta_title' => $detailed['meta_title'] ?? ("{$region['name']} Region | E.A.T.H. Travels"),
+                'meta_description' => $detailed['meta_description'] ?? ($detailed['summary'] ?? null),
                 'sort_order' => $index + 1,
                 'is_featured' => true,
                 'is_active' => true,
@@ -149,18 +165,21 @@ class WebsiteDemoSeeder extends Seeder
         return $ids;
     }
 
-    protected function seedJourneys(array $treks, array $destinationIds, array $guideIds): array
+    protected function seedJourneys(array $treks, array $destinationIds, array $guideIds, array $detailedCatalog = []): array
     {
         $ids = [];
         foreach ($treks as $index => $trek) {
+            $detailed = $detailedCatalog[$trek['id']] ?? $detailedCatalog[$trek['slug']] ?? [];
+
             $id = DB::table('journeys')->insertGetId([
                 'destination_id' => $destinationIds[$trek['region_id']] ?? reset($destinationIds),
                 'guide_id' => $guideIds[$trek['guide_id'] ?? null] ?? null,
                 'name' => $trek['name'],
                 'slug' => $trek['slug'],
+                'subtitle' => $detailed['subtitle'] ?? ($trek['tagline'] ?? null),
                 'summary' => $trek['summary'],
-                'description' => $trek['summary'],
-                'overview_secondary' => 'Illustrative itinerary stored in the database for website planning and comparison.',
+                'description' => $detailed['description'] ?? $trek['summary'],
+                'overview_secondary' => $detailed['overview_secondary'] ?? 'Authentic Himalayan itinerary with accredited local Sherpa guides.',
                 'duration_days' => $trek['duration_days'],
                 'duration_nights' => max(0, ((int) $trek['duration_days']) - 1),
                 'difficulty' => $trek['difficulty'],
@@ -176,10 +195,10 @@ class WebsiteDemoSeeder extends Seeder
                 'is_active' => true,
                 'is_published' => true,
                 'published_at' => now(),
-                'accommodation_note' => 'Accommodation details are database demo content and must be verified before real travel.',
-                'logistics_note' => 'Logistics are stored for website planning display.',
-                'safety_note' => 'Difficulty and altitude are not medical advice.',
-                'route_map_note' => 'Route map not supplied.',
+                'accommodation_note' => $detailed['accommodation_note'] ?? 'Hand-picked local mountain teahouses and lodges.',
+                'logistics_note' => $detailed['logistics_note'] ?? 'Licensed guide, porters, and national park permits included.',
+                'safety_note' => $detailed['safety_note'] ?? 'Comprehensive first aid medical kit and daily pulse oximeter monitoring.',
+                'route_map_note' => $detailed['route_map_note'] ?? 'Authentic Himalayan trail route.',
                 'sort_order' => $index + 1,
                 'meta_title' => "{$trek['name']} | E.A.T.H. Travels",
                 'meta_description' => $trek['summary'],
@@ -188,15 +207,16 @@ class WebsiteDemoSeeder extends Seeder
             ]);
 
             $ids[$trek['id']] = $id;
-            $this->seedJourneyContent($id, $trek);
+            $this->seedJourneyContent($id, $trek, $detailed);
         }
 
         return $ids;
     }
 
-    protected function seedJourneyContent(int $journeyId, array $trek): void
+    protected function seedJourneyContent(int $journeyId, array $trek, array $detailed = []): void
     {
-        foreach ($trek['highlights'] ?? [] as $index => $highlight) {
+        $highlights = $detailed['highlights'] ?? $trek['highlights'] ?? [];
+        foreach ($highlights as $index => $highlight) {
             DB::table('journey_highlights')->insert([
                 'journey_id' => $journeyId,
                 'title' => $highlight,
@@ -207,37 +227,64 @@ class WebsiteDemoSeeder extends Seeder
             ]);
         }
 
-        for ($day = 1; $day <= (int) $trek['duration_days']; $day++) {
+        $duration = (int) $trek['duration_days'];
+        $itinerary = $detailed['itinerary'] ?? [];
+
+        for ($day = 1; $day <= $duration; $day++) {
+            $dayData = $itinerary[$day] ?? [];
+
             DB::table('journey_itinerary_days')->insert([
                 'journey_id' => $journeyId,
                 'day_number' => $day,
-                'title' => $day === 1 ? 'Arrival and journey briefing' : ($day === (int) $trek['duration_days'] ? 'Departure and onward plans' : "Trail day {$day}"),
-                'route' => $day === 1 ? 'Kathmandu arrival' : 'Himalayan trail section',
-                'description' => 'Database-seeded itinerary day for website display and planning.',
-                'location_label' => 'Nepal',
-                'altitude_label' => $day === 1 ? '1,400m' : null,
-                'walking_hours_label' => $day === 1 ? '2-3 hrs' : (($trek['walking_hours_max'] ?? 6) . ' hrs'),
-                'accommodation_label' => 'Standard tea house',
-                'meal_note' => 'Breakfast, lunch and dinner included where applicable.',
-                'is_acclimatization' => in_array($day, [3, 6], true) && (int) $trek['duration_days'] >= 10,
+                'title' => $dayData['title'] ?? ($day === 1 ? 'Arrival and journey briefing' : ($day === $duration ? 'Departure and onward plans' : "Trail day {$day}")),
+                'route' => $dayData['route'] ?? ($day === 1 ? 'Kathmandu arrival' : 'Himalayan trail section'),
+                'description' => $dayData['description'] ?? 'Trek through changing mountain landscapes with regular hydration and rest breaks.',
+                'location_label' => $dayData['location_label'] ?? 'Nepal',
+                'altitude_m' => $dayData['altitude_m'] ?? ($day === 1 ? 1400 : null),
+                'altitude_label' => $dayData['altitude_label'] ?? ($day === 1 ? '1,400m' : null),
+                'walking_hours' => $dayData['walking_hours'] ?? ($day === 1 ? 2.5 : min(6, (int) ($trek['walking_hours_max'] ?? 6))),
+                'walking_hours_label' => $dayData['walking_hours_label'] ?? ($day === 1 ? '2–3 hrs' : (($trek['walking_hours_max'] ?? 6) . ' hrs')),
+                'accommodation_label' => $dayData['accommodation_label'] ?? 'Standard tea house',
+                'meal_note' => $dayData['meal_note'] ?? 'Breakfast, lunch and dinner included where applicable.',
+                'is_acclimatization' => (bool) ($dayData['is_acclimatization'] ?? (in_array($day, [3, 6], true) && $duration >= 10)),
                 'sort_order' => $day,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        foreach (['inclusion' => ['Ground itinerary planning', 'Guide support', 'Standard accommodation'], 'exclusion' => ['International airfare', 'Travel insurance', 'Personal expenses']] as $type => $items) {
-            foreach ($items as $index => $item) {
-                DB::table('journey_services')->insert([
-                    'journey_id' => $journeyId,
-                    'type' => $type,
-                    'title' => $item,
-                    'sort_order' => $index + 1,
-                    'is_active' => true,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+        $inclusions = $detailed['inclusions'] ?? [
+            'Ground itinerary planning and professional guide support',
+            'Standard teahouse and mountain lodge accommodation',
+            'Conservation area and national park trekking permits',
+        ];
+        foreach ($inclusions as $index => $item) {
+            DB::table('journey_services')->insert([
+                'journey_id' => $journeyId,
+                'type' => 'inclusion',
+                'title' => $item,
+                'sort_order' => $index + 1,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $exclusions = $detailed['exclusions'] ?? [
+            'International airfare and Nepal tourist visa fees',
+            'Travel and high-altitude emergency medical rescue insurance',
+            'Personal expenses, snacks, and gear purchases',
+        ];
+        foreach ($exclusions as $index => $item) {
+            DB::table('journey_services')->insert([
+                'journey_id' => $journeyId,
+                'type' => 'exclusion',
+                'title' => $item,
+                'sort_order' => $index + 1,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
 
         DB::table('journey_prices')->insert([

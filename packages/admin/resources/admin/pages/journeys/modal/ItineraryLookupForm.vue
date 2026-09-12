@@ -15,12 +15,16 @@
                 <v-row>
                     <!-- Name Field -->
                     <v-col cols="12">
-                        <v-text-field v-model="form.name" label="Category Name" :rules="[rules.required]" :error-messages="serverErrors.name" required />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.name" label="Category Name" :rules="[rules.required]" :error-messages="serverErrors.name" required />
+                        </div>
                     </v-col>
 
                     <!-- Icon Upload Field -->
                     <v-col cols="12">
-                        <v-file-input label="Upload Icon Image" accept="image/*" prepend-icon="" :error-messages="serverErrors.icon_url" @change="handleIconUpload" prepend-inner-icon="mdi-upload" required />
+                        <div class="mb-2">
+                            <v-file-input label="Upload Icon Image" accept="image/*" prepend-icon="" :error-messages="serverErrors.icon_url" @change="handleIconUpload" prepend-inner-icon="mdi-upload" required />
+                        </div>
 
                         <!-- Image Preview -->
                         <div v-if="form.icon_url" style="height: 100px; width: 100px;" class="mt-2">
@@ -31,7 +35,7 @@
             </v-form>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             <v-spacer></v-spacer>
             <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn>

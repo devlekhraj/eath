@@ -16,10 +16,7 @@
                 </template>
 
                 <template #item.size="{ item }">
-                    <div class="text-caption">
-                        <div>{{ formatDimensions(item) }}</div>
-                        <div>{{ formatAspectRatio(item) }}</div>
-                    </div>
+                    <span class="text-caption">{{ formatDimensions(item) }}</span>
                 </template>
 
                 <template #item.alt_text="{ item }">

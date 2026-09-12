@@ -19,22 +19,9 @@ import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/600.css'
 import '@fontsource/poppins/700.css'
 
-// Axios global config
-import http from './http.config'
-
-// Global components
-import ModalTemplate from '@components/ModalTemplate.vue'
-import SummarnoteViewer from '@components/SummarnoteViewer.vue'
-import { useGlobalModal } from '@/composables/globalModal'
 
 const app = createApp(App)
 const pinia = createPinia()
-const modal = useGlobalModal()
-
-// Register global components
-app.component('ModalTemplate', ModalTemplate)
-app.component('SummarnoteViewer', SummarnoteViewer)
-app.config.globalProperties.$modal = modal
 
 app.use(pinia)
 app.use(router)

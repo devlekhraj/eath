@@ -16,7 +16,6 @@
                             label="Search experiences..."
                             clearable
                             prepend-inner-icon="mdi-magnify"
-                            density="compact"
                             hide-details
                         />
                     </v-col>
@@ -35,18 +34,9 @@
             </template>
 
             <template #item.name="{ item }">
-                <div>
-                    <a href="#" class="text-primary font-weight-medium text-decoration-underline" @click.prevent="handleOpen(item)">
-                        {{ item.name }}
-                    </a>
-                    <div v-if="item.summary" class="text-caption text-slate-500 text-truncate" style="max-width: 320px;">
-                        {{ item.summary }}
-                    </div>
-                </div>
-            </template>
-
-            <template #item.slug="{ item }">
-                <span class="text-caption text-slate-500 font-mono">{{ item.slug ? `/experiences/${item.slug}` : '—' }}</span>
+                <a href="#" class="text-primary text-decoration-underline" @click.prevent="handleOpen(item)">
+                    {{ item.name }}
+                </a>
             </template>
 
             <template #item.journeys_count="{ item }">
@@ -63,7 +53,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="text-uppercase font-weight-medium"
+                    class="text-uppercase"
                     :color="item.is_featured ? 'primary' : 'secondary'"
                 >
                     {{ item.is_featured ? 'Featured' : 'Standard' }}
@@ -74,7 +64,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="text-uppercase font-weight-medium"
+                    class="text-uppercase"
                     :color="item.is_active ? 'success' : 'secondary'"
                     @click="toggleActive(item)"
                     style="cursor: pointer;"
@@ -119,9 +109,8 @@ const { open: openModal } = useGlobalModal()
 const { showSuccess, showError } = useSnackbar()
 
 const headers = [
-    { title: 'SN', key: 'sn', sortable: false, width: '50px' },
+    { title: 'SN', key: 'sn', sortable: false },
     { title: 'Experience Name', key: 'name', sortable: true },
-    { title: 'Slug', key: 'slug', sortable: false },
     { title: 'Journeys', key: 'journeys_count', sortable: true },
     { title: 'Sort Order', key: 'sort_order', sortable: true },
     { title: 'Featured', key: 'is_featured', sortable: true },

@@ -1,8 +1,8 @@
 <template>
   <v-card>
-    <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
+    <v-card-title class="d-flex align-center justify-space-between py-0">
       <div class="d-flex align-center ga-2">
-        <span class="text-uppercase font-weight-medium text-slate-800">Trip Planner Submission</span>
+        <span>Trip Planner Submission</span>
         <v-chip size="small" variant="tonal" color="primary">
           {{ submission.reference_code }}
         </v-chip>
@@ -11,7 +11,7 @@
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider />
+        <v-divider />
 
     <v-card-text class="pt-4">
       <v-row dense>
@@ -73,14 +73,14 @@
             <div class="mt-3">
               <label class="text-caption font-weight-medium text-slate-700 d-block mb-1">Status</label>
               <div class="d-flex align-center ga-2">
-                <v-select
-                  v-model="currentStatus"
-                  :items="statusOptions"
-                  density="compact"
-                  variant="outlined"
-                  class="flex-grow-1"
-                  hide-details
-                />
+                <div class="mb-2">
+                    <v-select
+                      v-model="currentStatus"
+                      :items="statusOptions"
+                      class="flex-grow-1"
+                      hide-details
+                    />
+                </div>
                 <v-btn
                   color="primary"
                   variant="elevated"
@@ -129,9 +129,7 @@
         </v-col>
       </v-row>
     </v-card-text>
-
-    <v-divider />
-    <v-card-actions class="pa-3 justify-end">
+    <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleClose">Close</v-btn>
     </v-card-actions>
   </v-card>

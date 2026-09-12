@@ -1,7 +1,7 @@
 <template>
     <v-card>
-        <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-            <span class="text-uppercase font-weight-medium text-slate-800">
+        <v-card-title class="d-flex align-center justify-space-between py-0">
+            <span>
                 {{ form.id ? 'Edit Article Category' : 'Add Article Category' }}
             </span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
@@ -14,48 +14,50 @@
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
                 <v-row>
                     <v-col cols="12">
-                        <v-text-field
-                            v-model="form.name"
-                            label="Category Name"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required]"
-                            required
-                            @input="onNameInput"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.name"
+                                label="Category Name"
+                                :rules="[rules.required]"
+                                required
+                                @input="onNameInput"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">
-                        <v-text-field
-                            v-model="form.slug"
-                            label="URL Slug"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required, rules.slug]"
-                            hint="URL slug e.g. trekking-guide, alpine-culture"
-                            persistent-hint
-                            required
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.slug"
+                                label="URL Slug"
+                                :rules="[rules.required, rules.slug]"
+                                hint="URL slug e.g. trekking-guide, alpine-culture"
+                                persistent-hint
+                                required
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
-                        <v-text-field
-                            v-model.number="form.sort_order"
-                            label="Sequence / Sort Order"
-                            type="number"
-                            variant="outlined"
-                            density="comfortable"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model.number="form.sort_order"
+                                label="Sequence / Sort Order"
+                                type="number"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
                         <div class="d-flex align-center h-100">
-                            <v-switch
-                                v-model="form.is_active"
-                                inset
-                                label="Active Status"
-                                color="success"
-                            />
+                            <div class="mb-2">
+                                <v-switch
+                                    v-model="form.is_active"
+                                    inset
+                                    label="Active Status"
+                                    color="success"
+                                />
+                            </div>
                         </div>
                     </v-col>
 
@@ -66,9 +68,8 @@
                 </v-row>
             </v-form>
         </v-card-text>
-        <v-divider />
 
-        <v-card-actions class="pa-3 justify-end">
+        <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             <v-btn color="primary" :loading="loading" @click="submitForm">Save Category</v-btn>
         </v-card-actions>

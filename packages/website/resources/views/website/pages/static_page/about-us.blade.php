@@ -21,7 +21,7 @@
 
     {{-- section page content --}}
     <section class="mx-auto w-full max-w-7xl px-6 py-12">
-        <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
+        <div class="content-viewer note-editable-content">
             <div>
                 {!! $page->content !!}
             </div>

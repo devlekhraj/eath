@@ -15,8 +15,6 @@
               v-model="search"
               label="Search Pages"
               clearable
-              density="compact"
-              variant="outlined"
               hide-details
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by title, slug..."
@@ -43,12 +41,6 @@
         </div>
       </template>
 
-      <template #item.slug="{ item }">
-        <div>
-          <span class="text-caption text-medium-emphasis">/{{ item.slug }}</span>
-        </div>
-      </template>
-
       <template #item.type="{ item }">
         <div>
           <v-chip size="small" label variant="tonal" color="primary" class="text-uppercase">
@@ -61,7 +53,6 @@
         <div>
           <v-switch
             v-model="item.is_active"
-            density="compact"
             color="success"
             hide-details
             @change="toggleActive(item)"
@@ -113,9 +104,8 @@ const { open: openModal } = useGlobalModal()
 const { showSuccess, showError } = useSnackbar()
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+  { title: 'SN', key: 'sn', sortable: false },
   { title: 'Title', key: 'title', sortable: false },
-  { title: 'Slug', key: 'slug', sortable: false },
   { title: 'Type', key: 'type', sortable: false },
   { title: 'Active', key: 'is_active', sortable: false },
   { title: 'Published', key: 'is_published', sortable: false },

@@ -24,9 +24,9 @@
             <div class="space-y-6">
 
                 @if(!empty($destination->description))
-                    <div class="border-slate-200 bg-white p-6 tiptap-container">
+                    <div class="border-slate-200 bg-white p-6">
                         <h3 class="text-xl font-semibold text-slate-900">About {{ $destination->name }}</h3>
-                        <div class="prose prose-slate mt-4 max-w-none vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                        <div class="prose prose-slate mt-4 max-w-none content-viewer note-editable-content">
                             {!! $destination->description !!}
                         </div>
                     </div>

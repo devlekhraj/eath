@@ -1,7 +1,7 @@
 <template>
     <v-card>
-        <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-            <span class="text-uppercase font-weight-medium text-slate-800">
+        <v-card-title class="d-flex align-center justify-space-between py-0">
+            <span>
                 {{ form.id ? 'Edit Traveler Story' : 'Add Traveler Story' }}
             </span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
@@ -14,101 +14,101 @@
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
                 <v-row>
                     <v-col cols="12" md="8">
-                        <v-text-field
-                            v-model="form.title"
-                            label="Story Title"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required]"
-                            required
-                            @input="onTitleInput"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.title"
+                                label="Story Title"
+                                :rules="[rules.required]"
+                                required
+                                @input="onTitleInput"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="4">
-                        <v-text-field
-                            v-model="form.slug"
-                            label="URL Slug"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required, rules.slug]"
-                            hint="URL slug e.g. conquering-thorong-la"
-                            persistent-hint
-                            required
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.slug"
+                                label="URL Slug"
+                                :rules="[rules.required, rules.slug]"
+                                hint="URL slug e.g. conquering-thorong-la"
+                                persistent-hint
+                                required
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-text-field
-                            v-model="form.traveler_name"
-                            label="Traveler Name"
-                            prepend-inner-icon="mdi-account"
-                            variant="outlined"
-                            density="comfortable"
-                            placeholder="e.g. Sarah Jenkins"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.traveler_name"
+                                label="Traveler Name"
+                                prepend-inner-icon="mdi-account"
+                                placeholder="e.g. Sarah Jenkins"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-text-field
-                            v-model="form.traveler_country"
-                            label="Country of Origin"
-                            prepend-inner-icon="mdi-earth"
-                            variant="outlined"
-                            density="comfortable"
-                            placeholder="e.g. United Kingdom"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.traveler_country"
+                                label="Country of Origin"
+                                prepend-inner-icon="mdi-earth"
+                                placeholder="e.g. United Kingdom"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-text-field
-                            v-model="form.traveled_on"
-                            label="Date of Travel"
-                            type="date"
-                            variant="outlined"
-                            density="comfortable"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.traveled_on"
+                                label="Date of Travel"
+                                type="date"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
-                        <v-select
-                            v-model="form.journey_id"
-                            :items="journeyOptions"
-                            item-title="title"
-                            item-value="id"
-                            label="Related Journey / Trek"
-                            variant="outlined"
-                            density="comfortable"
-                            clearable
-                            :loading="loadingOptions"
-                        />
+                        <div class="mb-2">
+                            <v-select
+                                v-model="form.journey_id"
+                                :items="journeyOptions"
+                                item-title="title"
+                                item-value="id"
+                                label="Related Journey / Trek"
+                                clearable
+                                :loading="loadingOptions"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
-                        <v-select
-                            v-model="form.destination_id"
-                            :items="destinationOptions"
-                            item-title="name"
-                            item-value="id"
-                            label="Destination / Region"
-                            variant="outlined"
-                            density="comfortable"
-                            clearable
-                            :loading="loadingOptions"
-                        />
+                        <div class="mb-2">
+                            <v-select
+                                v-model="form.destination_id"
+                                :items="destinationOptions"
+                                item-title="name"
+                                item-value="id"
+                                label="Destination / Region"
+                                clearable
+                                :loading="loadingOptions"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">
-                        <v-textarea
-                            v-model="form.summary"
-                            label="Story Summary"
-                            rows="2"
-                            auto-grow
-                            variant="outlined"
-                            density="comfortable"
-                            hint="A captivating 1-2 sentence excerpt shown in cards and quotes"
-                            persistent-hint
-                        />
+                        <div class="mb-2">
+                            <v-textarea
+                                v-model="form.summary"
+                                label="Story Summary"
+                                rows="2"
+                                auto-grow
+                                hint="A captivating 1-2 sentence excerpt shown in cards and quotes"
+                                persistent-hint
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">
@@ -117,55 +117,59 @@
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-switch
-                            v-model="form.is_active"
-                            inset
-                            label="Active"
-                            color="success"
-                        />
+                        <div class="mb-2">
+                            <v-switch
+                                v-model="form.is_active"
+                                inset
+                                label="Active"
+                                color="success"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-switch
-                            v-model="form.is_published"
-                            inset
-                            label="Published"
-                            color="primary"
-                        />
+                        <div class="mb-2">
+                            <v-switch
+                                v-model="form.is_published"
+                                inset
+                                label="Published"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-switch
-                            v-model="form.is_featured"
-                            inset
-                            label="Featured Story"
-                            color="accent"
-                        />
+                        <div class="mb-2">
+                            <v-switch
+                                v-model="form.is_featured"
+                                inset
+                                label="Featured Story"
+                                color="accent"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
-                        <v-text-field
-                            v-model="form.meta_title"
-                            label="Meta Title (SEO)"
-                            variant="outlined"
-                            density="comfortable"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.meta_title"
+                                label="Meta Title (SEO)"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
-                        <v-text-field
-                            v-model="form.meta_description"
-                            label="Meta Description (SEO)"
-                            variant="outlined"
-                            density="comfortable"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.meta_description"
+                                label="Meta Description (SEO)"
+                            />
+                        </div>
                     </v-col>
                 </v-row>
             </v-form>
         </v-card-text>
-        <v-divider />
 
-        <v-card-actions class="pa-3 justify-end">
+        <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
             <v-btn color="primary" :loading="loading" @click="submitForm">Save Story</v-btn>
         </v-card-actions>

@@ -15,10 +15,7 @@
 					</div>
 				</template>
 				<template #item.size="{ item }">
-					<div class="text-caption">
-						<div>{{ formatDimensions(item) }}</div>
-						<div>{{ formatAspectRatio(item) }}</div>
-					</div>
+					<span class="text-caption">{{ formatDimensions(item) }}</span>
 				</template>
 				<template #item.alt_text="{ item }">
 					<div class="text-caption">
@@ -59,9 +56,9 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import SelectGalleryImage from './gallery_form/SelectGalleryImage.vue'
-import FormGalleryUpdate from './gallery_form/FormGalleryUpdate.vue'
-import FormImageDelete from './gallery_form/FormImageDelete.vue'
+import SelectGalleryImage from '@components/gallery/SelectGalleryImage.vue'
+import FormGalleryUpdate from '@components/gallery/FormGalleryUpdate.vue'
+import FormImageDelete from '@components/gallery/FormImageDelete.vue'
 import { getBannerByIdApi } from '@/api/website-sections.api'
 import { useGlobalModal } from '@/composables/globalModal'
 

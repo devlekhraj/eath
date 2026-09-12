@@ -23,7 +23,9 @@
                 <!-- Review Comment -->
                 <div class="mb-4">
                     <label class="text-sm font-medium">Review</label>
-                        <v-textarea label="Review" v-model="form.comment" :rules="[rules.required]" :error-messages="serverErrors.comment"></v-textarea>
+                        <div class="mb-2">
+                            <v-textarea label="Review" v-model="form.comment" :rules="[rules.required]" :error-messages="serverErrors.comment"></v-textarea>
+                        </div>
 
 
                 </div>

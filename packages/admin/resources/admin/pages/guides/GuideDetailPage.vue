@@ -23,7 +23,7 @@
                     <div class="pl-4">
                         <h2 class="mb-1 text-uppercase">{{ guide.name }}</h2>
                         <p class="text-subtitle-1 text-grey">{{ guide.username }}</p>
-                        <v-chip :color="statusColor(guide.status)" size="small" label class="text-capitalize mt-2">
+                        <v-chip :color="getStatusColor(guide.status)" size="small" label class="text-uppercase mt-2">
                             {{ guide.status }}
                         </v-chip>
                     </div>
@@ -70,6 +70,7 @@ import { useRoute } from 'vue-router'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
+import { getStatusColor } from '@/utils/utils'
 import GuideForm from './modal/GuideForm.vue'
 import { getGuideByIdApi } from '@/api/guides.api'
 import { uploadGalleryImageApi } from '@/api/gallery.api'
@@ -148,16 +149,6 @@ function openForm(item = {}) {
     })
 }
 
-const statusColor = (status) => {
-    switch (status) {
-        case 'active': return 'green'
-        case 'inactive': return 'grey'
-        case 'pending': return 'orange'
-        case 'deleted':
-        case 'suspended': return 'red'
-        default: return 'grey'
-    }
-}
 </script>
 <style scoped>
 .avatar-upload-wrapper {

@@ -4,94 +4,99 @@
             <v-col cols="12" lg="8" offset-lg="2">
                 <v-row>
                     <v-col cols="12">
-                        <v-text-field
-                            v-model="form.title"
-                            label="Title"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required]"
-                            :error-messages="errors.title"
-                            @input="handleTitleInput"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.title"
+                                label="Title"
+                                :rules="[rules.required]"
+                                :error-messages="errors.title"
+                                @input="handleTitleInput"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">
-                        <v-text-field
-                            v-model="form.slug"
-                            label="Slug"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.slug]"
-                            hint="URL-friendly string with lowercase letters, numbers, and hyphens"
-                            persistent-hint
-                            :error-messages="errors.slug"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.slug"
+                                label="Slug"
+                                :rules="[rules.slug]"
+                                hint="URL-friendly string with lowercase letters, numbers, and hyphens"
+                                persistent-hint
+                                :error-messages="errors.slug"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">
-                        <v-textarea
-                            v-model="form.summary"
-                            label="Summary / Abstract"
-                            rows="3"
-                            auto-grow
-                            variant="outlined"
-                            density="comfortable"
-                            hint="Brief overview displayed in article cards and meta snippets"
-                            persistent-hint
-                        />
+                        <div class="mb-2">
+                            <v-textarea
+                                v-model="form.summary"
+                                label="Summary / Abstract"
+                                rows="3"
+                                auto-grow
+                                hint="Brief overview displayed in article cards and meta snippets"
+                                persistent-hint
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="6">
-                        <v-select
-                            v-model="form.category_id"
-                            :items="articleCategories"
-                            item-title="name"
-                            item-value="id"
-                            label="Article Category"
-                            variant="outlined"
-                            density="comfortable"
-                            clearable
-                            :error-messages="errors.category_id"
-                        />
+                        <div class="mb-2">
+                            <v-select
+                                v-model="form.category_id"
+                                :items="articleCategories"
+                                item-title="name"
+                                item-value="id"
+                                label="Article Category"
+                                clearable
+                                :error-messages="errors.category_id"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="6">
-                        <v-text-field
-                            v-model="form.author"
-                            label="Author Name"
-                            prepend-inner-icon="mdi-account"
-                            variant="outlined"
-                            density="comfortable"
-                            :rules="[rules.required]"
-                            :error-messages="errors.author"
-                        />
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.author"
+                                label="Author Name"
+                                prepend-inner-icon="mdi-account"
+                                :rules="[rules.required]"
+                                :error-messages="errors.author"
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-switch
-                            v-model="form.is_active"
-                            label="Is Active"
-                            color="success"
-                            inset
-                        />
+                        <div class="mb-2">
+                            <v-switch
+                                v-model="form.is_active"
+                                label="Is Active"
+                                color="success"
+                                inset
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-switch
-                            v-model="form.is_published"
-                            label="Is Published"
-                            color="primary"
-                            inset
-                        />
+                        <div class="mb-2">
+                            <v-switch
+                                v-model="form.is_published"
+                                label="Is Published"
+                                inset
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">
-                        <v-switch
-                            v-model="form.is_featured"
-                            label="Featured Article"
-                            color="accent"
-                            inset
-                        />
+                        <div class="mb-2">
+                            <v-switch
+                                v-model="form.is_featured"
+                                label="Featured Article"
+                                color="accent"
+                                inset
+                            />
+                        </div>
                     </v-col>
 
                     <v-col cols="12">

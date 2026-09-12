@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-card-title class="d-flex align-center justify-space-between py-3">
+        <v-card-title class="d-flex align-center justify-space-between py-0">
             <span class="text-subtitle-1 font-weight-bold text-uppercase">Confirm Deletion</span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
@@ -13,9 +13,7 @@
             <div class="text-body-1 font-weight-medium mb-1">Are you sure you want to delete this experience?</div>
             <div class="text-caption text-slate-500">"{{ item.name }}" will be removed from all associated journeys and filters.</div>
         </v-card-text>
-
-        <v-divider />
-        <v-card-actions class="justify-end pa-3">
+        <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleCancel" :disabled="loading">Cancel</v-btn>
             <v-btn color="error" variant="flat" class="px-6 font-weight-medium" :loading="loading" @click="handleDelete">
                 Delete Experience

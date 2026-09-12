@@ -32,7 +32,7 @@
                     $trekCount = $region['trek_count'] ?? count($region['treks'] ?? []);
                 @endphp
                 <div class="website-dest-item">
-                    <article class="website-card" style="padding: 0; overflow: hidden; height: 100%; display: flex; flex-direction: column; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface);">
+                    <article class="website-card" style="padding: 0; overflow: hidden; height: 100%; display: flex; flex-direction: column; border: 1px solid var(--color-border); border-radius: 0 !important; background: var(--color-surface);">
                         <!-- Destination Portrait / Landscape Cover -->
                         <div style="position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--color-background-warm);">
                             <img src="{{ $img['url'] }}" 
@@ -40,16 +40,16 @@
                                  width="{{ $img['width'] ?? 800 }}" 
                                  height="{{ $img['height'] ?? 500 }}" 
                                  loading="lazy" 
-                                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 0 !important;">
 
                             <div style="position: absolute; top: var(--space-3); left: var(--space-3);">
                                 @if($trekCount > 0)
-                                    <span class="website-badge website-badge--warm" style="background: rgba(255, 255, 255, 0.94); color: var(--color-text); font-weight: 600;">
-                                        {{ $trekCount }} Sample {{ \Illuminate\Support\Str::plural('Trek', $trekCount) }}
+                                    <span class="website-badge website-badge--warm" style="background: rgba(255, 255, 255, 0.94); color: var(--color-text); font-weight: 600; border-radius: 0 !important;">
+                                        {{ $trekCount }} {{ \Illuminate\Support\Str::plural('Trek', $trekCount) }}
                                     </span>
                                 @else
-                                    <span class="website-badge website-badge--neutral" style="background: rgba(255, 255, 255, 0.94); color: var(--color-text-muted);">
-                                        0 Sample Treks
+                                    <span class="website-badge website-badge--neutral" style="background: rgba(255, 255, 255, 0.94); color: var(--color-text-muted); border-radius: 0 !important;">
+                                        0 Treks
                                     </span>
                                 @endif
                             </div>
@@ -57,6 +57,11 @@
 
                         <!-- Card Body -->
                         <div style="padding: var(--space-5); display: flex; flex-direction: column; flex-grow: 1;">
+                            @if(!empty($region['region_label']))
+                                <span class="website-micro website-text-muted" style="display: block; margin-bottom: var(--space-1); text-transform: uppercase; font-weight: 600;">
+                                    {{ $region['region_label'] }}
+                                </span>
+                            @endif
                             <h3 class="website-h3" style="margin-bottom: var(--space-2);">
                                 <a href="{{ route('website.destinations.show', $region['slug']) }}" class="website-link" style="color: inherit; text-decoration: none;">
                                     {{ $region['name'] }} Region
@@ -64,7 +69,7 @@
                             </h3>
 
                             <p class="website-small website-text-secondary" style="margin: 0 0 var(--space-4) 0; line-height: 1.5; flex-grow: 1;">
-                                {{ $region['intro'] }}
+                                {{ $region['summary'] ?? $region['intro'] }}
                             </p>
 
                             <div style="padding-top: var(--space-3); border-top: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">

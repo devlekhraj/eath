@@ -1,105 +1,103 @@
 <template>
   <v-card>
-    <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-      <span class="text-uppercase font-weight-medium text-slate-800">
+    <v-card-title class="d-flex align-center justify-space-between py-0">
+      <span>
         {{ props.item?.id ? 'Edit Website Section' : 'Add Website Section' }}
       </span>
       <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider />
+        <v-divider />
 
     <v-card-text>
       <v-form ref="formRef" @submit.prevent="handleSubmit">
         <v-row dense>
           <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="form.page_key"
-              label="Page Key *"
-              placeholder="e.g. home, about, contact"
-              :rules="[rules.required]"
-              :error-messages="serverErrors.page_key"
-              variant="outlined"
-              density="compact"
-              required
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.page_key"
+                  label="Page Key *"
+                  placeholder="e.g. home, about, contact"
+                  :rules="[rules.required]"
+                  :error-messages="serverErrors.page_key"
+                  required
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="form.section_key"
-              label="Section Key *"
-              placeholder="e.g. hero, values, featured"
-              :rules="[rules.required]"
-              :error-messages="serverErrors.section_key"
-              variant="outlined"
-              density="compact"
-              required
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.section_key"
+                  label="Section Key *"
+                  placeholder="e.g. hero, values, featured"
+                  :rules="[rules.required]"
+                  :error-messages="serverErrors.section_key"
+                  required
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="8">
-            <v-text-field
-              v-model="form.heading"
-              label="Heading"
-              placeholder="Section main heading"
-              :error-messages="serverErrors.heading"
-              variant="outlined"
-              density="compact"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.heading"
+                  label="Heading"
+                  placeholder="Section main heading"
+                  :error-messages="serverErrors.heading"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="4">
-            <v-text-field
-              v-model="form.eyebrow"
-              label="Eyebrow / Subtitle"
-              placeholder="Small kicker label"
-              :error-messages="serverErrors.eyebrow"
-              variant="outlined"
-              density="compact"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.eyebrow"
+                  label="Eyebrow / Subtitle"
+                  placeholder="Small kicker label"
+                  :error-messages="serverErrors.eyebrow"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12">
-            <v-textarea
-              v-model="form.body"
-              label="Body / Content"
-              rows="4"
-              placeholder="Section narrative or description"
-              :error-messages="serverErrors.body"
-              variant="outlined"
-              density="compact"
-            />
+            <div class="mb-2">
+                <v-textarea
+                  v-model="form.body"
+                  label="Body / Content"
+                  rows="4"
+                  placeholder="Section narrative or description"
+                  :error-messages="serverErrors.body"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="6">
-            <v-text-field
-              v-model.number="form.sort_order"
-              label="Sort Order"
-              type="number"
-              min="0"
-              :error-messages="serverErrors.sort_order"
-              variant="outlined"
-              density="compact"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model.number="form.sort_order"
+                  label="Sort Order"
+                  type="number"
+                  min="0"
+                  :error-messages="serverErrors.sort_order"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="6" class="d-flex align-center">
-            <v-switch
-              v-model="form.is_active"
-              label="Active Status"
-              color="primary"
-              density="compact"
-              hide-details
-            />
+            <div class="mb-2">
+                <v-switch
+                  v-model="form.is_active"
+                  label="Active Status"
+                  hide-details
+                />
+            </div>
           </v-col>
         </v-row>
       </v-form>
     </v-card-text>
-
-    <v-divider />
-    <v-card-actions class="pa-3">
+    <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer />
       <v-btn

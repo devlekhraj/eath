@@ -15,8 +15,6 @@
               v-model="search"
               label="Search Categories"
               clearable
-              density="compact"
-              variant="outlined"
               hide-details
               prepend-inner-icon="mdi-magnify"
               placeholder="Search category name..."
@@ -43,12 +41,6 @@
         </div>
       </template>
 
-      <template #item.slug="{ item }">
-        <div>
-          <span class="text-caption text-medium-emphasis">/articles/category/{{ item.slug }}</span>
-        </div>
-      </template>
-
       <template #item.articles_count="{ item }">
         <div>
           <span>{{ item.articles_count ?? 0 }}</span>
@@ -65,7 +57,6 @@
         <div>
           <v-switch
             v-model="item.is_active"
-            density="compact"
             color="success"
             hide-details
             @change="toggleActive(item)"
@@ -100,9 +91,8 @@ import CategoryDelete from './modal/CategoryDelete.vue'
 const { showSuccess, showError } = useSnackbar()
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+  { title: 'SN', key: 'sn', sortable: false },
   { title: 'Category Name', key: 'name', sortable: false },
-  { title: 'URL Slug', key: 'slug', sortable: false },
   { title: 'Articles', key: 'articles_count', sortable: false },
   { title: 'Seq#', key: 'sort_order', sortable: false },
   { title: 'Active', key: 'is_active', sortable: false },

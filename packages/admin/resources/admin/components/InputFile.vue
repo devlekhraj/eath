@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mb-2">
         <v-file-input prepend-icon="" v-model="selected_file" @change="handleUploadImage()" prepend-inner-icon="mdi-image" label="File input"></v-file-input>
     </div>
 </template>

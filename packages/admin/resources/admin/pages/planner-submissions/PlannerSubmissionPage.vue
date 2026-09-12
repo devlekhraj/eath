@@ -15,8 +15,6 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by code, traveler, email..."
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -27,8 +25,6 @@
               :items="statusFilterOptions"
               label="Filter Status"
               clearable
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -96,7 +92,7 @@
         <div>
           <v-chip
             size="small"
-            class="text-capitalize"
+            class="text-uppercase"
             :color="getStatusColor(item.status)"
             variant="flat"
           >
@@ -142,6 +138,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
+import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
 import { getPlannerSubmissionsApi } from '@/api/planner-submissions.api'
 import PlannerDetailModal from './modal/PlannerDetailModal.vue'
@@ -153,16 +150,16 @@ const selectedStatus = ref(null)
 const submissions = ref([])
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '50px' },
-  { title: 'Ref Code', key: 'reference_code', sortable: true, width: '120px' },
+  { title: 'SN', key: 'sn', sortable: false },
+  { title: 'Ref Code', key: 'reference_code', sortable: true },
   { title: 'Traveler', key: 'contact_name', sortable: true },
   { title: 'Email', key: 'contact_email', sortable: false },
-  { title: 'Country', key: 'country', sortable: true, width: '110px' },
-  { title: 'Party', key: 'travelers', sortable: false, width: '120px' },
+  { title: 'Country', key: 'country', sortable: true },
+  { title: 'Party', key: 'travelers', sortable: false },
   { title: 'Target Journey / Region', key: 'journey', sortable: false },
-  { title: 'Status', key: 'status', sortable: true, width: '110px' },
-  { title: 'Submitted', key: 'created_at', sortable: true, width: '120px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
+  { title: 'Status', key: 'status', sortable: true },
+  { title: 'Submitted', key: 'created_at', sortable: true },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center' },
 ]
 
 const statusFilterOptions = [
@@ -195,21 +192,6 @@ const filteredItems = computed(() => {
     )
   })
 })
-
-function getStatusColor(status) {
-  switch (status) {
-    case 'new':
-      return 'error'
-    case 'reviewing':
-      return 'warning'
-    case 'replied':
-      return 'success'
-    case 'closed':
-      return 'default'
-    default:
-      return 'default'
-  }
-}
 
 function formatDate(val) {
   if (!val) return '—'

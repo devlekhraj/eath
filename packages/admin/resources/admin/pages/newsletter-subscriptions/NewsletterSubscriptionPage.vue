@@ -15,8 +15,6 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by email, name..."
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -27,8 +25,6 @@
               :items="statusFilterOptions"
               label="Filter Status"
               clearable
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -107,25 +103,23 @@
         </v-card-title>
         <v-divider />
         <v-card-text class="pa-4">
-          <v-text-field
-            v-model="addForm.email"
-            label="Email Address *"
-            type="email"
-            variant="outlined"
-            density="compact"
-            class="mb-3"
-            :error-messages="addErrors.email"
-          />
-          <v-text-field
-            v-model="addForm.name"
-            label="Subscriber Name"
-            placeholder="e.g. John Doe"
-            variant="outlined"
-            density="compact"
-            :error-messages="addErrors.name"
-          />
+          <div class="mb-2">
+            <v-text-field
+              v-model="addForm.email"
+              label="Email Address *"
+              type="email"
+              :error-messages="addErrors.email"
+            />
+          </div>
+          <div class="mb-2">
+            <v-text-field
+              v-model="addForm.name"
+              label="Subscriber Name"
+              placeholder="e.g. John Doe"
+              :error-messages="addErrors.name"
+            />
+          </div>
         </v-card-text>
-        <v-divider />
         <v-card-actions class="pa-3 justify-end">
           <v-btn variant="text" @click="openAddDialog = false">Cancel</v-btn>
           <v-btn
@@ -200,12 +194,12 @@ const deleting = ref(false)
 const itemToDelete = ref(null)
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '50px' },
+  { title: 'SN', key: 'sn', sortable: false },
   { title: 'Email Address', key: 'email', sortable: true },
   { title: 'Name', key: 'name', sortable: true },
-  { title: 'Status', key: 'is_subscribed', sortable: true, width: '130px' },
-  { title: 'Subscribed On', key: 'subscribed_at', sortable: true, width: '130px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '110px' },
+  { title: 'Status', key: 'is_subscribed', sortable: true },
+  { title: 'Subscribed On', key: 'subscribed_at', sortable: true },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center' },
 ]
 
 const statusFilterOptions = [

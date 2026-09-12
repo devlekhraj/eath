@@ -1,69 +1,69 @@
 <template>
   <v-card>
-    <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-      <span class="text-uppercase font-weight-medium text-slate-800">
+    <v-card-title class="d-flex align-center justify-space-between py-0">
+      <span>
         {{ props.item?.id ? 'Edit FAQ' : 'Add FAQ' }}
       </span>
       <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider />
+        <v-divider />
 
     <v-card-text>
       <v-form ref="formRef" @submit.prevent="handleSubmit">
         <v-row dense>
           <v-col cols="12">
-            <v-text-field
-              v-model="form.question"
-              label="Question *"
-              placeholder="e.g. What is the best season for trekking in Nepal?"
-              :rules="[rules.required]"
-              :error-messages="serverErrors.question"
-              variant="outlined"
-              density="compact"
-              required
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.question"
+                  label="Question *"
+                  placeholder="e.g. What is the best season for trekking in Nepal?"
+                  :rules="[rules.required]"
+                  :error-messages="serverErrors.question"
+                  required
+                />
+            </div>
           </v-col>
 
           <v-col cols="12">
-            <v-textarea
-              v-model="form.answer"
-              label="Answer *"
-              placeholder="Provide a thorough, comprehensive answer for travelers..."
-              rows="5"
-              auto-grow
-              :rules="[rules.required]"
-              :error-messages="serverErrors.answer"
-              variant="outlined"
-              density="compact"
-              required
-            />
+            <div class="mb-2">
+                <v-textarea
+                  v-model="form.answer"
+                  label="Answer *"
+                  placeholder="Provide a thorough, comprehensive answer for travelers..."
+                  rows="5"
+                  auto-grow
+                  :rules="[rules.required]"
+                  :error-messages="serverErrors.answer"
+                  required
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="6">
-            <v-combobox
-              v-model="form.category"
-              :items="categoryOptions"
-              label="Category"
-              placeholder="Select or type a category"
-              clearable
-              variant="outlined"
-              density="compact"
-              :error-messages="serverErrors.category"
-            />
+            <div class="mb-2">
+                <v-combobox
+                  v-model="form.category"
+                  :items="categoryOptions"
+                  label="Category"
+                  placeholder="Select or type a category"
+                  clearable
+                  :error-messages="serverErrors.category"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="6">
-            <v-text-field
-              v-model.number="form.sort_order"
-              label="Sort Order"
-              type="number"
-              min="0"
-              variant="outlined"
-              density="compact"
-              :error-messages="serverErrors.sort_order"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model.number="form.sort_order"
+                  label="Sort Order"
+                  type="number"
+                  min="0"
+                  :error-messages="serverErrors.sort_order"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12">
@@ -73,62 +73,60 @@
           </v-col>
 
           <v-col cols="12" sm="4">
-            <v-autocomplete
-              v-model="form.journey_id"
-              :items="journeyOptions"
-              item-title="name"
-              item-value="id"
-              label="Specific Journey"
-              clearable
-              variant="outlined"
-              density="compact"
-              :loading="loadingOptions"
-            />
+            <div class="mb-2">
+                <v-autocomplete
+                  v-model="form.journey_id"
+                  :items="journeyOptions"
+                  item-title="name"
+                  item-value="id"
+                  label="Specific Journey"
+                  clearable
+                  :loading="loadingOptions"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="4">
-            <v-select
-              v-model="form.destination_id"
-              :items="destinationOptions"
-              item-title="name"
-              item-value="id"
-              label="Specific Destination"
-              clearable
-              variant="outlined"
-              density="compact"
-              :loading="loadingOptions"
-            />
+            <div class="mb-2">
+                <v-select
+                  v-model="form.destination_id"
+                  :items="destinationOptions"
+                  item-title="name"
+                  item-value="id"
+                  label="Specific Destination"
+                  clearable
+                  :loading="loadingOptions"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" sm="4">
-            <v-select
-              v-model="form.experience_id"
-              :items="experienceOptions"
-              item-title="name"
-              item-value="id"
-              label="Specific Experience"
-              clearable
-              variant="outlined"
-              density="compact"
-              :loading="loadingOptions"
-            />
+            <div class="mb-2">
+                <v-select
+                  v-model="form.experience_id"
+                  :items="experienceOptions"
+                  item-title="name"
+                  item-value="id"
+                  label="Specific Experience"
+                  clearable
+                  :loading="loadingOptions"
+                />
+            </div>
           </v-col>
 
           <v-col cols="12" class="pt-2">
-            <v-switch
-              v-model="form.is_active"
-              label="Active (Visible on website)"
-              color="primary"
-              density="compact"
-              hide-details
-            />
+            <div class="mb-2">
+                <v-switch
+                  v-model="form.is_active"
+                  label="Active (Visible on website)"
+                  hide-details
+                />
+            </div>
           </v-col>
         </v-row>
       </v-form>
     </v-card-text>
-
-    <v-divider />
-    <v-card-actions class="pa-3">
+    <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer />
       <v-btn

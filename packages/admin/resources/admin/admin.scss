@@ -20,16 +20,19 @@ body,
     font-family: "Poppins", sans-serif !important;
 }
 
-
 // App background gradient
 main.v-main {
     background:
-        radial-gradient(circle at top left,
+        radial-gradient(
+            circle at top left,
             rgba(219, 234, 254, 0.7) 0%,
-            transparent 35%),
-        radial-gradient(circle at bottom right,
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
             rgba(224, 242, 254, 0.6) 0%,
-            transparent 40%),
+            transparent 40%
+        ),
         #f0f4f9;
 }
 
@@ -92,8 +95,8 @@ main.v-main {
 // ==========================================================================
 .v-input,
 .v-field {
-    --v-field-font-size: 0.82rem !important;
-    font-size: 0.82rem;
+    --v-field-font-size: 14px !important;
+    font-size: 14px;
 }
 
 .v-field__input,
@@ -109,7 +112,7 @@ main.v-main {
 .app-field-select-selection-text,
 .app-select-placeholder,
 .app-autocomplete-placeholder {
-    font-size: 0.82rem !important;
+    font-size: 14px !important;
 }
 
 .v-label,
@@ -117,7 +120,9 @@ main.v-main {
 .v-field-label--floating {
     font-size: 0.82rem !important;
     --v-field-label-scale: 1 !important;
-    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition:
+        transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
     will-change: transform;
 }
 
@@ -173,7 +178,11 @@ main.v-main {
     .v-data-table-header th {
         font-size: 0.82rem !important;
         font-weight: 600 !important;
-        background: linear-gradient(rgba(var(--v-theme-primary), 0.06), rgba(var(--v-theme-primary), 0.06)) rgb(var(--v-theme-surface)) !important;
+        background: linear-gradient(
+                rgba(var(--v-theme-primary), 0.06),
+                rgba(var(--v-theme-primary), 0.06)
+            )
+            rgb(var(--v-theme-surface)) !important;
 
         .v-data-table-header__content {
             font-weight: 600 !important;
@@ -220,7 +229,11 @@ main.v-main {
             > thead > tr > th:last-child {
                 z-index: 3 !important;
                 text-align: center !important;
-                background: linear-gradient(rgba(var(--v-theme-primary), 0.06), rgba(var(--v-theme-primary), 0.06)) rgb(var(--v-theme-surface)) !important;
+                background: linear-gradient(
+                        rgba(var(--v-theme-primary), 0.06),
+                        rgba(var(--v-theme-primary), 0.06)
+                    )
+                    rgb(var(--v-theme-surface)) !important;
 
                 .v-data-table-header__content {
                     justify-content: center !important;
@@ -251,7 +264,7 @@ main.v-main {
     .v-list-item__spacer {
         width: 10px !important;
     }
-    
+
     .v-list-item-title,
     .v-list-item__content {
         font-size: 0.82rem;
@@ -263,15 +276,15 @@ main.v-main {
         color: rgba(0, 0, 0, 0.38) !important;
         cursor: not-allowed !important;
         opacity: 1 !important;
-    
+
         .v-list-item-title,
         .v-list-item__prepend .v-icon {
             color: rgba(0, 0, 0, 0.38) !important;
         }
-    
+
         &.active-nav-item {
             color: rgba(0, 0, 0, 0.38) !important;
-    
+
             .v-list-item-title,
             .v-list-item__prepend .v-icon {
                 color: rgba(0, 0, 0, 0.38) !important;
@@ -279,8 +292,126 @@ main.v-main {
         }
     }
 }
+// International Phone Input Country Display & Unified Field
+.v-phone-input {
+    --v-phone-input-country-width: 7.8rem !important;
+    --v-phone-input-country-autocomplete-width: 7.8rem !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    width: 100% !important;
 
+    // Country select input
+    .v-phone-input__country__input.v-input {
+        width: 7.8rem !important;
+        min-width: 7.8rem !important;
+        max-width: 7.8rem !important;
+        flex: 0 0 7.8rem !important;
 
+        &.v-phone-input--focused,
+        &.v-autocomplete.v-phone-input--focused {
+            width: 7.8rem !important;
+            min-width: 7.8rem !important;
+            max-width: 7.8rem !important;
+            flex: 0 0 7.8rem !important;
 
+            .v-field {
+                --v-phone-input-country-width: 7.8rem !important;
+                width: 7.8rem !important;
+                min-width: 7.8rem !important;
+                max-width: 7.8rem !important;
+            }
+        }
 
+        .v-field {
+            --v-phone-input-country-width: 7.8rem !important;
+            min-width: 7.8rem !important;
+            max-width: 7.8rem !important;
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
 
+            .v-field__input {
+                padding-inline-start: 10px !important;
+                padding-inline-end: 0 !important;
+                white-space: nowrap !important;
+            }
+
+            .v-field__append-inner {
+                padding-inline-start: 2px !important;
+                padding-inline-end: 8px !important;
+
+                .v-icon {
+                    font-size: 15px !important;
+                    width: 15px !important;
+                    height: 15px !important;
+                    opacity: 0.65;
+                }
+            }
+
+            .v-field__outline__end {
+                border-top-right-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+            }
+        }
+
+        .v-input__details {
+            display: none !important;
+        }
+    }
+
+    // Phone number input
+    .v-phone-input__phone__input.v-input {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        margin-inline-start: -1px !important;
+
+        .v-field {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+
+            .v-field__outline__start {
+                border-top-left-radius: 0 !important;
+                border-bottom-left-radius: 0 !important;
+            }
+        }
+    }
+
+    .v-phone-input__country__input.v-input.v-phone-input--focused,
+    .v-phone-input__phone__input.v-input.v-input--focused {
+        z-index: 2 !important;
+    }
+
+    .v-phone-input__country__icon.fi {
+        width: 20px;
+        line-height: 20px;
+        border-radius: 2px;
+    }
+}
+
+.v-phone-input__country__menu {
+    min-width: 300px !important;
+    max-width: 380px !important;
+
+    .v-list-item {
+        font-size: 0.82rem !important;
+        min-height: 36px !important;
+        padding-inline: 12px !important;
+    }
+
+    .v-phone-input__country__icon.fi {
+        width: 20px;
+        line-height: 20px;
+        margin-inline-end: 10px !important;
+    }
+
+    .v-phone-input__country__title {
+        font-size: 0.82rem !important;
+        font-weight: 500;
+    }
+
+    .v-phone-input__country__append {
+        font-size: 0.75rem !important;
+        color: #64748b !important;
+        margin-inline-start: auto !important;
+        padding-inline-start: 12px;
+    }
+}

@@ -15,8 +15,6 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               placeholder="Search question, answer..."
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -27,8 +25,6 @@
               :items="categoryOptions"
               label="Filter Category"
               clearable
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -39,8 +35,6 @@
               :items="scopeOptions"
               label="Filter Scope"
               clearable
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -145,13 +139,13 @@ const { open: openModal } = useGlobalModal()
 const { showSuccess, showError } = useSnackbar()
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+  { title: 'SN', key: 'sn', sortable: false },
   { title: 'Question', key: 'question', sortable: true },
-  { title: 'Category', key: 'category', sortable: true, width: '150px' },
+  { title: 'Category', key: 'category', sortable: true },
   { title: 'Association / Scope', key: 'scope', sortable: false },
-  { title: 'Order', key: 'sort_order', sortable: true, width: '80px' },
-  { title: 'Status', key: 'is_active', sortable: false, width: '100px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
+  { title: 'Order', key: 'sort_order', sortable: true },
+  { title: 'Status', key: 'is_active', sortable: false },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center' },
 ]
 
 const faqs = ref([])

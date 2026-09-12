@@ -221,7 +221,7 @@
 
                                 <div>
 
-                                    <div class="vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                    <div class="content-viewer note-editable-content">
                                         {!! $package->description !!}
                                     </div>
 
@@ -263,7 +263,7 @@
                                                             aria-labelledby="heading{{ $key }}"
                                                             data-bs-parent="#itineraryAccordion">
                                                             <div
-                                                                class="accordion-body px-4 pb-4 pt-3 vuetify-pro-tiptap-editor__content view markdown-theme-default">
+                                                                class="accordion-body px-4 pb-4 pt-3 content-viewer note-editable-content">
                                                                 {!! $itinery->description !!}
 
                                                                 @if ($itinery->highlights->isNotEmpty())

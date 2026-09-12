@@ -202,12 +202,12 @@
         <!-- Upcoming Group Departures Table -->
         <v-col cols="12" lg="8">
           <v-card class="h-100">
-            <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
+            <v-card-title class="d-flex align-center justify-space-between pa-3">
               <div class="d-flex align-center ga-2">
                 <v-avatar size="24" color="primary" variant="tonal" rounded>
                   <v-icon size="14">mdi-calendar-clock-outline</v-icon>
                 </v-avatar>
-                <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
+                <span class=" font-weight-medium text-slate-800" style="letter-spacing: 0.03em;">
                   Upcoming Group Departures
                 </span>
               </div>
@@ -224,15 +224,15 @@
             <v-divider />
 
             <v-card-text class="pa-0">
-              <v-table density="compact">
+              <v-table>
                 <thead>
                   <tr>
-                    <th class="text-left" style="width: 50px;">SN</th>
+                    <th class="text-left">SN</th>
                     <th class="text-left">Journey</th>
                     <th class="text-left">Dates</th>
                     <th class="text-left">Seats Available</th>
                     <th class="text-left">Cost</th>
-                    <th class="text-center" style="width: 100px;">Status</th>
+                    <th class="text-center">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -279,8 +279,8 @@
                       <div>
                         <v-chip
                           size="x-small"
-                          class="text-capitalize"
-                          :color="getDepartureStatusColor(dep.status)"
+                          class="text-uppercase"
+                          :color="getStatusColor(dep.status)"
                         >
                           {{ dep.status || 'Active' }}
                         </v-chip>
@@ -297,12 +297,12 @@
         <v-col cols="12" lg="4">
           <v-card class="h-100 d-flex flex-column justify-space-between">
             <div>
-              <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
+              <v-card-title class="d-flex align-center justify-space-between pa-3">
                 <div class="d-flex align-center ga-2">
                   <v-avatar size="24" color="primary" variant="tonal" rounded>
                     <v-icon size="14">mdi-compass-outline</v-icon>
                   </v-avatar>
-                  <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
+                  <span class=" font-weight-medium text-slate-800" style="letter-spacing: 0.03em;">
                     Destination Portfolio
                   </span>
                 </div>
@@ -373,12 +373,12 @@
         <!-- Recent Planner Submissions Table -->
         <v-col cols="12" lg="6">
           <v-card class="h-100">
-            <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
+            <v-card-title class="d-flex align-center justify-space-between pa-3">
               <div class="d-flex align-center ga-2">
                 <v-avatar size="24" color="success" variant="tonal" rounded>
                   <v-icon size="14">mdi-ticket-confirmation-outline</v-icon>
                 </v-avatar>
-                <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
+                <span class=" font-weight-medium text-slate-800" style="letter-spacing: 0.03em;">
                   Recent Planner Requests
                 </span>
               </div>
@@ -395,10 +395,10 @@
             <v-divider />
 
             <v-card-text class="pa-0">
-              <v-table density="compact">
+              <v-table>
                 <thead>
                   <tr>
-                    <th class="text-left" style="width: 50px;">SN</th>
+                    <th class="text-left">SN</th>
                     <th class="text-left">Traveler</th>
                     <th class="text-left">Journey</th>
                     <th class="text-left">Departure</th>
@@ -444,8 +444,8 @@
                       <div>
                         <v-chip
                           size="x-small"
-                          class="text-capitalize"
-                          :color="getLeadStatusColor(req.status)"
+                          class="text-uppercase"
+                          :color="getStatusColor(req.status)"
                         >
                           {{ req.status }}
                         </v-chip>
@@ -461,12 +461,12 @@
         <!-- Recent Inquiries Table -->
         <v-col cols="12" lg="6">
           <v-card class="h-100">
-            <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
+            <v-card-title class="d-flex align-center justify-space-between pa-3">
               <div class="d-flex align-center ga-2">
                 <v-avatar size="24" color="warning" variant="tonal" rounded>
                   <v-icon size="14">mdi-message-text-clock-outline</v-icon>
                 </v-avatar>
-                <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
+                <span class=" font-weight-medium text-slate-800" style="letter-spacing: 0.03em;">
                   Latest Inquiries
                 </span>
               </div>
@@ -483,10 +483,10 @@
             <v-divider />
 
             <v-card-text class="pa-0">
-              <v-table density="compact">
+              <v-table>
                 <thead>
                   <tr>
-                    <th class="text-left" style="width: 50px;">SN</th>
+                    <th class="text-left">SN</th>
                     <th class="text-left">Lead Name</th>
                     <th class="text-left">Subject / Destination</th>
                     <th class="text-left">Received</th>
@@ -523,7 +523,7 @@
                     </td>
                     <td class="text-center">
                       <div>
-                        <v-chip size="x-small" class="text-capitalize" variant="tonal" color="secondary">
+                        <v-chip size="x-small" class="text-uppercase" variant="tonal" color="secondary">
                           {{ inq.type }}
                         </v-chip>
                       </div>
@@ -532,8 +532,8 @@
                       <div>
                         <v-chip
                           size="x-small"
-                          class="text-capitalize"
-                          :color="getLeadStatusColor(inq.status)"
+                          class="text-uppercase"
+                          :color="getStatusColor(inq.status)"
                         >
                           {{ inq.status }}
                         </v-chip>
@@ -552,12 +552,12 @@
         <!-- Monthly Inflow Chart -->
         <v-col cols="12" lg="8">
           <v-card class="h-100">
-            <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
+            <v-card-title class="d-flex align-center justify-space-between pa-3">
               <div class="d-flex align-center ga-2">
                 <v-avatar size="24" color="primary" variant="tonal" rounded>
                   <v-icon size="14">mdi-chart-timeline-variant</v-icon>
                 </v-avatar>
-                <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
+                <span class=" font-weight-medium text-slate-800" style="letter-spacing: 0.03em;">
                   Monthly Planner & Inquiries Inflow
                 </span>
               </div>
@@ -623,7 +623,7 @@
                 <v-avatar size="24" color="info" variant="tonal" rounded>
                   <v-icon size="14">mdi-folder-cog-outline</v-icon>
                 </v-avatar>
-                <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
+                <span class=" font-weight-medium text-slate-800" style="letter-spacing: 0.03em;">
                   Editorial & Operations Hub
                 </span>
               </v-card-title>
@@ -692,7 +692,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { fetchDashboardStats } from '@/api/dashboard.api'
-import { formatDate, formatAmount } from '@utils/utils'
+import { formatDate, formatAmount, getStatusColor } from '@utils/utils'
 
 const loading = ref(true)
 const error = ref(null)
@@ -721,27 +721,6 @@ const calcBarHeight = (val) => {
   if (!val || val <= 0) return 4
   const max = 10
   return Math.max(8, Math.min(120, Math.round((val / max) * 120)))
-}
-
-const getLeadStatusColor = (status) => {
-  const map = {
-    new: 'error',
-    reviewing: 'warning',
-    replied: 'success',
-    closed: 'default',
-  }
-  return map[status?.toLowerCase()] || 'default'
-}
-
-const getDepartureStatusColor = (status) => {
-  const map = {
-    active: 'success',
-    guaranteed: 'info',
-    filling_fast: 'warning',
-    closed: 'default',
-    completed: 'default',
-  }
-  return map[status?.toLowerCase()] || 'primary'
 }
 
 onMounted(() => {

@@ -1,7 +1,7 @@
 <template>
     <v-card>
-        <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-            <span class="text-uppercase font-weight-medium text-slate-800">Confirm Delete</span>
+        <v-card-title class="d-flex align-center justify-space-between py-0">
+            <span>Confirm Delete</span>
             <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -11,8 +11,7 @@
             <div class="text-subtitle-1">Are you sure you want to delete this article?</div>
             <div class="text-caption text-medium-emphasis mt-1">{{ item.title }}</div>
         </v-card-text>
-        <v-divider />
-        <v-card-actions class="pa-3 justify-end">
+        <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleClose">Cancel</v-btn>
             <v-btn color="error" :loading="submitting" @click="deleteArticle">Delete</v-btn>
         </v-card-actions>

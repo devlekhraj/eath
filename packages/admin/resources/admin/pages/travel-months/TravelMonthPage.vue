@@ -21,7 +21,7 @@
 
             <template #item.name="{ item }">
                 <div>
-                    <a href="#" class="text-primary font-weight-medium text-decoration-underline" @click.prevent="handleOpen(item)">
+                    <a href="#" class="text-primary text-decoration-underline" @click.prevent="handleOpen(item)">
                         {{ item.name }}
                     </a>
                 </div>
@@ -31,7 +31,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="text-uppercase font-weight-medium"
+                    class="text-uppercase"
                     :color="getSeasonColor(item.season)"
                 >
                     {{ item.season }}
@@ -54,7 +54,7 @@
                 <v-chip
                     size="small"
                     label
-                    class="text-uppercase font-weight-medium"
+                    class="text-uppercase"
                     :color="item.is_active ? 'success' : 'secondary'"
                     @click="toggleActive(item)"
                     style="cursor: pointer;"
@@ -94,7 +94,7 @@ const { open: openModal } = useGlobalModal()
 const { showSuccess, showError } = useSnackbar()
 
 const headers = [
-    { title: 'No.', key: 'month_number', sortable: true, width: '60px' },
+    { title: 'No.', key: 'month_number', sortable: true },
     { title: 'Month', key: 'name', sortable: true },
     { title: 'Season', key: 'season', sortable: true },
     { title: 'Conditions & Weather Notes', key: 'conditions_note', sortable: false },

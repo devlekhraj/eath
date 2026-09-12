@@ -41,84 +41,87 @@
 							<v-window-item value="overview">
 								<v-row>
 									<v-col cols="12" md="8">
-										<v-text-field
-											v-model="form.title"
-											label="Page Title"
-											variant="outlined"
-											density="comfortable"
-											:rules="[rules.required]"
-										/>
+										<div class="mb-2">
+											<v-text-field
+												v-model="form.title"
+												label="Page Title"
+												:rules="[rules.required]"
+											/>
+										</div>
 									</v-col>
 
 									<v-col cols="12" md="4">
-										<v-text-field
-											v-model="form.slug"
-											label="URL Slug"
-											variant="outlined"
-											density="comfortable"
-											:rules="[rules.slug]"
-											hint="URL slug without leading slash"
-											persistent-hint
-										/>
+										<div class="mb-2">
+											<v-text-field
+												v-model="form.slug"
+												label="URL Slug"
+												:rules="[rules.slug]"
+												hint="URL slug without leading slash"
+												persistent-hint
+											/>
+										</div>
 									</v-col>
 
 									<v-col cols="12" md="6">
-										<v-select
-											v-model="form.type"
-											:items="typeOptions"
-											label="Page Type"
-											variant="outlined"
-											density="comfortable"
-										/>
+										<div class="mb-2">
+											<v-select
+												v-model="form.type"
+												:items="typeOptions"
+												label="Page Type"
+											/>
+										</div>
 									</v-col>
 
 									<v-col cols="12" sm="3">
-										<v-switch
-											v-model="form.is_active"
-											inset
-											label="Active"
-											color="success"
-										/>
+										<div class="mb-2">
+											<v-switch
+												v-model="form.is_active"
+												inset
+												label="Active"
+												color="success"
+											/>
+										</div>
 									</v-col>
 
 									<v-col cols="12" sm="3">
-										<v-switch
-											v-model="form.is_published"
-											inset
-											label="Published"
-											color="primary"
-										/>
+										<div class="mb-2">
+											<v-switch
+												v-model="form.is_published"
+												inset
+												label="Published"
+											/>
+										</div>
 									</v-col>
 
 									<v-col cols="12">
-										<v-textarea
-											v-model="form.summary"
-											label="Page Summary"
-											rows="2"
-											auto-grow
-											variant="outlined"
-											density="comfortable"
-											hint="Short overview shown in previews and search results"
-											persistent-hint
-										/>
+										<div class="mb-2">
+											<v-textarea
+												v-model="form.summary"
+												label="Page Summary"
+												rows="2"
+												auto-grow
+												hint="Short overview shown in previews and search results"
+												persistent-hint
+											/>
+										</div>
 									</v-col>
 
 									<v-col cols="12" md="6">
-										<v-text-field
-											v-model="form.meta_title"
-											label="Meta Title (SEO)"
-											variant="outlined"
-											density="comfortable"
-										/>
+										<div class="mb-2">
+											<v-text-field
+												v-model="form.meta_title"
+												label="Meta Title (SEO)"
+											/>
+										</div>
 									</v-col>
 
 									<v-col cols="12" md="6">
-										<v-text-field
-											v-model="form.meta_description"
-											label="Meta Description (SEO)"
-											variant="outlined"
-											density="comfortable"
-										/>
+										<div class="mb-2">
+											<v-text-field
+												v-model="form.meta_description"
+												label="Meta Description (SEO)"
+											/>
+										</div>
 									</v-col>
 								</v-row>
 							</v-window-item>
@@ -146,13 +149,13 @@
 								<v-divider class="mb-4" />
 
 								<div v-if="form.sections && form.sections.length > 0">
-									<v-table class="border">
+									<v-table>
 										<thead>
 											<tr>
-												<th style="width: 80px;">Order</th>
+												<th>Order</th>
 												<th>Heading</th>
 												<th>Layout</th>
-												<th class="text-center" style="width: 120px;">Actions</th>
+												<th class="text-center">Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -204,29 +207,30 @@
 						<v-card-text>
 							<v-row>
 								<v-col cols="12" sm="8">
-									<v-text-field
-										v-model="editingSection.heading"
-										label="Section Heading"
-										variant="outlined"
-										density="compact"
-									/>
+									<div class="mb-2">
+										<v-text-field
+											v-model="editingSection.heading"
+											label="Section Heading"
+										/>
+									</div>
 								</v-col>
 								<v-col cols="12" sm="4">
-									<v-text-field
-										v-model.number="editingSection.sort_order"
-										label="Sort Order"
-										type="number"
-										variant="outlined"
-										density="compact"
-									/>
+									<div class="mb-2">
+										<v-text-field
+											v-model.number="editingSection.sort_order"
+											label="Sort Order"
+											type="number"
+										/>
+									</div>
 								</v-col>
 								<v-col cols="12">
-									<label class="text-caption mb-1 d-block font-weight-medium">Section Body</label>
-									<SummarnoteEditor v-model="editingSection.body" minHeight="200" />
+									<div class="mb-2">
+										<label class="text-caption mb-1 d-block">Section Body</label>
+										<SummarnoteEditor v-model="editingSection.body" minHeight="200" />
+									</div>
 								</v-col>
 							</v-row>
 						</v-card-text>
-						<v-divider />
 						<v-card-actions class="pa-3 justify-end">
 							<v-btn variant="text" @click="closeSectionDialog">Cancel</v-btn>
 							<v-btn color="primary" :loading="savingSection" @click="saveSection">Save Section</v-btn>

@@ -13,7 +13,9 @@
                 <v-row>
                     <v-col cols="12" md="12">
                         <!-- Travel Package -->
-                        <v-select v-model="form.travel_package_id" :items="travelPackages" item-title="name" item-value="id" label="Travel Package" :rules="[rules.required]" :error-messages="serverErrors.travel_package_id" clearable required />
+                        <div class="mb-2">
+                            <v-select v-model="form.travel_package_id" :items="travelPackages" item-title="name" item-value="id" label="Travel Package" :rules="[rules.required]" :error-messages="serverErrors.travel_package_id" clearable required />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="6">
@@ -29,12 +31,16 @@
 
                     <v-col cols="12" md="12">
                         <!-- Group Size -->
-                        <v-text-field v-model="form.group_size" label="Group Size" type="number" :rules="[rules.required, rules.positiveNumber]" :error-messages="serverErrors.group_size" required min="1" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.group_size" label="Group Size" type="number" :rules="[rules.required, rules.positiveNumber]" :error-messages="serverErrors.group_size" required min="1" />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="12">
                         <!-- Notes / Comment -->
-                        <v-textarea v-model="form.notes" label="Notes / Comment" :error-messages="serverErrors.notes" rows="3" />
+                        <div class="mb-2">
+                            <v-textarea v-model="form.notes" label="Notes / Comment" :error-messages="serverErrors.notes" rows="3" />
+                        </div>
                     </v-col>
                 </v-row>
             </v-form>

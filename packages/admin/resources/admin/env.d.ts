@@ -8,4 +8,8 @@ declare module '*.vue' {
 
 interface Window {
   axios: typeof import('axios').default
+  $: any
+  jQuery: any
 }
+
+declare module 'jquery'

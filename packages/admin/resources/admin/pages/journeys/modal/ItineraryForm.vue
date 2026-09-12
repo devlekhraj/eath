@@ -12,25 +12,39 @@
             <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
                 <v-row>
                     <v-col cols="12" md="3">
-                        <v-text-field v-model="form.day_number" label="Day" type="number" :rules="[rules.required]" required />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.day_number" label="Day" type="number" :rules="[rules.required]" required />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="9">
-                        <v-text-field v-model="form.title" label="Title" placeholder="Arrival in Kathmandu" :rules="[rules.required]" required />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.title" label="Title" placeholder="Arrival in Kathmandu" :rules="[rules.required]" required />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="6">
-                        <v-text-field v-model="form.route" label="Route" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.route" label="Route" />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="3">
-                        <v-text-field v-model="form.altitude_m" label="Altitude (m)" type="number" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.altitude_m" label="Altitude (m)" type="number" />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="3">
-                        <v-text-field v-model="form.walking_hours" label="Walking Hours" type="number" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.walking_hours" label="Walking Hours" type="number" />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="6">
-                        <v-text-field v-model="form.accommodation_label" label="Accommodation" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.accommodation_label" label="Accommodation" />
+                        </div>
                     </v-col>
                     <v-col cols="12" md="6">
-                        <v-text-field v-model="form.meal_note" label="Meals" />
+                        <div class="mb-2">
+                            <v-text-field v-model="form.meal_note" label="Meals" />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" md="12">
@@ -42,9 +56,7 @@
                 </v-row>
             </v-form>
         </v-card-text>
-
-        <v-divider />
-        <v-card-actions class="justify-space-between">
+        <v-card-actions class="justify-end">
             <div>
                 <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
                 <v-btn v-if="props.item?.id" variant="text" class="ml-4" color="error" :loading="loading_delete" :disabled="loading_delete" @click="handleDelete">Delete</v-btn>

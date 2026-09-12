@@ -1,12 +1,12 @@
 <template>
   <v-card>
-    <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-      <span class="text-uppercase font-weight-medium text-slate-800">Upload Media Asset</span>
+    <v-card-title class="d-flex align-center justify-space-between py-0">
+      <span>Upload Media Asset</span>
       <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider />
+        <v-divider />
 
     <v-card-text>
       <v-row dense>
@@ -74,43 +74,41 @@
 
         <v-col cols="12" md="6">
           <v-form ref="formRef" @submit.prevent="handleUpload">
-            <v-text-field
-              v-model="form.title"
-              label="Asset Title"
-              placeholder="e.g. Everest Base Camp Sunrise"
-              variant="outlined"
-              density="compact"
-              class="mb-2"
-              :error-messages="serverErrors.title"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.title"
+                  label="Asset Title"
+                  placeholder="e.g. Everest Base Camp Sunrise"
+                  class="mb-2"
+                  :error-messages="serverErrors.title"
+                />
+            </div>
 
-            <v-text-field
-              v-model="form.alt_text"
-              label="Alt Text (SEO & Accessibility)"
-              placeholder="Descriptive alt text for screen readers and SEO"
-              variant="outlined"
-              density="compact"
-              class="mb-2"
-              :error-messages="serverErrors.alt_text"
-            />
+            <div class="mb-2">
+                <v-text-field
+                  v-model="form.alt_text"
+                  label="Alt Text (SEO & Accessibility)"
+                  placeholder="Descriptive alt text for screen readers and SEO"
+                  class="mb-2"
+                  :error-messages="serverErrors.alt_text"
+                />
+            </div>
 
-            <v-textarea
-              v-model="form.caption"
-              label="Caption / Description"
-              placeholder="Optional photo caption or editorial context"
-              rows="4"
-              variant="outlined"
-              density="compact"
-              class="mb-2"
-              :error-messages="serverErrors.caption"
-            />
+            <div class="mb-2">
+                <v-textarea
+                  v-model="form.caption"
+                  label="Caption / Description"
+                  placeholder="Optional photo caption or editorial context"
+                  rows="4"
+                  class="mb-2"
+                  :error-messages="serverErrors.caption"
+                />
+            </div>
           </v-form>
         </v-col>
       </v-row>
     </v-card-text>
-
-    <v-divider />
-    <v-card-actions class="pa-3">
+    <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
       <v-spacer />
       <v-btn

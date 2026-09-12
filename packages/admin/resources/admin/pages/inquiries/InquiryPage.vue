@@ -15,8 +15,6 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by code, name, email..."
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -27,8 +25,6 @@
               :items="statusFilterOptions"
               label="Filter Status"
               clearable
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -39,8 +35,6 @@
               :items="typeFilterOptions"
               label="Filter Type"
               clearable
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -79,7 +73,7 @@
 
       <template #item.inquiry_type="{ item }">
         <div>
-          <v-chip size="small" variant="tonal" color="secondary" class="text-capitalize">
+          <v-chip size="small" variant="tonal" color="secondary" class="text-uppercase">
             {{ item.inquiry_type }}
           </v-chip>
         </div>
@@ -105,7 +99,7 @@
         <div>
           <v-chip
             size="small"
-            class="text-capitalize"
+            class="text-uppercase"
             :color="getStatusColor(item.status)"
             variant="flat"
           >
@@ -151,6 +145,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
+import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
 import { getInquiriesApi } from '@/api/inquiries.api'
 import InquiryDetailModal from './modal/InquiryDetailModal.vue'
@@ -163,16 +158,16 @@ const selectedType = ref(null)
 const inquiries = ref([])
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '50px' },
-  { title: 'Ref Code', key: 'reference_code', sortable: true, width: '120px' },
+  { title: 'SN', key: 'sn', sortable: false },
+  { title: 'Ref Code', key: 'reference_code', sortable: true },
   { title: 'Traveller', key: 'name', sortable: true },
   { title: 'Email', key: 'email', sortable: false },
-  { title: 'Country', key: 'country', sortable: true, width: '110px' },
-  { title: 'Type', key: 'inquiry_type', sortable: true, width: '100px' },
+  { title: 'Country', key: 'country', sortable: true },
+  { title: 'Type', key: 'inquiry_type', sortable: true },
   { title: 'Journey', key: 'journey', sortable: false },
-  { title: 'Status', key: 'status', sortable: true, width: '110px' },
-  { title: 'Received', key: 'created_at', sortable: true, width: '120px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
+  { title: 'Status', key: 'status', sortable: true },
+  { title: 'Received', key: 'created_at', sortable: true },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center' },
 ]
 
 const statusFilterOptions = [
@@ -216,21 +211,6 @@ const filteredItems = computed(() => {
     )
   })
 })
-
-function getStatusColor(status) {
-  switch (status) {
-    case 'new':
-      return 'error'
-    case 'reviewing':
-      return 'warning'
-    case 'replied':
-      return 'success'
-    case 'closed':
-      return 'default'
-    default:
-      return 'default'
-  }
-}
 
 function formatDate(val) {
   if (!val) return '—'

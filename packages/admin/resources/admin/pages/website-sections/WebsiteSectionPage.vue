@@ -15,8 +15,6 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               placeholder="Search by key, heading..."
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -27,8 +25,6 @@
               :items="pageKeyOptions"
               label="Filter Page"
               clearable
-              variant="outlined"
-              density="compact"
               hide-details
             />
           </v-col>
@@ -119,14 +115,14 @@ const { open: openModal } = useGlobalModal()
 const { showSuccess, showError } = useSnackbar()
 
 const headers = [
-  { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+  { title: 'SN', key: 'sn', sortable: false },
   { title: 'Page Key', key: 'page_key', sortable: true },
   { title: 'Section Key', key: 'section_key', sortable: true },
   { title: 'Heading', key: 'heading', sortable: false },
   { title: 'Eyebrow', key: 'eyebrow', sortable: false },
-  { title: 'Order', key: 'sort_order', sortable: true, width: '80px' },
-  { title: 'Status', key: 'is_active', sortable: false, width: '110px' },
-  { title: 'Action', key: 'actions', sortable: false, align: 'center', width: '160px' },
+  { title: 'Order', key: 'sort_order', sortable: true },
+  { title: 'Status', key: 'is_active', sortable: false },
+  { title: 'Action', key: 'actions', sortable: false, align: 'center' },
 ]
 
 const sections = ref([])
