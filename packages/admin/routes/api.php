@@ -1,188 +1,219 @@
 <?php
 
-use Admin\Http\Controllers\Banner\BannerController;
-use Admin\Http\Controllers\Banner\BannerImageController;
-use Admin\Http\Controllers\Blog\BlogController;
-use Admin\Http\Controllers\Blog\BlogImageController;
-use Admin\Http\Controllers\BlogCategory\BlogCategoryController;
-use Admin\Http\Controllers\Customers\CustomerController;
+use Admin\Http\Controllers\Auth\AdminAuthController;
+use Admin\Http\Controllers\Dashboard\DashboardController;
+use Admin\Http\Controllers\Journey\JourneyController;
+use Admin\Http\Controllers\Journey\JourneyItineraryDayController;
+use Admin\Http\Controllers\Journey\JourneyPriceController;
+use Admin\Http\Controllers\Journey\JourneyServiceController;
+use Admin\Http\Controllers\Journey\JourneyDepartureController;
+use Admin\Http\Controllers\Journey\JourneyHighlightController;
 use Admin\Http\Controllers\Destination\DestinationController;
 use Admin\Http\Controllers\Destination\DestinationImageController;
-use Admin\Http\Controllers\FAQ\FaqController;
-use Admin\Http\Controllers\FeaturedPackage\FeaturedPackageController;
-use Admin\Http\Controllers\Gallery\GalleryController;
+use Admin\Http\Controllers\Experience\ExperienceController;
+use Admin\Http\Controllers\TravelMonth\TravelMonthController;
 use Admin\Http\Controllers\Guide\GuideController;
+use Admin\Http\Controllers\Article\ArticleController;
+use Admin\Http\Controllers\ArticleCategory\ArticleCategoryController;
+use Admin\Http\Controllers\TravelerStory\TravelerStoryController;
 use Admin\Http\Controllers\Inquiry\InquiryController;
-use Admin\Http\Controllers\Lookup\LookupController;
-use Admin\Http\Controllers\Media\MediaUsageController;
-use Admin\Http\Controllers\Page\PageController;
+use Admin\Http\Controllers\PlannerSubmission\PlannerSubmissionController;
+use Admin\Http\Controllers\Newsletter\NewsletterSubscriptionController;
+use Admin\Http\Controllers\WebsitePage\WebsitePageController;
+use Admin\Http\Controllers\WebsiteSection\WebsiteSectionController;
+use Admin\Http\Controllers\Media\MediaAssetController;
+use Admin\Http\Controllers\Faq\FaqController;
 use Admin\Http\Controllers\Settings\SettingController;
-use Admin\Http\Controllers\TravelPackage\PackageCategoryController;
-use Admin\Http\Controllers\TravelPackage\PackageInclusionController;
-use Admin\Http\Controllers\TravelPackage\PackageItinareryController;
-use Admin\Http\Controllers\TravelPackage\PackagePriceController;
-use Admin\Http\Controllers\TravelPackage\TravelPackageController;
-use Admin\Http\Controllers\TravelPackage\TrekDepartureController;
-use Admin\Http\Controllers\TravelPackage\TrekImageController;
-use Admin\Http\Controllers\Booking\BookingController;
-use Admin\Http\Controllers\Dashboard\DashboardController;
-use Admin\Http\Controllers\Auth\AdminAuthController;
-use Admin\Http\Controllers\Auth\UserAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('api/v1')->middleware('api')->group(function () {
 
-    // User login route (no auth middleware, but api middleware applied from above)
-    Route::post('user/login', [UserAuthController::class, 'login']);
-
-    // Protected user routes with auth:api
-    Route::middleware('auth:api')->prefix('user')->group(function () {
-        Route::post('logout', [UserAuthController::class, 'logout']);
-        Route::post('refresh', [UserAuthController::class, 'refresh']);
-        Route::post('me', [UserAuthController::class, 'me']);
-    });
-
-    // Admin login route (no auth middleware)
     Route::post('admin/login', [AdminAuthController::class, 'login']);
-    Route::post('admin/refresh', [AdminAuthController::class, 'refresh']);
 
-    // Protected admin routes with auth:api_admin
-    Route::middleware('auth:api_admin')->prefix('admin')->group(function () {
+    Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
         Route::post('logout', [AdminAuthController::class, 'logout']);
         Route::get('profile', [AdminAuthController::class, 'profile']);
         Route::get('dashboard', [DashboardController::class, 'index']);
 
-        Route::get('travel-packages', [TravelPackageController::class, 'index']);
-        Route::post('travel-packages', [TravelPackageController::class, 'storeUpdate']);
-        Route::get('travel-packages/{id}', [TravelPackageController::class, 'show']);
-        Route::post('travel-packages/{id}/highlight', [TravelPackageController::class, 'packageHighlight']);
+        // Journeys (Canonical CRUD & lifecycle)
+        Route::get('journeys', [JourneyController::class, 'index']);
+        Route::post('journeys', [JourneyController::class, 'storeUpdate']);
+        Route::get('journeys/{id}', [JourneyController::class, 'show']);
+        Route::patch('journeys/{id}/toggle-active', [JourneyController::class, 'toggleActive']);
+        Route::patch('journeys/{id}/toggle-publish', [JourneyController::class, 'togglePublish']);
+        Route::delete('journeys/{id}/delete', [JourneyController::class, 'destroy']);
+        Route::delete('journeys/{id}', [JourneyController::class, 'destroy']);
 
-        Route::patch('travel-packages/{id}/toggle-active', [TravelPackageController::class, 'toggleActive']);
-        Route::patch('travel-packages/{id}/toggle-publish', [TravelPackageController::class, 'togglePublish']);
-        Route::delete('travel-packages/{id}/delete', [TravelPackageController::class, 'packageDelete']);
+        // Journey Highlights
+        Route::post('journeys/{id}/highlights', [JourneyHighlightController::class, 'store']);
+        Route::delete('journey-highlights/{id}/delete', [JourneyHighlightController::class, 'destroy']);
+        Route::delete('journey-highlights/{id}', [JourneyHighlightController::class, 'destroy']);
 
-        Route::delete('travel-package-highlight/{id}/delete', [TravelPackageController::class, 'packageHighlightDelete']);
+        // Journey Itinerary Days & Highlights
+        Route::post('journeys/{id}/itinerary-days', [JourneyItineraryDayController::class, 'store']);
+        Route::delete('journey-itinerary-days/{id}/delete', [JourneyItineraryDayController::class, 'destroy']);
+        Route::delete('journey-itinerary-days/{id}', [JourneyItineraryDayController::class, 'destroy']);
+        Route::post('journey-itinerary-days/{id}/highlights', [JourneyItineraryDayController::class, 'storeHighlight']);
+        Route::delete('journey-itinerary-highlights/{id}/delete', [JourneyItineraryDayController::class, 'destroyHighlight']);
+        Route::delete('journey-itinerary-highlights/{id}', [JourneyItineraryDayController::class, 'destroyHighlight']);
 
-        Route::post('travel-packages/{id}/itinerary', [PackageItinareryController::class, 'storeItinerary']);
-        Route::delete('package-itineraries/{id}/delete', [PackageItinareryController::class, 'deleteItinerary']);
-        Route::post('package-itineraries/{id}/highlight', [PackageItinareryController::class, 'itineraryHighight']);
+        // Journey Prices
+        Route::post('journeys/{id}/prices', [JourneyPriceController::class, 'store']);
+        Route::delete('journey-prices/{id}/delete', [JourneyPriceController::class, 'destroy']);
+        Route::delete('journey-prices/{id}', [JourneyPriceController::class, 'destroy']);
 
-        Route::delete('itinerary-highlights/{id}/delete', [PackageItinareryController::class, 'itineraryHighightDelete']);
+        // Journey Services (Inclusions & Exclusions)
+        Route::post('journeys/{id}/services', [JourneyServiceController::class, 'store']);
+        Route::delete('journey-services/{id}/delete', [JourneyServiceController::class, 'destroy']);
+        Route::delete('journey-services/{id}', [JourneyServiceController::class, 'destroy']);
 
-        Route::get('lookups', [LookupController::class, 'getLookups']);
-        Route::post('lookups', [LookupController::class, 'storeUpdate']);
-        Route::delete('lookups/{id}/delete', [LookupController::class, 'deleteItem']);
+        // Journey Departures
+        Route::get('departures', [JourneyDepartureController::class, 'index']);
+        Route::post('journeys/{id}/departures', [JourneyDepartureController::class, 'store']);
+        Route::patch('journeys/{journeyId}/departures/{departureId}', [JourneyDepartureController::class, 'update']);
+        Route::delete('journeys/{journeyId}/departures/{departureId}', [JourneyDepartureController::class, 'destroy']);
+        Route::delete('journey-departures/{id}/delete', [JourneyDepartureController::class, 'destroy']);
+        Route::delete('journey-departures/{id}', [JourneyDepartureController::class, 'destroy']);
+        Route::patch('departures/{id}/toggle-active', [JourneyDepartureController::class, 'toggleActive']);
 
-        Route::post('travel-packages/{id}/inlusions', [PackageInclusionController::class, 'storeInclusion']);
-        Route::delete('package-inclusions/{id}/delete', [PackageInclusionController::class, 'deleteInclusion']);
-
-        Route::post('travel-packages/{id}/prices', [PackagePriceController::class, 'storeUpdatePrice']);
-        Route::delete('package-prices/{id}/delete', [PackagePriceController::class, 'deletePrice']);
-
-        Route::post('treks/{trekId}/save-image', [TrekImageController::class, 'saveImage']);
-        Route::post('treks/{trekId}/use-image', [TrekImageController::class, 'useImage']);
-        Route::post('treks/{id}/fixed-departures', [TrekDepartureController::class, 'store']);
-        Route::patch('treks/{trekId}/fixed-departures/{departureId}', [TrekDepartureController::class, 'update']);
-        Route::delete('treks/{trekId}/fixed-departures/{departureId}', [TrekDepartureController::class, 'destroy']);
-
-        Route::get('package-categories', [PackageCategoryController::class, 'getCategories']);
-        Route::post('package-categories', [PackageCategoryController::class, 'saveCategory']);
-        Route::patch('package-categories/{id}/toggle-active', [PackageCategoryController::class, 'toggleActive']);
-        Route::delete('package-categories/{id}/delete', [PackageCategoryController::class, 'delete']);
-
-        // destinations
+        // Destinations
         Route::get('destinations', [DestinationController::class, 'getDestinations']);
         Route::post('destinations', [DestinationController::class, 'saveDestination']);
         Route::get('destinations/{id}', [DestinationController::class, 'show']);
         Route::patch('destinations/{id}/update', [DestinationController::class, 'updateDestination']);
-
+        Route::delete('destinations/{id}/delete', [DestinationController::class, 'delete']);
+        Route::delete('destinations/{id}', [DestinationController::class, 'delete']);
         Route::post('destinations/{destinationId}/save-image', [DestinationImageController::class, 'saveImage']);
         Route::post('destinations/{destinationId}/use-image', [DestinationImageController::class, 'useImage']);
-        Route::delete('destinations/{id}/delete', [DestinationController::class, 'delete']);
 
-        Route::get('blogs', [BlogController::class, 'index']);
-        Route::post('blogs', [BlogController::class, 'store']);
-        Route::get('blogs/{id}', [BlogController::class, 'show']);
-        Route::patch('blogs/{id}/update', [BlogController::class, 'update']);
-        Route::delete('blogs/{id}/delete', [BlogController::class, 'delete']);
-        Route::patch('blogs/{id}/toggle-active', [BlogController::class, 'toggleActive']);
-        Route::patch('blogs/{id}/toggle-publish', [BlogController::class, 'togglePublish']);
+        // Experiences
+        Route::get('experiences', [ExperienceController::class, 'index']);
+        Route::post('experiences', [ExperienceController::class, 'store']);
+        Route::get('experiences/{id}', [ExperienceController::class, 'show']);
+        Route::patch('experiences/{id}', [ExperienceController::class, 'update']);
+        Route::delete('experiences/{id}/delete', [ExperienceController::class, 'destroy']);
+        Route::delete('experiences/{id}', [ExperienceController::class, 'destroy']);
+        Route::patch('experiences/{id}/toggle-active', [ExperienceController::class, 'toggleActive']);
 
-        Route::post('blogs/{blogId}/save-image', [BlogImageController::class, 'saveImage']);
-        Route::post('blogs/{blogId}/use-image', [BlogImageController::class, 'useImage']);
+        // Travel Months
+        Route::get('travel-months', [TravelMonthController::class, 'index']);
+        Route::get('travel-months/{id}', [TravelMonthController::class, 'show']);
+        Route::patch('travel-months/{id}', [TravelMonthController::class, 'update']);
+        Route::patch('travel-months/{id}/toggle-active', [TravelMonthController::class, 'toggleActive']);
 
-        Route::get('blog-categories', [BlogCategoryController::class, 'getCategories']);
-        Route::post('blog-categories', [BlogCategoryController::class, 'saveCategory']);
-        Route::get('blog-categories/{id}', [BlogCategoryController::class, 'show']);
-        Route::patch('blog-categories/{id}/toggle-active', [BlogCategoryController::class, 'toggleActive']);
-        Route::delete('blog-categories/{id}/delete', [BlogCategoryController::class, 'delete']);
-
-
-        Route::get('galleries', [GalleryController::class, 'index']);
-        Route::post('gallery-upload', [GalleryController::class, 'uploadImage']);
-
-        Route::get('galleries/{id}', [GalleryController::class, 'show']);
-        Route::delete('galleries/{id}/delete', [GalleryController::class, 'delete']);
-
+        // Guides
         Route::get('guides', [GuideController::class, 'index']);
         Route::get('guides/{id}', [GuideController::class, 'show']);
-        Route::delete('guides/{id}/delete', [GuideController::class, 'deleteGuide']);
         Route::post('guides', [GuideController::class, 'storeUpdate']);
         Route::patch('guides/{id}/bio', [GuideController::class, 'updateBio']);
-
+        Route::delete('guides/{id}/delete', [GuideController::class, 'deleteGuide']);
+        Route::delete('guides/{id}', [GuideController::class, 'deleteGuide']);
         Route::post('guides/{id}/review', [GuideController::class, 'guideReview']);
         Route::post('guides/{id}/trip', [GuideController::class, 'guideTrip']);
 
-        //  banners
+        // Articles & Sections
+        Route::get('articles', [ArticleController::class, 'index']);
+        Route::post('articles', [ArticleController::class, 'store']);
+        Route::get('articles/{id}', [ArticleController::class, 'show']);
+        Route::patch('articles/{id}', [ArticleController::class, 'update']);
+        Route::delete('articles/{id}/delete', [ArticleController::class, 'delete']);
+        Route::delete('articles/{id}', [ArticleController::class, 'delete']);
+        Route::patch('articles/{id}/toggle-active', [ArticleController::class, 'toggleActive']);
+        Route::patch('articles/{id}/toggle-publish', [ArticleController::class, 'togglePublish']);
+        Route::post('articles/{id}/sections', [ArticleController::class, 'storeSection']);
+        Route::delete('articles/{id}/sections/{sectionId}', [ArticleController::class, 'deleteSection']);
+        Route::post('articles/{id}/journeys', [ArticleController::class, 'syncJourneys']);
 
-        Route::get('banners', [BannerController::class, 'index']);
-        Route::get('banners/{id}', [BannerController::class, 'show']);
-        Route::post('banners/{bannerId}/save-image', [BannerImageController::class, 'saveImage']);
-        Route::post('banners/{bannerId}/use-image', [BannerImageController::class, 'useImage']);
+        // Article Categories
+        Route::get('article-categories', [ArticleCategoryController::class, 'index']);
+        Route::post('article-categories', [ArticleCategoryController::class, 'store']);
+        Route::get('article-categories/{id}', [ArticleCategoryController::class, 'show']);
+        Route::patch('article-categories/{id}', [ArticleCategoryController::class, 'update']);
+        Route::patch('article-categories/{id}/toggle-active', [ArticleCategoryController::class, 'toggleActive']);
+        Route::delete('article-categories/{id}/delete', [ArticleCategoryController::class, 'delete']);
+        Route::delete('article-categories/{id}', [ArticleCategoryController::class, 'delete']);
 
-        Route::post('banners', [BannerController::class, 'storeUpdate']);
-        Route::patch('banners/{id}/toggle-active', [BannerController::class, 'toggleActive']);
-        Route::delete('banners/{id}/delete', [BannerController::class, 'deleteBanner']);
+        // Traveler Stories
+        Route::get('traveler-stories', [TravelerStoryController::class, 'index']);
+        Route::post('traveler-stories', [TravelerStoryController::class, 'store']);
+        Route::get('traveler-stories/{id}', [TravelerStoryController::class, 'show']);
+        Route::patch('traveler-stories/{id}', [TravelerStoryController::class, 'update']);
+        Route::delete('traveler-stories/{id}/delete', [TravelerStoryController::class, 'destroy']);
+        Route::delete('traveler-stories/{id}', [TravelerStoryController::class, 'destroy']);
+        Route::patch('traveler-stories/{id}/toggle-active', [TravelerStoryController::class, 'toggleActive']);
+        Route::patch('traveler-stories/{id}/toggle-publish', [TravelerStoryController::class, 'togglePublish']);
 
-        Route::get('settings', [SettingController::class, 'index']);
-        Route::post('settings', [SettingController::class, 'storeUpdate']);
-        Route::get('settings/{id}', [SettingController::class, 'show']);
-        Route::delete('settings/{id}/delete', [SettingController::class, 'deleteSetting']);
-
-        Route::get('pages', [PageController::class, 'index']);
-        Route::get('pages/{id}', [PageController::class, 'show']);
-        Route::post('pages', [PageController::class, 'storeUpdate']);
-        Route::patch('pages/{id}/toggle-active', [PageController::class, 'toggleActive']);
-        Route::delete('pages/{id}/delete', [PageController::class, 'pageDelete']);
-
-        Route::get('faqs', [FaqController::class, 'index']);
-        Route::post('faqs', [FaqController::class, 'storeUpdate']);
-        Route::get('faqs/{id}', [FaqController::class, 'show']);
-        Route::delete('faqs/{id}/delete', [FaqController::class, 'delete']);
-
+        // Inquiries
         Route::get('inquiries', [InquiryController::class, 'index']);
         Route::post('inquiries', [InquiryController::class, 'storeUpdate']);
         Route::get('inquiries/{id}', [InquiryController::class, 'show']);
+        Route::patch('inquiries/{id}', [InquiryController::class, 'update']);
+        Route::patch('inquiries/{id}/status', [InquiryController::class, 'updateStatus']);
         Route::delete('inquiries/{id}/delete', [InquiryController::class, 'delete']);
+        Route::delete('inquiries/{id}', [InquiryController::class, 'destroy']);
 
-        Route::get('customers', [CustomerController::class, 'index']);
-        Route::post('customers', [CustomerController::class, 'storeUpdate']);
-        Route::get('customers/{id}', [CustomerController::class, 'show']);
-        Route::delete('customers/{id}/delete', [CustomerController::class, 'delete']);
+        // Planner Submissions
+        Route::get('planner-submissions', [PlannerSubmissionController::class, 'index']);
+        Route::get('planner-submissions/{id}', [PlannerSubmissionController::class, 'show']);
+        Route::patch('planner-submissions/{id}', [PlannerSubmissionController::class, 'update']);
+        Route::patch('planner-submissions/{id}/status', [PlannerSubmissionController::class, 'updateStatus']);
+        Route::delete('planner-submissions/{id}/delete', [PlannerSubmissionController::class, 'destroy']);
+        Route::delete('planner-submissions/{id}', [PlannerSubmissionController::class, 'destroy']);
 
-        Route::get('featured-packages', [FeaturedPackageController::class, 'index']);
-        Route::post('featured-packages', [FeaturedPackageController::class, 'storeUpdate']);
-        Route::get('featured-packages/{id}', [FeaturedPackageController::class, 'show']);
-        Route::patch('featured-packages/{id}/toggle-active', [FeaturedPackageController::class, 'toggleActive']);
-        Route::delete('featured-packages/{id}/delete', [FeaturedPackageController::class, 'delete']);
+        // Newsletter Subscriptions
+        Route::get('newsletter-subscriptions', [NewsletterSubscriptionController::class, 'index']);
+        Route::post('newsletter-subscriptions', [NewsletterSubscriptionController::class, 'store']);
+        Route::get('newsletter-subscriptions/{id}', [NewsletterSubscriptionController::class, 'show']);
+        Route::patch('newsletter-subscriptions/{id}/toggle-subscription', [NewsletterSubscriptionController::class, 'toggleSubscription']);
+        Route::delete('newsletter-subscriptions/{id}/delete', [NewsletterSubscriptionController::class, 'destroy']);
+        Route::delete('newsletter-subscriptions/{id}', [NewsletterSubscriptionController::class, 'destroy']);
 
-        Route::patch('media-usages/{id}/update', [MediaUsageController::class, 'updateItem']);
-        Route::delete('media-usages/{id}/delete', [MediaUsageController::class, 'delete']);
+        // Website Pages & Sections
+        Route::get('website-pages', [WebsitePageController::class, 'index']);
+        Route::post('website-pages', [WebsitePageController::class, 'store']);
+        Route::get('website-pages/{id}', [WebsitePageController::class, 'show']);
+        Route::patch('website-pages/{id}', [WebsitePageController::class, 'update']);
+        Route::delete('website-pages/{id}/delete', [WebsitePageController::class, 'destroy']);
+        Route::delete('website-pages/{id}', [WebsitePageController::class, 'destroy']);
+        Route::patch('website-pages/{id}/toggle-active', [WebsitePageController::class, 'toggleActive']);
+        Route::patch('website-pages/{id}/toggle-publish', [WebsitePageController::class, 'togglePublish']);
+        Route::post('website-pages/{id}/sections', [WebsitePageController::class, 'storeSection']);
+        Route::delete('website-pages/{id}/sections/{sectionId}', [WebsitePageController::class, 'deleteSection']);
 
-        Route::get('bookings', [BookingController::class, 'index']);
-        Route::post('bookings', [BookingController::class, 'storeUpdate']);
-        Route::get('bookings/{id}', [BookingController::class, 'show']);
-        Route::delete('bookings/{id}/delete', [BookingController::class, 'delete']);
+        // Website Sections (Global / Homepage)
+        Route::get('website-sections', [WebsiteSectionController::class, 'index']);
+        Route::post('website-sections', [WebsiteSectionController::class, 'store']);
+        Route::get('website-sections/{id}', [WebsiteSectionController::class, 'show']);
+        Route::patch('website-sections/{id}', [WebsiteSectionController::class, 'update']);
+        Route::delete('website-sections/{id}/delete', [WebsiteSectionController::class, 'destroy']);
+        Route::delete('website-sections/{id}', [WebsiteSectionController::class, 'destroy']);
+        Route::patch('website-sections/{id}/toggle-active', [WebsiteSectionController::class, 'toggleActive']);
+
+        // Media Assets (Canonical Media Manager)
+        Route::get('media-assets', [MediaAssetController::class, 'index']);
+        Route::post('media-assets', [MediaAssetController::class, 'upload']);
+        Route::post('media-assets/upload', [MediaAssetController::class, 'upload']);
+        Route::get('media-assets/{id}', [MediaAssetController::class, 'show']);
+        Route::patch('media-assets/{id}', [MediaAssetController::class, 'update']);
+        Route::delete('media-assets/{id}/delete', [MediaAssetController::class, 'destroy']);
+        Route::delete('media-assets/{id}', [MediaAssetController::class, 'destroy']);
+        Route::post('media-assets/{id}/attach', [MediaAssetController::class, 'attach']);
+        Route::delete('media-attachments/{id}', [MediaAssetController::class, 'detach']);
+
+        // FAQs
+        Route::get('faqs', [FaqController::class, 'index']);
+        Route::get('faqs/categories', [FaqController::class, 'categories']);
+        Route::post('faqs', [FaqController::class, 'storeUpdate']);
+        Route::get('faqs/{id}', [FaqController::class, 'show']);
+        Route::patch('faqs/{id}', [FaqController::class, 'update']);
+        Route::patch('faqs/{id}/toggle-active', [FaqController::class, 'toggleActive']);
+        Route::delete('faqs/{id}/delete', [FaqController::class, 'delete']);
+        Route::delete('faqs/{id}', [FaqController::class, 'destroy']);
+
+        // Website Settings
+        Route::get('settings', [SettingController::class, 'index']);
+        Route::post('settings', [SettingController::class, 'storeUpdate']);
+        Route::get('settings/{key}', [SettingController::class, 'show']);
     });
 });

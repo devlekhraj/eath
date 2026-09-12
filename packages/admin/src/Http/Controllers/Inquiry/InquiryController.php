@@ -2,159 +2,149 @@
 
 namespace Admin\Http\Controllers\Inquiry;
 
-
-use Admin\Models\Page;
+use App\Http\Controllers\Controller;
+use Admin\Models\Inquiry;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Http\Controllers\Controller;
-use Admin\Models\Faq;
-use Admin\Models\Inquiry;
-use Admin\Models\Setting;
 
 class InquiryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Logic to retrieve travel packages
-        $inquiry = Inquiry::orderBy('created_at','desc')->get();
+        $query = Inquiry::query()
+            ->with([
+                'journey:id,name,slug',
+                'departure:id,code,start_date,end_date',
+            ])
+            ->orderBy('id', 'desc');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('inquiry_type')) {
+            $query->where('inquiry_type', $request->input('inquiry_type'));
+        }
+
+        if ($request->filled('journey_id')) {
+            $query->where('journey_id', $request->input('journey_id'));
+        }
+
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+            $query->where(function ($q) use ($search) {
+                $q->where('reference_code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('country', 'like', "%{$search}%")
+                  ->orWhere('subject', 'like', "%{$search}%")
+                  ->orWhere('message', 'like', "%{$search}%");
+            });
+        }
+
+        $inquiries = $query->get();
 
         return response()->json([
             'success' => true,
-            'data' => $inquiry
-        ], 200);
+            'data' => $inquiries,
+        ]);
     }
-    public function show(Request $request, $id)
+
+    public function show($id)
     {
-        // Retrieve the travel package by ID or fail with 404
-        $page = Inquiry::findOrFail($id);
+        $inquiry = Inquiry::with([
+            'journey:id,name,slug',
+            'departure:id,code,start_date,end_date',
+        ])->findOrFail($id);
 
         return response()->json([
             'success' => true,
-            'data' => $page,
-            'message' => 'Page retrieved.'
-        ], 200);
+            'data' => $inquiry,
+        ]);
     }
-    public function delete(Request $request, $id)
+
+    public function update(Request $request, $id)
     {
-        // Retrieve the travel package by ID or fail with 404
+        $inquiry = Inquiry::findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => ['sometimes', 'required', Rule::in(Inquiry::STATUSES)],
+            'subject' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $inquiry->update($validated);
+        $inquiry->load(['journey:id,name,slug', 'departure:id,code,start_date,end_date']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Inquiry updated successfully.',
+            'data' => $inquiry,
+        ]);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $inquiry = Inquiry::findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(Inquiry::STATUSES)],
+        ]);
+
+        $inquiry->status = $validated['status'];
+        $inquiry->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => "Inquiry status changed to {$inquiry->status}.",
+            'status' => $inquiry->status,
+        ]);
+    }
+
+    public function destroy($id)
+    {
         $inquiry = Inquiry::findOrFail($id);
         $inquiry->delete();
 
         return response()->json([
             'success' => true,
-            'message' => $inquiry->title.' deleted.'
-        ], 200);
-
+            'message' => 'Inquiry deleted successfully.',
+        ]);
     }
 
-
+    public function delete($id)
+    {
+        return $this->destroy($id);
+    }
 
     public function storeUpdate(Request $request)
     {
-        $isUpdate = $request->has('id');
-
-        $rules = [
-            'id'                => 'nullable|exists:faqs,id',
-            'question'             => 'required|string',
-            'answer'             => 'required|string',
-        ];
-
-        $validated = $request->validate($rules);
-
-
-      
-        if ($isUpdate) {
-            $inquiry = Inquiry::findOrFail($request->id);
-            $inquiry->update($validated);
-            $message = 'Setting updated successfully.';
-        } else {
-
-            $inquiry = Inquiry::create($validated);
-            $message = 'Setting created successfully.';
+        if ($request->filled('id')) {
+            return $this->update($request, $request->input('id'));
         }
-     
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'country' => ['nullable', 'string', 'max:100'],
+            'subject' => ['nullable', 'string', 'max:255'],
+            'message' => ['required', 'string'],
+            'inquiry_type' => ['nullable', Rule::in(Inquiry::TYPES)],
+            'journey_id' => ['nullable', 'integer', 'exists:journeys,id'],
+            'departure_id' => ['nullable', 'integer'],
+        ]);
+
+        $validated['reference_code'] = 'INQ-' . strtoupper(bin2hex(random_bytes(4)));
+        $validated['status'] = Inquiry::STATUS_NEW;
+
+        $inquiry = Inquiry::create($validated);
+        $inquiry->load(['journey:id,name,slug', 'departure:id,code,start_date,end_date']);
+
         return response()->json([
-            'message' => $message,
-            'Setting'    => $inquiry,
-        ], $isUpdate ? 200 : 201);
-    }
-
-
-
-
-
-
-
-
-
-    // public function saveCategory(Request $request)
-    // {
-    //     $request->validate([
-    //         'name'        => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'parent_id'   => 'nullable|exists:package_categories,id',
-    //         'seq_no' => 'nullable|integer',
-    //         'id'          => 'nullable|exists:package_categories,id',
-    //     ]);
-
-    //     $data = $request->only(['name', 'description', 'parent_id']);
-
-    //     $category = PackageCategory::updateOrCreate(
-    //         ['id' => $request->id],
-    //         $data
-    //     );
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'data'    => $category,
-    //         'message' => $request->id ? 'Category updated successfully.' : 'Category created successfully.'
-    //     ]);
-    // }
-
-    // public function getCategories(Request $request)
-    // {
-    //     $query = PackageCategory::with(['parent', 'children']);
-
-    //     if ($request->query('type') === 'parent') {
-    //         $query->whereNull('parent_id');
-    //     }
-
-    //     $categories = $query->get();
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'data'    => PackageCategoryResource::collection($categories),
-    //     ]);
-    // }
-
-    public function toggleActive($id, Request $request)
-    {
-        $page = Page::findOrFail($id);
-        $isActive = $request->boolean('is_active');
-
-        $page->is_active = $isActive ? 1 : 0;
-        $page->save();
-
-        $message = $isActive ? 'page is now active.' : 'page is now inactive.';
-
-        return response()->json(['success' => true, 'message' => $message]);
-    }
-
-    public function togglePublish($id, Request $request)
-    {
-        $page = Page::findOrFail($id);
-        $isPublished = $request->boolean('is_published');
-
-        $page->is_published = $isPublished ? 1 : 0;
-
-        if ($isPublished && is_null($page->published_at)) {
-            $page->published_at = now();  // Set current datetime if null
-        }
-
-        $page->save();
-
-        $message = $isPublished ? 'page is published now.' : 'page is unpublished now.';
-
-        return response()->json(['success' => true, 'message' => $message]);
+            'success' => true,
+            'message' => 'Inquiry created successfully.',
+            'data' => $inquiry,
+        ], 201);
     }
 }

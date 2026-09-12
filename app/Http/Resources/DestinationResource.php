@@ -1,10 +1,7 @@
 <?php
 
-// App\Http\Resources\PackageCategoryResource.php
-
 namespace App\Http\Resources;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DestinationResource extends JsonResource
@@ -15,53 +12,26 @@ class DestinationResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'region' => $this->region,
-            'district' => $this->district,
-            'overview' => $this->overview,
-            'highlights' => $this->highlights,
+            'summary' => $this->summary,
             'description' => $this->description,
-            'best_season' => $this->best_season,
-            'how_to_reach' => $this->how_to_reach,
+            'region_label' => $this->region_label,
+            'region' => $this->region_label,
+            'gateway' => $this->gateway,
+            'trailheads' => $this->trailheads,
             'permits' => $this->permits,
-            'weather_notes' => $this->weather_notes,
+            'pacing_note' => $this->pacing_note,
+            'sort_order' => $this->sort_order,
+            'is_featured' => (bool) $this->is_featured,
+            'is_active' => (bool) $this->is_active,
             'meta_title' => $this->meta_title,
-            'meta_keywords' => $this->meta_keywords,
             'meta_description' => $this->meta_description,
-            'canonical_url' => $this->canonical_url,
-            'is_featured' => $this->is_featured,
-            'is_active' => $this->is_active,
-            'treks_count' => $this->treks_count ?? 0,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'images' => $this->whenLoaded('images', function () {
-                return $this->images->map(function ($usage) {
-                    $cdnUrl = rtrim(config('filesystems.disks.cdn.url', env('CDN_URL')), '/');
-                    return [
-                        'id' => $usage->id,
-                        'url' => $usage->gallery->url,
-                        'alt_text' => $usage->alt_text,
-                        'caption' => $usage->caption,
-                        'description' => $usage->description,
-                        'height' => $usage->gallery->height,
-                        'width' => $usage->gallery->width,
-                        'size' => $usage->gallery->size,
-                        'variants' => $usage->gallery->variants->map(function ($variant) use ($cdnUrl) {
-                            $url = $cdnUrl !== ''
-                                ? $cdnUrl . '/' . ltrim($variant->file_path, '/')
-                                : Storage::disk('cdn')->url($variant->file_path);
-                            return [
-                                // 'variant' => $variant->variant,
-                                // 'format' => $variant->format,
-                                'url' => $url,
-                                // 'file_path' => $variant->file_path,
-                                // 'size' => $variant->size,
-                                'width' => $variant->width,
-                                'height' => $variant->height,
-                            ];
-                        }),
-                    ];
-                });
-            }),
+            'hero_image_id' => $this->hero_image_id,
+            'card_image_id' => $this->card_image_id,
+            'journeys_count' => $this->journeys_count ?? ($this->relationLoaded('journeys') ? $this->journeys->count() : 0),
+            'treks_count' => $this->journeys_count ?? ($this->relationLoaded('journeys') ? $this->journeys->count() : 0),
+            'journeys' => $this->relationLoaded('journeys') ? $this->journeys : [],
+            'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }

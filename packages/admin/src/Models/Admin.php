@@ -2,16 +2,27 @@
 
 namespace Admin\Models;
 
-use Admin\Models\GuideReview;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // 👈 extend this, not Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends Authenticatable implements JWTSubject
+class Admin extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
+    public const STATUS_SUSPENDED = 'suspended';
+    public const STATUS_PENDING = 'pending';
+
+    public const STATUSES = [
+        self::STATUS_ACTIVE,
+        self::STATUS_INACTIVE,
+        self::STATUS_SUSPENDED,
+        self::STATUS_PENDING,
+    ];
 
     protected $fillable = [
         'fname',
@@ -83,21 +94,4 @@ class Admin extends Authenticatable implements JWTSubject
         return $result;
     }
 
-    /**
-     * JWT methods
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
-    public function guideReviews()
-    {
-        return $this->morphMany(GuideReview::class, 'reviewer');
-    }
 }

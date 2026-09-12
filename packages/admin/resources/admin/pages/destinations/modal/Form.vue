@@ -1,26 +1,96 @@
 <template>
-    <v-card>
-        <v-card-title class="d-flex align-center justify-space-between py-0">
-            <span>Destination Form</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+    <v-card class="rounded-0 elevation-0">
+        <v-card-title class="d-flex align-center justify-space-between py-3">
+            <span class="text-subtitle-1 font-weight-bold text-uppercase">{{ form.id ? 'Edit Destination' : 'Add Destination' }}</span>
+            <v-btn icon variant="text" size="small" aria-label="Close dialog" class="rounded-0" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
         <v-divider />
 
-        <v-card-text>
-            <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation>
-                <v-row>
-                    <v-col cols="12" md="12">
-                        <v-text-field v-model="form.name" label="Category Name" :rules="[rules.required]" :error-messages="serverErrors.name" required />
+        <v-card-text class="pa-4">
+            <v-form ref="formRef" @submit.prevent="submitForm" lazy-validation>
+                <v-row dense>
+                    <v-col cols="12" md="8">
+                        <v-text-field
+                            v-model="form.name"
+                            label="Destination Name"
+                            :rules="[rules.required]"
+                            :error-messages="serverErrors.name"
+                            class="rounded-0"
+                            required
+                        />
+                    </v-col>
+
+                    <v-col cols="12" md="4">
+                        <v-text-field
+                            v-model="form.slug"
+                            label="URL Slug (optional)"
+                            :error-messages="serverErrors.slug"
+                            class="rounded-0"
+                        />
+                    </v-col>
+
+                    <v-col cols="12" md="6">
+                        <v-text-field
+                            v-model="form.region_label"
+                            label="Region Label (e.g. Khumbu, Annapurna)"
+                            :error-messages="serverErrors.region_label"
+                            class="rounded-0"
+                        />
+                    </v-col>
+
+                    <v-col cols="12" md="6">
+                        <v-text-field
+                            v-model="form.sort_order"
+                            label="Sort Order"
+                            type="number"
+                            min="0"
+                            class="rounded-0"
+                        />
+                    </v-col>
+
+                    <v-col cols="12">
+                        <v-textarea
+                            v-model="form.summary"
+                            label="Summary / Introduction"
+                            rows="3"
+                            auto-grow
+                            :error-messages="serverErrors.summary"
+                            class="rounded-0"
+                        />
+                    </v-col>
+
+                    <v-col cols="12" md="6">
+                        <v-switch
+                            v-model="form.is_active"
+                            label="Active"
+                            color="primary"
+                            inset
+                            class="rounded-0"
+                        />
+                    </v-col>
+
+                    <v-col cols="12" md="6">
+                        <v-switch
+                            v-model="form.is_featured"
+                            label="Featured Destination"
+                            color="primary"
+                            inset
+                            class="rounded-0"
+                        />
                     </v-col>
                 </v-row>
             </v-form>
         </v-card-text>
 
-        <v-card-actions class="justify-space-around">
-            
-            <v-btn color="primary" :loading="loading" :disabled="loading" @click="submitForm">Save</v-btn>
+        <v-divider />
+        <v-card-actions class="justify-end pa-3">
+            <v-btn variant="text" class="rounded-0" @click="handleCancel">Cancel</v-btn>
+            <v-btn color="primary" variant="flat" class="px-6 rounded-0 font-weight-medium" :loading="loading" :disabled="loading" @click="submitForm">
+                <v-icon start>mdi-check</v-icon>
+                {{ form.id ? 'Save Changes' : 'Create Destination' }}
+            </v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -36,18 +106,20 @@ const formRef = ref(null)
 const loading = ref(false)
 
 const form = reactive({
+    id: null,
     name: '',
-    parent_id: null,
-    description: '',
-    is_active: false,
+    slug: '',
+    summary: '',
+    region_label: '',
     sort_order: 0,
+    is_active: true,
+    is_featured: false,
 })
 
-const parentOptions = ref([])
 const serverErrors = reactive({})
 
 const rules = {
-    required: v => !!v || 'This field is required',
+    required: (v) => !!v || 'This field is required',
 }
 
 const props = defineProps({
@@ -58,28 +130,19 @@ const props = defineProps({
 })
 
 onMounted(() => {
-    fetchParentCategories()
-
     if (props.item?.id) {
         Object.assign(form, {
             id: props.item.id,
             name: props.item.name || '',
-            parent_id: props.item.parent_id || null,
-            description: props.item.description || '',
-            is_active: props.item.is_active ?? true,
+            slug: props.item.slug || '',
+            summary: props.item.summary || '',
+            region_label: props.item.region_label || props.item.region || '',
             sort_order: props.item.sort_order || 0,
+            is_active: props.item.is_active ?? true,
+            is_featured: props.item.is_featured ?? false,
         })
     }
 })
-
-async function fetchParentCategories() {
-    try {
-        const resp = await http.get('admin/package-categories?type=parent')
-        parentOptions.value = resp.data || []
-    } catch (error) {
-        console.error('Failed to load parent categories', error)
-    }
-}
 
 function handleCancel() {
     formRef.value?.reset()
@@ -87,29 +150,25 @@ function handleCancel() {
 }
 
 async function submitForm() {
-    // Clear previous server errors
-    Object.keys(serverErrors).forEach(key => (serverErrors[key] = null))
+    Object.keys(serverErrors).forEach((key) => (serverErrors[key] = null))
 
     const { valid } = await formRef.value.validate()
     if (!valid) return
 
-    handleSubmit()
-}
-
-async function handleSubmit() {
     try {
-        form.sort_order = parseInt(form.sort_order) || 0
-
         loading.value = true
+        form.sort_order = parseInt(form.sort_order, 10) || 0
+
         const resp = await http.post('admin/destinations', form)
 
-        showSuccess(resp.message || 'Destination created successfully')
+        showSuccess(resp.data?.message ?? resp.message ?? 'Destination saved successfully')
+        emit('saved')
         emit('close')
     } catch (error) {
         if (error.response?.status === 422) {
             Object.assign(serverErrors, error.response.data.errors || {})
         } else {
-            showError(error?.response?.data?.message || 'Failed to update status')
+            showError(error?.response?.data?.message || 'Failed to save destination')
         }
         console.error('Destination creation failed', error)
     } finally {
@@ -117,5 +176,3 @@ async function handleSubmit() {
     }
 }
 </script>
-
-<style scoped></style>

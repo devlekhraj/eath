@@ -4,7 +4,7 @@ namespace Admin\Http\Controllers\Media;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Admin\Models\GalleryUsage;
+use Admin\Models\MediaAttachment;
 
 class MediaUsageController extends Controller
 {
@@ -17,7 +17,7 @@ class MediaUsageController extends Controller
         ]);
 
         try {
-            $usage = GalleryUsage::findOrFail($id);
+            $usage = MediaAttachment::findOrFail($id);
             $usage->alt_text = $request->input('alt_text', $usage->alt_text);
             $usage->caption = $request->input('caption', $usage->caption);
             $usage->description = $request->input('description', $usage->description);
@@ -39,12 +39,12 @@ class MediaUsageController extends Controller
     {
 
         try {
-            $usage = GalleryUsage::findOrFail($id);
+            $usage = MediaAttachment::findOrFail($id);
             $usage->delete();
     
             return response()->json([
                 'success' => true,
-                'message' => $usage->title . ' deleted.'
+                'message' => 'Media usage deleted.'
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([

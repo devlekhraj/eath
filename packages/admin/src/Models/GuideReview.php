@@ -8,24 +8,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class GuideReview extends Model
 {
     use SoftDeletes;
-    protected $guarded = [];
-    protected $casts = [
-        "is_approved" => "boolean",
+
+    protected $fillable = [
+        'guide_id',
+        'reviewer_name',
+        'reviewer_country',
+        'rating',
+        'title',
+        'body',
+        'reviewed_on',
+        'is_featured',
+        'is_published',
+        'sort_order',
     ];
 
-    /**
-     * Get the guide that this review belongs to.
-     */
+    protected $casts = [
+        'rating' => 'integer',
+        'reviewed_on' => 'date',
+        'is_featured' => 'boolean',
+        'is_published' => 'boolean',
+    ];
+
     public function guide()
     {
         return $this->belongsTo(Guide::class);
-    }
-
-    /**
-     * Get the reviewer (user, admin, etc.) that wrote this review.
-     */
-    public function reviewer()
-    {
-        return $this->morphTo();
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-use Admin\Http\Controllers\Gallery\GalleryController;
+use Admin\Http\Controllers\Media\MediaAssetController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::prefix('admin')->group(function () {
     Route::get('/', fn () => view('admin'));
@@ -13,4 +12,4 @@ Route::prefix('auth')->group(function () {
     Route::get('/{any}', fn () => view('admin'))->where('any', '.*');
 });
 
-Route::get('image/{filename}', [GalleryController::class,'getImage'])->name('image.view');
+Route::get('image/{filename}', [MediaAssetController::class, 'getImage'])->name('image.view');

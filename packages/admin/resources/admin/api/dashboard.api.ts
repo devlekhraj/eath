@@ -15,6 +15,16 @@ export interface DashboardMetrics {
   total_guides: number
   total_blogs: number
   total_customers: number
+  total_journeys?: number
+  published_journeys?: number
+  active_journeys?: number
+  active_destinations?: number
+  total_experiences?: number
+  total_articles?: number
+  published_articles?: number
+  total_planner_submissions?: number
+  new_planner_submissions?: number
+  newsletter_subscribers?: number
 }
 
 export interface RecentBooking {
@@ -47,12 +57,16 @@ export interface RecentInquiry {
 
 export interface UpcomingDeparture {
   id: number
+  journey_name?: string
+  journey_id?: number
   trek_name: string
   trek_id: number
   start_date: string | null
   end_date: string | null
   cost: string | number
+  price_minor?: string | number
   available_seats: number
+  total_seats?: number
   booked_seats: number
   status: string
 }
@@ -62,7 +76,9 @@ export interface DestinationSummary {
   name: string
   slug: string
   packages_count: number
+  journeys_count?: number
   is_featured: boolean
+  is_active?: boolean
 }
 
 export interface MonthlyTrend {

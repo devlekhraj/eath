@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
 	{
 		path: '/admin',
 		component: () => import('@/layout/AuthLayout.vue'),
@@ -43,190 +43,68 @@ const routes = [
 					subtitle: 'Overview of key metrics',
 				},
 			},
-			{
-				path: 'banners',
-				name: 'adminBannerPage',
-				component: () => import('@pages/banners/BannerPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Banner Management',
-					subtitle: 'Manage homepage banners and display order',
-				},
-			},
-			{
-				path: 'banners/:id',
-				name: 'adminBannerDetailPage',
-				component: () => import('@pages/banners/BannerDetailPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Edit Banner',
-					subtitle: 'Modify banner content, visibility, and settings',
-				},
-			},
 
+			// Journeys (table: journeys)
 			{
-				path: 'blogs',
-				name: 'adminBlogPage',
-				component: () => import('@pages/blogs/BlogPage.vue'),
+				path: 'journeys',
+				name: 'adminJourneyPage',
+				component: () => import('@pages/journeys/JourneyPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'All Blogs',
-					subtitle: 'Manage your blog articles',
+					title: 'Journeys',
+					subtitle: 'Manage all website journeys',
 				},
 			},
 			{
-				path: 'blog-detail',
-				name: 'adminBlogDetailPage',
-				component: () => import('@pages/blogs/BlogDetailPage.vue'),
+				path: 'journeys/:id',
+				name: 'adminJourneyDetailPage',
+				component: () => import('@pages/journeys/JourneyDetailPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Blog Detail',
-					subtitle: 'View and edit blog post',
-				},
-			},
-			// {
-			// 	path: 'blog-form',
-			// 	name: 'adminBlogForm',
-			// 	component: () => import('@pages/blogs/BlogForm.vue'),
-			// 	meta: {
-			// 		requireAuth: true,
-			// 		title: 'Create Blog',
-			// 		subtitle: 'Write and publish a new blog post',
-			// 	},
-			// },
-			{
-				path: 'blog-categories',
-				name: 'adminBlogCategorypage',
-				component: () => import('@pages/blogs/BlogCategoryPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Blog Categories',
-					subtitle: 'Organize your blog content',
+					title: 'Journey Detail',
+					subtitle: 'Manage journey content, pricing, itinerary, and media',
 				},
 			},
 			{
-				path: 'bookings',
-				name: 'adminBookingPage',
-				component: () => import('@pages/bookings/BookingPage.vue'),
+				path: 'journey-form',
+				name: 'adminJourneyForm',
+				component: () => import('@pages/journeys/JourneyForm.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Manage Bookings',
-					subtitle: 'View and edit travel bookings',
+					title: 'Journey Form',
 				},
 			},
-			{
-				path: 'booking-form',
-				name: 'adminBookingForm',
-				component: () => import('@pages/bookings/BookingForm.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'New Booking',
-					subtitle: 'Create a new travel booking',
-				},
-			},
-			{
-				path: 'customers',
-				name: 'adminCustomerPage',
-				component: () => import('@pages/customers/CustomerPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Customer List',
-					subtitle: 'View and manage all customers',
-				},
-			},
-
-
-			// packages routes
-			{
-				path: 'featured-packages',
-				name: 'adminFeaturedPackagePage',
-				component: () => import('@pages/featured-packages/FeaturedPackagePage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Available Packages',
-					subtitle: 'All the available packages',
-				},
-			},
+			// Legacy journey aliases
 			{
 				path: 'packages',
-				name: 'adminPackagePage',
-				component: () => import('@pages/packages/PackagePage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Available Packages',
-					subtitle: 'All the available packages',
-				},
+				redirect: '/admin/journeys',
 			},
 			{
 				path: 'packages/:id',
-				name: 'adminPackageDetailPage',
-				component: () => import('@pages/packages/PackageDetailPage.vue'),
+				redirect: (to) => `/admin/journeys/${to.params.id}`,
+			},
+
+			// Journey Departures (table: journey_departures)
+			{
+				path: 'departures',
+				name: 'adminDeparturePage',
+				component: () => import('@pages/journey-departures/JourneyDeparturePage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Package Detail',
-					subtitle: 'All the available packages',
+					title: 'Departures',
+					subtitle: 'Manage journey departure dates and availability',
 				},
 			},
 			{
-				path: 'package-form',
-				name: 'adminPackageForm',
-				component: () => import('@pages/packages/PackageForm.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Trek Form',
-					// subtitle: 'Trek Form',
-				},
+				path: 'journey-departures',
+				redirect: '/admin/departures',
 			},
 			{
-				path: 'package-categories',
-				name: 'adminPackageCategoryPage',
-				component: () => import('@pages/packages/PackageCategoryPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Package Categories',
-					subtitle: 'View and manage all customers',
-				},
+				path: 'featured-packages',
+				redirect: '/admin/departures',
 			},
-			{
-				path: 'destinations',
-				name: 'adminDestinationPage',
-				component: () => import('@pages/destinations/DestinationPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Destinations',
-					subtitle: 'View and manage all destinations',
-				},
-			},
-			{
-				path: 'destinations/:id',
-				name: 'admin.destination.detail',
-				component: () => import('@pages/destinations/DestinationDetailPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Destination Detail',
-					subtitle: 'View and manage destination details',
-				},
-			},
-			{
-				path: 'package-lookups',
-				name: 'adminPackageLookupPage',
-				component: () => import('@pages/packages/PackageLookupPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Package Lookup Page',
-					subtitle: 'Lookup with icon',
-				},
-			},
-			{
-				path: 'lookups',
-				name: 'adminLookupPage',
-				component: () => import('@pages/lookups/LookupPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Itinerary Lookup Page',
-					subtitle: 'Itinerary Highlights lookup with icon',
-				},
-			},
+
+			// Guides (table: guides)
 			{
 				path: 'guides',
 				name: 'adminGuidePage',
@@ -247,10 +125,119 @@ const routes = [
 					subtitle: 'Tour & Trekking Guides',
 				},
 			},
+
+			// Destinations (table: destinations)
+			{
+				path: 'destinations',
+				name: 'adminDestinationPage',
+				component: () => import('@pages/destinations/DestinationPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Destinations',
+					subtitle: 'Manage regions, places, and destination pages',
+				},
+			},
+			{
+				path: 'destinations/:id',
+				name: 'admin.destination.detail',
+				component: () => import('@pages/destinations/DestinationDetailPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Destination Detail',
+					subtitle: 'View and manage destination details',
+				},
+			},
+
+			// Experiences (table: experiences)
+			{
+				path: 'experiences',
+				name: 'adminExperiencePage',
+				component: () => import('@pages/experiences/ExperiencePage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Experiences',
+					subtitle: 'Manage journey experience tags and filters',
+				},
+			},
+			{
+				path: 'package-categories',
+				redirect: '/admin/experiences',
+			},
+
+			// Travel Months (table: travel_months)
+			{
+				path: 'travel-months',
+				name: 'adminTravelMonthPage',
+				component: () => import('@pages/travel-months/TravelMonthPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Travel Months',
+					subtitle: 'Manage seasonal trekking windows and conditions',
+				},
+			},
+
+			// Articles (tables: articles, article_categories)
+			{
+				path: 'articles',
+				name: 'adminArticlePage',
+				component: () => import('@pages/articles/ArticlePage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Articles',
+					subtitle: 'Manage website stories, guides, and journal content',
+				},
+			},
+			{
+				path: 'articles/:id',
+				name: 'adminArticleDetailPage',
+				component: () => import('@pages/articles/ArticleDetailPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Article Detail',
+					subtitle: 'View and edit article post',
+				},
+			},
+			{
+				path: 'article-categories',
+				name: 'adminArticleCategoryPage',
+				component: () => import('@pages/articles/ArticleCategoryPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Article Categories',
+					subtitle: 'Organize article content',
+				},
+			},
+			// Legacy article aliases
+			{
+				path: 'blogs',
+				redirect: '/admin/articles',
+			},
+			{
+				path: 'blog-detail',
+				redirect: '/admin/articles',
+			},
+			{
+				path: 'blog-categories',
+				redirect: '/admin/article-categories',
+			},
+
+			// Traveler Stories (table: traveler_stories)
+			{
+				path: 'traveler-stories',
+				name: 'adminTravelerStoryPage',
+				component: () => import('@pages/traveler-stories/TravelerStoryPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Traveler Stories',
+					subtitle: 'Manage traveler experiences, testimonials, and journeys taken',
+				},
+			},
+
+			// Inquiries (table: inquiries)
 			{
 				path: 'inquiries',
 				name: 'adminInquiryPage',
-				component: () => import('@pages/customers/InquiryPage.vue'),
+				component: () => import('@pages/inquiries/InquiryPage.vue'),
 				meta: {
 					requireAuth: true,
 					title: 'Inquiries',
@@ -258,57 +245,140 @@ const routes = [
 				},
 			},
 			{
-				path: 'invoices',
-				name: 'adminInvoicePage',
-				component: () => import('@pages/finance/InvoicePage.vue'),
+				path: 'customers',
+				redirect: '/admin/inquiries',
+			},
+
+			// Planner Submissions (table: planner_submissions)
+			{
+				path: 'planner-submissions',
+				name: 'adminPlannerSubmissionPage',
+				component: () => import('@pages/planner-submissions/PlannerSubmissionPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Invoices',
-					subtitle: 'Track and manage billing',
+					title: 'Planner Submissions',
+					subtitle: 'Review trip planner requests from the website',
 				},
 			},
 			{
-				path: 'reports',
-				name: 'adminReportPage',
-				component: () => import('@pages/finance/ReportPage.vue'),
+				path: 'bookings',
+				redirect: '/admin/planner-submissions',
+			},
+
+			// Newsletter Subscriptions (table: newsletter_subscriptions)
+			{
+				path: 'newsletter-subscriptions',
+				name: 'adminNewsletterSubscriptionPage',
+				component: () => import('@pages/newsletter-subscriptions/NewsletterSubscriptionPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Reports',
-					subtitle: 'Analyze business performance',
+					title: 'Newsletter Subscriptions',
+					subtitle: 'Manage subscriber list and status',
 				},
 			},
 
-			// gallery routes
+			// Website Sections (table: website_sections)
+			{
+				path: 'website-sections',
+				name: 'adminWebsiteSectionPage',
+				component: () => import('@pages/website-sections/WebsiteSectionPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Website Sections',
+					subtitle: 'Manage global sections and homepage content blocks',
+				},
+			},
+			{
+				path: 'website-sections/:id',
+				name: 'adminWebsiteSectionDetailPage',
+				component: () => import('@pages/website-sections/WebsiteSectionDetailPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Edit Website Section',
+					subtitle: 'Modify section content, media, and settings',
+				},
+			},
+			// Legacy section aliases
+			{
+				path: 'banners',
+				redirect: '/admin/website-sections',
+			},
+			{
+				path: 'banners/:id',
+				redirect: (to) => `/admin/website-sections/${to.params.id}`,
+			},
+
+			// Website Pages (table: website_pages)
+			{
+				path: 'website-pages',
+				name: 'adminWebsitePage',
+				component: () => import('@pages/website-pages/WebsitePage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Pages',
+					subtitle: 'Web Pages',
+				},
+			},
+			{
+				path: 'website-pages/:id',
+				name: 'adminWebsitePageDetail',
+				component: () => import('@pages/website-pages/WebsitePageDetail.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Pages',
+					subtitle: 'Web Page Detail',
+				},
+			},
+			{
+				path: 'webpages',
+				redirect: '/admin/website-pages',
+			},
+			{
+				path: 'webpages/:id',
+				redirect: (to) => `/admin/website-pages/${to.params.id}`,
+			},
+
+			// Media Assets (table: media_assets)
+			{
+				path: 'media-assets',
+				name: 'adminMediaAssetPage',
+				component: () => import('@pages/media-assets/MediaAssetPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Media Assets',
+					subtitle: 'Upload and manage media assets, photos, and banners',
+				},
+			},
+			{
+				path: 'media',
+				redirect: '/admin/media-assets',
+			},
 			{
 				path: 'gallery',
-				name: 'adminGalleryPage',
-				component: () => import('@pages/gallery/GalleryPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Gallery',
-					subtitle: 'Manage media gallery',
-				},
+				redirect: '/admin/media-assets',
 			},
+
+			// FAQs (table: faqs)
 			{
-				path: 'gallery-form',
-				name: 'adminGalleryForm',
-				component: () => import('@pages/gallery/GalleryForm.vue'),
+				path: 'faqs',
+				name: 'adminFAQPage',
+				component: () => import('@pages/faqs/FaqPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Gallery Form',
-					subtitle: 'Upload or edit gallery images',
+					title: 'Frequently Asked Questions',
+					subtitle: 'Manage questions, answers, categories, and journey associations',
 				},
 			},
 
-			// settings
+			// Settings (tables: website_settings, admins)
 			{
-				path: 'notifications',
-				name: 'adminNotificationPage',
-				component: () => import('@pages/settings/NotificationPage.vue'),
+				path: 'general-settings',
+				name: 'adminGeneralSettingPage',
+				component: () => import('@pages/settings/GeneralSettingPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Notifications',
-					subtitle: 'Send alerts and messages',
+					title: 'Settings',
+					subtitle: 'Application-wide configurations',
 				},
 			},
 			{
@@ -322,47 +392,17 @@ const routes = [
 				},
 			},
 			{
-				path: 'general-settings',
-				name: 'adminGeneralSettingPage',
-				component: () => import('@pages/settings/GeneralSettingPage.vue'),
+				path: 'notifications',
+				name: 'adminNotificationPage',
+				component: () => import('@pages/settings/NotificationPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Settings',
-					subtitle: 'Application-wide configurations',
-				},
-			},
-			{
-				path: 'webpages',
-				name: 'adminWebPage',
-				component: () => import('@pages/webpage/WebPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Pages',
-					subtitle: 'Web Pages',
-				},
-			},
-			{
-				path: 'webpages/:id',
-				name: 'adminWebPageDetail',
-				component: () => import('@pages/webpage/WebPageDetail.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'Pages',
-					subtitle: 'Web Page Detail',
-				},
-			},
-			{
-				path: 'faqs',
-				name: 'adminFAQPage',
-				component: () => import('@pages/faq/FaqPage.vue'),
-				meta: {
-					requireAuth: true,
-					title: 'FAQ',
-					subtitle: 'FAQ Page',
+					title: 'Notifications',
+					subtitle: 'Send alerts and messages',
 				},
 			},
 
-			// demo page
+			// Demo page
 			{
 				path: 'demo-page',
 				name: 'adminDemoPage',

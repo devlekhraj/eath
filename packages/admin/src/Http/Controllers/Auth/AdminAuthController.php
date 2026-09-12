@@ -3,11 +3,11 @@
 namespace Admin\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Admin\Models\Admin;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\JWTGuard;
 
 class AdminAuthController extends Controller
 {
@@ -31,12 +31,16 @@ class AdminAuthController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-        $credentials = $request->only('username','password');
+        $admin = Admin::query()
+            ->where('username', $request->string('username')->toString())
+            ->first();
 
-        /** @var JWTGuard $guard */
-        $guard = Auth::guard('api_admin');
-        $token = $guard->attempt($credentials);
-        if (!$token) {
+        if (
+            !$admin ||
+            !Hash::check($request->string('password')->toString(), $admin->password) ||
+            !$admin->is_active ||
+            $admin->status !== Admin::STATUS_ACTIVE
+        ) {
             return response()->json([
                 'errors' => [
                     'password' => ['Invalid username or password.'],
@@ -44,12 +48,18 @@ class AdminAuthController extends Controller
             ], 422);
         }
 
-        return $this->respondWithToken($token);
+        $token = $admin->createToken('admin-panel')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'admin' => $admin,
+        ]);
     }
 
-    public function profile(): JsonResponse
+    public function profile(Request $request): JsonResponse
     {
-        $user = Auth::guard('api_admin')->user();
+        $user = $request->user();
 
         try {
             $notificationCount = $user ? $user->unreadNotifications()->count() : 0;
@@ -63,32 +73,10 @@ class AdminAuthController extends Controller
         ]);
     }
 
-    public function logout(): JsonResponse
+    public function logout(Request $request): JsonResponse
     {
-        Auth::guard('api_admin')->logout();
+        $request->user()?->currentAccessToken()?->delete();
 
         return response()->json(['message' => 'Successfully logged out']);
-    }
-
-    public function refresh(): JsonResponse
-    {
-        /** @var JWTGuard $guard */
-        $guard = Auth::guard('api_admin');
-        $token = $guard->refresh();
-
-        return $this->respondWithToken($token);
-    }
-
-    protected function respondWithToken(string $token): JsonResponse
-    {
-        /** @var JWTGuard $guard */
-        $guard = Auth::guard('api_admin');
-        $ttl = $guard->factory()->getTTL();
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => $ttl ? $ttl * 60 : null,
-        ]);
     }
 }

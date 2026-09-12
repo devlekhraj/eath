@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('guide_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('guide_id')->constrained('guides')->onDelete('cascade');
-            $table->integer('rating');
-            $table->text('comment')->nullable();
-            $table->boolean('is_approved')->default(false);
+            $table->foreignId('guide_id')->constrained('guides')->cascadeOnDelete();
+            $table->string('reviewer_name');
+            $table->string('reviewer_country')->nullable();
+            $table->unsignedTinyInteger('rating')->nullable();
+            $table->string('title')->nullable();
+            $table->text('body');
+            $table->date('reviewed_on')->nullable();
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_published')->default(false);
+            $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

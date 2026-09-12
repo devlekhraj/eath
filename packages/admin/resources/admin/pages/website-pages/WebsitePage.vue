@@ -1,0 +1,196 @@
+<template>
+  <div>
+    <v-data-table
+      :headers="headers"
+      :loading="fetching_data"
+      :items="filteredItems"
+      :items-per-page="20"
+      :sort-by="['title']"
+      :sort-desc="[false]"
+    >
+      <template #top>
+        <v-row class="px-4 py-2 mb-4 mt-2" align="center" justify="space-between" no-gutters>
+          <v-col cols="12" sm="6" md="4" lg="3" xl="3">
+            <v-text-field
+              v-model="search"
+              label="Search Pages"
+              clearable
+              density="compact"
+              variant="outlined"
+              hide-details
+              rounded="0"
+              prepend-inner-icon="mdi-magnify"
+              placeholder="Search by title, slug..."
+            />
+          </v-col>
+
+          <v-col cols="auto">
+            <v-btn color="primary" rounded="0" @click="addPage()">
+              <v-icon start>mdi-plus</v-icon> Add New Page
+            </v-btn>
+          </v-col>
+        </v-row>
+      </template>
+
+      <template #item.sn="{ index }">
+        <div style="min-width: max-content;">{{ index + 1 }}</div>
+      </template>
+
+      <template #item.title="{ item }">
+        <div style="min-width: max-content;">
+          <router-link :to="{ name: 'adminWebPageDetail', params: { id: item.id } }" class="text-primary text-decoration-underline text-capitalize">
+            {{ item.title }}
+          </router-link>
+        </div>
+      </template>
+
+      <template #item.slug="{ item }">
+        <div style="min-width: max-content;">
+          <span class="text-caption text-medium-emphasis">/{{ item.slug }}</span>
+        </div>
+      </template>
+
+      <template #item.type="{ item }">
+        <div style="min-width: max-content;">
+          <v-chip size="small" label rounded="0" variant="tonal" color="primary" class="text-uppercase">
+            {{ item.type || 'standard' }}
+          </v-chip>
+        </div>
+      </template>
+
+      <template #item.is_active="{ item }">
+        <div style="min-width: max-content;">
+          <v-switch
+            v-model="item.is_active"
+            density="compact"
+            color="success"
+            hide-details
+            rounded="0"
+            @change="toggleActive(item)"
+          />
+        </div>
+      </template>
+
+      <template #item.is_published="{ item }">
+        <div style="min-width: max-content;">
+          <v-chip
+            size="small"
+            label
+            rounded="0"
+            :color="item.is_published ? 'success' : 'warning'"
+          >
+            <v-icon start size="14">
+              {{ item.is_published ? 'mdi-check-circle' : 'mdi-alert-circle' }}
+            </v-icon>
+            {{ item.is_published ? 'Published' : 'Draft' }}
+          </v-chip>
+        </div>
+      </template>
+
+      <template #item.actions="{ item }">
+        <div class="d-flex align-center justify-center ga-2" style="min-width: max-content;">
+          <v-btn size="x-small" icon variant="tonal" color="primary" rounded="0" :to="{ name: 'adminWebPageDetail', params: { id: item.id } }">
+            <v-icon size="16">mdi-pencil</v-icon>
+          </v-btn>
+          <v-btn size="x-small" icon variant="tonal" color="error" rounded="0" @click="deleteItem(item)">
+            <v-icon size="16">mdi-delete</v-icon>
+          </v-btn>
+        </div>
+      </template>
+    </v-data-table>
+    <modal-template ref="globalModal" @close="fetchData"></modal-template>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import http from '@/http.config'
+import { useSnackbar } from '@/composables/snackbar'
+import PageForm from './modal/PageForm.vue'
+import PageDelete from './modal/PageDelete.vue'
+
+const { showSuccess, showError } = useSnackbar()
+
+const headers = [
+  { title: 'SN', key: 'sn', sortable: false, width: '60px' },
+  { title: 'Title', key: 'title', sortable: false },
+  { title: 'Slug', key: 'slug', sortable: false },
+  { title: 'Type', key: 'type', sortable: false },
+  { title: 'Active', key: 'is_active', sortable: false },
+  { title: 'Published', key: 'is_published', sortable: false },
+  { title: 'Actions', key: 'actions', sortable: false, align: 'center' },
+]
+
+const data_list = ref([])
+const search = ref('')
+const globalModal = ref(null)
+const fetching_data = ref(false)
+
+const filteredItems = computed(() => {
+  if (!search.value) return data_list.value
+  const term = search.value.toLowerCase()
+  return data_list.value.filter(item =>
+    item.title?.toLowerCase().includes(term) ||
+    item.slug?.toLowerCase().includes(term) ||
+    item.type?.toLowerCase().includes(term)
+  )
+})
+
+function addPage(item = {}) {
+  globalModal.value.open({
+    title: 'Add New Website Page',
+    component: PageForm,
+    size: 'md',
+    props: {
+      item,
+    },
+  })
+}
+
+const fetchData = async () => {
+  try {
+    fetching_data.value = true
+    const resp = await http.get('admin/website-pages')
+    fetching_data.value = false
+    data_list.value = resp.data || []
+  } catch (error) {
+    try {
+      const fallback = await http.get('admin/pages')
+      data_list.value = fallback.data || []
+    } catch {
+      data_list.value = []
+    } finally {
+      fetching_data.value = false
+    }
+  }
+}
+
+const deleteItem = (item) => {
+  globalModal.value.open({
+    title: 'Delete ' + item.title,
+    component: PageDelete,
+    size: 'sm',
+    props: {
+      item,
+    },
+  })
+}
+
+async function toggleActive(item) {
+  try {
+    const resp = await http.patch(`admin/website-pages/${item.id}/toggle-active`, {
+      is_active: item.is_active
+    })
+    showSuccess(resp.message || 'Status updated successfully')
+    fetchData()
+  } catch (error) {
+    showError(error?.response?.data?.message || 'Failed to update status')
+    item.is_active = !item.is_active
+    console.error('Failed to update status:', error)
+  }
+}
+
+onMounted(fetchData)
+</script>
+
+<style scoped></style>

@@ -12,7 +12,7 @@ class NewsletterController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'email' => 'required|email|unique:newsletter_subscriptions,email',
+            'email' => 'required|email|max:255',
             'name' => 'nullable|string|max:191',
         ]);
 

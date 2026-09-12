@@ -96,3 +96,12 @@
   - This is globally handled via `resources/admin/admin.scss` on `.v-data-table` and `.v-data-table-server` (sticky right: 0, surface background, and center alignment).
 - **Table header styling (Semi-bold & light primary background):**
   - All table headers across `.v-table`, `.v-data-table`, and `.v-data-table-server` have semi-bold text (`font-weight: 600`) and a very light primary tint background (`rgba(var(--v-theme-primary), 0.06)` blended over surface), configured globally in `resources/admin/admin.scss`.
+
+## Mandatory Project Change Logging (`docs/updates/`)
+
+- **Log every change in a new timestamped file**:
+  - Whenever you make changes, updates, refactors, or bug fixes, you MUST create a new documentation file in `docs/updates/`.
+  - File naming standard: `docs/updates/YYYY-MM-DD-HH-MM-<short-descriptive-slug>.md`.
+  - Use Nepal Time (NPT, UTC+05:45) for all timestamps.
+  - Never overwrite existing update files; each task/session must produce its own new update record.
+  - Follow the template in `docs/updates/README.md` (Summary, Detailed Changes, Verification Commands & Outputs, Next Steps).

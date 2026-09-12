@@ -255,7 +255,7 @@ class WebsitePlannerDraftService
             'addons' => [],
             'special_requests' => '',
             'selected_trek_id' => $context['trek_id'],
-            'selected_departure_id' => $context['departure_id'],
+            'departure_id' => $context['departure_id'],
             'created_at' => $now,
             'updated_at' => $now,
         ];
@@ -335,19 +335,19 @@ class WebsitePlannerDraftService
             $cleanData['flexible_dates'] = !empty($input['flexible_dates']);
 
             // Departure check: changing timing_mode, start_date or duration clears departure selection if incompatible
-            if (!empty($currentDraft['selected_departure_id'])) {
+            if (!empty($currentDraft['departure_id'])) {
                 $departures = WebsiteCatalogRepository::getDepartures();
-                $depIndex = array_search($currentDraft['selected_departure_id'], array_column($departures, 'id'));
+                $depIndex = array_search($currentDraft['departure_id'], array_column($departures, 'id'));
                 if ($depIndex !== false) {
                     $dep = $departures[$depIndex];
                     $datesMatch = ($cleanData['timing_mode'] ?? '') === 'dates' && ($cleanData['start_date'] ?? '') === $dep['start_date'];
                     $daysMatch = empty($cleanData['available_days']) || $cleanData['available_days'] === $dep['duration_days'];
                     if (!$datesMatch || !$daysMatch) {
-                        $cleanData['selected_departure_id'] = null;
+                        $cleanData['departure_id'] = null;
                         $warnings[] = 'Your previously selected sample departure was cleared because your travel dates or trip duration changed.';
                     }
                 } else {
-                    $cleanData['selected_departure_id'] = null;
+                    $cleanData['departure_id'] = null;
                 }
             }
         } elseif ($step === 'travelers') {
@@ -415,15 +415,15 @@ class WebsitePlannerDraftService
             }
 
             // Invalidate departure if total party exceeds illustrative seats
-            if (!empty($currentDraft['selected_departure_id']) && empty($errors['adults']) && empty($errors['children'])) {
+            if (!empty($currentDraft['departure_id']) && empty($errors['adults']) && empty($errors['children'])) {
                 $departures = WebsiteCatalogRepository::getDepartures();
-                $depIndex = array_search($currentDraft['selected_departure_id'], array_column($departures, 'id'));
+                $depIndex = array_search($currentDraft['departure_id'], array_column($departures, 'id'));
                 if ($depIndex !== false) {
                     $dep = $departures[$depIndex];
                     $totalParty = ($cleanData['adults'] ?? 1) + ($cleanData['children'] ?? 0);
                     $sampleSeats = $dep['sample_seats'] ?? 0;
                     if ($totalParty > $sampleSeats) {
-                        $cleanData['selected_departure_id'] = null;
+                        $cleanData['departure_id'] = null;
                         $warnings[] = "Your selected sample departure was cleared because your party of {$totalParty} exceeds the illustrative open seats ({$sampleSeats}) on that departure.";
                     }
                 }
@@ -515,7 +515,7 @@ class WebsitePlannerDraftService
             if ($action === 'custom_request') {
                 $cleanData['mode'] = 'custom';
                 $cleanData['selected_trek_id'] = null;
-                $cleanData['selected_departure_id'] = null;
+                $cleanData['departure_id'] = null;
             } else {
                 $selectedTrekId = $input['selected_trek_id'] ?? ($currentDraft['selected_trek_id'] ?? null);
                 $treks = WebsiteCatalogRepository::getTreks();
@@ -525,11 +525,11 @@ class WebsitePlannerDraftService
                     $cleanData['selected_trek_id'] = $selectedTrekId;
                     $cleanData['mode'] = 'selected';
                     // Clear departure if it belonged to another trek
-                    if (!empty($currentDraft['selected_departure_id'])) {
+                    if (!empty($currentDraft['departure_id'])) {
                         $departures = WebsiteCatalogRepository::getDepartures();
-                        $depIndex = array_search($currentDraft['selected_departure_id'], array_column($departures, 'id'));
+                        $depIndex = array_search($currentDraft['departure_id'], array_column($departures, 'id'));
                         if ($depIndex !== false && $departures[$depIndex]['trek_id'] !== $selectedTrekId) {
-                            $cleanData['selected_departure_id'] = null;
+                            $cleanData['departure_id'] = null;
                             $warnings[] = 'Your sample departure was cleared because you selected a different trek.';
                         }
                     }
@@ -568,7 +568,7 @@ class WebsitePlannerDraftService
             'adults', 'children', 'child_age_bands', 'trekking_experience', 'max_difficulty',
             'walking_hours_max', 'interests', 'accommodation', 'pace', 'trip_style',
             'budget_max_usd', 'budget_includes_flights', 'addons', 'special_requests',
-            'selected_trek_id', 'selected_departure_id', 'mode'
+            'selected_trek_id', 'departure_id', 'mode'
         ];
 
         foreach ($allowedFields as $field) {
@@ -578,16 +578,16 @@ class WebsitePlannerDraftService
         }
 
         // Invalidate selected departure if dates, duration, travelers, or trek changed incompatibly
-        if ($draft['selected_departure_id']) {
+        if ($draft['departure_id']) {
             $departures = WebsiteCatalogRepository::getDepartures();
-            $depIndex = array_search($draft['selected_departure_id'], array_column($departures, 'id'));
+            $depIndex = array_search($draft['departure_id'], array_column($departures, 'id'));
             if ($depIndex !== false) {
                 $dep = $departures[$depIndex];
                 if ($draft['selected_trek_id'] && $dep['trek_id'] !== $draft['selected_trek_id']) {
-                    $draft['selected_departure_id'] = null;
+                    $draft['departure_id'] = null;
                 }
             } else {
-                $draft['selected_departure_id'] = null;
+                $draft['departure_id'] = null;
             }
         }
 

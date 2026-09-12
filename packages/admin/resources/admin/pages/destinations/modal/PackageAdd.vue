@@ -99,9 +99,9 @@ async function submitForm() {
 async function handleSubmit() {
     try {
         loading.value = true
-        const resp = await http.post('/admin/travel-packages', form)
-        showSuccess(resp.data?.message || 'Package created successfully')
-        router.push({ name: 'adminPackageForm', query: { id: resp.data.id } })
+        const resp = await http.post('/admin/journeys', form)
+        showSuccess(resp.data?.message || 'Journey created successfully')
+        router.push({ name: 'adminJourneyForm', query: { id: resp.data.id } })
     } catch (error) {
         if (error.response?.status === 422) {
             const errors = error.response.data?.errors || {}
