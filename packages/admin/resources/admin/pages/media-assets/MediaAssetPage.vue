@@ -30,7 +30,7 @@
         </v-btn-toggle>
 
         <!-- Upload Button -->
-        <v-btn color="primary" variant="elevated" @click="handleOpenUpload">
+        <v-btn color="primary" variant="flat" @click="handleOpenUpload">
           <v-icon start>mdi-cloud-upload-outline</v-icon> Upload Media
         </v-btn>
       </v-col>
@@ -53,7 +53,7 @@
         <p class="text-body-2 text-medium-emphasis mt-1 mb-4">
           {{ search ? 'No results matched your search query.' : 'Upload photos, banners, and hero assets to get started.' }}
         </p>
-        <v-btn color="primary" variant="elevated" @click="handleOpenUpload">
+        <v-btn color="primary" variant="flat" @click="handleOpenUpload">
           <v-icon start>mdi-cloud-upload</v-icon> Upload First Media Asset
         </v-btn>
       </v-card>

@@ -37,9 +37,6 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
-            $table->foreignId('hero_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
-            $table->foreignId('card_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
-            $table->foreignId('route_map_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->text('accommodation_note')->nullable();
             $table->text('logistics_note')->nullable();
             $table->text('safety_note')->nullable();

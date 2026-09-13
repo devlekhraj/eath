@@ -23,7 +23,13 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/public/build
+/public/cdn
 
+public/build
+public/cdn
+tests/
+/tests/
 
 # Logs
 error_log

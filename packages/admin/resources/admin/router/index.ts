@@ -68,10 +68,10 @@ const routes: RouteRecordRaw[] = [
 			{
 				path: 'journey-form',
 				name: 'adminJourneyForm',
-				component: () => import('@pages/journeys/JourneyForm.vue'),
+				component: () => import('@pages/journeys/JourneyDetailPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Journey Form',
+					title: 'Journey Detail',
 				},
 			},
 			// Legacy journey aliases

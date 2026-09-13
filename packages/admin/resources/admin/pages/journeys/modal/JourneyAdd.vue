@@ -13,13 +13,17 @@
                 <v-row>
                     <v-col cols="12">
                         <div class="mb-2">
-                            <v-text-field v-model="form.name" label="Journey Name" :rules="[rules.required]" :error-messages="serverErrors.name" />
+                            <v-text-field v-model="form.name" label="Journey Name" :rules="[rules.required]"
+                                :error-messages="serverErrors.name" />
                         </div>
                     </v-col>
 
                     <v-col cols="12">
                         <div class="mb-2">
-                            <v-text-field v-model="form.slug" label="Slug" :rules="[rules.required, rules.slug]" :error-messages="serverErrors.slug" hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint @input="onSlugInput" />
+                            <v-text-field v-model="form.slug" label="Slug" :rules="[rules.required, rules.slug]"
+                                :error-messages="serverErrors.slug"
+                                hint="URL-friendly string with lowercase letters, numbers, and hyphens" persistent-hint
+                                @input="onSlugInput" />
                         </div>
                     </v-col>
                 </v-row>

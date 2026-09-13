@@ -13,7 +13,7 @@ class JourneyDepartureController extends Controller
 {
     public function index(Request $request)
     {
-        $query = JourneyDeparture::with(['journey:id,name,slug,duration_days,duration_nights,hero_image_id'])
+        $query = JourneyDeparture::with(['journey:id,name,slug,duration_days,duration_nights', 'journey.heroAttachment.mediaAsset'])
             ->orderBy('start_date', 'asc');
 
         if ($request->filled('journey_id')) {

@@ -30,7 +30,7 @@
           </v-col>
 
           <v-col cols="auto" class="mt-2 mt-sm-0">
-            <v-btn color="primary" variant="elevated" @click="openAddDialog = true">
+            <v-btn color="primary" variant="flat" @click="openAddDialog = true">
               <v-icon start>mdi-plus</v-icon> Add Subscriber
             </v-btn>
           </v-col>
@@ -124,7 +124,7 @@
           <v-btn variant="text" @click="openAddDialog = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            variant="elevated"
+            variant="flat"
             :loading="adding"
             @click="handleAddSubscriber"
           >
@@ -155,7 +155,7 @@
           <v-btn variant="text" @click="openDeleteDialog = false">Cancel</v-btn>
           <v-btn
             color="error"
-            variant="elevated"
+            variant="flat"
             :loading="deleting"
             @click="handleDeleteSubscriber"
           >

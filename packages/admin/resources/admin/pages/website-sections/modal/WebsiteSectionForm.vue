@@ -99,10 +99,9 @@
     </v-card-text>
     <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-      <v-spacer />
       <v-btn
         color="primary"
-        variant="elevated"
+        variant="flat"
         :loading="loading"
         :disabled="loading"
         @click="handleSubmit"

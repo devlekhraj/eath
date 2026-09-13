@@ -34,7 +34,7 @@
                   icon
                   size="x-small"
                   color="error"
-                  variant="elevated"
+                  variant="flat"
                   class="position-absolute"
                   style="top: 8px; right: 8px; z-index: 5;"
                   @click.stop="clearFile"
@@ -54,7 +54,6 @@
               <v-btn
                 variant="outlined"
                 color="primary"
-                size="small"
                 class="mt-3"
                 @click.stop="triggerFileInput"
               >
@@ -79,7 +78,6 @@
                   v-model="form.title"
                   label="Asset Title"
                   placeholder="e.g. Everest Base Camp Sunrise"
-                  class="mb-2"
                   :error-messages="serverErrors.title"
                 />
             </div>
@@ -89,7 +87,6 @@
                   v-model="form.alt_text"
                   label="Alt Text (SEO & Accessibility)"
                   placeholder="Descriptive alt text for screen readers and SEO"
-                  class="mb-2"
                   :error-messages="serverErrors.alt_text"
                 />
             </div>
@@ -100,7 +97,6 @@
                   label="Caption / Description"
                   placeholder="Optional photo caption or editorial context"
                   rows="4"
-                  class="mb-2"
                   :error-messages="serverErrors.caption"
                 />
             </div>
@@ -110,10 +106,9 @@
     </v-card-text>
     <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-      <v-spacer />
       <v-btn
         color="primary"
-        variant="elevated"
+        variant="flat"
         :loading="uploading"
         :disabled="!selectedFile || uploading"
         @click="handleUpload"

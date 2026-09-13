@@ -2,20 +2,19 @@
 
 namespace Admin\Models;
 
+use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Destination extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasMediaAttachments;
 
     protected $fillable = [
         'name',
         'slug',
         'summary',
         'description',
-        'hero_image_id',
-        'card_image_id',
         'region_label',
         'gateway',
         'trailheads',
@@ -36,5 +35,15 @@ class Destination extends Model
     public function journeys()
     {
         return $this->hasMany(Journey::class)->orderBy('sort_order');
+    }
+
+    public function travelerStories()
+    {
+        return $this->hasMany(TravelerStory::class);
+    }
+
+    public function faqs()
+    {
+        return $this->hasMany(Faq::class);
     }
 }

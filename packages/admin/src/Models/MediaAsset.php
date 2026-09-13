@@ -53,20 +53,12 @@ class MediaAsset extends Model
             return asset('images/placeholder.jpg');
         }
 
-        if (str_starts_with($this->path, 'http://') || str_starts_with($this->path, 'https://')) {
-            return $this->path;
-        }
+        $disk = $this->disk ?: 'cdn';
 
-        try {
-            $disk = $this->disk ?: 'public';
-            if (config("filesystems.disks.{$disk}")) {
-                return Storage::disk($disk)->url($this->path);
-            }
-        } catch (\Throwable $e) {
-            // Fallback
-        }
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $storage */
+        $storage = Storage::disk($disk);
 
-        return asset('storage/' . ltrim($this->path, '/'));
+        return $storage->url($this->path);
     }
 
     public function getFormattedSizeAttribute(): string

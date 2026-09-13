@@ -2,12 +2,13 @@
 
 namespace Admin\Models;
 
+use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Journey extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasMediaAttachments;
 
     // Difficulty
     public const DIFFICULTY_EASY = 'easy';
@@ -95,9 +96,6 @@ class Journey extends Model
         'is_active',
         'is_published',
         'published_at',
-        'hero_image_id',
-        'card_image_id',
-        'route_map_image_id',
         'accommodation_note',
         'logistics_note',
         'safety_note',

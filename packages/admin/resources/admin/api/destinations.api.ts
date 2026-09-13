@@ -2,7 +2,7 @@ import http from '@/http.config'
 
 export type DestinationId = number | string
 
-// ── Destinations ──────────────────────────────────────────────────────────────
+// ── Destinations CRUD ─────────────────────────────────────────────────────────
 
 export function getDestinationsApi(params?: Record<string, unknown>) {
     return http.get('/admin/destinations', { params })
@@ -12,8 +12,12 @@ export function getDestinationByIdApi(id: DestinationId) {
     return http.get(`/admin/destinations/${id}`)
 }
 
-export function createDestinationApi(payload: Record<string, unknown>) {
+export function saveDestinationApi(payload: Record<string, unknown>) {
     return http.post('admin/destinations', payload)
+}
+
+export function updateDestinationApi(id: DestinationId, payload: Record<string, unknown>) {
+    return http.patch(`/admin/destinations/${id}/update`, payload)
 }
 
 export function deleteDestinationApi(id: DestinationId) {
@@ -21,20 +25,8 @@ export function deleteDestinationApi(id: DestinationId) {
 }
 
 export function toggleDestinationActiveApi(id: DestinationId, isActive: boolean) {
-    return http.patch(`/admin/destinations/${id}/toggle-active`, { is_active: isActive })
+    return http.patch(`/admin/destinations/${id}/update`, { is_active: isActive })
 }
-
-// ── Destination SEO / Overview ────────────────────────────────────────────────
-
-export function updateDestinationOverviewApi(id: DestinationId, payload: Record<string, unknown>) {
-    return http.patch(`/admin/destinations/${id}`, payload)
-}
-
-export function updateDestinationDescriptionApi(id: DestinationId, payload: Record<string, unknown>) {
-    return http.patch(`/admin/destinations/${id}/description`, payload)
-}
-
-// ── Package Categories (shared by Destinations + Journeys) ───────────────────
 
 export function getPackageCategoriesApi(params?: Record<string, unknown>) {
     return http.get('admin/package-categories', { params })
@@ -125,3 +117,19 @@ export function saveItineraryLookupApi(payload: Record<string, unknown>) {
 export function deleteItineraryLookupApi(id: DestinationId) {
     return http.delete(`/admin/itinerary-lookups/${id}/delete`)
 }
+
+// ── Destination Media Attachments ─────────────────────────────────────────────
+
+export function attachDestinationMediaApi(destinationId: DestinationId, payload: Record<string, unknown>) {
+    return http.post(`/admin/destinations/${destinationId}/media-attachments`, payload)
+}
+
+export function detachDestinationMediaApi(destinationId: DestinationId, attachmentId: number | string) {
+    return http.delete(`/admin/destinations/${destinationId}/media-attachments/${attachmentId}`)
+}
+
+export function updateDestinationMediaApi(destinationId: DestinationId, attachmentId: number | string, payload: Record<string, unknown>) {
+    return http.patch(`/admin/destinations/${destinationId}/media-attachments/${attachmentId}`, payload)
+}
+
+

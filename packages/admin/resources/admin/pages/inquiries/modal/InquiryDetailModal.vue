@@ -70,7 +70,7 @@
                 </div>
                 <v-btn
                   color="primary"
-                  variant="elevated"
+                  variant="flat"
                   :loading="savingStatus"
                   :disabled="currentStatus === inquiry.status || savingStatus"
                   @click="handleStatusUpdate"

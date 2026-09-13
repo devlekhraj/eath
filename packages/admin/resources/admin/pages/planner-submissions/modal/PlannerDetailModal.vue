@@ -83,7 +83,7 @@
                 </div>
                 <v-btn
                   color="primary"
-                  variant="elevated"
+                  variant="flat"
                   :loading="savingStatus"
                   :disabled="currentStatus === submission.status || savingStatus"
                   @click="handleStatusUpdate"

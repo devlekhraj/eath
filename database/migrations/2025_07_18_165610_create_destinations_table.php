@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('summary')->nullable();
             $table->longText('description')->nullable();
-            $table->foreignId('hero_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
-            $table->foreignId('card_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->string('region_label')->nullable();
             $table->text('gateway')->nullable();
             $table->text('trailheads')->nullable();

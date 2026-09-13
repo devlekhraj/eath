@@ -43,6 +43,8 @@ The following defaults are set globally in [`vuetify.ts`](file:///Volumes/TOSHIB
 | `<v-avatar>` | `rounded: true`, `variant: 'tonal'` | `rounded`, `rounded="0"`, `variant="tonal"` |
 | `<v-chip>` | `size: 'small'`, `variant: 'tonal'`, `label: true`, `class: 'text-capitalize'` | `size="small"`, `label`, `class="text-capitalize"`, `rounded-0` |
 | `<v-btn>` | `elevation: 0` | `elevation="0"`, `rounded-0` |
+| `<v-expansion-panels>` | `flat: true`, `elevation: 0` | `elevation="..."` |
+| `<v-expansion-panel>` | `elevation: 0` | `elevation="..."` |
 | `<v-progress-linear>` | `height: 6`, `rounded: true` | `height="6"`, `rounded`, `rounded="0"` |
 | `<v-alert>` | `density: 'comfortable'`, `variant: 'tonal'` | `density="comfortable"`, `variant="tonal"` |
 | `<v-table>`, `<v-data-table>`, `<v-data-table-server>` | `density: 'comfortable'`, `hover: true` | `density="comfortable"`, `hover`, `class="border"`, `class="rounded-lg"` |
@@ -116,9 +118,13 @@ The following defaults are set globally in [`vuetify.ts`](file:///Volumes/TOSHIB
    - Permitted: `primary`, `secondary`, `success`, `warning`, `error`, `info`.
    - **Never** use arbitrary Tailwind strings (e.g. `color="slate-600"`, `color="indigo-darken-1"`).
 2. **Standard Action Variants**:
-   - Primary submit / call-to-action: `color="primary" variant="elevated"`
+   - Primary submit / call-to-action: `color="primary" variant="flat"` (**CRITICAL: Never use `elevated`; use `variant="flat"` instead of `elevated` for `<v-btn>`**).
    - Secondary / filter / action: `color="primary" variant="outlined"` or `variant="tonal"`
-   - Cancel / close / table row action: `variant="text"`
+   - Cancel / close: `variant="text"`
+3. **No `size="small"` for Action Buttons**:
+   - Action buttons (page header actions, toolbar actions, card action bars, form submit/save buttons, modal/drawer action buttons) must use **standard default Vuetify button sizing**.
+   - **Never apply `size="small"` or `size="x-small"` to action buttons.**
+   - Only compact inline table-row actions or modal header close icon buttons may use compact/small sizing where space constraints require it.
 
 ---
 
@@ -142,39 +148,42 @@ The following defaults are set globally in [`vuetify.ts`](file:///Volumes/TOSHIB
 ## 7. Modal & Dialog Standards (`<v-dialog>`)
 
 ### Rules:
-1. Dialogs should wrap content in a clean `<v-card>`:
+1. Dialogs should wrap content in a clean `<v-card>` following `.agents/rules/modal.md`:
    ```html
    <v-dialog v-model="isOpen" max-width="600px">
      <v-card>
-       <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-         <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem;">
-           Dialog Title
-         </span>
-         <v-btn icon size="small" variant="text" aria-label="Close" @click="isOpen = false">
-           <v-icon size="18">mdi-close</v-icon>
+       <v-card-title class="d-flex align-center justify-space-between py-0">
+         <span>Dialog Title</span>
+         <v-btn icon size="small" variant="text" aria-label="Close dialog" @click="isOpen = false">
+           <v-icon>mdi-close</v-icon>
          </v-btn>
        </v-card-title>
        <v-divider />
-       <v-card-text class="pa-4">
+       <v-card-text>
          <v-form @submit.prevent="handleSubmit">
-           <v-row dense>
+           <v-row>
              <v-col cols="12">
-               <!-- Inputs inherit compact, outlined, and hideDetails automatically -->
-               <v-text-field v-model="form.name" label="Name *" required />
+               <div class="mb-2">
+                 <!-- Inputs inherit compact, outlined, and hideDetails automatically -->
+                 <v-text-field v-model="form.name" label="Name *" required />
+               </div>
              </v-col>
            </v-row>
          </v-form>
        </v-card-text>
-       <v-divider />
-       <v-card-actions class="pa-3 justify-end ga-2">
+       <v-card-actions class="justify-end">
          <v-btn variant="text" @click="isOpen = false">Cancel</v-btn>
-         <v-btn color="primary" variant="elevated" :loading="saving" @click="handleSubmit">
-           Save Changes
+         <v-btn color="primary" variant="flat" :loading="saving" @click="handleSubmit">
+           Save
          </v-btn>
        </v-card-actions>
      </v-card>
    </v-dialog>
    ```
+2. **Form inputs must be wrapped in `<div class="mb-2">`** inside `<v-card-text>`.
+3. Modal header must use `class="d-flex align-center justify-space-between py-0"` with a simple `<span>` for the title.
+4. Modal actions must use `class="justify-end"` with a `variant="text"` Cancel button and standard primary submit button (`variant="flat"`). Do NOT separate buttons with `<v-spacer />`.
+5. Modal action buttons must use default standard sizing (do NOT use `size="small"`).
 
 ---
 
@@ -182,6 +191,9 @@ The following defaults are set globally in [`vuetify.ts`](file:///Volumes/TOSHIB
 
 | ❌ Anti-Pattern / Mistake | ✅ Clean Global Standard | Reason |
 | :--- | :--- | :--- |
+| `<v-btn variant="elevated" color="primary">Save</v-btn>` | `<v-btn color="primary" variant="flat">Save</v-btn>` | Never use elevated; always use `variant="flat"` instead of elevated for `<v-btn>`. |
+| `<v-btn size="small" color="primary">Add Item</v-btn>` | `<v-btn color="primary">Add Item</v-btn>` | Action buttons must use default standard Vuetify sizing, never `size="small"`. |
+| `<v-card-actions class="justify-end"><v-btn>Cancel</v-btn><v-spacer /><v-btn>Save</v-btn></v-card-actions>` | `<v-card-actions class="justify-end"><v-btn variant="text">Cancel</v-btn><v-btn color="primary" variant="flat">Save</v-btn></v-card-actions>` | Action buttons must sit together right-aligned; `<v-spacer />` pushes them apart. |
 | `<v-card class="rounded-0 elevation-0 border">` | `<v-card>` or `<v-card class="pa-4 h-100">` | `VCard` default is already flat, zero-elevation, borderless, and `rounded: 'lg'` in `vuetify.ts`. |
 | `<v-avatar rounded="0">` | `<v-avatar size="24" color="primary">` | `VAvatar` default is already tonal & rounded. |
 | `<v-text-field density="compact" variant="outlined" hide-details="auto">` | `<v-text-field label="Name">` | All text fields globally inherit compact outlined with auto details. |

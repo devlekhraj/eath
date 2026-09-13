@@ -102,7 +102,7 @@ class MediaAssetController extends Controller
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeName = Str::slug($originalName) . '-' . substr($hash, 0, 8) . '.' . $extension;
 
-        $disk = 'public';
+        $disk = 'cdn';
         $subFolder = 'media/' . substr($hash, 0, 2);
         $filePath = $file->storeAs($subFolder, $safeName, $disk);
 

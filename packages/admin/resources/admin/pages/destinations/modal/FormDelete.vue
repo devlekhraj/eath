@@ -10,13 +10,13 @@
         <v-card-text class="text-center pt-4">
             <div class="text-subtitle-1 font-weight-medium">Are you sure?</div>
             <div class="text-caption text-grey mt-2">
-                This will delete: <strong>{{ item.title }}</strong>
+                This will delete: <strong>{{ item.name || item.title }}</strong>
             </div>
         </v-card-text>
 
         <v-card-actions class="justify-end">
             <v-btn variant="text" @click="handleClose">Cancel</v-btn>
-            <v-btn color="error" :loading="submitting" @click="deleteCategory">Delete</v-btn>
+            <v-btn color="error" :loading="submitting" @click="deleteDestination">Delete</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -34,7 +34,7 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'saved'])
 
 const submitting = ref(false)
 
@@ -42,13 +42,13 @@ function handleClose() {
     emit('close')
 }
 
-async function deleteCategory() {
+async function deleteDestination() {
     submitting.value = true
     try {
-        const resp = await http.delete(`/admin/package-categories/${props.item.id}/delete`)
-        console.log(resp)
+        const resp = await http.delete(`/admin/destinations/${props.item.id}/delete`)
         submitting.value = false
-        showSuccess(resp.message || 'success');
+        showSuccess(resp?.message || 'Destination deleted successfully');
+        emit('saved')
         handleClose()
     } catch (error) {
         showError(error?.response?.data?.message || 'Failed to delete');

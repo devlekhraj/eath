@@ -49,7 +49,7 @@
       <v-btn variant="text" @click="handleClose">Cancel</v-btn>
       <v-btn
         color="error"
-        variant="elevated"
+        variant="flat"
         :loading="submitting"
         :disabled="item?.attachments_count > 0 && !forceDelete"
         @click="handleDelete"

@@ -40,10 +40,15 @@ Route::prefix('api/v1')->middleware('api')->group(function () {
         Route::get('journeys', [JourneyController::class, 'index']);
         Route::post('journeys', [JourneyController::class, 'storeUpdate']);
         Route::get('journeys/{id}', [JourneyController::class, 'show']);
+        Route::patch('journeys/{id}/update', [JourneyController::class, 'update']);
+        Route::patch('journeys/{id}', [JourneyController::class, 'update']);
         Route::patch('journeys/{id}/toggle-active', [JourneyController::class, 'toggleActive']);
         Route::patch('journeys/{id}/toggle-publish', [JourneyController::class, 'togglePublish']);
         Route::delete('journeys/{id}/delete', [JourneyController::class, 'destroy']);
         Route::delete('journeys/{id}', [JourneyController::class, 'destroy']);
+        Route::post('journeys/{id}/media-attachments', [JourneyController::class, 'attachMedia']);
+        Route::patch('journeys/{id}/media-attachments/{attachmentId}', [JourneyController::class, 'updateMediaAttachment']);
+        Route::delete('journeys/{id}/media-attachments/{attachmentId}', [JourneyController::class, 'detachMedia']);
 
         // Journey Highlights
         Route::post('journeys/{id}/highlights', [JourneyHighlightController::class, 'store']);
@@ -84,6 +89,9 @@ Route::prefix('api/v1')->middleware('api')->group(function () {
         Route::patch('destinations/{id}/update', [DestinationController::class, 'updateDestination']);
         Route::delete('destinations/{id}/delete', [DestinationController::class, 'delete']);
         Route::delete('destinations/{id}', [DestinationController::class, 'delete']);
+        Route::post('destinations/{id}/media-attachments', [DestinationController::class, 'attachMedia']);
+        Route::patch('destinations/{id}/media-attachments/{attachmentId}', [DestinationController::class, 'updateMediaAttachment']);
+        Route::delete('destinations/{id}/media-attachments/{attachmentId}', [DestinationController::class, 'detachMedia']);
         Route::post('destinations/{destinationId}/save-image', [DestinationImageController::class, 'saveImage']);
         Route::post('destinations/{destinationId}/use-image', [DestinationImageController::class, 'useImage']);
 

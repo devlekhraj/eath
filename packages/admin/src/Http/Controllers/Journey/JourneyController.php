@@ -8,6 +8,7 @@ use Admin\Models\Journey;
 use Admin\Models\JourneyDeparture;
 use Admin\Models\JourneyHighlight;
 use Admin\Models\JourneyService;
+use Admin\Models\MediaAttachment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -61,6 +62,10 @@ class JourneyController extends Controller
                 'prices',
                 'departures.plannerSubmissions',
                 'guides:id,name',
+                'heroAttachment.mediaAsset',
+                'cardAttachment.mediaAsset',
+                'routeMapAttachment.mediaAsset',
+                'galleryAttachments.mediaAsset',
             ])
             ->findOrFail($id);
 
@@ -71,16 +76,23 @@ class JourneyController extends Controller
         ]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->merge(['id' => $id]);
+        return $this->storeUpdate($request);
+    }
+
     public function storeUpdate(Request $request)
     {
-        $id = $request->input('id');
+        $id = $request->input('id') ?? $request->route('id');
+        $isUpdate = !empty($id);
 
         $rules = [
             'id' => ['nullable', 'integer', 'exists:journeys,id'],
             'destination_id' => ['nullable', 'integer', 'exists:destinations,id'],
             'guide_id' => ['nullable', 'integer', 'exists:guides,id'],
             'name' => [
-                'required',
+                $isUpdate ? 'sometimes' : 'required',
                 'string',
                 'max:255',
                 Rule::unique('journeys', 'name')->ignore($id),
@@ -130,32 +142,84 @@ class JourneyController extends Controller
         ];
 
         $validated = $request->validate($rules);
-        $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
 
-        if (array_key_exists('price', $validated) && !array_key_exists('price_minor', $validated)) {
-            $validated['price_minor'] = (int) round(((float) $validated['price']) * 100);
+        if ($isUpdate) {
+            $journey = Journey::query()->findOrFail($id);
+
+            if (array_key_exists('name', $validated) && !array_key_exists('slug', $validated)) {
+                $validated['slug'] = Str::slug($validated['name']);
+            }
+
+            if (array_key_exists('price', $validated) && !array_key_exists('price_minor', $validated)) {
+                $validated['price_minor'] = (int) round(((float) $validated['price']) * 100);
+            }
+
+            if (array_key_exists('currency', $validated)) {
+                $validated['currency'] = strtoupper((string) $validated['currency']);
+            }
+
+            if (!empty($validated['is_published']) && empty($validated['published_at']) && empty($journey->published_at)) {
+                $validated['published_at'] = now();
+            }
+
+            $payload = Arr::only($validated, (new Journey())->getFillable());
+            if (!empty($payload)) {
+                $journey->update($payload);
+            }
+        } else {
+            $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
+
+            if (array_key_exists('price', $validated) && !array_key_exists('price_minor', $validated)) {
+                $validated['price_minor'] = (int) round(((float) $validated['price']) * 100);
+            }
+
+            $validated['destination_id'] = $validated['destination_id']
+                ?? Destination::query()->orderBy('sort_order')->orderBy('name')->value('id');
+
+            abort_if(!$validated['destination_id'], 422, 'Please create at least one destination before creating a journey.');
+
+            $payload = Arr::only($validated, (new Journey())->getFillable());
+            $payload['summary'] = $payload['summary'] ?? "Draft journey summary for {$validated['name']}.";
+            $payload['duration_days'] = $payload['duration_days'] ?? 1;
+            $payload['duration_nights'] = $payload['duration_nights'] ?? max(0, $payload['duration_days'] - 1);
+            $payload['price_minor'] = $payload['price_minor'] ?? 0;
+            $payload['currency'] = strtoupper($payload['currency'] ?? 'USD');
+            $payload['pricing_basis'] = $payload['pricing_basis'] ?? Journey::PRICING_BASIS_PER_PERSON;
+            $payload['is_active'] = $payload['is_active'] ?? false;
+            $payload['is_published'] = $payload['is_published'] ?? false;
+            if (!empty($payload['is_published']) && empty($payload['published_at'])) {
+                $payload['published_at'] = now();
+            }
+
+            $journey = Journey::query()->create($payload);
         }
 
-        $validated['destination_id'] = $validated['destination_id']
-            ?? Journey::query()->whereKey($id)->value('destination_id')
-            ?? Destination::query()->orderBy('sort_order')->orderBy('name')->value('id');
-
-        abort_if(!$validated['destination_id'], 422, 'Please create at least one destination before creating a journey.');
-
-        $payload = Arr::only($validated, (new Journey())->getFillable());
-        $payload['summary'] = $payload['summary'] ?? "Draft journey summary for {$validated['name']}.";
-        $payload['duration_days'] = $payload['duration_days'] ?? 1;
-        $payload['duration_nights'] = $payload['duration_nights'] ?? max(0, $payload['duration_days'] - 1);
-        $payload['price_minor'] = $payload['price_minor'] ?? 0;
-        $payload['currency'] = strtoupper($payload['currency'] ?? 'USD');
-        $payload['pricing_basis'] = $payload['pricing_basis'] ?? Journey::PRICING_BASIS_PER_PERSON;
-        $payload['is_active'] = $payload['is_active'] ?? false;
-        $payload['is_published'] = $payload['is_published'] ?? false;
-        if (!empty($payload['is_published']) && empty($payload['published_at'])) {
-            $payload['published_at'] = now();
+        if ($request->has('hero_image_id')) {
+            $heroId = $request->input('hero_image_id');
+            if ($heroId) {
+                $journey->syncMediaAttachment((int) $heroId, MediaAttachment::COLLECTION_HERO);
+            } else {
+                $journey->detachMediaCollection(MediaAttachment::COLLECTION_HERO);
+            }
         }
 
-        $journey = Journey::query()->updateOrCreate(['id' => $id], $payload);
+        if ($request->has('card_image_id')) {
+            $cardId = $request->input('card_image_id');
+            if ($cardId) {
+                $journey->syncMediaAttachment((int) $cardId, MediaAttachment::COLLECTION_CARD);
+            } else {
+                $journey->detachMediaCollection(MediaAttachment::COLLECTION_CARD);
+            }
+        }
+
+        if ($request->has('route_map_image_id')) {
+            $routeMapId = $request->input('route_map_image_id');
+            if ($routeMapId) {
+                $journey->syncMediaAttachment((int) $routeMapId, MediaAttachment::COLLECTION_ROUTE_MAP);
+            } else {
+                $journey->detachMediaCollection(MediaAttachment::COLLECTION_ROUTE_MAP);
+            }
+        }
 
         if (array_key_exists('experience_ids', $validated)) {
             $journey->experiences()->sync($validated['experience_ids'] ?? []);
@@ -167,7 +231,16 @@ class JourneyController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $this->serializeJourney($journey->fresh()->load(['destination', 'guide:id,name', 'experiences', 'travelMonths'])),
+            'data' => $this->serializeJourney($journey->fresh()->load([
+                'destination',
+                'guide:id,name',
+                'experiences',
+                'travelMonths',
+                'heroAttachment.mediaAsset',
+                'cardAttachment.mediaAsset',
+                'routeMapAttachment.mediaAsset',
+                'galleryAttachments.mediaAsset',
+            ])),
             'message' => $id ? 'Journey updated successfully.' : 'Journey created successfully.',
         ]);
     }
@@ -289,9 +362,46 @@ class JourneyController extends Controller
             'pace' => $journey->pace,
             'pricing_basis' => $journey->pricing_basis,
             'featured_rank' => $journey->featured_rank,
-            'hero_image_id' => $journey->hero_image_id,
-            'card_image_id' => $journey->card_image_id,
-            'route_map_image_id' => $journey->route_map_image_id,
+            'hero_image_id' => $journey->heroAttachment?->media_asset_id,
+            'card_image_id' => $journey->cardAttachment?->media_asset_id,
+            'hero_image' => $journey->heroAttachment?->mediaAsset ? [
+                'id' => $journey->heroAttachment->mediaAsset->id,
+                'attachment_id' => $journey->heroAttachment->id,
+                'url' => $journey->heroAttachment->mediaAsset->url,
+                'filename' => $journey->heroAttachment->mediaAsset->filename,
+                'title' => $journey->heroAttachment->title ?? $journey->heroAttachment->mediaAsset->title,
+                'alt_text' => $journey->heroAttachment->alt_text ?? $journey->heroAttachment->mediaAsset->alt_text,
+                'caption' => $journey->heroAttachment->caption ?? $journey->heroAttachment->mediaAsset->caption,
+            ] : null,
+            'card_image' => $journey->cardAttachment?->mediaAsset ? [
+                'id' => $journey->cardAttachment->mediaAsset->id,
+                'attachment_id' => $journey->cardAttachment->id,
+                'url' => $journey->cardAttachment->mediaAsset->url,
+                'filename' => $journey->cardAttachment->mediaAsset->filename,
+                'title' => $journey->cardAttachment->title ?? $journey->cardAttachment->mediaAsset->title,
+                'alt_text' => $journey->cardAttachment->alt_text ?? $journey->cardAttachment->mediaAsset->alt_text,
+                'caption' => $journey->cardAttachment->caption ?? $journey->cardAttachment->mediaAsset->caption,
+            ] : null,
+            'gallery' => ($journey->relationLoaded('galleryAttachments') && $journey->galleryAttachments) ? $journey->galleryAttachments->map(fn ($attachment) => [
+                'attachment_id' => $attachment->id,
+                'id' => $attachment->media_asset_id,
+                'url' => $attachment->mediaAsset?->url,
+                'filename' => $attachment->mediaAsset?->filename,
+                'title' => $attachment->title ?? $attachment->mediaAsset?->title,
+                'alt_text' => $attachment->alt_text ?? $attachment->mediaAsset?->alt_text,
+                'caption' => $attachment->caption ?? $attachment->mediaAsset?->caption,
+                'sort_order' => $attachment->sort_order,
+            ])->values() : [],
+            'route_map_image_id' => $journey->routeMapAttachment?->media_asset_id,
+            'route_map_image' => $journey->routeMapAttachment?->mediaAsset ? [
+                'id' => $journey->routeMapAttachment->mediaAsset->id,
+                'attachment_id' => $journey->routeMapAttachment->id,
+                'url' => $journey->routeMapAttachment->mediaAsset->url,
+                'filename' => $journey->routeMapAttachment->mediaAsset->filename,
+                'title' => $journey->routeMapAttachment->title ?? $journey->routeMapAttachment->mediaAsset->title,
+                'alt_text' => $journey->routeMapAttachment->alt_text ?? $journey->routeMapAttachment->mediaAsset->alt_text,
+                'caption' => $journey->routeMapAttachment->caption ?? $journey->routeMapAttachment->mediaAsset->caption,
+            ] : null,
             'accommodation_note' => $journey->accommodation_note,
             'logistics_note' => $journey->logistics_note,
             'safety_note' => $journey->safety_note,
@@ -421,5 +531,114 @@ class JourneyController extends Controller
             'sort_order' => $service->sort_order,
             'is_active' => $service->is_active,
         ];
+    }
+
+    public function attachMedia(Request $request, $id)
+    {
+        $journey = Journey::findOrFail($id);
+
+        $validated = $request->validate([
+            'media_asset_id' => ['required', 'integer', 'exists:media_assets,id'],
+            'collection' => ['required', 'string', 'max:50'],
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'caption' => ['nullable', 'string', 'max:500'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+        ]);
+
+        $mediaAssetId = (int) $validated['media_asset_id'];
+        $collection = $validated['collection'];
+        unset($validated['media_asset_id'], $validated['collection']);
+
+        if (in_array($collection, [MediaAttachment::COLLECTION_HERO, MediaAttachment::COLLECTION_CARD], true)) {
+            $journey->syncMediaAttachment($mediaAssetId, $collection, $validated);
+        } else {
+            $journey->attachMediaAsset($mediaAssetId, $collection, $validated);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Media attached successfully.',
+            'data' => $this->serializeJourney($journey->fresh()->load([
+                'destination:id,name,slug',
+                'guide:id,name',
+                'experiences:id,name,slug',
+                'travelMonths:id,name,slug,month_number,season',
+                'itineraryDays.highlights',
+                'highlights',
+                'services',
+                'prices',
+                'departures.plannerSubmissions',
+                'guides:id,name',
+                'heroAttachment.mediaAsset',
+                'cardAttachment.mediaAsset',
+                'routeMapAttachment.mediaAsset',
+                'galleryAttachments.mediaAsset',
+            ])),
+        ]);
+    }
+
+    public function updateMediaAttachment(Request $request, $id, $attachmentId)
+    {
+        $journey = Journey::findOrFail($id);
+        $attachment = $journey->mediaAttachments()->findOrFail($attachmentId);
+
+        $validated = $request->validate([
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'caption' => ['nullable', 'string', 'max:500'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+        ]);
+
+        $attachment->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Image details updated successfully.',
+            'data' => $this->serializeJourney($journey->fresh()->load([
+                'destination:id,name,slug',
+                'guide:id,name',
+                'experiences:id,name,slug',
+                'travelMonths:id,name,slug,month_number,season',
+                'itineraryDays.highlights',
+                'highlights',
+                'services',
+                'prices',
+                'departures.plannerSubmissions',
+                'guides:id,name',
+                'heroAttachment.mediaAsset',
+                'cardAttachment.mediaAsset',
+                'routeMapAttachment.mediaAsset',
+                'galleryAttachments.mediaAsset',
+            ])),
+        ]);
+    }
+
+    public function detachMedia($id, $attachmentId)
+    {
+        $journey = Journey::findOrFail($id);
+        $attachment = $journey->mediaAttachments()->findOrFail($attachmentId);
+        $attachment->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Media removed successfully.',
+            'data' => $this->serializeJourney($journey->fresh()->load([
+                'destination:id,name,slug',
+                'guide:id,name',
+                'experiences:id,name,slug',
+                'travelMonths:id,name,slug,month_number,season',
+                'itineraryDays.highlights',
+                'highlights',
+                'services',
+                'prices',
+                'departures.plannerSubmissions',
+                'guides:id,name',
+                'heroAttachment.mediaAsset',
+                'cardAttachment.mediaAsset',
+                'routeMapAttachment.mediaAsset',
+                'galleryAttachments.mediaAsset',
+            ])),
+        ]);
     }
 }

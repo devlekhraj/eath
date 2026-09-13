@@ -24,6 +24,13 @@ export default createVuetify({
       border: 0,
       rounded: true,
     },
+    VExpansionPanels: {
+      flat: true,
+      elevation: 0,
+    },
+    VExpansionPanel: {
+      elevation: 0,
+    },
     VNavigationDrawer: {
       elevation: 0,
     },

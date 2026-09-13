@@ -6,8 +6,8 @@
                     <v-icon>mdi-plus</v-icon> Add Day
                 </v-btn>
             </v-card-title>
-                        <v-expansion-panels multiple elevation="1">
-                <v-expansion-panel v-for="(itinerary, index) in itineraryDays" :key="itinerary.id || index">
+            <v-expansion-panels multiple flat elevation="0">
+                <v-expansion-panel v-for="(itinerary, index) in itineraryDays" :key="itinerary.id || index" elevation="0">
                     <v-expansion-panel-title>
                         Day {{ itinerary.day_number }} - {{ itinerary.title }}
                     </v-expansion-panel-title>

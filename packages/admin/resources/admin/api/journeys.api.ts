@@ -105,6 +105,26 @@ export function toggleDepartureActive(id: number | string, is_active?: boolean) 
     return http.patch(`/admin/departures/${id}/toggle-active`, { is_active });
 }
 
+export function updateJourneyApi(id: number | string, payload: Record<string, any>) {
+    return http.post('/admin/journeys', { id, ...payload });
+}
+
+export function attachJourneyMediaApi(journeyId: number | string, payload: Record<string, any>) {
+    return http.post(`/admin/journeys/${journeyId}/media-attachments`, payload);
+}
+
+export function updateJourneyMediaApi(
+    journeyId: number | string,
+    attachmentId: number | string,
+    payload: Record<string, any>
+) {
+    return http.patch(`/admin/journeys/${journeyId}/media-attachments/${attachmentId}`, payload);
+}
+
+export function detachJourneyMediaApi(journeyId: number | string, attachmentId: number | string) {
+    return http.delete(`/admin/journeys/${journeyId}/media-attachments/${attachmentId}`);
+}
+
 // Aliases for backward compatibility
 export const saveTrekDepartures = saveJourneyDepartures;
 export const deleteTrekDeparture = deleteJourneyDeparture;

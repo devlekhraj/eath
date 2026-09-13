@@ -1,104 +1,203 @@
 <template>
-    <v-container class="py-6">
-        <v-row>
-            <v-col cols="12" md="7">
-                <v-card class="pa-4">
-                    <div>
-                        <v-carousel height="420" hide-delimiters>
-                            <v-carousel-item v-for="(image, index) in journey.images" :key="index"
-                                :src="image"></v-carousel-item>
-                        </v-carousel>
-                    </div>
-                    <div class="pt-2">
-                        <h1 class="font-weight-bold mb-2">{{ journey.name }}</h1>
-                        <p class="text-subtitle-1 text-grey-darken-1 mb-4">{{ journey.slug }}</p>
-                    </div>
+  <div class="py-2">
+    <div class="mb-4">
+      <v-btn
+        variant="text"
+        color="secondary"
+        :to="{ name: 'adminJourneyPage' }"
+      >
+        <v-icon start size="16">mdi-arrow-left</v-icon>
+        Back to Journeys
+      </v-btn>
+    </div>
 
-                    <v-chip class="mr-2" color="primary" text-color="white">
-                        {{ journey.duration_days }} Days / {{ journey.duration_nights }} Nights
-                    </v-chip>
+    <!-- Loading State -->
+    <v-card v-if="loading && !formReady" class="pa-8 text-center">
+      <v-progress-circular indeterminate color="primary" size="48" class="mb-4" />
+      <div class="text-body-2 text-medium-emphasis">Loading journey details...</div>
+    </v-card>
 
-                    <v-chip color="success" text-color="white">
-                        ${{ journey.price }}
-                    </v-chip>
+    <!-- Content State -->
+    <div v-else-if="formReady">
+      <!-- Detail Header Card -->
+      <DetailHeader
+        :title="journey?.name || 'Untitled Journey'"
+        :url="journeyUrl"
+        :image-url="headerImageUrl"
+        class="mb-6"
+      >
+        <template #meta>
+          <div class="d-flex align-center flex-wrap ga-2 mt-1">
+            <v-chip
+              size="small"
+              label
+              class="text-uppercase"
+              :color="journey.is_active ? 'success' : 'secondary'"
+            >
+              {{ journey.is_active ? 'Active' : 'Draft' }}
+            </v-chip>
 
-                    <v-divider class="my-6"></v-divider>
+            <v-chip
+              v-if="journey.is_featured"
+              size="small"
+              label
+              class="text-uppercase"
+              color="primary"
+            >
+              Featured
+            </v-chip>
 
-                    <h2 class="text-h6 mb-2">Description</h2>
-                    <div v-html="journey.description" class="mb-6" />
+            <v-chip
+              v-if="journey.destination?.name"
+              size="small"
+              label
+              variant="outlined"
+              color="secondary"
+            >
+              {{ journey.destination.name }}
+            </v-chip>
 
-                    <h2 class="text-h6 mb-2">Itinerary</h2>
-                    <v-timeline side="end" density="compact" class="mb-6">
-                        <v-timeline-item v-for="(item, index) in journey.itinerary" :key="index"
-                            :title="'Day ' + item.sort_order + ': ' + item.title">
-                            <div>{{ item.description }}</div>
-                        </v-timeline-item>
-                    </v-timeline>
+            <v-chip
+              v-if="journey.duration_days"
+              size="small"
+              label
+              variant="tonal"
+              color="primary"
+            >
+              {{ journey.duration_days }} Days / {{ journey.duration_nights ?? 0 }} Nights
+            </v-chip>
 
-                    <h2 class="text-h6 mb-2">Inclusions</h2>
-                    <ul class="mb-6">
-                        <li v-for="(inc, index) in journey.inclusions" :key="index">
-                            {{ inc }}
-                        </li>
-                    </ul>
+            <v-chip
+              v-if="journey.price || journey.price_minor"
+              size="small"
+              label
+              variant="tonal"
+              color="success"
+            >
+              ${{ journey.price ?? (journey.price_minor ? journey.price_minor / 100 : 0) }}
+            </v-chip>
+          </div>
+        </template>
+      </DetailHeader>
 
-                    <h2 class="text-h6 mb-2">Exclusions</h2>
-                    <ul class="mb-6">
-                        <li v-for="(exc, index) in journey.exclusions" :key="index">
-                            {{ exc }}
-                        </li>
-                    </ul>
-                </v-card>
-            </v-col>
+      <!-- Main Tabs Section -->
+      <v-card>
+        <v-tabs v-model="activeTab" color="primary">
+          <v-tab value="tab_overview">
+            <v-icon color="primary" start>mdi-view-dashboard-outline</v-icon>
+            Overview & Content
+          </v-tab>
+          <v-tab value="tab_itinerary">
+            <v-icon color="primary" start>mdi-map-marker-path</v-icon>
+            Itinerary & Highlights ({{ journey.itinerary_days?.length ?? 0 }})
+          </v-tab>
+          <v-tab value="tab_pricing">
+            <v-icon color="primary" start>mdi-currency-usd</v-icon>
+            Pricing & Services
+          </v-tab>
+          <v-tab value="tab_departures">
+            <v-icon color="primary" start>mdi-calendar-clock</v-icon>
+            Departures ({{ journey.departures?.length ?? 0 }})
+          </v-tab>
+          <v-tab value="tab_media">
+            <v-icon color="primary" start>mdi-image-multiple-outline</v-icon>
+            Media & Visuals
+          </v-tab>
+          <v-tab value="tab_seo">
+            <v-icon color="primary" start>mdi-google</v-icon>
+            SEO & Meta
+          </v-tab>
+        </v-tabs>
 
-            <v-col cols="12" md="5">
+        <v-divider />
 
-            </v-col>
-        </v-row>
-    </v-container>
+        <div class="pa-6" style="min-height: 500px;">
+          <KeepAlive>
+            <component
+              :is="activeTabComponent"
+              :journey="journey"
+              @refresh="fetchJourney"
+            />
+          </KeepAlive>
+        </div>
+      </v-card>
+    </div>
+
+    <!-- Error State -->
+    <v-alert
+      v-else
+      type="error"
+      variant="tonal"
+      class="mt-4"
+    >
+      Failed to load journey details. Please return to the list and try again.
+    </v-alert>
+  </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            journey: {
-                name: 'Everest Base Camp Trek',
-                slug: 'everest-base-camp-trek',
-                duration_days: 14,
-                duration_nights: 13,
-                price: 1500.0,
-                description: `<p>Explore the breathtaking Everest region with this unforgettable trek. Traverse through Sherpa villages, cross hanging bridges, and experience panoramic mountain views. This adventure is for those seeking high-altitude experiences, culture, and nature combined in one remarkable journey.</p>`,
-                itinerary: [
-                    { title: 'Arrival in Kathmandu', description: 'Welcome and transfer to hotel.', sort_order: 1 },
-                    { title: 'Flight to Lukla and trek to Phakding', description: 'Short scenic flight and warm-up trek.', sort_order: 2 },
-                    { title: 'Trek to Namche Bazaar', description: 'Enter the heart of the Khumbu region.', sort_order: 3 },
-                ],
-                inclusions: [
-                    'Airport pickups and drops',
-                    '3-star hotel accommodation in Kathmandu',
-                    'All meals during the trek',
-                    'Experienced English-speaking guide',
-                ],
-                exclusions: [
-                    'International airfare',
-                    'Nepal visa fee',
-                    'Personal expenses',
-                    'Tips for guides and porters',
-                ],
-                images: [
-                    'https://picsum.photos/seed/pic1/1920/900',
-                    'https://picsum.photos/seed/pic2/1920/900',
-                    'https://picsum.photos/seed/pic3/1920/900',
-                ],
-            },
-        }
-    },
-}
-</script>
+<script setup>
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import DetailHeader from '@/components/DetailHeader.vue'
+import TabOverview from './detail_tabs/TabOverview.vue'
+import TabItinerary from './detail_tabs/TabItinerary.vue'
+import TabPricing from './detail_tabs/TabPricing.vue'
+import TabDepartures from './detail_tabs/TabDepartures.vue'
+import TabMedia from './detail_tabs/TabMedia.vue'
+import TabSeo from './detail_tabs/TabSeo.vue'
+import { getJourney } from '@/api/journeys.api'
+import { useSnackbar } from '@/composables/snackbar'
 
-<style scoped>
-/* li {
-    margin-bottom: 4px;
-} */
-</style>
+const route = useRoute()
+const journeyId = computed(() => route.params.id || route.query.id)
+const { showError } = useSnackbar()
+
+const journey = reactive({})
+const formReady = ref(false)
+const loading = ref(true)
+const activeTab = ref('tab_overview')
+
+const tabComponents = {
+  tab_overview: TabOverview,
+  tab_itinerary: TabItinerary,
+  tab_pricing: TabPricing,
+  tab_departures: TabDepartures,
+  tab_media: TabMedia,
+  tab_seo: TabSeo,
+}
+
+const activeTabComponent = computed(() => tabComponents[activeTab.value] || TabOverview)
+
+const publicBaseUrl = window?.location?.origin ?? ''
+const journeyUrl = computed(() => {
+  if (!journey?.slug) return ''
+  return `${publicBaseUrl}/journeys/${journey.slug}`
+})
+
+const headerImageUrl = computed(() => {
+  return journey?.card_image?.url || journey?.hero_image?.url || ''
+})
+
+async function fetchJourney() {
+  const id = journeyId.value
+  if (!id) return
+
+  try {
+    loading.value = true
+    const resp = await getJourney(id)
+    const data = resp.data?.data ?? resp.data ?? {}
+    Object.assign(journey, data)
+    formReady.value = true
+  } catch (err) {
+    console.error('Failed to fetch journey details:', err)
+    showError('Failed to load journey details')
+    formReady.value = false
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchJourney()
+})
+</script>

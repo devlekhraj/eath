@@ -6,7 +6,6 @@
             :items-per-page="20"
             :sort-by="['sort_order', 'name']"
             :loading="fetching_data"
-            class="elevation-0"
         >
             <template #top>
                 <v-row class="px-4 py-3" align="center" justify="space-between" no-gutters>
@@ -31,6 +30,13 @@
 
             <template #item.sn="{ index }">
                 <span class="text-caption text-slate-500">{{ index + 1 }}</span>
+            </template>
+
+            <template #item.thumb="{ item }">
+                <v-avatar size="36" color="grey-lighten-3">
+                    <v-img v-if="item.thumb" :src="item.thumb" cover />
+                    <v-icon v-else size="18" color="grey">mdi-image-outline</v-icon>
+                </v-avatar>
             </template>
 
             <template #item.name="{ item }">
@@ -102,6 +108,7 @@ const { showSuccess, showError } = useSnackbar()
 
 const headers = [
     { title: 'SN', key: 'sn', sortable: false },
+    { title: 'Image', key: 'thumb', sortable: false, width: '60px' },
     { title: 'Destination', key: 'name', sortable: true },
     { title: 'Region', key: 'region_label', sortable: true },
     { title: 'Journeys', key: 'journeys_count', sortable: true },
@@ -131,6 +138,7 @@ function handleOpen(item = null) {
         props: {
             item: item || {},
         },
+        onSaved: fetchDestinations,
     })
 }
 
@@ -142,6 +150,7 @@ function handleDelete(item = {}) {
         props: {
             item,
         },
+        onSaved: fetchDestinations,
     })
 }
 

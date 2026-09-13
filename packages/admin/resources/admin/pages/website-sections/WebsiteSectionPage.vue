@@ -30,7 +30,7 @@
           </v-col>
 
           <v-col cols="auto" class="mt-2 mt-sm-0">
-            <v-btn color="primary" variant="elevated" @click="handleOpen()">
+            <v-btn color="primary" variant="flat" @click="handleOpen()">
               <v-icon start>mdi-plus</v-icon> Add Section
             </v-btn>
           </v-col>

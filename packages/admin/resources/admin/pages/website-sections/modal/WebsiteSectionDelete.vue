@@ -17,7 +17,7 @@
     </v-card-text>
     <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleClose">Cancel</v-btn>
-      <v-btn color="error" variant="elevated" :loading="submitting" @click="handleDelete">
+      <v-btn color="error" variant="flat" :loading="submitting" @click="handleDelete">
         Delete
       </v-btn>
     </v-card-actions>

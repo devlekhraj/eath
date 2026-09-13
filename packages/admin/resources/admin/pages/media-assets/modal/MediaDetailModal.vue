@@ -21,12 +21,11 @@
           </div>
 
           <div class="mt-3 d-flex align-center ga-2">
-            <div class="mb-2">
+            <div class="flex-grow-1">
                 <v-text-field
                   :model-value="asset.url"
                   label="Direct Public URL"
                   readonly
-                  class="flex-grow-1"
                   hide-details
                 />
             </div>
@@ -57,7 +56,6 @@
                   v-model="form.title"
                   label="Asset Title"
                   placeholder="Descriptive title"
-                  class="mb-3"
                 />
             </div>
 
@@ -66,7 +64,6 @@
                   v-model="form.alt_text"
                   label="Alt Text (SEO & Accessibility)"
                   placeholder="Descriptive alt text for screen readers"
-                  class="mb-3"
                 />
             </div>
 
@@ -76,7 +73,6 @@
                   label="Caption"
                   placeholder="Optional photo caption or editorial context"
                   rows="5"
-                  class="mb-3"
                 />
             </div>
           </v-form>
@@ -85,10 +81,9 @@
     </v-card-text>
     <v-card-actions class="justify-end">
       <v-btn variant="text" @click="handleCancel">Cancel</v-btn>
-      <v-spacer />
       <v-btn
         color="primary"
-        variant="elevated"
+        variant="flat"
         :loading="saving"
         @click="handleSave"
       >

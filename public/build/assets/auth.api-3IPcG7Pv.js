@@ -1,1 +1,0 @@
-import{h as o}from"./http.config-BqGP8sKe.js";function n(t){return o.post("/admin/login",t)}function p(){return o.post("/admin/logout")}function r(){return o.get("/admin/profile")}export{p as a,n as l,r as p};
