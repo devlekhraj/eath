@@ -1,0 +1,1 @@
+import{_ as t}from"./main-C4jjPJPQ.js";import{ae as o,x as r,a7 as a}from"./vendor-vue-Cuu67uBw.js";import"./jquery-DeunYbTO.js";import"./vendor-vuetify-CgyoRjQr.js";const s={};function n(i,e){return a(),o("div",null,e[0]||(e[0]=[r("p",null,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, ipsa.",-1)]))}const u=t(s,[["render",n]]);export{u as default};

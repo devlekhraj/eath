@@ -1,1 +1,0 @@
-import{_ as r}from"./main-D3WjctTC.js";import{af as o,x as s,a7 as t}from"./vendor-vue-BySCVZq8.js";import"./jquery-DeunYbTO.js";import"./vendor-vuetify-7S5vC3Tv.js";const a={};function n(c,e){return t(),o("div",null,e[0]||(e[0]=[s("p",null,"password reset",-1)]))}const d=r(a,[["render",n]]);export{d as default};

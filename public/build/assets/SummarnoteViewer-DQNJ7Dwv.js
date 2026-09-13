@@ -1,1 +1,0 @@
-import{l as n,af as o,a7 as t}from"./vendor-vue-BySCVZq8.js";import{_ as r}from"./main-D3WjctTC.js";const a=["innerHTML"],s=n({__name:"SummarnoteViewer",props:{value:{}},setup(m){return(e,_)=>(t(),o("div",{class:"summernote-viewer note-editable-content",innerHTML:e.value||""},null,8,a))}}),p=r(s,[["__scopeId","data-v-13270bb5"]]);export{p as S};
