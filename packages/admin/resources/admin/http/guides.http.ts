@@ -32,5 +32,5 @@ export function saveGuideTripApi(guideId: GuideId, payload: Record<string, unkno
 
 /** Fetches journeys for the trip selector dropdown */
 export function getTravelPackagesListApi(params?: Record<string, unknown>) {
-    return http.get('/admin/travel-packages', { params })
+    return http.get('/admin/journeys', { params })
 }

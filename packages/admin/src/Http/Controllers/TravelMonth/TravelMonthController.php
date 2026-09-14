@@ -29,7 +29,9 @@ class TravelMonthController extends Controller
 
     public function show($id)
     {
-        $month = TravelMonth::withCount('journeys')->findOrFail($id);
+        $month = TravelMonth::withCount('journeys')
+            ->with(['faqs', 'heroAttachment.mediaAsset'])
+            ->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -46,6 +48,7 @@ class TravelMonthController extends Controller
             'summary' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'conditions_note' => ['nullable', 'string'],
+            'content' => ['nullable', 'array'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);

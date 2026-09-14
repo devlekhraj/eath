@@ -2,295 +2,265 @@
 
 namespace Admin\Http\Controllers\Guide;
 
-
-use Admin\Models\Blog;
 use Admin\Models\Guide;
-use Admin\Models\Gallery;
-use Admin\Models\GuideTrip;
-use Admin\Models\GuideReview;
-use Illuminate\Support\Str;
-use Admin\Models\GalleryUsage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Admin\Models\Journey;
+use Admin\Services\AuthService;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
 use App\Http\Resources\GuideResource;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GuideController extends Controller
 {
-    public function index()
+    public function __construct(
+        protected AuthService $authService
+    ) {}
+
+    public function index(Request $request)
     {
-        $guideList = Guide::with(['mediaAttachments.mediaAsset'])->latest()->get();
+        $query = Guide::query()
+            ->with(['mediaAttachments.mediaAsset'])
+            ->withCount(['journeys', 'reviews']);
+
+        if ($request->filled('search')) {
+            $search = $request->string('search')->toString();
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        $guideList = $query->orderBy('sort_order')->latest('id')->get();
 
         return response()->json([
             'success' => true,
-            'data' => GuideResource::collection($guideList)
+            'data' => GuideResource::collection($guideList),
+        ], 200);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $guide = Guide::with([
+            'mediaAttachments.mediaAsset',
+            'reviews',
+            'journeys',
+        ])->withCount(['journeys', 'reviews'])->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => new GuideResource($guide),
         ], 200);
     }
 
     public function storeUpdate(Request $request)
     {
-        $id = $request->id;
+        $id = $request->input('id');
 
-        // Validation rules
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:guides,email' . ($id ? ',' . $id . ',id' : ''),
-            'phone_no' => 'required|string|max:20',
-            'language_spoken' => 'required|array',
-            'language_spoken.*' => 'string|max:50', // each language must be string max 50 chars
-            'bio' => 'nullable|string',
-            'license_number' => 'nullable|string|max:100',
-            'experience_years' => 'nullable|integer|min:0|max:100',
-            'status' => 'nullable|in:active,inactive,deleted,pending,suspended',
+            'id' => ['nullable', 'integer', 'exists:guides,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:guides,slug' . ($id ? ',' . $id . ',id' : '')],
+            'role' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:guides,email' . ($id ? ',' . $id . ',id' : '')],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'phone_no' => ['nullable', 'string', 'max:50'],
+            'biography' => ['nullable', 'string'],
+            'bio' => ['nullable', 'string'],
+            'languages' => ['nullable', 'array'],
+            'languages.*' => ['string', 'max:50'],
+            'language_spoken' => ['nullable', 'array'],
+            'language_spoken.*' => ['string', 'max:50'],
+            'qualifications' => ['nullable', 'array'],
+            'qualifications.*' => ['string', 'max:100'],
+            'years_experience' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'experience_years' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'is_featured' => ['nullable', 'boolean'],
+            'is_active' => ['nullable', 'boolean'],
+            'status' => ['nullable', 'string'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string', 'max:300'],
             'media' => ['nullable', 'array'],
             'media.avatar' => ['nullable', 'integer', 'exists:media_assets,id'],
         ]);
 
-        $mediaData = $validated['media'] ?? [];
-        unset($validated['media']);
+        $payload = [
+            'name' => $validated['name'],
+            'slug' => !empty($validated['slug']) ? Str::slug($validated['slug']) : Str::slug($validated['name']),
+            'role' => $validated['role'] ?? null,
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? $validated['phone_no'] ?? null,
+            'biography' => $validated['biography'] ?? $validated['bio'] ?? null,
+            'languages' => $validated['languages'] ?? $validated['language_spoken'] ?? [],
+            'qualifications' => $validated['qualifications'] ?? [],
+            'years_experience' => $validated['years_experience'] ?? $validated['experience_years'] ?? 0,
+            'is_featured' => $request->boolean('is_featured'),
+            'sort_order' => $validated['sort_order'] ?? 0,
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+        ];
+
+        if ($request->has('is_active')) {
+            $payload['is_active'] = $request->boolean('is_active');
+        } elseif ($request->has('status')) {
+            $payload['is_active'] = $request->input('status') === 'active';
+        } else {
+            $payload['is_active'] = true;
+        }
 
         if ($id) {
             $guide = Guide::findOrFail($id);
-            $guide->update($validated);
+            $guide->update($payload);
         } else {
-            $guide = Guide::create($validated);
+            $guide = Guide::create($payload);
         }
 
         if ($request->has('media')) {
-            $guide->syncMediaFromRequest($mediaData);
+            $guide->syncMediaFromRequest($validated['media'] ?? []);
         }
 
-        $guide->load(['mediaAttachments.mediaAsset', 'reviews', 'trips']);
-
-        return response()->json([
-            'message' => 'Guide saved successfully',
-            'data' => new GuideResource($guide),
-        ]);
-    }
-
-
-    public function show(Request $request, $id)
-    {
-        $guide = Guide::with(['mediaAttachments.mediaAsset', 'reviews', 'trips'])->findOrFail($id);
+        $guide->load([
+            'mediaAttachments.mediaAsset',
+            'reviews',
+            'journeys',
+        ])->loadCount(['journeys', 'reviews']);
 
         return response()->json([
             'success' => true,
+            'message' => $id ? 'Guide updated successfully' : 'Guide created successfully',
             'data' => new GuideResource($guide),
-        ], 200);
+        ]);
     }
 
     public function updateBio(Request $request, $id)
     {
-        // Logic to retrieve travel packages
-        $guide = Guide::find($id);
-        $guide->bio = $request->bio;
-        $guide->save();
+        $validated = $request->validate([
+            'bio' => ['nullable', 'string'],
+            'biography' => ['nullable', 'string'],
+        ]);
 
+        $guide = Guide::findOrFail($id);
+        $guide->biography = $validated['biography'] ?? $validated['bio'] ?? null;
+        $guide->save();
 
         return response()->json([
             'success' => true,
-            'data' => $guide,
-            "message" => "Bio updated",
+            'message' => 'Bio updated successfully',
+            'data' => new GuideResource($guide->load(['mediaAttachments.mediaAsset', 'reviews', 'journeys'])),
         ], 200);
     }
 
-
     public function guideReview(Request $request, $guideId)
     {
-        $request->validate([
-            'comment' => 'required|string',
-            'rating' => 'required|integer|min:1|max:5',
-            'id' => 'sometimes|integer|exists:guide_reviews,id',
+        $guide = Guide::findOrFail($guideId);
+
+        $validated = $request->validate([
+            'id' => ['nullable', 'integer', 'exists:guide_reviews,id'],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'comment' => ['nullable', 'string'],
+            'body' => ['nullable', 'string'],
+            'reviewer_name' => ['nullable', 'string', 'max:255'],
+            'reviewer_country' => ['nullable', 'string', 'max:100'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'reviewed_on' => ['nullable', 'date'],
+            'is_published' => ['nullable', 'boolean'],
+            'is_featured' => ['nullable', 'boolean'],
         ]);
 
-        $reviewer = auth()->user();
+        $body = $validated['body'] ?? $validated['comment'] ?? '';
+        $reviewerName = $validated['reviewer_name'] ?? $this->authService->name('Anonymous Explorer');
 
-        if ($request->filled('id')) {
-            // Update existing review
-            $review = GuideReview::where('id', $request->id)
-                ->where('reviewer_id', $reviewer->id)
-                ->where('reviewer_type', get_class($reviewer))
-                ->firstOrFail();
+        $reviewData = [
+            'guide_id' => $guide->id,
+            'rating' => $validated['rating'],
+            'body' => $body,
+            'reviewer_name' => $reviewerName,
+            'reviewer_country' => $validated['reviewer_country'] ?? null,
+            'title' => $validated['title'] ?? null,
+            'reviewed_on' => $validated['reviewed_on'] ?? now()->toDateString(),
+            'is_published' => $validated['is_published'] ?? true,
+            'is_featured' => $validated['is_featured'] ?? false,
+        ];
 
-            $review->rating = $request->input('rating');
-            $review->comment = $request->input('comment');
-            $review->is_approved = false; // reset approval on update
-            $review->save();
-
+        if (!empty($validated['id'])) {
+            $review = $guide->reviews()->findOrFail($validated['id']);
+            $review->update($reviewData);
             $message = 'Review updated successfully';
         } else {
-            // Create new review
-            $review = GuideReview::create([
-                'guide_id' => $guideId,
-                'reviewer_id' => $reviewer->id,
-                'reviewer_type' => get_class($reviewer),
-                'rating' => $request->input('rating'),
-                'comment' => $request->input('comment'),
-                'is_approved' => false,
-            ]);
-
+            $review = $guide->reviews()->create($reviewData);
             $message = 'Review submitted successfully';
         }
 
         return response()->json([
+            'success' => true,
             'message' => $message,
+            'data' => $review,
             'review' => $review,
         ]);
     }
 
     public function guideTrip(Request $request, $guideId)
     {
+        $guide = Guide::findOrFail($guideId);
+
         $validated = $request->validate([
-            'id' => 'nullable|exists:guide_trips,id',
-            'travel_package_id' => 'nullable|exists:travel_packages,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'group_size' => 'required|integer|min:1',
-            'notes' => 'nullable|string',
+            'journey_id' => ['nullable', 'integer', 'exists:journeys,id'],
+            'travel_package_id' => ['nullable', 'integer', 'exists:journeys,id'],
+            'role' => ['nullable', 'string', 'max:255'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date'],
+            'group_size' => ['nullable', 'integer', 'min:1'],
+            'notes' => ['nullable', 'string'],
         ]);
 
-
-        $validated['start_date'] = Carbon::parse($validated['start_date'])->format('Y-m-d');
-        $validated['end_date'] = Carbon::parse($validated['end_date'])->format('Y-m-d');
-
-        if (isset($validated['id'])) {
-            // Update existing trip
-            $trip = GuideTrip::where('id', $validated['id'])
-                ->where('guide_id', $guideId)
-                ->firstOrFail();
-
-            $trip->update([
-                'travel_package_id' => $validated['travel_package_id'] ?? null,
-                'start_date' => $validated['start_date'],
-                'end_date' => $validated['end_date'],
-                'group_size' => $validated['group_size'],
-                'notes' => $validated['notes'] ?? null,
-            ]);
-
-            $message = 'Guide trip updated successfully';
-        } else {
-            // Create new trip
-            $trip = GuideTrip::create([
-                'guide_id' => $guideId,
-                'travel_package_id' => $validated['travel_package_id'] ?? null,
-                'start_date' => $validated['start_date'],
-                'end_date' => $validated['end_date'],
-                'group_size' => $validated['group_size'],
-                'notes' => $validated['notes'] ?? null,
-            ]);
-
-            $message = 'Guide trip added successfully';
+        $journeyId = $validated['journey_id'] ?? $validated['travel_package_id'] ?? null;
+        if (!$journeyId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please select a valid journey or trek.',
+            ], 422);
         }
 
-        return response()->json([
-            'message' => $message,
-            'trip' => $trip,
-        ]);
-    }
+        $role = $validated['role'] ?? $validated['notes'] ?? 'Lead Guide';
+        $sortOrder = $validated['sort_order'] ?? 0;
 
-
-
-
-    public function uploadImage(Request $request)
-    {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        $guide->journeys()->syncWithoutDetaching([
+            $journeyId => [
+                'role' => $role,
+                'sort_order' => $sortOrder,
+            ],
         ]);
 
-        $image = $request->file('image');
-
-        $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeName = Str::slug($originalName, '-');
-        $extension = $image->getClientOriginalExtension();
-
-        $year = now()->format('Y');
-        $month = now()->format('m');
-        $relativePath = "gallery/{$year}/{$month}";
-        $fullPath = storage_path($relativePath);
-
-        if (!File::exists($fullPath)) {
-            File::makeDirectory($fullPath, 0755, true);
-        }
-
-        $filename = $safeName . '.' . $extension;
-        $counter = 0;
-        while (File::exists($fullPath . '/' . $filename)) {
-            $counter++;
-            $filename = $safeName . '-' . $counter . '.' . $extension;
-        }
-
-        $mimeType = $image->getMimeType();
-        $image->move($fullPath, $filename);
-
-        $filepath = "{$relativePath}/{$filename}";
-        $fileSize = File::size($fullPath . '/' . $filename); // in bytes
-        $gallery = Gallery::create([
-            'filename' => $filename,
-            'filepath' => $filepath,
-            'mime_type' => $mimeType,
-            'file_size' => $fileSize,
-            'alt_text' => null,
-            'image_url' => route('image.view', ['filename' => $filename]),
-        ]);
-
-
-        if ($request->has('usage_type') && $request->has('usage_id')) {
-            $usageType = $request->input('usage_type');
-            $usageId = $request->input('usage_id');
-            $gallery->usages()->create([
-                "usage_type" => $usageType,
-                "usage_id" => $usageId
-            ]);
-
-            switch ($request->usage_type) {
-                case 'blogs':
-                    $blog = Blog::find($request->usage_id);
-                    $blog->cover_image = $filename;
-                    $blog->save();
-                    break;
-                default:
-                    break;
-            }
-        }
+        $journey = Journey::find($journeyId);
 
         return response()->json([
             'success' => true,
-            "filename" => $filename,
-            'data' => $gallery,
-            'url' => route('image.view', ['filename' => $filename]),
-        ], 201);
-    }
-
-    public function getImage($filename)
-    {
-        $file = Gallery::where('filename', $filename)->first();
-        if (!$file) {
-            return response()->file(public_path('images/logo.png'));
-        }
-
-        $filePath = storage_path($file->filepath);
-
-        if (!file_exists($filePath)) {
-            return response()->file(public_path('images/logo.png'));
-        }
-
-        return response()->file($filePath, [
-            'Content-Type' => mime_content_type($filePath),
+            'message' => 'Guide assigned to journey successfully',
+            'trip' => [
+                'id' => $journeyId,
+                'journey_id' => $journeyId,
+                'travel_package_id' => $journeyId,
+                'travel_package' => ['name' => $journey?->name],
+                'role' => $role,
+            ],
         ]);
     }
 
     public function deleteGuide($id)
     {
-        $guide = Guide::find($id);
-
-        if (!$guide) {
-            return response()->json(['message' => 'guide not found'], 404);
-        }
-
+        $guide = Guide::findOrFail($id);
+        $name = $guide->name;
         $guide->delete();
 
-        return response()->json(['message' => $guide->name . ' deleted successfully']);
+        return response()->json([
+            'success' => true,
+            'message' => "Guide '{$name}' deleted successfully",
+        ]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Website\Http\Controllers;
 
+use Admin\Models\TravelMonth;
+use Admin\Models\WebsitePage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Website\Services\WebsiteCatalogRepository;
@@ -12,6 +14,13 @@ class TravelMonthController extends Controller
     public function index(Request $request)
     {
         $allMonths = WebsiteCatalogRepository::getMonths();
+
+        $page = WebsitePage::with([
+            'sections' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
+            'heroAttachment.mediaAsset',
+        ])
+        ->where('slug', 'when-to-go')
+        ->first();
 
         $requestedMonth = $request->query('month');
         $isDefault = empty($requestedMonth);
@@ -30,8 +39,14 @@ class TravelMonthController extends Controller
         // Matching treks for selected month
         $matchingTreks = $selectedMonth['treks'] ?? [];
 
-        // Four labeled sample season groups
-        $seasons = [
+        // Four labeled sample season groups (from dynamic section with fallback)
+        $seasonSection = $page?->sections?->first(fn ($s) => $s->layout_key === 'cards_grid');
+        $seasons = (!empty($seasonSection?->content['items']))
+            ? $seasonSection->content['items']
+            : null;
+
+        if (empty($seasons)) {
+            $seasons = [
             [
                 'name' => 'Spring',
                 'months' => 'March – May',
@@ -61,6 +76,7 @@ class TravelMonthController extends Controller
                 'trail_flow' => 'Low footprint and minimal trail encounters; some high-altitude teahouses close for winter break.',
             ],
         ];
+    }
 
         // Month-specific editorial descriptions
         $monthEditorials = [
@@ -126,10 +142,17 @@ class TravelMonthController extends Controller
             ],
         ];
 
-        $currentEditorial = $monthEditorials[$selectedMonth['id']] ?? $monthEditorials[9];
+        $editorialFallback = $monthEditorials[$selectedMonth['id']] ?? $monthEditorials[9];
+        $content = $selectedMonth['content'] ?? [];
+        $currentEditorial = [
+            'overview' => !empty($content['overview']) ? $content['overview'] : (!empty($selectedMonth['summary']) ? $selectedMonth['summary'] : $editorialFallback['overview']),
+            'trail_vibe' => !empty($content['trail_vibe']) ? $content['trail_vibe'] : (!empty($selectedMonth['conditions_note']) ? $selectedMonth['conditions_note'] : $editorialFallback['trail_vibe']),
+            'pack_tip' => !empty($content['pack_tip']) ? $content['pack_tip'] : (!empty($selectedMonth['description']) ? $selectedMonth['description'] : $editorialFallback['pack_tip']),
+        ];
         $article = WebsiteCatalogRepository::findArticle('choosing-a-travel-month');
 
         return view('website_preview.pages.months.index', [
+            'page' => $page,
             'months' => $allMonths,
             'seasons' => $seasons,
             'selectedMonth' => $selectedMonth,
@@ -137,6 +160,8 @@ class TravelMonthController extends Controller
             'currentEditorial' => $currentEditorial,
             'matchingTreks' => $matchingTreks,
             'article' => $article,
+            'title' => $page?->meta_title ?: ($page?->title ?: 'When to Trek in Nepal · Month-by-Month Guide · EATH Website'),
+            'metaDescription' => $page?->meta_description ?: ($page?->summary ?: 'Himalayan trekking conditions shift markedly across elevation zones and seasons. Review seasonal patterns and matching itineraries.'),
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'When to Go'],
@@ -148,6 +173,19 @@ class TravelMonthController extends Controller
     {
         $m = WebsiteCatalogRepository::findMonth($month);
         abort_unless($m, 404);
+
+        $monthModel = TravelMonth::query()
+            ->with([
+                'faqs' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
+                'heroAttachment.mediaAsset',
+            ])
+            ->where(function ($q) use ($month) {
+                $q->where('slug', $month);
+                if (is_numeric($month)) {
+                    $q->orWhere('month_number', (int) $month);
+                }
+            })
+            ->first();
 
         // Previous and Next month with safe December/January wrapping
         $prevId = ($m['id'] === 1) ? 12 : ($m['id'] - 1);
@@ -171,7 +209,14 @@ class TravelMonthController extends Controller
             }
         }
 
-        $heroImage = WebsiteAssetRegistry::resolve('experience-mountain-scenery', 'Trekking in ' . $m['name']);
+        $heroUrl = $monthModel?->heroAttachment?->mediaAsset?->url ?? null;
+        $fallbackHero = WebsiteAssetRegistry::resolve('experience-mountain-scenery', 'Trekking in ' . $m['name']);
+        $heroImage = [
+            'url' => $heroUrl ?: $fallbackHero['url'],
+            'alt' => $monthModel?->heroAttachment?->alt_text ?: $fallbackHero['alt'],
+            'width' => 1920,
+            'height' => 1080,
+        ];
 
         $monthData = [
             1 => [
@@ -392,7 +437,19 @@ class TravelMonthController extends Controller
             ],
         ];
 
-        $currentData = $monthData[$m['id']] ?? $monthData[9];
+        $dbContent = $monthModel?->content ?? [];
+        $dbFaqs = ($monthModel && $monthModel->faqs->isNotEmpty())
+            ? $monthModel->faqs->map(fn ($f) => ['question' => $f->question, 'answer' => $f->answer])->all()
+            : [];
+
+        $defaultMonthData = $monthData[$m['id']] ?? $monthData[9];
+
+        $currentData = [
+            'summary' => $monthModel?->summary ?: ($defaultMonthData['summary'] ?? ''),
+            'reasons' => !empty($dbContent['reasons']) ? $dbContent['reasons'] : ($defaultMonthData['reasons'] ?? []),
+            'limitations' => !empty($dbContent['limitations']) ? $dbContent['limitations'] : ($defaultMonthData['limitations'] ?? []),
+            'faqs' => !empty($dbFaqs) ? $dbFaqs : ($defaultMonthData['faqs'] ?? []),
+        ];
 
         $prepArticles = [
             WebsiteCatalogRepository::findArticle('choosing-a-travel-month'),
@@ -403,6 +460,7 @@ class TravelMonthController extends Controller
 
         return view('website_preview.pages.months.show', [
             'month' => $m,
+            'monthModel' => $monthModel,
             'prevMonth' => $prevMonth,
             'nextMonth' => $nextMonth,
             'matchingDestinations' => $matchingDestinations,
@@ -410,6 +468,8 @@ class TravelMonthController extends Controller
             'heroImage' => $heroImage,
             'currentData' => $currentData,
             'prepArticles' => $prepArticles,
+            'title' => 'Planning a Trek in ' . $m['name'] . ' · EATH Himalayan Website',
+            'metaDescription' => $currentData['summary'] ?? ('Explore our ' . $m['name'] . ' Himalayan trekking guide, trail conditions, and seasonal itineraries.'),
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'When to Go', 'url' => route('website.months.index')],

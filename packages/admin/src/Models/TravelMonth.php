@@ -2,10 +2,15 @@
 
 namespace Admin\Models;
 
+use Admin\Models\Concerns\HasFaqs;
+use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 
 class TravelMonth extends Model
 {
+    use HasFaqs;
+    use HasMediaAttachments;
+
     public const SEASON_WINTER = 'winter';
     public const SEASON_SPRING = 'spring';
     public const SEASON_SUMMER = 'summer';
@@ -26,6 +31,7 @@ class TravelMonth extends Model
         'summary',
         'description',
         'conditions_note',
+        'content',
         'sort_order',
         'is_active',
     ];
@@ -33,6 +39,7 @@ class TravelMonth extends Model
     protected $casts = [
         'month_number' => 'integer',
         'is_active' => 'boolean',
+        'content' => 'array',
     ];
 
     public function journeys()

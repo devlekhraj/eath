@@ -29,8 +29,26 @@ class GuideReview extends Model
         'is_published' => 'boolean',
     ];
 
+    protected $appends = [
+        'comment',
+        'reviewer',
+    ];
+
     public function guide()
     {
         return $this->belongsTo(Guide::class);
+    }
+
+    public function getCommentAttribute(): ?string
+    {
+        return $this->body;
+    }
+
+    public function getReviewerAttribute(): array
+    {
+        return [
+            'name' => $this->reviewer_name ?? 'Anonymous Explorer',
+            'country' => $this->reviewer_country,
+        ];
     }
 }

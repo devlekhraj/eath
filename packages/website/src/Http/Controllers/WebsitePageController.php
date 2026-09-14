@@ -16,11 +16,30 @@ class WebsitePageController extends Controller
     public function about()
     {
         $guides = WebsiteCatalogRepository::getGuides();
-        $heroImage = WebsiteAssetRegistry::resolve('about-hero', 'About EATH Himalayan Trekking');
+
+        $page = WebsitePage::with([
+            'sections' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
+            'heroAttachment.mediaAsset',
+        ])
+        ->where('slug', 'about')
+        ->first();
+
+        $heroUrl = $page?->heroAttachment?->mediaAsset?->url ?? null;
+        $fallbackHero = WebsiteAssetRegistry::resolve('about-hero', 'About EATH Himalayan Trekking');
+
+        $heroImage = [
+            'url' => $heroUrl ?: $fallbackHero['url'],
+            'alt' => $page?->heroAttachment?->alt_text ?: $fallbackHero['alt'],
+            'width' => 1600,
+            'height' => 900,
+        ];
 
         return view('website_preview.pages.about', [
+            'page' => $page,
             'guides' => $guides,
             'heroImage' => $heroImage,
+            'title' => $page?->meta_title ?: ($page?->title ?: 'About EATH: Elevated Alpine Trekking & Hospitality'),
+            'metaDescription' => $page?->meta_description ?: ($page?->summary ?: 'Proposed brand story, planning philosophy, and architectural design for the EATH Himalayan trekking website platform.'),
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'About Us'],
@@ -33,10 +52,28 @@ class WebsitePageController extends Controller
         $highAltitudeArticle = WebsiteCatalogRepository::findArticle('questions-before-a-high-altitude-trip');
         $packingArticle = WebsiteCatalogRepository::findArticle('organizing-your-packing-questions');
 
+        $page = WebsitePage::with([
+            'sections' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
+            'heroAttachment.mediaAsset',
+        ])
+        ->where('slug', 'safety')
+        ->first();
+
+        $heroUrl = $page?->heroAttachment?->mediaAsset?->url ?? null;
+        $fallbackHero = WebsiteAssetRegistry::resolve('safety-hero', 'Mountain trail support and preparation landscape');
+
+        $heroImage = [
+            'url' => $heroUrl ?: $fallbackHero['url'],
+            'alt' => $page?->heroAttachment?->alt_text ?: $fallbackHero['alt'],
+            'width' => 1920,
+            'height' => 1080,
+        ];
+
         return view('website_preview.pages.safety', [
-            'heroImage' => WebsiteAssetRegistry::resolve('safety-hero', 'Mountain trail support and preparation landscape'),
-            'title' => 'Safety & Field Support Framework',
-            'metaDescription' => 'Explore our proposed safety discussion framework, acclimatization pacing questions, and field coordination standards for Himalayan trekking.',
+            'page' => $page,
+            'heroImage' => $heroImage,
+            'title' => $page?->meta_title ?: ($page?->title ?: 'Safety & Field Support Framework'),
+            'metaDescription' => $page?->meta_description ?: ($page?->summary ?: 'Explore our proposed safety discussion framework, acclimatization pacing questions, and field coordination standards for Himalayan trekking.'),
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'Safety and Support'],
@@ -92,8 +129,22 @@ class WebsitePageController extends Controller
             $preselectedTrek = $preselectedTrek['slug'] ?? null;
         }
 
+        $page = WebsitePage::with('heroAttachment.mediaAsset')->where('slug', 'contact')->first();
+        $heroUrl = $page?->heroAttachment?->mediaAsset?->url ?? null;
+        $fallbackHero = WebsiteAssetRegistry::resolve('contact-hero', 'Calm Nepal mountain landscape for contact planning');
+
+        $heroImage = [
+            'url' => $heroUrl ?: $fallbackHero['url'],
+            'alt' => $page?->heroAttachment?->alt_text ?: $fallbackHero['alt'],
+            'width' => 1600,
+            'height' => 900,
+        ];
+
         return view('website_preview.pages.contact', [
-            'heroImage' => WebsiteAssetRegistry::resolve('contact-hero', 'Calm Nepal mountain landscape for contact planning'),
+            'page' => $page,
+            'heroImage' => $heroImage,
+            'title' => $page?->meta_title ?: ($page?->title ?: 'Contact Our Team (Website)'),
+            'metaDescription' => $page?->meta_description ?: ($page?->summary ?: 'Simulate sending an expedition inquiry or route planning question to our Himalayan trekking team in this preview.'),
             'treks' => $treks,
             'preselectedTrek' => $preselectedTrek,
             'topics' => [
@@ -193,10 +244,54 @@ class WebsitePageController extends Controller
 
     protected function renderPolicy(string $slug, string $label)
     {
-        $policy = WebsiteCatalogRepository::getPolicy($slug);
-        abort_unless($policy, 404);
+        $page = WebsitePage::with([
+            'sections' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
+        ])
+        ->where('slug', $slug)
+        ->where('is_active', true)
+        ->first();
+
+        if ($page) {
+            $policy = [
+                'title' => $page->title,
+                'intro' => $page->summary,
+                'notice_title' => $page->notice_title,
+                'notice_body' => $page->notice_body,
+                'body' => $page->body,
+                'sections' => $page->sections->map(fn ($section) => [
+                    'heading' => $section->heading,
+                    'body' => $section->body,
+                ])->values()->all(),
+            ];
+        } else {
+            $policy = WebsiteCatalogRepository::getPolicy($slug);
+        }
+
+        if (!$policy) {
+            $policyTitles = [
+                'privacy' => 'Privacy Policy',
+                'terms' => 'Terms & Conditions',
+                'booking-conditions' => 'Booking Conditions',
+                'cancellation' => 'Cancellation Policy',
+                'cookies' => 'Cookie Policy',
+            ];
+            $policy = [
+                'title' => $policyTitles[$slug] ?? ucwords(str_replace('-', ' ', $slug)),
+                'intro' => 'Official policy documentation for EATH Travels expeditions and website services.',
+                'notice_title' => 'Policy Verification Notice',
+                'notice_body' => 'All operational policies are reviewed periodically to comply with Nepal tourism and safety regulations.',
+                'body' => '<p>Please contact our operations team for detailed policy inquiries.</p>',
+                'sections' => [
+                    [
+                        'heading' => 'Operational Overview',
+                        'body' => 'EATH Travels operates Himalayan trekking journeys under strict safety, welfare, and environmental guidelines.',
+                    ],
+                ],
+            ];
+        }
 
         return view('website_preview.pages.policy', [
+            'page' => $page,
             'policy' => $policy,
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],

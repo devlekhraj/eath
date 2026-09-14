@@ -43,6 +43,26 @@
                         </div>
                     </v-col>
 
+                    <v-col cols="12" md="6">
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.content.trail_vibe"
+                                label="Trail Atmosphere & Crowds (Vibe)"
+                                placeholder="e.g. Peaceful, uncrowded villages with warm teahouse hearths."
+                            />
+                        </div>
+                    </v-col>
+
+                    <v-col cols="12" md="6">
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.content.pack_tip"
+                                label="Seasonal Gear & Packing Tip"
+                                placeholder="e.g. Down jackets, thermal layering systems."
+                            />
+                        </div>
+                    </v-col>
+
                     <v-col cols="12">
                         <div class="mb-2">
                             <v-textarea
@@ -97,6 +117,10 @@ const form = reactive({
     conditions_note: '',
     summary: '',
     description: '',
+    content: {
+        trail_vibe: '',
+        pack_tip: '',
+    },
     is_active: true,
 })
 
@@ -123,6 +147,12 @@ onMounted(() => {
             conditions_note: props.item.conditions_note || '',
             summary: props.item.summary || '',
             description: props.item.description || '',
+            content: {
+                trail_vibe: props.item.content?.trail_vibe || '',
+                pack_tip: props.item.content?.pack_tip || '',
+                reasons: props.item.content?.reasons || [],
+                limitations: props.item.content?.limitations || [],
+            },
             is_active: props.item.is_active ?? true,
         })
     }
@@ -146,6 +176,7 @@ async function submitForm() {
             conditions_note: form.conditions_note,
             summary: form.summary,
             description: form.description,
+            content: form.content,
             is_active: form.is_active,
         })
 

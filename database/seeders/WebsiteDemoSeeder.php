@@ -21,6 +21,7 @@ class WebsiteDemoSeeder extends Seeder
             'website_pages', 'website_sections', 'website_settings', 'journey_safety_items',
             'journeys', 'guides', 'travel_months', 'experience_highlights',
             'experience_prep_questions', 'experiences', 'destination_logistics', 'destinations',
+            'media_attachments',
         ];
         foreach ($tablesToTruncate as $tbl) {
             if (Schema::hasTable($tbl)) {
@@ -275,21 +276,335 @@ class WebsiteDemoSeeder extends Seeder
 
     protected function seedMonths(array $months): array
     {
+        $monthEditorials = [
+            1 => [
+                'overview' => 'January features quiet winter trails with deep blue skies and crisp mountain silhouettes. High mountain passes are typically snowbound, making this month best suited for lower-elevation valley walks and cultural explorations.',
+                'trail_vibe' => 'Peaceful, uncrowded villages with warm teahouse hearths.',
+                'pack_tip' => 'Down jackets, thermal layering systems, and warm sleeping bag liners are essential for chilly evenings.',
+            ],
+            2 => [
+                'overview' => 'February marks late winter with lengthening daylight hours and gradually warming afternoon sunshine. Mid-elevation forest trails begin to stir as early wild primulas appear in southern foothills.',
+                'trail_vibe' => 'Quiet, contemplative walking with minimal trail congestion.',
+                'pack_tip' => 'Four-season warmth for high points with flexible daytime layers as sun intensity builds.',
+            ],
+            3 => [
+                'overview' => 'March ushers in the vibrant Himalayan spring. Lower forests burst into bloom with crimson rhododendrons and magnolia blossoms, while mountain passes become accessible under steady daytime warming.',
+                'trail_vibe' => 'Re-awakening trail energy with cheerful lodges and lively trailside stops.',
+                'pack_tip' => 'Windproof outer shell for gusty ridges and sun protection for bright snow glare.',
+            ],
+            4 => [
+                'overview' => 'April is one of the premier spring trekking periods. Sub-alpine ridges present full wildflower canopies and comfortable walking conditions across both Annapurna and Everest regions.',
+                'trail_vibe' => 'Active, vibrant trail community with climbers and trekkers sharing expedition stories.',
+                'pack_tip' => 'Sun hat, high-SPF block, and breathable trekking shirts for sunlit afternoon ascents.',
+            ],
+            5 => [
+                'overview' => 'May offers warm daytime temperatures and long hours of daylight. High pass traverses are at their most snow-free, though afternoon cloud buildups can introduce occasional localized pre-monsoon showers.',
+                'trail_vibe' => 'Expedition peak season with festive base-camp atmospheres.',
+                'pack_tip' => 'Moisture-wicking base layers and compact rain shells for late afternoon mountain mists.',
+            ],
+            6 => [
+                'overview' => 'June brings the arrival of summer monsoon winds to southern Nepal, transforming low valleys into emerald terraces. Rain-shadow sanctuaries like Upper Mustang remain shielded from moisture, offering dry desert trail conditions.',
+                'trail_vibe' => 'Serene and exclusive in rain-shadow havens; quiet elsewhere.',
+                'pack_tip' => 'Gaiters and sturdy footwear for damp sections; windproof protection for arid Tibetan plateau walks.',
+            ],
+            7 => [
+                'overview' => 'July is the heart of trans-Himalayan trekking. While lower hills receive regular rain, northern arid valleys behind the Annapurna and Dhaulagiri barriers enjoy dry, temperate walking amidst golden barley fields.',
+                'trail_vibe' => 'Unique cultural immersion during high summer village farming cycles.',
+                'pack_tip' => 'Lightweight sun protection, dust buffs, and water filtration for remote desert paths.',
+            ],
+            8 => [
+                'overview' => 'August continues favorable conditions in northern rain-shadow zones while southern alpine meadows host luxuriant high-pasture wildflowers and grazing yaks.',
+                'trail_vibe' => 'Intimate, slow-paced village interactions in isolated mountain enclaves.',
+                'pack_tip' => 'Breathable trail clothes with quick-dry fabrics and waterproof pack liners.',
+            ],
+            9 => [
+                'overview' => 'September marks the post-monsoon transition as skies wash clean of moisture, revealing vivid turquoise horizons and gleaming snow peaks. Late September initiates Nepal\'s celebrated autumn trekking window.',
+                'trail_vibe' => 'Anticipation and pristine visibility as prime season unfolds.',
+                'pack_tip' => 'Mid-weight fleece and adaptable shell jackets for shifting alpine conditions.',
+            ],
+            10 => [
+                'overview' => 'October stands as the most famous trekking month in the Himalayas. Ultra-stable weather, dry footing, and breathtaking panoramic clarity across all major ranges make it ideal for classic passes and base camp approaches.',
+                'trail_vibe' => 'Bustling international camaraderie, fully operational teahouses, and vibrant evening dining halls.',
+                'pack_tip' => 'Standard three-season kit with quality boots, headlamp, and warm evening layers.',
+            ],
+            11 => [
+                'overview' => 'November delivers crystalline skies, crisp morning air, and tapering crowd numbers. As temperatures cool, the high-altitude vistas reach their sharpest photographic clarity.',
+                'trail_vibe' => 'Tranquil late-autumn pacing with crisp, unhurried lodge stays.',
+                'pack_tip' => 'Substantial down jacket and thermal gloves for early morning summits and passes.',
+            ],
+            12 => [
+                'overview' => 'December introduces dry, sunny winter days with brilliant daylight sharpness and freezing nighttime temperatures. It is ideal for lower-elevation circuits, cultural trails, and hill ridges with unobstructed mountain backdrops.',
+                'trail_vibe' => 'Crisp stillness, uncrowded teahouses, and deep winter hospitality.',
+                'pack_tip' => 'Heavyweight insulating layers, wool socks, and cold-rated sleeping gear.',
+            ],
+        ];
+
+        $monthDetails = [
+            1 => [
+                'summary' => 'January presents cold, dry winter trail conditions characterized by crystal-clear dawn skies, sharp mountain horizons, and exceptionally peaceful trails. High alpine passes above 5,000 meters are typically snowbound, making lower-altitude foothill walks and cultural trails the primary recommendation.',
+                'reasons' => [
+                    ['title' => 'Serene, Uncrowded Corridors', 'description' => 'Walk popular foothill trails with minimal foot traffic and enjoy personal lodge hospitality.'],
+                    ['title' => 'Crisp Morning Visibility', 'description' => 'Winter high pressure creates sharp photographic contrast and cloudless mountain silhouettes.'],
+                    ['title' => 'Vibrant Valley Cultural Life', 'description' => 'Witness authentic village winter rhythms and traditional mid-hill celebrations without tourist crowds.'],
+                ],
+                'limitations' => [
+                    'Are you prepared for sub-zero nighttime temperatures and limited dining hall heating above 3,000 meters?',
+                    'Does your schedule allow buffer days for potential frost or fog delays on mountain airstrips?',
+                    'Have you confirmed with your guide that high-pass sections are excluded from your winter route?',
+                ],
+                'faqs' => [
+                    ['question' => 'Can travelers trek in Nepal during January?', 'answer' => 'Yes, but primarily on lower to mid-altitude foothill circuits such as the Ghorepani ridge or Kathmandu Valley rim. High-altitude pass crossings are not recommended due to winter snow.'],
+                    ['question' => 'How cold does it get during a January trek?', 'answer' => 'Daytime walking in direct sunlight can feel pleasant at 10°C to 15°C in lower valleys, but nighttime temperatures drop well below freezing, requiring a 4-season down sleeping bag.'],
+                    ['question' => 'Are teahouses open along the routes in January?', 'answer' => 'Lodges on popular lower routes remain open year-round, while high-altitude seasonal camps close until spring.'],
+                ],
+            ],
+            2 => [
+                'summary' => 'February marks the late-winter transition as daylight hours steadily lengthen and direct afternoon sunshine begins to warm lower valleys. Mid-elevation forests stir with early seasonal blooms while higher ridges remain snowbound.',
+                'reasons' => [
+                    ['title' => 'Lengthening Daylight & Mild Days', 'description' => 'Enjoy longer hiking windows and comfortable daytime warmth across mid-elevation paths.'],
+                    ['title' => 'Uncrowded Tea-House Lodges', 'description' => 'Experience genuine Himalayan warmth and quiet evenings beside lodge stoves.'],
+                    ['title' => 'Early Southern Blooms', 'description' => 'Spot early wildflower buds and rhododendron shoots across lower pine forest tracks.'],
+                ],
+                'limitations' => [
+                    'Have you confirmed that snowmelt on shaded northern slopes has not created icy trail patches?',
+                    'Are you packing layered clothing for cold early mornings and warming afternoon ascents?',
+                    'Are high passes like Thorong La or Cho La confirmed to be closed or requiring specialist equipment?',
+                ],
+                'faqs' => [
+                    ['question' => 'Is February suitable for first-time trekkers in Nepal?', 'answer' => 'Yes, especially for shorter cultural foothill treks. It offers quiet trails and bright weather before the peak spring influx arrives.'],
+                    ['question' => 'Will high passes be open in February?', 'answer' => 'Most high passes above 5,000m remain heavily snowbound or closed. Trekkers should plan lower circuits with alternate valley routings.'],
+                    ['question' => 'What sleeping gear is needed for February?', 'answer' => 'A rated down sleeping bag (-10°C or warmer) is essential as lodge rooms are unheated.'],
+                ],
+            ],
+            3 => [
+                'summary' => 'March announces the grand arrival of Himalayan spring. Warmer daytime temperatures thaw mid-elevation paths while entire hillsides between 2,000m and 3,200m explode with crimson, pink, and white rhododendron blossoms.',
+                'reasons' => [
+                    ['title' => 'Wild Rhododendron Canopies', 'description' => 'Traverse ancient cloud forests ablaze with spectacular native rhododendron blooms.'],
+                    ['title' => 'Awakening Trail Energy', 'description' => 'Share trails with returning lodge keepers and international hikers as the season opens.'],
+                    ['title' => 'Warming Alpine Temperatures', 'description' => 'Experience comfortable hiking temperatures without the biting cold of mid-winter.'],
+                ],
+                'limitations' => [
+                    'Are high mountain passes fully thawed or still carrying lingering winter snowpacks?',
+                    'Have you factored in early afternoon cloud build-ups that occasionally obscure summit views?',
+                    'Are your seasonal allergy precautions in place for dense blooming forest zones?',
+                ],
+                'faqs' => [
+                    ['question' => 'When do the rhododendrons bloom in Nepal?', 'answer' => 'Rhododendrons bloom from early March through late April, starting at lower elevations and progressing up mountain slopes.'],
+                    ['question' => 'Is March very crowded on popular routes?', 'answer' => 'March is moderately busy as the season begins, but generally sees fewer travelers than peak April or October.'],
+                    ['question' => 'Do I need crampons or microspikes for March trekking?', 'answer' => 'For routes with high-altitude passes or base camps, microspikes are strongly advised for early-morning frozen sections.'],
+                ],
+            ],
+            4 => [
+                'summary' => 'April is universally celebrated as one of Nepal\'s premier trekking months. Stable atmospheric conditions, radiant forest blooms, and excellent mountain views make it ideal for classic high-altitude base camps and passes.',
+                'reasons' => [
+                    ['title' => 'Premier High-Altitude Window', 'description' => 'Optimal conditions for high passes and base camp approaches across all major ranges.'],
+                    ['title' => 'Peak Floral Splendor', 'description' => 'Upper rhododendron and magnolia canopies reach their most vibrant blooming zenith.'],
+                    ['title' => 'Expedition Trail Atmosphere', 'description' => 'Encounter international climbing teams and sherpa crews during peak mountaineering season.'],
+                ],
+                'limitations' => [
+                    'Have you pre-arranged domestic flight bookings to Lukla or Pokhara to avoid sold-out departures?',
+                    'Are lodge rooms secured in advance for popular high-density villages like Namche or Dingboche?',
+                    'Are you prepared for bright alpine sun exposure requiring high-grade UV eye protection?',
+                ],
+                'faqs' => [
+                    ['question' => 'Why is April so popular for Himalayan trekking?', 'answer' => 'April combines dry, stable weather, warm daytime walking temperatures, and vibrant rhododendron blooms with open high passes.'],
+                    ['question' => 'How busy are the teahouses in April?', 'answer' => 'April is peak season; popular trails like Everest Base Camp and Annapurna Circuit see high occupancy. Early booking is recommended.'],
+                    ['question' => 'What are daytime temperatures like in April?', 'answer' => 'In lower valleys, daytime temperatures reach 18°C to 22°C. At high elevations (above 4,000m), expect 5°C to 10°C during sunny days.'],
+                ],
+            ],
+            5 => [
+                'summary' => 'May offers warm daytime walking conditions, snow-free high-altitude passes, and long daylight hours. While afternoon convective clouds can introduce localized haze, morning summit vistas remain spectacular.',
+                'reasons' => [
+                    ['title' => 'Warmest High-Pass Traversals', 'description' => 'Cross passes like Thorong La and Cho La with minimal snowpack under mild conditions.'],
+                    ['title' => 'Thriving Alpine Biodiversity', 'description' => 'Observe high-altitude summer flora, alpine herbs, and grazing herds moving to high pastures.'],
+                    ['title' => 'Summit Atmosphere in Base Camps', 'description' => 'Experience the anticipation as major Everest and Lhotse summit pushes take place.'],
+                ],
+                'limitations' => [
+                    'Are you prepared to start trail days early to maximize clear morning mountain viewing before afternoon cloud buildup?',
+                    'Have you packed quick-dry waterproof gear for occasional localized late-afternoon showers?',
+                    'Are hydration and electrolyte supplies adequate for warmer valley ascents?',
+                ],
+                'faqs' => [
+                    ['question' => 'Does May get rain before the monsoon?', 'answer' => 'Late May can experience occasional pre-monsoon afternoon showers or heat haze, but mornings are typically clear and dry.'],
+                    ['question' => 'Is May too warm for trekking in Nepal?', 'answer' => 'Lower valleys can feel warm during steep midday climbs, but high-altitude regions enjoy very comfortable, mild hiking weather.'],
+                    ['question' => 'Are high mountain passes accessible in May?', 'answer' => 'Yes. May is one of the most reliable months for crossing high passes with snow clear from trail paths.'],
+                ],
+            ],
+            6 => [
+                'summary' => 'June heralds the onset of summer monsoon rains across southern Nepal, transforming mid-hills into lush emerald terraces. Trans-Himalayan rain-shadow sanctuaries like Upper Mustang remain dry, shielded by the 8,000m peaks.',
+                'reasons' => [
+                    ['title' => 'Rain-Shadow Plateau Trekking', 'description' => 'Explore the arid Tibetan plateau of Upper Mustang in dry, temperate summer conditions.'],
+                    ['title' => 'Emerald Agricultural Terraces', 'description' => 'Witness vibrant paddy planting cycles and rich green hillsides on lower transitions.'],
+                    ['title' => 'Exclusive Trail Solitude', 'description' => 'Experience remote trails with minimal tourist presence and deep cultural immersion.'],
+                ],
+                'limitations' => [
+                    'Have you verified that your route lies within a verified trans-Himalayan rain-shadow zone (e.g. Upper Mustang)?',
+                    'Have you built extra contingency days into your itinerary for domestic road or flight transit into the mountains?',
+                    'Are you carrying protective waterproof packs for travel days across lower foothills?',
+                ],
+                'faqs' => [
+                    ['question' => 'Can you trek in Nepal during the June monsoon?', 'answer' => 'Yes, specifically in rain-shadow regions like Upper Mustang and Nar Phu, which sit behind the high Himalayan barrier and receive very little rainfall.'],
+                    ['question' => 'Are flights to Jomsom operational in June?', 'answer' => 'Morning flights between Pokhara and Jomsom operate regularly before wind and clouds build up, though buffer days are recommended.'],
+                    ['question' => 'What is the trail condition in rain-shadow areas in June?', 'answer' => 'Trails in Upper Mustang remain dry, dusty, and well-graded, making for pleasant summer trekking.'],
+                ],
+            ],
+            7 => [
+                'summary' => 'July is the heart of the summer monsoon in the south, but high-altitude rain-shadow valleys behind Annapurna and Dhaulagiri flourish under dry skies, dramatic sunlit cloud formations, and golden barley fields.',
+                'reasons' => [
+                    ['title' => 'Golden Summer Barley Harvests', 'description' => 'Witness traditional village agricultural ceremonies across high-desert Mustang hamlets.'],
+                    ['title' => 'Dramatic Sky Scapes', 'description' => 'Marvel at theatrical monsoon cloud banks drifting south while northern plateaus remain clear.'],
+                    ['title' => 'Cultural Festivals in Ancient Monasteries', 'description' => 'Attend monastic ceremonies and local horse festivals in secluded northern villages.'],
+                ],
+                'limitations' => [
+                    'Are your domestic travel links to mountain gateway towns resilient against road washouts or flight holds?',
+                    'Have you packed dust protection buffs and UV eye gear for arid, windy afternoon valley walks?',
+                    'Are you prepared for warmer daytime walking in desert terrain requiring disciplined hydration?',
+                ],
+                'faqs' => [
+                    ['question' => 'How rainy is Upper Mustang in July?', 'answer' => 'Upper Mustang receives minimal rainfall due to the Himalayan rain-shadow effect. Showers are rare and usually brief.'],
+                    ['question' => 'Do leeches exist on the trails in July?', 'answer' => 'Leeches inhabit wet southern subtropical forests during the monsoon, but they do NOT exist in the dry, arid plateaus of Upper Mustang.'],
+                    ['question' => 'What permits are required for July Mustang trekking?', 'answer' => 'A Restricted Area Permit ($500 for 10 days) and Annapurna Conservation Area Permit (ACAP) are required.'],
+                ],
+            ],
+            8 => [
+                'summary' => 'August continues favorable conditions in northern rain-shadow zones while southern alpine pastures bloom with wildflowers. Late August often sees the initial tapering of monsoon moisture, offering early hints of autumn.',
+                'reasons' => [
+                    ['title' => 'High Alpine Meadow Wildflowers', 'description' => 'High pastures and yak grazing grounds display lush biodiversity and summer greenery.'],
+                    ['title' => 'Historic Fortress & Cave Exploration', 'description' => 'Walk undisturbed ancient salt-trade routes and explore thousand-year-old cliff caves.'],
+                    ['title' => 'Quiet, Intimate Local Homestays', 'description' => 'Enjoy genuine hospitality from families in secluded mountain communities.'],
+                ],
+                'limitations' => [
+                    'Have you factored in weather buffer days for Kathmandu-to-gateway travel connections?',
+                    'Are trail shoes equipped for gravel and dust paths rather than deep mud?',
+                    'Are licensed guides with trans-Himalayan expertise accompanying your journey?',
+                ],
+                'faqs' => [
+                    ['question' => 'Is late August good for starting an autumn trek?', 'answer' => 'Late August can offer quiet trails, though southern corridors may still experience monsoon showers until mid-September.'],
+                    ['question' => 'What is the temperature in Mustang during August?', 'answer' => 'Expect pleasant daytime temperatures around 20°C with cool, comfortable evenings around 8°C to 12°C.'],
+                    ['question' => 'How physically demanding is summer rain-shadow trekking?', 'answer' => 'Mustang features undulating terrain without extreme high-pass crossings, making it a moderate, accessible journey.'],
+                ],
+            ],
+            9 => [
+                'summary' => 'September marks the post-monsoon transition as skies wash clean of moisture, revealing vivid turquoise horizons and glistening snow peaks. Late September initiates Nepal\'s celebrated autumn trekking season across all regions.',
+                'reasons' => [
+                    ['title' => 'Fresh Post-Monsoon Air', 'description' => 'Breathe crystalline air as lingering cloud systems wash away to reveal pristine mountain massifs.'],
+                    ['title' => 'Lush Green Lower Valleys', 'description' => 'Enjoy the unique contrast of verdant terraced hillsides against snow-covered 8,000m summits.'],
+                    ['title' => 'Season Opening Excitement', 'description' => 'Experience the buoyant mood as teahouses reopen and trail guides prepare for autumn.'],
+                ],
+                'limitations' => [
+                    'Have you accounted for lingering early-September rainfall before the monsoon officially retreats?',
+                    'Are you prepared for rapidly changing trail conditions as high camps transition into autumn mode?',
+                    'Are your acclimatization rest days preserved to adapt safely to higher elevations?',
+                ],
+                'faqs' => [
+                    ['question' => 'When in September is it best to start trekking?', 'answer' => 'Mid to late September is generally ideal, as monsoon rains clear away and mountain visibility improves dramatically.'],
+                    ['question' => 'Are all teahouses open by September?', 'answer' => 'Yes, teahouses across all major trekking routes are open, staffed, and well-stocked for the autumn season.'],
+                    ['question' => 'Is September crowded on Everest and Annapurna routes?', 'answer' => 'Early September is quiet; traveler numbers ramp up in late September, remaining lighter than peak October.'],
+                ],
+            ],
+            10 => [
+                'summary' => 'October stands as the undisputed gold standard for Himalayan trekking. Unbeatable atmospheric stability, dry trails, crisp sunny days, and peerless mountain panoramas make it ideal for classic passes and base camps.',
+                'reasons' => [
+                    ['title' => 'Legendary Panoramic Clarity', 'description' => 'Unsurpassed crisp visibility extending hundreds of kilometers across the Himalayan chain.'],
+                    ['title' => 'Dry, Confident Footing', 'description' => 'Enjoy dry trails and dependable crossing conditions on high passes like Thorong La and Cho La.'],
+                    ['title' => 'Festive Cultural Atmosphere', 'description' => 'Share in Nepal\'s festive joy as the major Dashain celebrations illuminate mountain villages.'],
+                ],
+                'limitations' => [
+                    'Have you secured advance lodge and flight bookings for high-demand hubs like Lukla, Namche, and Pokhara?',
+                    'Are you prepared for bustling dining halls and shared communal trail energy during peak weeks?',
+                    'Do you have warm evening layers for freezing high-altitude camp nights?',
+                ],
+                'faqs' => [
+                    ['question' => 'Why is October considered the best month to trek in Nepal?', 'answer' => 'October offers the most dependable dry weather, stable skies, moderate daytime temperatures, and spectacular mountain views.'],
+                    ['question' => 'Do I need advance bookings for October trekking?', 'answer' => 'Yes, October is peak season. Flights to Lukla and popular lodges in Namche or Ghorepani should be booked well in advance.'],
+                    ['question' => 'How cold does it get at night in October?', 'answer' => 'At 4,000m and above, nighttime temperatures regularly dip to -5°C to -10°C, requiring a warm down sleeping bag and jacket.'],
+                ],
+            ],
+            11 => [
+                'summary' => 'November delivers crystalline skies, crisp morning air, and tapering crowd numbers. As temperatures cool, the high-altitude vistas reach their sharpest photographic clarity before winter sets in.',
+                'reasons' => [
+                    ['title' => 'Peerless Photographic Clarity', 'description' => 'Crystalline, deep-blue skies and razor-sharp snow ridges make November a photographer\'s paradise.'],
+                    ['title' => 'Tapering Crowd Numbers', 'description' => 'Enjoy peaceful trails, quieter lodges, and attentive teahouse hospitality after peak October.'],
+                    ['title' => 'Dry, Stable Weather', 'description' => 'Extremely low precipitation risk ensures uninterrupted trekking schedules and clear days.'],
+                ],
+                'limitations' => [
+                    'Are you equipped with thermal underwear and a heavy down jacket for sharp sub-zero nights?',
+                    'Have you confirmed that high teahouses remain open through late November?',
+                    'Are you prepared for shorter daylight hours requiring earlier morning starts?',
+                ],
+                'faqs' => [
+                    ['question' => 'Is November too cold for trekking in Nepal?', 'answer' => 'Daytime walking in the sun is pleasantly cool and crisp (10°C to 15°C). Nights at high elevations are cold (-10°C), but easily managed with quality gear.'],
+                    ['question' => 'Are high passes open in November?', 'answer' => 'Yes, through early to mid-November high passes like Thorong La and Larkya La remain open, though late-month snow can occasionally prompt early closures.'],
+                    ['question' => 'How clear is the mountain view in November?', 'answer' => 'November offers some of the clearest skies of the entire year, with virtually no humidity or haze.'],
+                ],
+            ],
+            12 => [
+                'summary' => 'December introduces dry, sunny winter days with brilliant daylight sharpness and freezing nighttime temperatures. It is ideal for lower-elevation circuits, cultural trails, and hill ridges with unobstructed mountain backdrops.',
+                'reasons' => [
+                    ['title' => 'Brilliant Blue Skies & Sunshine', 'description' => 'Warm, direct daytime sun and sparkling cloudless skies provide excellent foothill walking.'],
+                    ['title' => 'Tranquil Trail Flow', 'description' => 'Experience genuine solitude on popular trails without competing for lodge space.'],
+                    ['title' => 'Crisp Mountain Backdrops', 'description' => 'Enjoy uninterrupted snow peaks rising dramatically over golden terraced valleys.'],
+                ],
+                'limitations' => [
+                    'Are you planning routes that remain below 3,800 meters to avoid winter pass closures?',
+                    'Have you confirmed that lodges on your chosen trail remain open during the winter period?',
+                    'Do you have comprehensive winter insulation for sub-zero lodge bedrooms?',
+                ],
+                'faqs' => [
+                    ['question' => 'Can you trek in Nepal in December?', 'answer' => 'Yes. Lower-altitude and mid-hill treks such as Poon Hill, Mardi Himal (lower ridge), or Langtang Valley are wonderful in December, with sunny days and clear views.'],
+                    ['question' => 'Are high-altitude passes open in December?', 'answer' => 'Most passes above 5,000m are closed by heavy winter snow or risk extreme sub-zero conditions.'],
+                    ['question' => 'What gear is essential for December trekking?', 'answer' => 'A 4-season sleeping bag, quality thermal base layers, insulated down jacket, warm beanie, and windproof gloves.'],
+                ],
+            ],
+        ];
+
         $ids = [];
         foreach ($months as $month) {
+            $monthNum = (int) $month['id'];
+            $editorial = $monthEditorials[$monthNum] ?? [];
+            $detail = $monthDetails[$monthNum] ?? [];
+
+            $contentPayload = [
+                'overview' => $editorial['overview'] ?? ($month['intro'] ?? ''),
+                'trail_vibe' => $editorial['trail_vibe'] ?? '',
+                'pack_tip' => $editorial['pack_tip'] ?? '',
+                'reasons' => $detail['reasons'] ?? [],
+                'limitations' => $detail['limitations'] ?? [],
+            ];
+
             $id = DB::table('travel_months')->insertGetId([
-                'month_number' => $month['id'],
+                'month_number' => $monthNum,
                 'name' => $month['name'],
                 'slug' => $month['slug'],
                 'season' => $month['season_website'] ?? 'spring',
-                'summary' => $month['intro'] ?? null,
-                'description' => $month['intro'] ?? null,
-                'sort_order' => $month['id'],
+                'summary' => $detail['summary'] ?? ($month['intro'] ?? null),
+                'conditions_note' => $editorial['trail_vibe'] ?? null,
+                'description' => $editorial['pack_tip'] ?? ($month['intro'] ?? null),
+                'content' => json_encode($contentPayload),
+                'sort_order' => $monthNum,
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            $ids[(int) $month['id']] = $id;
+
+            // Seed polymorphic FAQs for the month
+            if (!empty($detail['faqs'])) {
+                foreach ($detail['faqs'] as $sortIdx => $faqItem) {
+                    DB::table('faqs')->insert([
+                        'question' => $faqItem['question'],
+                        'answer' => $faqItem['answer'],
+                        'faqable_type' => 'Admin\Models\TravelMonth',
+                        'faqable_id' => $id,
+                        'category' => 'Seasonal Planning',
+                        'sort_order' => $sortIdx + 1,
+                        'is_active' => true,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
+            $ids[$monthNum] = $id;
         }
 
         return $ids;
@@ -1083,23 +1398,753 @@ class WebsiteDemoSeeder extends Seeder
             ]);
         }
 
-        $standardSlugs = ['about', 'contact', 'safety', 'privacy', 'terms', 'booking-conditions', 'cancellation', 'cookies'];
-        foreach ($standardSlugs as $slug) {
-            DB::table('website_pages')->insert([
-                'title' => Str::headline($slug),
+        $this->seedSafetyPage();
+        $this->seedAboutPage();
+        $this->seedContactPage();
+        $this->seedWhenToGoPage();
+        $this->seedPolicyPages();
+        $this->seedResponsibleTravelPage($heroAssetId);
+    }
+
+    protected function seedSafetyPage(): void
+    {
+        $safetyAssetId = DB::table('media_assets')->where('filename', 'safety-hero.jpg')->value('id');
+        if (!$safetyAssetId) {
+            $safetyAssetId = DB::table('media_assets')->insertGetId([
+                'filename' => 'safety-hero.jpg',
+                'path' => 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Himalayas%2C_Ama_Dablam%2C_Nepal.jpg/1920px-Himalayas%2C_Ama_Dablam%2C_Nepal.jpg',
+                'mime_type' => 'image/jpeg',
+                'width' => 1920,
+                'height' => 1080,
+                'title' => 'Expansive alpine ridgeline beneath the iconic summit of Ama Dablam',
+                'alt_text' => 'Expansive alpine ridgeline beneath the iconic summit of Ama Dablam',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $safetyPageId = DB::table('website_pages')->insertGetId([
+            'title' => 'Himalayan Safety & Field Support Framework',
+            'slug' => 'safety',
+            'type' => 'safety',
+            'summary' => 'Trekking in high-altitude environments requires structured acclimatization, open communication, and proactive trail decision-making. Explore our proposed preparation framework and discussion guidelines below.',
+            'body' => '<p>At E.A.T.H. Travels, field safety is not an afterthought or a marketing slogan. It is a continuous, disciplined operational protocol governing every hour on the trail, from initial medical review in Kathmandu to high-pass crossings and contingency descent routing.</p>',
+            'notice_title' => 'Sample editorial layout — operational content must be verified',
+            'notice_body' => 'This page is an editorial preview showing how safety policies, health check routines, and field coordination topics could be structured. It does not constitute verified company policy, medical advice, or real-time emergency dispatch instructions. In live operations, all guidelines must be verified with certified mountain leaders and official health authorities.',
+            'cta_title' => 'Have Questions About Trail Pacing or Altitude Preparation?',
+            'cta_description' => 'Our team can help design an itinerary structured around your fitness and acclimatization comfort. Submit a simulated planning question or build a tailored route proposal.',
+            'cta_primary_btn_text' => 'Ask a Planning Question →',
+            'cta_primary_btn_url' => '/contact',
+            'cta_secondary_btn_text' => 'Start Custom Journey Planner',
+            'cta_secondary_btn_url' => '/plan-my-trek',
+            'meta_title' => 'Safety & Field Support Framework | EATH Trekking Website',
+            'meta_description' => 'Explore our proposed safety discussion framework, acclimatization pacing questions, and field coordination standards for Himalayan trekking.',
+            'is_active' => true,
+            'is_published' => true,
+            'published_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('media_attachments')->insert([
+            'media_asset_id' => $safetyAssetId,
+            'attachable_type' => 'website_page',
+            'attachable_id' => $safetyPageId,
+            'collection' => 'hero',
+            'title' => 'Safety & Field Support Hero',
+            'alt_text' => 'Expansive alpine ridgeline beneath the iconic summit of Ama Dablam',
+            'sort_order' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $safetySections = [
+            [
+                'heading' => 'Proposed Preparation-Discussion Framework',
+                'layout_key' => 'cards_grid',
+                'sort_order' => 1,
+                'body' => 'Before embarking on a mountain journey, travelers and expedition planners should align across three critical preparation phases:',
+                'content' => json_encode([
+                    'tag' => 'Three-Stage Model',
+                    'items' => [
+                        [
+                            'title' => 'Pre-Trip Medical & Conditioning Alignment',
+                            'tag' => 'Phase 1',
+                            'description' => 'Review cardiovascular fitness, personal medications, and previous high-altitude exposure with a physician. Confirm an itinerary designed with gradual daily ascent increments.',
+                        ],
+                        [
+                            'title' => 'Daily Trail Monitoring & Pacing Checks',
+                            'tag' => 'Phase 2',
+                            'description' => 'Establish routine morning and evening health check-ins, assess hydration and appetite, and evaluate daily walking pace against group fatigue markers.',
+                        ],
+                        [
+                            'title' => 'Contingency Buffers & Descent Routing',
+                            'tag' => 'Phase 3',
+                            'description' => 'Ensure the route contains built-in weather rest days and clearly mapped lower-elevation fallback trails in the event of persistent symptoms or sudden snowstorms.',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Questions About Guide Support & Responsibilities',
+                'layout_key' => 'checklist',
+                'sort_order' => 2,
+                'body' => 'Before a real trip, confirm who provides support and what the actual itinerary includes. Key questions to discuss with your operator include:',
+                'content' => json_encode([
+                    'tag' => 'Field Leadership',
+                    'items' => [
+                        [
+                            'title' => 'Field Leadership Ratio',
+                            'tag' => 'Guide Standards',
+                            'description' => 'What is the ratio of licensed guides and assistant guides to clients on technical or steep trail sections?',
+                        ],
+                        [
+                            'title' => 'Wilderness First Aid Qualifications',
+                            'tag' => 'Medical Training',
+                            'description' => 'Are all accompanying guides currently certified in Wilderness First Aid (WFA) or Wilderness First Responder (WFR)?',
+                        ],
+                        [
+                            'title' => 'Turn-Around Authority',
+                            'tag' => 'Operational Command',
+                            'description' => 'Does the lead guide have explicit authority to mandate a rest day or initiate a descent if a trekker exhibits acute altitude symptoms?',
+                        ],
+                        [
+                            'title' => 'Porter & Crew Welfare',
+                            'tag' => 'Fair Employment',
+                            'description' => 'Are porters and support staff provided with fair wages, load limits (maximum 20–25kg), adequate cold-weather clothing, and rescue insurance?',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Itinerary & Acclimatization Information to Confirm',
+                'layout_key' => 'cards_grid',
+                'sort_order' => 3,
+                'body' => 'Ascent rate is the single most controllable risk factor in preventing Acute Mountain Sickness (AMS). When reviewing any proposed trekking schedule, verify the following details:',
+                'content' => json_encode([
+                    'tag' => 'Altitude Physiology',
+                    'items' => [
+                        [
+                            'title' => 'Sleeping Elevation Increments',
+                            'tag' => 'Max 500m / Day',
+                            'description' => 'Confirm that sleeping elevation gains above 3,000 meters do not exceed recommended thresholds (typically 300 to 500 meters per day) without an intervening rest night.',
+                        ],
+                        [
+                            'title' => 'Active Acclimatization Days',
+                            'tag' => 'Climb High, Sleep Low',
+                            'description' => 'Confirm that rest days include optional “climb high, sleep low” day hikes to stimulate physiological adaptation without overexertion.',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Communication Arrangements to Confirm',
+                'layout_key' => 'checklist',
+                'sort_order' => 4,
+                'body' => 'Himalayan valleys vary widely in mobile cellular reception. Confirm communication contingencies before departing the trailhead:',
+                'content' => json_encode([
+                    'tag' => 'Connectivity & Dispatch',
+                    'items' => [
+                        [
+                            'title' => 'Satellite Messaging & Tracking',
+                            'tag' => 'Satellite Mesh',
+                            'description' => 'Verify whether the field crew carries two-way satellite messengers (e.g. Garmin inReach) for remote valley communication.',
+                        ],
+                        [
+                            'title' => 'Base Operations Check-ins',
+                            'tag' => 'Kathmandu Base',
+                            'description' => 'Confirm the frequency of routine status updates between the trail leader and the central operations base in Kathmandu.',
+                        ],
+                        [
+                            'title' => 'Cellular Dead Zones',
+                            'tag' => 'Offline Expectations',
+                            'description' => 'Clarify which specific valleys or high camps on your itinerary have no cellular connectivity so family members understand expected offline periods.',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Weather & Itinerary Decision Questions',
+                'layout_key' => 'cards_grid',
+                'sort_order' => 5,
+                'body' => 'Mountain weather is dynamic, especially during seasonal transition windows. Formulate clear decision rules with your team:',
+                'content' => json_encode([
+                    'tag' => 'Alpine Meteorology',
+                    'items' => [
+                        [
+                            'title' => 'Pass Crossing Windows',
+                            'tag' => 'Early Departure',
+                            'description' => 'Ask what local meteorological indicators are monitored before committing to high pass crossings like Cho La, Thorong La, or Larkya La.',
+                        ],
+                        [
+                            'title' => 'Buffer Days for Domestic Flights',
+                            'tag' => 'Flight Contingency',
+                            'description' => 'Ensure at least one to two contingency days in Kathmandu following Lukla or Jomsom flights to avoid missing international departure flights during weather delays.',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Emergency-Coordination Protocols & Dispatch Boundaries',
+                'layout_key' => 'disclosure',
+                'sort_order' => 6,
+                'body' => 'In active commercial operations, an expedition provider must maintain formal emergency dispatch coordination with helicopter charter services, high-altitude medical clinics in Pheriche and Manang, and international insurance assistance providers.',
+                'content' => json_encode([
+                    'tag' => 'Protocols',
+                    'items' => [
+                        [
+                            'title' => 'Commercial Dispatch Infrastructure',
+                            'tag' => 'Verified Protocol',
+                            'description' => 'Direct radio and satellite links connect field leaders to private helicopter charters in Kathmandu and Pokhara for expedited medical evacuation.',
+                        ],
+                        [
+                            'title' => 'Prototype Boundary Disclosure',
+                            'tag' => 'Transparency Standard',
+                            'description' => 'Notice: The EATH preview platform does not provide active emergency rescue telephone numbers, medical dispatch, or guaranteed helicopter evacuation capabilities. For real emergencies in Nepal, contact certified emergency services or your travel insurance assistance provider directly.',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Traveler Responsibilities & Insurance Questions',
+                'layout_key' => 'checklist',
+                'sort_order' => 7,
+                'body' => 'Every participant shares responsibility for collective group safety on Himalayan trails:',
+                'content' => json_encode([
+                    'tag' => 'Traveler Care',
+                    'items' => [
+                        [
+                            'title' => 'Mandatory Helicopter Evacuation Coverage',
+                            'tag' => 'Up to 6,000m',
+                            'description' => 'Does your policy explicitly cover emergency helicopter search, rescue, and repatriation up to the highest altitude of your route (e.g. 5,600m or 6,000m)? Standard travel policies frequently cap coverage at 3,000m.',
+                        ],
+                        [
+                            'title' => 'Cashless Guarantee of Payment',
+                            'tag' => 'Direct Billing',
+                            'description' => 'Does your insurer have established direct-billing relationships with Kathmandu emergency hospitals, or are you required to pay upfront?',
+                        ],
+                        [
+                            'title' => 'Medical Condition Transparency',
+                            'tag' => 'Health Disclosure',
+                            'description' => 'Disclose any asthma, hypertension, or past altitude sickness to your expedition leader before reaching the trailhead.',
+                        ],
+                        [
+                            'title' => 'Honest Self-Assessment',
+                            'tag' => 'Early Reporting',
+                            'description' => 'Commit to reporting headaches, nausea, or sleeplessness immediately rather than attempting to “push through” symptoms.',
+                        ],
+                    ],
+                ]),
+            ],
+        ];
+
+        foreach ($safetySections as $sec) {
+            DB::table('website_page_sections')->insert([
+                'website_page_id' => $safetyPageId,
+                'heading' => $sec['heading'],
+                'layout_key' => $sec['layout_key'],
+                'sort_order' => $sec['sort_order'],
+                'body' => $sec['body'],
+                'content' => $sec['content'],
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+    protected function seedAboutPage(): void
+    {
+        $aboutAssetId = DB::table('media_assets')->where('filename', 'about-hero.jpg')->value('id');
+        if (!$aboutAssetId) {
+            $aboutAssetId = DB::table('media_assets')->insertGetId([
+                'filename' => 'about-hero.jpg',
+                'path' => 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1000&q=75',
+                'mime_type' => 'image/jpeg',
+                'width' => 1600,
+                'height' => 900,
+                'title' => 'Vast panoramic view of the Greater Himalaya mountain chain at sunrise',
+                'alt_text' => 'Vast panoramic view of the Greater Himalaya mountain chain at sunrise',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $aboutPageId = DB::table('website_pages')->insertGetId([
+            'title' => 'About EATH: Elevated Alpine Trekking & Hospitality',
+            'slug' => 'about',
+            'type' => 'about',
+            'summary' => 'A modern approach to Himalayan journey planning built around transparent pacing, traveler preferences, and honest environmental boundaries.',
+            'body' => '<p>Founded in Kathmandu, E.A.T.H. Travels brings clarity, transparency, and unhurried alpine pacing to high-mountain exploration across Nepal, Tibet, and Bhutan. We believe mountain travel should be measured by the depth of your connection with the trails and people, not by rushed schedules or superficial bucket lists.</p>',
+            'notice_title' => 'Sample Brand Narrative Notice',
+            'notice_body' => 'This page presents proposed brand positioning and architectural design for the EATH platform. Descriptions of operational methods, guide profiles, and service philosophies represent sample editorial content for testing and evaluation, not verified historical records.',
+            'cta_title' => 'Design Your Tailored Himalayan Journey',
+            'cta_description' => 'Step away from rigid tour packages. Use our interactive planner to find routes matched to your experience, duration, and personal mountain rhythm.',
+            'cta_primary_btn_text' => 'Launch Journey Planner →',
+            'cta_primary_btn_url' => '/plan-my-trek',
+            'cta_secondary_btn_text' => 'Explore Trek Catalog',
+            'cta_secondary_btn_url' => '/treks',
+            'meta_title' => 'About EATH · Proposed Brand Story & Philosophy · EATH Website',
+            'meta_description' => 'Proposed brand story, planning philosophy, and architectural design for the EATH Himalayan trekking website platform.',
+            'is_active' => true,
+            'is_published' => true,
+            'published_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('media_attachments')->insert([
+            'media_asset_id' => $aboutAssetId,
+            'attachable_type' => 'website_page',
+            'attachable_id' => $aboutPageId,
+            'collection' => 'hero',
+            'title' => 'About EATH Hero',
+            'alt_text' => 'Vast panoramic view of the Greater Himalaya mountain chain at sunrise',
+            'sort_order' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $aboutSections = [
+            [
+                'heading' => 'Rethinking the Himalayan Trekking Experience',
+                'layout_key' => 'standard',
+                'sort_order' => 1,
+                'body' => '<p>Himalayan trekking has historically been presented through rigid package formulas, crowded high-volume corridors, and marketing superlatives that obscure the genuine physical and logistical realities of mountain travel.</p><p>EATH is conceived to shift the focus back to where it belongs: thoughtful itinerary pacing, transparent trade-offs, and traveler self-determination. Rather than pressuring visitors with artificial scarcity or rushed departures, our digital platform organizes routes according to real-world considerations—acclimatization safety, seasonal suitability, and personal travel rhythm.</p><p>Whether you seek the quiet tranquility of lateral valley trails, photographic dawn pacing, or authentic interactions with high-mountain communities, the platform provides clear, grounded criteria to help you design an intentional journey.</p>',
+                'content' => json_encode(['tag' => 'Our Approach']),
+            ],
+            [
+                'heading' => 'How Our Planning Platform Operates',
+                'layout_key' => 'cards_grid',
+                'sort_order' => 2,
+                'body' => 'A three-step guided progression designed to replace high-pressure sales with transparent exploration.',
+                'content' => json_encode([
+                    'tag' => 'The Workflow',
+                    'items' => [
+                        [
+                            'title' => 'Explore by Season & Region',
+                            'tag' => 'Step 01',
+                            'description' => 'Filter itineraries using historical climatic windows and regional terrain characters rather than generalized promises.',
+                        ],
+                        [
+                            'title' => 'Guided Criteria Matching',
+                            'tag' => 'Step 02',
+                            'description' => 'Define your available days, party composition, physical comfort zone, and preferred pacing to evaluate deterministic route recommendations.',
+                        ],
+                        [
+                            'title' => 'Transparent Review & Synthesis',
+                            'tag' => 'Step 03',
+                            'description' => 'Review itemized illustrative estimates and route trade-offs before generating a non-PII plan receipt—with zero forced deposits.',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Our Core Planning & Guiding Principles',
+                'layout_key' => 'checklist',
+                'sort_order' => 3,
+                'body' => 'Four foundational commitments guide our route architecture, client consultations, and field operations:',
+                'content' => json_encode([
+                    'tag' => 'Operational Ethos',
+                    'items' => [
+                        [
+                            'title' => 'Conservative Acclimatization Pacing',
+                            'tag' => 'Safety First',
+                            'description' => 'We reject compressed schedules. Every high-altitude itinerary mandates conservative sleeping elevation profiles and built-in contingency buffers.',
+                        ],
+                        [
+                            'title' => 'Fair Staff Protections',
+                            'tag' => 'Porter Welfare',
+                            'description' => 'Porters, guides, and kitchen crew receive fair market-leading wages, strict 20kg weight limits, and equal emergency medical coverage.',
+                        ],
+                        [
+                            'title' => 'Sacred Landscape Stewardship',
+                            'tag' => 'Leave No Trace',
+                            'description' => 'Active commitment to single-use plastic elimination, water source preservation, and reverence for centuries-old monastic traditions.',
+                        ],
+                        [
+                            'title' => 'Honest, Unbundled Pricing',
+                            'tag' => 'Full Transparency',
+                            'description' => 'No hidden permit fees, unexpected tipping surcharges, or forced gear rentals. Every quote itemizes field costs openly.',
+                        ],
+                    ],
+                ]),
+            ],
+            [
+                'heading' => 'Indigenous Leadership & Field Guide Network',
+                'layout_key' => 'cards_grid',
+                'sort_order' => 4,
+                'body' => 'Our expeditions are led exclusively by certified native mountain guides born and raised in the valleys they navigate.',
+                'content' => json_encode([
+                    'tag' => 'Mountain Leadership',
+                    'items' => [
+                        [
+                            'title' => 'Wilderness First Responders',
+                            'tag' => 'Medical Certification',
+                            'description' => 'All lead guides carry active Wilderness First Responder (WFR) credentials with annual high-altitude pulse oximetry retraining.',
+                        ],
+                        [
+                            'title' => 'Native Valley Heritage',
+                            'tag' => 'Cultural Roots',
+                            'description' => 'Guides share firsthand cultural lineage with Sherpa, Gurung, Tamang, and Thakali mountain communities.',
+                        ],
+                        [
+                            'title' => 'Uncompromising Safety Authority',
+                            'tag' => 'Guide Discretion',
+                            'description' => 'Lead guides have unreserved authority to mandate rest days or initiate immediate descent if altitude symptoms develop.',
+                        ],
+                    ],
+                ]),
+            ],
+        ];
+
+        foreach ($aboutSections as $sec) {
+            DB::table('website_page_sections')->insert([
+                'website_page_id' => $aboutPageId,
+                'heading' => $sec['heading'],
+                'layout_key' => $sec['layout_key'],
+                'sort_order' => $sec['sort_order'],
+                'body' => $sec['body'],
+                'content' => $sec['content'],
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+    protected function seedContactPage(): void
+    {
+        $contactAssetId = DB::table('media_assets')->where('filename', 'contact-hero.jpg')->value('id');
+        if (!$contactAssetId) {
+            $contactAssetId = DB::table('media_assets')->insertGetId([
+                'filename' => 'contact-hero.jpg',
+                'path' => 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1000&q=75',
+                'mime_type' => 'image/jpeg',
+                'width' => 1600,
+                'height' => 900,
+                'title' => 'Serene morning atmosphere overlooking the Himalayan foothills',
+                'alt_text' => 'Serene morning atmosphere overlooking the Himalayan foothills',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $contactPageId = DB::table('website_pages')->insertGetId([
+            'title' => 'Contact Our Trekking Team (Website)',
+            'slug' => 'contact',
+            'type' => 'contact',
+            'summary' => 'Have questions about route feasibility, seasonal timing, or physical preparation? Test our simulated inquiry workflow below.',
+            'body' => '<p>Our Kathmandu expedition operations base is staffed year-round by certified mountain planners and logistical coordinators. Whether you are inquiring about a customized Khumbu itinerary or seeking advice on monsoon transitions, our team provides realistic, unvarnished guidance.</p>',
+            'notice_title' => 'Simulated Contact Notice — Real Database Storage in Inquiries Table',
+            'notice_body' => 'This form models customer inquiry intake for the EATH platform. In this preview environment, submissions are saved locally to the inquiries database table and displayed inside the Admin Panel Leads & Operations module.',
+            'meta_title' => 'Contact Our Trekking Team (Website) | EATH Trekking Website',
+            'meta_description' => 'Simulate sending an expedition inquiry or route planning question to our Himalayan trekking team in this preview preview.',
+            'is_active' => true,
+            'is_published' => true,
+            'published_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('media_attachments')->insert([
+            'media_asset_id' => $contactAssetId,
+            'attachable_type' => 'website_page',
+            'attachable_id' => $contactPageId,
+            'collection' => 'hero',
+            'title' => 'Contact Team Hero',
+            'alt_text' => 'Serene morning atmosphere overlooking the Himalayan foothills',
+            'sort_order' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    protected function seedWhenToGoPage(): void
+    {
+        $assetId = DB::table('media_assets')->where('filename', 'when-to-go-hero.jpg')->value('id');
+        if (!$assetId) {
+            $assetId = DB::table('media_assets')->insertGetId([
+                'filename' => 'when-to-go-hero.jpg',
+                'path' => 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg/1920px-Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg',
+                'mime_type' => 'image/jpeg',
+                'width' => 1920,
+                'height' => 1080,
+                'title' => 'Himalayan seasonal trekking vistas across Nepal',
+                'alt_text' => 'Panoramic seasonal view of Himalayan peaks and walking trails',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $pageId = DB::table('website_pages')->insertGetId([
+            'title' => 'When to Trek in Nepal: Month-by-Month Guide',
+            'slug' => 'when-to-go',
+            'type' => 'standard',
+            'summary' => 'Himalayan trekking conditions shift markedly across elevation zones and seasons. Use this interactive calendar to review seasonal patterns, historical trail rhythms, and catalog itineraries matched to each travel month.',
+            'body' => '<p>Planning the timing of a Himalayan journey involves weighing altitude, temperature, mountain visibility, and trail atmosphere across four distinct seasons.</p>',
+            'notice_title' => 'Sample Seasonality Notice',
+            'notice_body' => 'Monthly suitability profiles reflect historical climatic patterns and catalog fixture tags. They do not constitute real-time weather forecasts, guarantee trail passability, or confirm departure operation. Independent route verification is essential before real-world travel.',
+            'cta_title' => 'Need Advice on Timing Your Expedition?',
+            'cta_description' => 'Our mountain coordinators can help you align trail conditions, pass openings, and regional festival dates with your preferred travel window.',
+            'cta_primary_btn_text' => 'Ask Timing Specialist',
+            'cta_primary_btn_url' => '/contact',
+            'meta_title' => 'When to Trek in Nepal · Month-by-Month Guide · EATH Website',
+            'meta_description' => 'Explore the month-by-month guide to trekking in Nepal. Compare seasons, trail conditions, and catalog journeys.',
+            'is_active' => true,
+            'is_published' => true,
+            'published_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('media_attachments')->insert([
+            'media_asset_id' => $assetId,
+            'attachable_type' => 'website_page',
+            'attachable_id' => $pageId,
+            'collection' => 'hero',
+            'title' => 'When to Go Hero',
+            'alt_text' => 'Panoramic seasonal view of Himalayan peaks and walking trails',
+            'sort_order' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Four Himalayan Seasons Section
+        DB::table('website_page_sections')->insert([
+            'website_page_id' => $pageId,
+            'heading' => 'Four Himalayan Seasons',
+            'layout_key' => 'cards_grid',
+            'sort_order' => 1,
+            'body' => 'Season wording represents an illustrative organizational label based on historical regional trends, not current weather guidance or operational promises.',
+            'content' => json_encode([
+                'tag' => 'Climatic Framework',
+                'items' => [
+                    [
+                        'name' => 'Spring',
+                        'title' => 'Spring',
+                        'months' => 'March – May',
+                        'month_ids' => [3, 4, 5],
+                        'summary' => 'Mild temperatures, vibrant rhododendron blooms along mid-elevation ridges, and extended daytime hours. Excellent visibility in early mornings before afternoon cloud developments.',
+                        'trail_flow' => 'High enthusiasm; popular corridors experience steady traveler traffic.',
+                    ],
+                    [
+                        'name' => 'Summer / Monsoon',
+                        'title' => 'Summer / Monsoon',
+                        'months' => 'June – August',
+                        'month_ids' => [6, 7, 8],
+                        'summary' => 'Lush terraced hillsides and dramatic cloud formations. Southern flanks receive seasonal precipitation, while trans-Himalayan rain-shadow zones (like Upper Mustang) remain dry and serene.',
+                        'trail_flow' => 'Quiet trails; limited departures on southern faces with regular departures in rain-shadow regions.',
+                    ],
+                    [
+                        'name' => 'Autumn',
+                        'title' => 'Autumn',
+                        'months' => 'September – November',
+                        'month_ids' => [9, 10, 11],
+                        'summary' => 'Crisp post-monsoon atmosphere, exceptional crystal-clear mountain panoramas, and dependable daytime trail conditions across all major Himalayan massifs.',
+                        'trail_flow' => 'Peak trekking window with high social vitality across classic tea-house junctions.',
+                    ],
+                    [
+                        'name' => 'Winter',
+                        'title' => 'Winter',
+                        'months' => 'December – February',
+                        'month_ids' => [12, 1, 2],
+                        'summary' => 'Dry, bright daytime sunshine with sharp, sub-zero nighttime temperatures. Lower and mid-elevation routes offer tranquil walking, while high-altitude passes frequently experience heavy snow.',
+                        'trail_flow' => 'Low footprint and minimal trail encounters; some high-altitude teahouses close for winter break.',
+                    ],
+                ],
+            ]),
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    protected function seedPolicyPages(): void
+    {
+        $policies = [
+            'privacy' => [
+                'title' => 'Privacy Policy',
+                'summary' => 'Learn how EATH collects, protects, and handles traveler information across our platform and booking inquiries.',
+                'notice_title' => 'Website Policy Layout — Professional Review Required',
+                'notice_body' => 'Website policy layout — not binding terms; professional and business review required before launch.',
+                'sections' => [
+                    [
+                        'heading' => '1. Information We Collect',
+                        'body' => 'We collect personal information necessary to plan and coordinate Himalayan mountain journeys. This includes your name, email address, nationality, contact phone numbers, emergency contact details, dietary requirements, and high-altitude medical fitness disclosures provided during planning inquiries or booking submissions.',
+                    ],
+                    [
+                        'heading' => '2. Purpose & Legal Basis for Processing',
+                        'body' => 'Your information is used exclusively to facilitate route proposals, issue official government national park permits, register TIMS cards, coordinate domestic STOL flights (e.g. Lukla, Jomsom), arrange village teahouse lodgings, and establish mountain safety rosters for field expedition leaders.',
+                    ],
+                    [
+                        'heading' => '3. Information Sharing & Field Third Parties',
+                        'body' => 'We share essential travel details strictly with authorized operational partners required to deliver your journey: licensed native trekking guides, regional national park authorities, domestic aviation carriers, and certified emergency helicopter evacuation services when rapid dispatch is required.',
+                    ],
+                    [
+                        'heading' => '4. Data Retention & Safeguards',
+                        'body' => 'We implement encryption, role-based access restrictions, and secure database backups to safeguard your information. Personal information is retained only as long as required to fulfill operational, accounting, and legal requirements under Nepal tourism regulations.',
+                    ],
+                    [
+                        'heading' => '5. Cookies & Local Browser Storage',
+                        'body' => 'We use non-invasive session tokens and functional cookies to remember your shortlisted journeys in the Compare Treks tool and preserve your step progression in the Journey Planner. We do not deploy third-party advertising tracking or sell behavioral profiles.',
+                    ],
+                    [
+                        'heading' => '6. Your Privacy Rights & Access Requests',
+                        'body' => 'You have the right to request access to the personal data we hold about you, request corrections to inaccurate information, or request deletion of non-essential records. To exercise these rights, please contact our team via privacy@eath.test.',
+                    ],
+                ],
+            ],
+            'terms' => [
+                'title' => 'Terms & Conditions',
+                'summary' => 'Standard terms governing the use of the EATH platform, route planning tools, and trekking service agreements.',
+                'notice_title' => 'Website Terms Layout — Professional Review Required',
+                'notice_body' => 'Website policy layout — not binding terms; professional and business review required before launch.',
+                'sections' => [
+                    [
+                        'heading' => '1. Acceptance of Terms & Platform Use',
+                        'body' => 'By accessing the EATH website and utilizing our interactive journey planning tools, you agree to comply with these terms of use. All content, route diagrams, and software interfaces are the proprietary property of E.A.T.H. Travels (P) Ltd.',
+                    ],
+                    [
+                        'heading' => '2. Booking Confirmation & Reservations',
+                        'body' => 'A reservation is deemed provisional until the required deposit has been received and verified by our operations team. Upon payment verification, an official expedition dossier and confirmation itinerary will be dispatched.',
+                    ],
+                    [
+                        'heading' => '3. Pricing, Inclusions & Currency Fluctuations',
+                        'body' => 'All published prices are quoted in USD and include licensed guide services, porter allocations, national park entry permits, and standard teahouse accommodations as itemized. Personal equipment, international airfare, Nepal visa fees, and personal travel insurance are excluded.',
+                    ],
+                    [
+                        'heading' => '4. Traveler Health, Acclimatization & Safety Authority',
+                        'body' => 'Trekkers agree to abide by the safety instructions of the designated lead guide at all times. The lead guide holds absolute and unreserved operational authority to mandate an acclimatization rest day, modify trail routing, or order immediate descent if a traveler demonstrates acute altitude symptoms.',
+                    ],
+                    [
+                        'heading' => '5. Inherent Mountain Risks & Limitation of Liability',
+                        'body' => 'Himalayan mountain travel involves inherent risks including extreme weather, rockfall, altitude sickness, landslide delays, and unpredictable flight cancellations. Travelers voluntarily accept these hazards and agree that EATH is not liable for disruptions beyond reasonable operational control.',
+                    ],
+                    [
+                        'heading' => '6. Governing Law & Dispute Resolution',
+                        'body' => 'These terms are governed by and construed in accordance with the laws of Nepal. Any disputes arising from services shall first be submitted to informal mediation via the Nepal Tourism Board before formal proceedings in the courts of Kathmandu.',
+                    ],
+                ],
+            ],
+            'booking-conditions' => [
+                'title' => 'Booking Conditions',
+                'summary' => 'Essential booking requirements, payment milestones, and mandatory travel criteria for Himalayan expeditions.',
+                'notice_title' => 'Booking Conditions Layout — Professional Review Required',
+                'notice_body' => 'Website policy layout — not binding terms; professional and business review required before launch.',
+                'sections' => [
+                    [
+                        'heading' => '1. Advance Deposit & Reservation Confirmation',
+                        'body' => 'To secure guide assignments, advance hotel blocks, and high-demand domestic flights (such as Kathmandu/Manthali to Lukla), a non-refundable deposit of 25% of the total journey price is required at the time of booking.',
+                    ],
+                    [
+                        'heading' => '2. Final Balance Payment Schedule',
+                        'body' => 'The remaining 75% balance is due 30 days prior to your scheduled trip start date. Bookings made within 30 days of departure must be settled in full at the time of reservation confirmation.',
+                    ],
+                    [
+                        'heading' => '3. Mandatory High-Altitude Emergency Insurance',
+                        'body' => 'Every participant must hold active travel insurance that explicitly covers emergency helicopter search, evacuation, and medical repatriation up to 6,000 meters above sea level. Proof of policy must be presented before trailhead departure.',
+                    ],
+                    [
+                        'heading' => '4. Passport Validity & Nepal Visa Requirements',
+                        'body' => 'All foreign travelers must hold a passport valid for at least 6 months beyond the intended departure date from Nepal. Tourist visas may be obtained on arrival at Tribhuvan International Airport in Kathmandu or via the official Nepal Immigration online portal.',
+                    ],
+                    [
+                        'heading' => '5. Operator Itinerary Amendments',
+                        'body' => 'We reserve the right to alter route schedules, campsite locations, or lodge choices due to sudden weather shifts, trail washouts, heavy snow conditions, or group acclimatization pacing. Alternative arrangements of equal standard will be provided wherever possible.',
+                    ],
+                ],
+            ],
+            'cancellation' => [
+                'title' => 'Cancellation Policy',
+                'summary' => 'Clear rules on cancellation timelines, refunds, postponement options, and uncontrollable weather interruptions.',
+                'notice_title' => 'Cancellation Policy Layout — Professional Review Required',
+                'notice_body' => 'Website policy layout — not binding terms; professional and business review required before launch.',
+                'sections' => [
+                    [
+                        'heading' => '1. Client Cancellation Notice & Refund Tiers',
+                        'body' => 'If you cancel your expedition, notice must be received in writing. Refund amounts depend on the timeline: 60+ days prior to departure: 100% refund minus deposit; 30 to 59 days prior: 50% refund of balance; fewer than 30 days prior: no refund applicable.',
+                    ],
+                    [
+                        'heading' => '2. Non-Refundable Sunk Costs',
+                        'body' => 'Government national park entry permits, special restricted area permits (e.g. Upper Mustang, Manaslu), and non-transferable domestic flight tickets become non-refundable immediately upon formal issuance.',
+                    ],
+                    [
+                        'heading' => '3. Uncontrollable Delays & Weather Interruptions',
+                        'body' => 'In the event of severe weather causing flight cancellations to or from mountain airstrips (e.g. Lukla), we assist travelers with priority rebooking, helicopter charter upgrades (at traveler expense), or modified overland itineraries. Additional hotel nights in Kathmandu during weather groundings are the traveler’s responsibility.',
+                    ],
+                    [
+                        'heading' => '4. Trip Postponement & Credit Transfers',
+                        'body' => 'Travelers wishing to postpone their expedition rather than cancel may transfer their deposit to any departure within 12 months of the original date, subject to a nominal administrative rescheduling fee and notice provided at least 45 days in advance.',
+                    ],
+                    [
+                        'heading' => '5. Medical Evacuation & Early Descent',
+                        'body' => 'If a traveler descends early from a trek due to injury, altitude sickness, or personal choice, no refunds or credits are granted for unused itinerary days, lodge bookings, or guide services.',
+                    ],
+                ],
+            ],
+            'cookies' => [
+                'title' => 'Cookie Policy',
+                'summary' => 'Information on how cookies and browser local storage are used to enhance your route planning experience.',
+                'notice_title' => 'Cookie Policy Layout — Professional Review Required',
+                'notice_body' => 'Website policy layout — not binding terms; professional and business review required before launch.',
+                'sections' => [
+                    [
+                        'heading' => '1. What Are Cookies & Local Storage',
+                        'body' => 'Cookies and local browser storage are small text elements saved on your device by your web browser. They allow our website to remember your session state, maintain security tokens, and retain interactive selections as you browse.',
+                    ],
+                    [
+                        'heading' => '2. Essential Cookies We Use',
+                        'body' => 'Essential cookies are strictly necessary to deliver core platform functionality, including CSRF security protection, user session authentication, and maintaining safe form submissions across our planning interfaces.',
+                    ],
+                    [
+                        'heading' => '3. Functional Preferences & Trek Comparison',
+                        'body' => 'We use functional cookies to remember your shortlisted journeys in the Compare Treks module, preserve step inputs in the Journey Planner wizard, and respect your high-contrast or text readability display preferences.',
+                    ],
+                    [
+                        'heading' => '4. Managing & Clearing Cookies',
+                        'body' => 'You can configure your browser to reject cookies or notify you when a cookie is placed. You can also clear all stored session tokens at any time using the on-site reset controls located in the website footer.',
+                    ],
+                ],
+            ],
+        ];
+
+        foreach ($policies as $slug => $policy) {
+            $pageId = DB::table('website_pages')->insertGetId([
+                'title' => $policy['title'],
                 'slug' => $slug,
-                'summary' => 'Database-backed website page content.',
-                'body' => 'This page is stored in the database and can be managed as website content.',
-                'type' => in_array($slug, ['privacy', 'terms', 'booking-conditions', 'cancellation', 'cookies'], true) ? 'policy' : 'standard',
+                'type' => 'policy',
+                'summary' => $policy['summary'],
+                'body' => '<p>' . e($policy['summary']) . '</p>',
+                'notice_title' => $policy['notice_title'],
+                'notice_body' => $policy['notice_body'],
+                'meta_title' => $policy['title'] . ' | EATH Trekking Website',
+                'meta_description' => $policy['summary'],
                 'is_active' => true,
                 'is_published' => true,
                 'published_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }
 
-        // Realistic seed for Responsible Travel page
+            foreach ($policy['sections'] as $index => $sec) {
+                DB::table('website_page_sections')->insert([
+                    'website_page_id' => $pageId,
+                    'heading' => $sec['heading'],
+                    'layout_key' => 'standard',
+                    'sort_order' => $index + 1,
+                    'body' => $sec['body'],
+                    'content' => json_encode(['tag' => 'Policy Section']),
+                    'is_active' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+    }
+
+    protected function seedResponsibleTravelPage(int $heroAssetId): void
+    {
         $responsiblePageId = DB::table('website_pages')->insertGetId([
             'title' => 'Responsible Mountain Travel & Porter Welfare',
             'slug' => 'responsible-travel',

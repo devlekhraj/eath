@@ -1,49 +1,61 @@
 @extends('website_preview.layout.master')
 
-@section('title', 'Contact Our Trekking Team (Website) | EATH Trekking Website')
-@section('meta_description', 'Simulate sending an expedition inquiry or route planning question to our Himalayan trekking team in this preview preview.')
+@section('title', ($page?->meta_title ?: ($title ?: 'Contact Our Trekking Team (Website)')) . ' | EATH Trekking Website')
+@section('meta_description', $page?->meta_description ?: ($metaDescription ?: 'Simulate sending an expedition inquiry or route planning question to our Himalayan trekking team in this preview.'))
 
 @section('content')
 <div class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-16);">
     <div style="max-width: 860px; margin: 0 auto;">
-        <img src="{{ $heroImage['url'] }}" alt="{{ $heroImage['alt'] }}" width="{{ $heroImage['width'] }}" height="{{ $heroImage['height'] }}" loading="eager" decoding="async" style="width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; margin-bottom:var(--space-8);">
+        <img src="{{ $heroImage['url'] }}" alt="{{ $heroImage['alt'] }}" width="{{ $heroImage['width'] }}" height="{{ $heroImage['height'] }}" loading="eager" decoding="async" style="width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; margin-bottom:var(--space-8); border-radius: 0 !important;">
         {{-- 2. H1 & Website Communication Notice --}}
         <header style="margin-bottom: var(--space-10);">
-            <span class="website-badge website-badge--neutral" style="margin-bottom: var(--space-2);">Inquiry Center</span>
+            <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-2); background: transparent !important; border: none !important; padding: 0 !important;">
+                Inquiry Center
+            </div>
             <h1 class="website-h1" style="margin: 0 0 var(--space-4) 0;">
-                Contact Our Team (Website)
+                {{ $page?->title ?: 'Contact Our Team (Website)' }}
             </h1>
             <p class="website-lead website-text-secondary" style="margin: 0 0 var(--space-5) 0; line-height: 1.6;">
-                Have questions about route feasibility, seasonal timing, or physical preparation? Test our simulated inquiry workflow below.
+                {{ $page?->summary ?: 'Have questions about route feasibility, seasonal timing, or physical preparation? Test our simulated inquiry workflow below.' }}
             </p>
 
             {{-- Website Communication Notice Banner --}}
-            <div class="website-card" style="padding: var(--space-4) var(--space-5); background: var(--color-background-warm); border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent); border-radius: var(--radius-md); box-shadow: none !important;">
-                <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
-                    <span style="font-size: 1.25rem; line-height: 1;" aria-hidden="true">ℹ️</span>
-                    <div>
-                        <strong class="website-small" style="display: block; color: var(--color-text); margin-bottom: 2px;">
-                            Simulated Contact Notice — No Live Messages Sent
-                        </strong>
-                        <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.55;">
-                            This form models customer inquiry intake for the EATH platform. In this preview environment, submissions are processed locally: no emails are transmitted, no CRM leads or database records are created, and no real-world phone calls or WhatsApp messages are dispatched. Please use the prefilled sample traveler credentials and do not submit private personal information.
-                        </p>
+            @php
+                $noticeTitle = $page?->notice_title ?: 'Simulated Contact Notice — Real Database Storage in Inquiries Table';
+                $noticeBody = $page?->notice_body ?: 'This form models customer inquiry intake for the EATH platform. In this preview environment, submissions are saved locally to the inquiries database table and displayed inside the Admin Panel Leads & Operations module.';
+            @endphp
+            @if(!empty($noticeTitle) || !empty($noticeBody))
+                <div class="website-card" style="padding: var(--space-4) var(--space-5); background: var(--color-background-warm); border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent); border-radius: 0 !important; box-shadow: none !important;">
+                    <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
+                        <span style="font-size: 1.25rem; line-height: 1;" aria-hidden="true">ℹ️</span>
+                        <div>
+                            @if(!empty($noticeTitle))
+                                <strong class="website-small" style="display: block; color: var(--color-text); margin-bottom: 2px;">
+                                    {{ $noticeTitle }}
+                                </strong>
+                            @endif
+                            @if(!empty($noticeBody))
+                                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.55;">
+                                    {{ $noticeBody }}
+                                </p>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </header>
 
         {{-- Success State Alert --}}
         @if(session('contact_success'))
-            <div role="alert" class="website-card" style="padding: var(--space-5); background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #16a34a; border-radius: var(--radius-md); margin-bottom: var(--space-8); box-shadow: none !important;">
+            <div role="alert" class="website-card" style="padding: var(--space-5); background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #16a34a; border-radius: 0 !important; margin-bottom: var(--space-8); box-shadow: none !important;">
                 <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
                     <span style="font-size: 1.25rem; line-height: 1;" aria-hidden="true">✅</span>
                     <div>
                         <strong class="website-body" style="display: block; color: #166534; margin-bottom: var(--space-1);">
-                            Simulated Message Received
+                            Inquiry Received & Stored
                         </strong>
                         <p class="website-small" style="color: #15803d; margin: 0; line-height: 1.55;">
-                            Your preview inquiry has been processed successfully. In accordance with this prototype&rsquo;s privacy standards, no live emails were transmitted, no leads were saved to a database, and no sensitive personal data was retained.
+                            Your inquiry has been stored in the database. You can review and manage this submission directly in the Admin Panel Leads &amp; Operations module.
                         </p>
                     </div>
                 </div>
@@ -52,7 +64,7 @@
 
         {{-- Error Summary --}}
         @if($errors->any())
-            <div role="alert" tabindex="-1" class="website-card" style="padding: var(--space-4) var(--space-5); background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid var(--color-danger); border-radius: var(--radius-md); margin-bottom: var(--space-8); box-shadow: none !important;">
+            <div role="alert" tabindex="-1" class="website-card" style="padding: var(--space-4) var(--space-5); background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid var(--color-danger); border-radius: 0 !important; margin-bottom: var(--space-8); box-shadow: none !important;">
                 <strong class="website-small" style="color: #991b1b; display: block; margin-bottom: var(--space-1);">
                     Please correct the following issues:
                 </strong>
@@ -273,7 +285,7 @@
                 <p class="website-body website-text-secondary" style="margin: 0 0 var(--space-3) 0; line-height: 1.6;">
                     In real commercial expeditions, our team operates from an established operations office in Kathmandu, handling flight logistics, trekking permits, and luggage storage.
                 </p>
-                <div style="padding: var(--space-3) var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: var(--radius-sm);">
+                <div style="padding: var(--space-3) var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: 0 !important;">
                     <strong class="website-small" style="display: block; color: var(--color-text); margin-bottom: 2px;">
                         Prototype Credential Status:
                     </strong>

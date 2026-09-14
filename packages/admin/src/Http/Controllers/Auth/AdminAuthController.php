@@ -2,8 +2,9 @@
 
 namespace Admin\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Admin\Models\Admin;
+use Admin\Services\AuthService;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,10 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminAuthController extends Controller
 {
+    public function __construct(
+        protected AuthService $authService
+    ) {}
+
     public function login(Request $request): JsonResponse
     {
         $validator = Validator::make(
@@ -59,23 +64,12 @@ class AdminAuthController extends Controller
 
     public function profile(Request $request): JsonResponse
     {
-        $user = $request->user();
-
-        try {
-            $notificationCount = $user ? $user->unreadNotifications()->count() : 0;
-        } catch (\Throwable) {
-            $notificationCount = 0;
-        }
-
-        return response()->json([
-            'data' => $user,
-            'notification_count' => $notificationCount,
-        ]);
+        return response()->json($this->authService->profile());
     }
 
     public function logout(Request $request): JsonResponse
     {
-        $request->user()?->currentAccessToken()?->delete();
+        $this->authService->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }

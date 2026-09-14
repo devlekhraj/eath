@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('summary')->nullable();
             $table->longText('description')->nullable();
             $table->text('conditions_note')->nullable();
+            $table->json('content')->nullable();
             $table->unsignedInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

@@ -1,202 +1,196 @@
 @extends('website_preview.layout.master')
 
-@section('title', 'About EATH · Proposed Brand Story & Philosophy · EATH Website')
-@section('meta_description', 'Proposed brand story, planning philosophy, and architectural design for the EATH Himalayan trekking website platform.')
+@section('title', ($page?->meta_title ?: ($title ?: 'About EATH: Elevated Alpine Trekking & Hospitality')) . ' | EATH Website')
+@section('meta_description', $page?->meta_description ?: ($metaDescription ?: 'Proposed brand story, planning philosophy, and architectural design for the EATH Himalayan trekking website platform.'))
 
 @section('content')
 <div class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12);">
 
     <!-- H1 & Proposed Brand Introduction -->
     <header style="max-width: 820px; margin-bottom: var(--space-8);">
-        <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); flex-wrap: wrap;">
-            <span class="website-badge website-badge--primary">Proposed Brand Story</span>
-            <span class="website-badge website-badge--neutral">Architecture Website</span>
+        <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-2); background: transparent !important; border: none !important; padding: 0 !important;">
+            Proposed Brand Story
         </div>
 
         <h1 class="website-h1" style="margin: 0 0 var(--space-3) 0;">
-            About EATH: Elevated Alpine Trekking &amp; Hospitality
+            {{ $page?->title ?: 'About EATH: Elevated Alpine Trekking & Hospitality' }}
         </h1>
 
         <p class="website-body website-text-secondary" style="font-size: 1.15rem; line-height: 1.6; margin: 0 0 var(--space-4) 0;">
-            A modern approach to Himalayan journey planning built around transparent pacing, traveler preferences, and honest environmental boundaries.
+            {{ $page?->summary ?: 'A modern approach to Himalayan journey planning built around transparent pacing, traveler preferences, and honest environmental boundaries.' }}
         </p>
 
-        <!-- Explicit Brand Narrative Disclaimer -->
-        <div class="website-notice website-notice--info" style="margin: 0; padding: var(--space-3) var(--space-4);">
-            <span class="website-micro" style="display: block; line-height: 1.5;">
-                <strong>Sample Brand Narrative:</strong> This page presents proposed brand positioning and architectural design for the EATH platform. Descriptions of operational methods, guide profiles, and service philosophies represent sample editorial content for testing and evaluation, not verified historical records.
-            </span>
-        </div>
+        <!-- Brand Narrative Notice Banner -->
+        @php
+            $noticeTitle = $page?->notice_title ?: 'Sample Brand Narrative Notice';
+            $noticeBody = $page?->notice_body ?: 'This page presents proposed brand positioning and architectural design for the EATH platform. Descriptions of operational methods, guide profiles, and service philosophies represent sample editorial content for testing and evaluation, not verified historical records.';
+        @endphp
+        @if(!empty($noticeTitle) || !empty($noticeBody))
+            <div class="website-card" style="padding: var(--space-3) var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-left: 4px solid var(--color-primary); border-radius: 0 !important; box-shadow: none !important;">
+                <span class="website-micro" style="display: block; line-height: 1.5;">
+                    @if(!empty($noticeTitle))
+                        <strong>{{ $noticeTitle }}:</strong>
+                    @endif
+                    {{ $noticeBody }}
+                </span>
+            </div>
+        @endif
     </header>
 
     <!-- Hero Image Banner -->
-    @if($heroImage)
-        <div style="border-radius: var(--radius-lg); overflow: hidden; max-height: 400px; margin-bottom: var(--space-10); border: 1px solid var(--color-border); background: var(--color-surface);">
+    @if(!empty($heroImage['url']))
+        <div style="max-height: 440px; margin-bottom: var(--space-10); border: 1px solid var(--color-border); background: var(--color-surface); border-radius: 0 !important; overflow: hidden;">
             <img src="{{ $heroImage['url'] }}"
                  alt="{{ $heroImage['alt'] }}"
-                 style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                 style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 0 !important;"
                  loading="eager" />
         </div>
     @endif
 
-    <!-- 3. Sample Company-Story Narrative -->
-    <section aria-labelledby="heading-story" style="max-width: 800px; margin-bottom: var(--space-12);">
-        <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-2);">Our Approach</span>
-        <h2 id="heading-story" class="website-h2" style="margin: 0 0 var(--space-4) 0;">
-            Rethinking the Himalayan Trekking Experience
-        </h2>
+    <!-- Dynamic Sections -->
+    @php
+        $sections = $page?->sections ?? collect();
+    @endphp
 
-        <div style="color: var(--color-text-secondary); line-height: 1.75; font-size: 1.0625rem;">
-            <p style="margin-bottom: var(--space-4);">
-                Himalayan trekking has historically been presented through rigid package formulas, crowded high-volume corridors, and marketing superlatives that obscure the genuine physical and logistical realities of mountain travel.
-            </p>
-            <p style="margin-bottom: var(--space-4);">
-                EATH is conceived to shift the focus back to where it belongs: thoughtful itinerary pacing, transparent trade-offs, and traveler self-determination. Rather than pressuring visitors with artificial scarcity or rushed departures, our digital platform organizes routes according to real-world considerations—acclimatization safety, seasonal suitability, and personal travel rhythm.
-            </p>
-            <p style="margin: 0;">
-                Whether you seek the quiet tranquility of lateral valley trails, photographic dawn pacing, or authentic interactions with high-mountain communities, the platform provides clear, grounded criteria to help you design an intentional journey.
-            </p>
-        </div>
-    </section>
+    @if($sections->isNotEmpty())
+        @foreach($sections as $index => $section)
+            @php
+                $rawContent = $section->content;
+                $items = $rawContent['items'] ?? (is_array($rawContent) ? $rawContent : []);
+                $tag = $rawContent['tag'] ?? null;
+                $layout = $section->layout_key ?: 'standard';
+                $secHeadingId = 'heading-about-sec-' . ($section->id ?: $index);
+            @endphp
 
-    <!-- 4. How This Planning Experience Works -->
-    <section aria-labelledby="heading-process" style="margin-bottom: var(--space-12);">
-        <div style="margin-bottom: var(--space-5);">
-            <span class="website-badge website-badge--primary" style="margin-bottom: var(--space-1);">The Workflow</span>
-            <h2 id="heading-process" class="website-h3" style="margin: 0 0 var(--space-1) 0;">
-                How Our Planning Platform Operates
-            </h2>
-            <p class="website-small website-text-secondary" style="margin: 0; max-width: 740px;">
-                A three-step guided progression designed to replace high-pressure sales with transparent exploration.
-            </p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
-            <div class="website-card" style="padding: var(--space-5); background: var(--color-surface); border: 1px solid var(--color-border);">
-                <div style="font-size: 1.75rem; margin-bottom: var(--space-2); color: var(--color-primary);">01</div>
-                <h3 class="website-h4" style="margin: 0 0 var(--space-2) 0;">Explore by Season &amp; Region</h3>
-                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
-                    Filter itineraries using historical climatic windows and regional terrain characters rather than generalized promises.
-                </p>
-            </div>
-
-            <div class="website-card" style="padding: var(--space-5); background: var(--color-surface); border: 1px solid var(--color-border);">
-                <div style="font-size: 1.75rem; margin-bottom: var(--space-2); color: var(--color-primary);">02</div>
-                <h3 class="website-h4" style="margin: 0 0 var(--space-2) 0;">Guided Criteria Matching</h3>
-                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
-                    Define your available days, party composition, physical comfort zone, and preferred pacing to evaluate deterministic route recommendations.
-                </p>
-            </div>
-
-            <div class="website-card" style="padding: var(--space-5); background: var(--color-surface); border: 1px solid var(--color-border);">
-                <div style="font-size: 1.75rem; margin-bottom: var(--space-2); color: var(--color-primary);">03</div>
-                <h3 class="website-h4" style="margin: 0 0 var(--space-2) 0;">Transparent Review &amp; Synthesis</h3>
-                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
-                    Review itemized illustrative estimates and route trade-offs before generating a non-PII plan receipt—with zero forced deposits.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. Three Proposed Differentiators -->
-    <section aria-labelledby="heading-differentiators" style="margin-bottom: var(--space-12);">
-        <div style="margin-bottom: var(--space-5);">
-            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-1);">Guiding Principles</span>
-            <h2 id="heading-differentiators" class="website-h3" style="margin: 0 0 var(--space-1) 0;">
-                Three Core Differentiators
-            </h2>
-            <p class="website-small website-text-secondary" style="margin: 0; max-width: 740px;">
-                Foundational standards embedded in the design of every catalog itinerary and consultation.
-            </p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
-            <div class="website-card" style="padding: var(--space-5); background: var(--color-background-warm); border: 1px solid var(--color-border);">
-                <strong class="website-body" style="color: var(--color-primary-dark); display: block; margin-bottom: var(--space-2);">
-                    ✓ Pacing-First Route Architecture
-                </strong>
-                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.6;">
-                    Every itinerary prioritizes gradual ascent profiles and built-in acclimatization rest stops over rushed, physically punitive schedules.
-                </p>
-            </div>
-
-            <div class="website-card" style="padding: var(--space-5); background: var(--color-background-warm); border: 1px solid var(--color-border);">
-                <strong class="website-body" style="color: var(--color-primary-dark); display: block; margin-bottom: var(--space-2);">
-                    ✓ Preference-Driven Discovery
-                </strong>
-                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.6;">
-                    We treat travel desires—quiet forest paths, photography patience, cultural curiosity—as primary signals rather than afterthoughts.
-                </p>
-            </div>
-
-            <div class="website-card" style="padding: var(--space-5); background: var(--color-background-warm); border: 1px solid var(--color-border);">
-                <strong class="website-body" style="color: var(--color-primary-dark); display: block; margin-bottom: var(--space-2);">
-                    ✓ Honest, Grounded Information
-                </strong>
-                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.6;">
-                    We state seasonal limitations and trail conditions candidly. If a pass is snowbound in winter, we say so plainly without false assurances.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. Fictional Website Team Preview -->
-    <section aria-labelledby="heading-team-preview" style="margin-bottom: var(--space-12);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-5); flex-wrap: wrap; gap: var(--space-2);">
-            <div>
-                <span class="website-badge website-badge--neutral" style="margin-bottom: var(--space-1);">Field Leadership</span>
-                <h2 id="heading-team-preview" class="website-h3" style="margin: 0 0 var(--space-1) 0;">
-                    Sample Guide &amp; Planner Profiles
-                </h2>
-                <p class="website-small website-text-secondary" style="margin: 0;">
-                    Illustrative guide records designed to model team representation in the website.
-                </p>
-            </div>
-
-            <a href="{{ route('website.guides.index') }}" class="website-btn website-btn--outline" style="font-size: 0.875rem;">
-                View All Field Guides &rarr;
-            </a>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5);">
-            @foreach($guides as $guide)
-                <div class="website-card" style="padding: var(--space-5); background: var(--color-surface); border: 1px solid var(--color-border); display: flex; flex-direction: column;">
-                    <div style="width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-3); background: var(--color-background-warm);">
-                        <img src="{{ $guide['image']['url'] }}"
-                             alt="{{ $guide['image']['alt'] }}"
-                             style="width: 100%; height: 100%; object-fit: cover; display: block;"
-                             loading="lazy" />
+            <section aria-labelledby="{{ $secHeadingId }}" style="margin-bottom: var(--space-12);">
+                <div style="margin-bottom: var(--space-4);">
+                    <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-1); background: transparent !important; border: none !important; padding: 0 !important;">
+                        {{ $tag ?: ($layout === 'cards_grid' ? 'The Workflow' : ($layout === 'checklist' ? 'Guiding Principles' : 'Our Approach')) }}
                     </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-1);">
-                        <h3 class="website-h4" style="margin: 0;">{{ $guide['name'] }}</h3>
-                        <span class="website-badge website-badge--neutral" style="font-size: 0.72rem;">Sample</span>
-                    </div>
-
-                    <span class="website-micro text-primary" style="font-weight: 600; margin-bottom: var(--space-2); display: block;">
-                        {{ $guide['role'] }}
-                    </span>
-
-                    <p class="website-small website-text-secondary" style="margin: 0 0 var(--space-3) 0; line-height: 1.5; flex-grow: 1;">
-                        {{ $guide['biography'] }}
-                    </p>
-
-                    <div style="padding-top: var(--space-2); border-top: 1px solid var(--color-border-light);">
-                        <span class="website-micro website-text-muted" style="display: block; font-style: italic;">
-                            {{ $guide['disclosure'] }}
-                        </span>
-                    </div>
+                    <h2 id="{{ $secHeadingId }}" class="website-h3" style="margin: 0 0 var(--space-2) 0;">
+                        {{ $section->heading }}
+                    </h2>
+                    @if(!empty($section->body))
+                        <div class="website-body website-text-secondary" style="margin: 0 0 var(--space-3) 0; line-height: 1.7; font-size: 1.05rem;">
+                            {!! $section->body !!}
+                        </div>
+                    @endif
                 </div>
-            @endforeach
-        </div>
-    </section>
 
-    <!-- 7. Responsible-Travel Overview Link -->
+                @if($layout === 'cards_grid' && !empty($items))
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
+                        @foreach($items as $item)
+                            <div class="website-card" style="padding: var(--space-5); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0 !important; box-shadow: none !important;">
+                                @if(!empty($item['tag']))
+                                    <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; margin-bottom: var(--space-1); background: transparent !important; border: none !important; padding: 0 !important;">
+                                        {{ $item['tag'] }}
+                                    </div>
+                                @endif
+                                <h3 class="website-h4" style="margin: 0 0 var(--space-2) 0;">
+                                    {{ $item['title'] ?? '' }}
+                                </h3>
+                                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.55;">
+                                    {{ $item['description'] ?? '' }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                @elseif($layout === 'checklist' && !empty($items))
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
+                        @foreach($items as $item)
+                            <div class="website-card" style="padding: var(--space-5); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important; box-shadow: none !important;">
+                                <strong class="website-body" style="color: var(--color-primary); display: block; margin-bottom: var(--space-2);">
+                                    ✓ {{ $item['title'] ?? '' }}
+                                </strong>
+                                <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.6;">
+                                    {{ $item['description'] ?? '' }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </section>
+        @endforeach
+    @else
+        <!-- Fallback Default Narrative -->
+        <section aria-labelledby="heading-story" style="max-width: 800px; margin-bottom: var(--space-12);">
+            <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-2); background: transparent !important; border: none !important; padding: 0 !important;">Our Approach</div>
+            <h2 id="heading-story" class="website-h2" style="margin: 0 0 var(--space-4) 0;">
+                Rethinking the Himalayan Trekking Experience
+            </h2>
+
+            <div style="color: var(--color-text-secondary); line-height: 1.75; font-size: 1.0625rem;">
+                <p style="margin-bottom: var(--space-4);">
+                    Himalayan trekking has historically been presented through rigid package formulas, crowded high-volume corridors, and marketing superlatives that obscure the genuine physical and logistical realities of mountain travel.
+                </p>
+                <p style="margin-bottom: var(--space-4);">
+                    EATH is conceived to shift the focus back to where it belongs: thoughtful itinerary pacing, transparent trade-offs, and traveler self-determination. Rather than pressuring visitors with artificial scarcity or rushed departures, our digital platform organizes routes according to real-world considerations—acclimatization safety, seasonal suitability, and personal travel rhythm.
+                </p>
+                <p style="margin: 0;">
+                    Whether you seek the quiet tranquility of lateral valley trails, photographic dawn pacing, or authentic interactions with high-mountain communities, the platform provides clear, grounded criteria to help you design an intentional journey.
+                </p>
+            </div>
+        </section>
+    @endif
+
+    <!-- Field Leadership Guide Profiles -->
+    @if(!empty($guides))
+        <section aria-labelledby="heading-team-preview" style="margin-bottom: var(--space-12);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-5); flex-wrap: wrap; gap: var(--space-2);">
+                <div>
+                    <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-1); background: transparent !important; border: none !important; padding: 0 !important;">Field Leadership</div>
+                    <h2 id="heading-team-preview" class="website-h3" style="margin: 0 0 var(--space-1) 0;">
+                        Sample Guide &amp; Planner Profiles
+                    </h2>
+                    <p class="website-small website-text-secondary" style="margin: 0;">
+                        Illustrative guide records designed to model team representation in the website.
+                    </p>
+                </div>
+
+                <a href="{{ route('website.guides.index') }}" class="website-btn website-btn--outline" style="font-size: 0.875rem; border-radius: 0 !important;">
+                    View All Field Guides &rarr;
+                </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5);">
+                @foreach($guides as $guide)
+                    <div class="website-card" style="padding: var(--space-5); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0 !important; box-shadow: none !important; display: flex; flex-direction: column;">
+                        <div style="width: 100%; aspect-ratio: 1 / 1; border-radius: 0 !important; overflow: hidden; margin-bottom: var(--space-3); background: var(--color-background-warm);">
+                            <img src="{{ $guide['image']['url'] }}"
+                                 alt="{{ $guide['image']['alt'] }}"
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 0 !important;"
+                                 loading="lazy" />
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-1);">
+                            <h3 class="website-h4" style="margin: 0;">{{ $guide['name'] }}</h3>
+                        </div>
+
+                        <span class="website-micro text-primary" style="font-weight: 600; margin-bottom: var(--space-2); display: block;">
+                            {{ $guide['role'] }}
+                        </span>
+
+                        <p class="website-small website-text-secondary" style="margin: 0 0 var(--space-3) 0; line-height: 1.5; flex-grow: 1;">
+                            {{ $guide['biography'] }}
+                        </p>
+
+                        <div style="padding-top: var(--space-2); border-top: 1px solid var(--color-border-light);">
+                            <span class="website-micro website-text-muted" style="display: block; font-style: italic;">
+                                {{ $guide['disclosure'] }}
+                            </span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
+    <!-- Responsible-Travel Overview Link -->
     <section aria-labelledby="heading-responsible-link" style="margin-bottom: var(--space-12);">
-        <div class="website-card" style="padding: var(--space-6); background: var(--color-background-warm); border: 1px solid var(--color-border);">
+        <div class="website-card" style="padding: var(--space-6); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important; box-shadow: none !important;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-4);">
                 <div style="max-width: 720px;">
-                    <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-1);">Trail Ethics</span>
+                    <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-1); background: transparent !important; border: none !important; padding: 0 !important;">Trail Ethics</div>
                     <h2 id="heading-responsible-link" class="website-h3" style="margin: 0 0 var(--space-2) 0;">
                         Our Responsible Travel Framework
                     </h2>
@@ -205,49 +199,43 @@
                     </p>
                 </div>
 
-                <a href="{{ route('website.responsible') }}" class="website-btn website-btn--outline">
+                <a href="{{ route('website.responsible') }}" class="website-btn website-btn--outline" style="border-radius: 0 !important;">
                     Read Responsible Travel Policy &rarr;
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- 8. Credentials Section with Honest Note -->
-    <section aria-labelledby="heading-credentials" style="margin-bottom: var(--space-12); max-width: 820px;">
-        <h2 id="heading-credentials" class="website-h3" style="margin: 0 0 var(--space-2) 0;">
-            Regulatory &amp; Credential Information
-        </h2>
-
-        <div class="website-card" style="padding: var(--space-4) var(--space-5); background: var(--color-surface); border: 1px solid var(--color-border);">
-            <strong class="website-small" style="display: block; color: var(--color-text); margin-bottom: var(--space-1);">
-                Website Status: Not Supplied for this Prototype
-            </strong>
-            <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
-                Official commercial registration numbers, Department of Tourism licenses, and trade association memberships (such as TAAN and Nepal Tourism Board affiliations) are deliberately omitted from this interactive preview. Verified legal registrations, insurance certificates, and tax credentials will be provided upon full commercial launch.
-            </p>
-        </div>
-    </section>
-
-    <!-- 9. Contact / Plan CTA -->
+    <!-- Bottom Contact / Plan CTA -->
+    @php
+        $ctaTitle = $page?->cta_title ?: 'Design Your Tailored Himalayan Journey';
+        $ctaDescription = $page?->cta_description ?: 'Step away from rigid tour packages. Use our interactive planner to find routes matched to your experience, duration, and personal mountain rhythm.';
+        $ctaPrimaryText = $page?->cta_primary_btn_text ?: 'Launch Journey Planner →';
+        $ctaPrimaryUrl = $page?->cta_primary_btn_url ?: route('website.planner.start') . '?mode=discover&source=about';
+        $ctaSecondaryText = $page?->cta_secondary_btn_text ?: 'Explore Trek Catalog';
+        $ctaSecondaryUrl = $page?->cta_secondary_btn_url ?: route('website.treks.index');
+    @endphp
     <section aria-labelledby="heading-about-cta">
-        <div class="website-card" style="padding: var(--space-8); background: var(--color-primary-subtle); border: 2px solid var(--color-primary-light); text-align: center;">
-            <span class="website-badge website-badge--primary" style="margin-bottom: var(--space-2); text-transform: uppercase;">
+        <div class="website-card" style="padding: var(--space-8); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0 !important; text-align: center; box-shadow: none !important;">
+            <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-2); background: transparent !important; border: none !important; padding: 0 !important;">
                 Start Exploring
-            </span>
-            <h2 id="heading-about-cta" class="website-h2" style="margin-bottom: var(--space-2); color: var(--color-primary-dark);">
-                Begin Your Himalayan Trek Design
+            </div>
+            <h2 id="heading-about-cta" class="website-h2" style="margin-bottom: var(--space-2);">
+                {{ $ctaTitle }}
             </h2>
             <p class="website-body website-text-secondary" style="max-width: 640px; margin: 0 auto var(--space-5) auto; line-height: 1.6;">
-                Ready to see how our planning engine matches your travel criteria? Explore catalog routes or build a tailored itinerary today.
+                {{ $ctaDescription }}
             </p>
 
             <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
-                <a href="{{ route('website.planner.start') }}?mode=discover&source=about" class="website-btn website-btn--primary">
-                    Launch Trek Planner &rarr;
+                <a href="{{ $ctaPrimaryUrl }}" class="website-btn website-btn--primary" style="border-radius: 0 !important;">
+                    {{ $ctaPrimaryText }}
                 </a>
-                <a href="{{ route('website.contact') }}" class="website-btn website-btn--outline">
-                    Send General Inquiry
-                </a>
+                @if(!empty($ctaSecondaryText) && !empty($ctaSecondaryUrl))
+                    <a href="{{ $ctaSecondaryUrl }}" class="website-btn website-btn--outline" style="border-radius: 0 !important;">
+                        {{ $ctaSecondaryText }}
+                    </a>
+                @endif
             </div>
         </div>
     </section>

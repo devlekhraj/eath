@@ -201,6 +201,8 @@ class WebsiteCatalogRepository
                     'intro' => $month->summary,
                     'summary' => $month->summary,
                     'description' => $month->description,
+                    'conditions_note' => $month->conditions_note,
+                    'content' => $month->content,
                     'trek_count' => count($monthTreks),
                     'treks' => $monthTreks,
                 ];
