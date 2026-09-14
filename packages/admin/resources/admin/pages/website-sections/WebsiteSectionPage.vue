@@ -107,8 +107,8 @@ import { ref, onMounted, computed } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import { getWebsiteSectionsApi, toggleWebsiteSectionActiveApi } from '@/api/website-sections.api'
-import WebsiteSectionForm from './modal/WebsiteSectionForm.vue'
-import WebsiteSectionDelete from './modal/WebsiteSectionDelete.vue'
+import WebsiteSectionForm from '@/modal-form/website-sections/WebsiteSectionForm.vue'
+import WebsiteSectionDelete from '@/modal-form/website-sections/WebsiteSectionDelete.vue'
 
 const { open: openModal } = useGlobalModal()
 

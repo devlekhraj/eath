@@ -74,8 +74,8 @@ const headers = [
 
 
 
-import SettingForm from './modal/SettingForm.vue';
-import SettingDelete from './modal/SettingDelete.vue';
+import SettingForm from '@/modal-form/settings/SettingForm.vue';
+import SettingDelete from '@/modal-form/settings/SettingDelete.vue';
 import { getSettingsApi } from '@/api/settings.api'
 
 

@@ -99,8 +99,8 @@ import { ref, onMounted, computed } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import Form from './modal/Form.vue'
-import FormDelete from './modal/FormDelete.vue'
+import Form from '@/modal-form/destinations/Form.vue'
+import FormDelete from '@/modal-form/destinations/FormDelete.vue'
 
 const { open: openModal } = useGlobalModal()
 

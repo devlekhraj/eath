@@ -75,8 +75,8 @@ import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
 import { ref, onMounted, computed } from 'vue'
 
-import GuideForm from './modal/GuideForm.vue'
-import GuideDeleteForm from './modal/GuideDeleteForm.vue'
+import GuideForm from '@/modal-form/guides/GuideForm.vue'
+import GuideDeleteForm from '@/modal-form/guides/GuideDeleteForm.vue'
 import { getGuidesApi } from '@/api/guides.api'
 
 

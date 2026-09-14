@@ -97,8 +97,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { dotStyle } from '@/utils/utils'
 import { useGlobalModal } from '@/composables/globalModal'
-import ArticleAdd from './modal/ArticleAdd.vue'
-import ArticleDelete from './modal/ArticleDelete.vue'
+import ArticleAdd from '@/modal-form/articles/ArticleAdd.vue'
+import ArticleDelete from '@/modal-form/articles/ArticleDelete.vue'
 import { getArticlesApi } from '@/api/articles.api'
 
 const { open: openModal } = useGlobalModal()

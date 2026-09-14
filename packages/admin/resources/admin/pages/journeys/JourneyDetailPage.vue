@@ -103,6 +103,10 @@
             <v-icon color="primary" start>mdi-image-multiple-outline</v-icon>
             Media & Visuals
           </v-tab>
+          <v-tab value="tab_faqs">
+            <v-icon color="primary" start>mdi-frequently-asked-questions</v-icon>
+            FAQs
+          </v-tab>
           <v-tab value="tab_seo">
             <v-icon color="primary" start>mdi-google</v-icon>
             SEO & Meta
@@ -144,6 +148,7 @@ import TabItinerary from './detail_tabs/TabItinerary.vue'
 import TabPricing from './detail_tabs/TabPricing.vue'
 import TabDepartures from './detail_tabs/TabDepartures.vue'
 import TabMedia from './detail_tabs/TabMedia.vue'
+import TabFaqs from './detail_tabs/TabFaqs.vue'
 import TabSeo from './detail_tabs/TabSeo.vue'
 import { getJourney } from '@/api/journeys.api'
 import { useSnackbar } from '@/composables/snackbar'
@@ -163,6 +168,7 @@ const tabComponents = {
   tab_pricing: TabPricing,
   tab_departures: TabDepartures,
   tab_media: TabMedia,
+  tab_faqs: TabFaqs,
   tab_seo: TabSeo,
 }
 

@@ -102,8 +102,8 @@ function handleRefresh() {
 const itineraryDays = computed(() => props.journey?.itinerary_days ?? [])
 
 
-import ItineraryForm from '../modal/ItineraryForm.vue'
-import ItineraryHighlightsForm from '../modal/ItineraryHighlightsForm.vue'
+import ItineraryForm from '@/modal-form/journeys/ItineraryForm.vue'
+import ItineraryHighlightsForm from '@/modal-form/journeys/ItineraryHighlightsForm.vue'
 
 
 function handleOpen(item = {}) {

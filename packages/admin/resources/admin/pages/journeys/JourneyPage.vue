@@ -111,8 +111,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { formatDate, formatAmount, dotStyle } from '@/utils/utils'
-import JourneyDelete from './modal/JourneyDelete.vue'
-import JourneyAdd from './modal/JourneyAdd.vue'
+import JourneyDelete from '@/modal-form/journeys/JourneyDelete.vue'
+import JourneyAdd from '@/modal-form/journeys/JourneyAdd.vue'
 
 import { useGlobalModal } from '@/composables/globalModal'
 import { getJourneys } from '@/api/journeys.api'

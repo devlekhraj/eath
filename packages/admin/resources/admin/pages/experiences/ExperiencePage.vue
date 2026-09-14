@@ -34,9 +34,9 @@
             </template>
 
             <template #item.name="{ item }">
-                <a href="#" class="text-primary text-decoration-underline" @click.prevent="handleOpen(item)">
+                <router-link :to="{ name: 'adminExperienceDetailPage', params: { id: item.id } }" class="text-primary text-decoration-underline">
                     {{ item.name }}
-                </a>
+                </router-link>
             </template>
 
             <template #item.journeys_count="{ item }">
@@ -75,7 +75,11 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center ga-1">
-                    <v-btn size="small" color="primary" variant="outlined" @click="handleOpen(item)" title="Edit experience">
+                    <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminExperienceDetailPage', params: { id: item.id } }" title="View experience details">
+                        <v-icon start size="14">mdi-eye</v-icon>
+                        View
+                    </v-btn>
+                    <v-btn size="small" color="secondary" variant="outlined" @click="handleOpen(item)" title="Quick edit">
                         <v-icon start size="14">mdi-pencil</v-icon>
                         Edit
                     </v-btn>
@@ -100,8 +104,8 @@ import { ref, onMounted, computed } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import Form from './modal/Form.vue'
-import FormDelete from './modal/FormDelete.vue'
+import Form from '@/modal-form/experiences/Form.vue'
+import FormDelete from '@/modal-form/experiences/FormDelete.vue'
 import { getExperiencesApi, toggleExperienceActiveApi } from '@/api/experiences.api'
 
 const { open: openModal } = useGlobalModal()

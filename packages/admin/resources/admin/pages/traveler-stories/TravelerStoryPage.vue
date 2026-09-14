@@ -102,8 +102,8 @@
 import http from '@/http.config'
 import { ref, onMounted, computed } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
-import TravelerStoryForm from './modal/TravelerStoryForm.vue'
-import TravelerStoryDelete from './modal/TravelerStoryDelete.vue'
+import TravelerStoryForm from '@/modal-form/traveler-stories/TravelerStoryForm.vue'
+import TravelerStoryDelete from '@/modal-form/traveler-stories/TravelerStoryDelete.vue'
 
 
 const headers = [

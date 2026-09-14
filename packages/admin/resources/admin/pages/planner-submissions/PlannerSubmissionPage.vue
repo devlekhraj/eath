@@ -141,8 +141,8 @@ import { useGlobalModal } from '@/composables/globalModal'
 import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
 import { getPlannerSubmissionsApi } from '@/api/planner-submissions.api'
-import PlannerDetailModal from './modal/PlannerDetailModal.vue'
-import PlannerDeleteModal from './modal/PlannerDeleteModal.vue'
+import PlannerDetailModal from '@/modal-form/planner-submissions/PlannerDetailModal.vue'
+import PlannerDeleteModal from '@/modal-form/planner-submissions/PlannerDeleteModal.vue'
 
 const loading = ref(false)
 const search = ref('')

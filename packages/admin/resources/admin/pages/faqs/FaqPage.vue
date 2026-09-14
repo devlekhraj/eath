@@ -131,8 +131,8 @@ import { ref, onMounted, computed } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import { getFaqsApi, toggleFaqActiveApi, getFaqCategoriesApi } from '@/api/faqs.api'
-import FaqForm from './modal/FaqForm.vue'
-import FaqDelete from './modal/FaqDelete.vue'
+import FaqForm from '@/modal-form/faqs/FaqForm.vue'
+import FaqDelete from '@/modal-form/faqs/FaqDelete.vue'
 
 const { open: openModal } = useGlobalModal()
 

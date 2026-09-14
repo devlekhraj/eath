@@ -2,18 +2,22 @@
 
 namespace Admin\Models;
 
+use Admin\Models\Concerns\HasFaqs;
+use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Experience extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasMediaAttachments, HasFaqs;
 
     protected $fillable = [
         'name',
         'slug',
         'summary',
         'description',
+        'emphasis',
+        'cues',
         'hero_image_id',
         'card_image_id',
         'sort_order',
@@ -21,6 +25,12 @@ class Experience extends Model
         'is_active',
         'meta_title',
         'meta_description',
+        'cta_title',
+        'cta_description',
+        'cta_primary_btn_text',
+        'cta_primary_btn_url',
+        'cta_secondary_btn_text',
+        'cta_secondary_btn_url',
     ];
 
     protected $casts = [
@@ -31,5 +41,15 @@ class Experience extends Model
     public function journeys()
     {
         return $this->belongsToMany(Journey::class)->withPivot('sort_order')->withTimestamps();
+    }
+
+    public function highlights()
+    {
+        return $this->hasMany(ExperienceHighlight::class)->orderBy('sort_order');
+    }
+
+    public function prepQuestions()
+    {
+        return $this->hasMany(ExperiencePrepQuestion::class)->orderBy('sort_order');
     }
 }

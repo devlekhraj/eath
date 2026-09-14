@@ -71,7 +71,7 @@ import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import { getStatusColor } from '@/utils/utils'
-import GuideForm from './modal/GuideForm.vue'
+import GuideForm from '@/modal-form/guides/GuideForm.vue'
 import { getGuideByIdApi } from '@/api/guides.api'
 import { uploadGalleryImageApi } from '@/api/gallery.api'
 

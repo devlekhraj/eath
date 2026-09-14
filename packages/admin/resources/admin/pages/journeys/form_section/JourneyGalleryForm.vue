@@ -40,9 +40,9 @@
 import { computed, ref } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
 const { open: openModal } = useGlobalModal()
-import SelectGalleryImage from '../modal/SelectGalleryImage.vue'
-import FormGalleryUpdate from '../modal/FormGalleryUpdate.vue'
-import FormImageDelete from '../modal/FormImageDelete.vue'
+import SelectGalleryImage from '@/modal-form/journeys/SelectGalleryImage.vue'
+import FormGalleryUpdate from '@/modal-form/journeys/FormGalleryUpdate.vue'
+import FormImageDelete from '@/modal-form/journeys/FormImageDelete.vue'
 
 const props = defineProps({
 	 journey: {

@@ -71,6 +71,37 @@ Before modifying code:
 
 ---
 
+## Frontend Page Detail Dynamic CRUD Standard
+
+Follow `.agents/rules/page-detail-crud-and-faqs.md`.
+
+* Every public frontend detail page (`/destinations/{slug}`, `/treks/{slug}`, `/experiences/{slug}`, `/articles/{slug}`, etc.) must have complete dynamic management in its corresponding Admin Panel view (`/admin/{resource}/:id`), exactly as implemented in Destination Detail.
+* Sections must never be permanently hardcoded in Blade templates or controllers without database backing.
+* Required editable sections include:
+  * Hero banner image, card thumbnail, and gallery (via polymorphic `HasMediaAttachments`)
+  * Titles, labels, teaser summary, and rich text body/description
+  * Logistics, practical facts, and operational advisory notices (`operational_notice`)
+  * Related relational entities
+  * Frequently Asked Questions (via polymorphic `HasFaqs`)
+  * Bottom Call-To-Action (CTA) banner (custom title, description, buttons and URLs)
+  * SEO metadata (`meta_title`, `meta_description`)
+* **Zero Breakage Policy**: Always provide sensible, contextual defaults in Blade templates (`{{ !empty($entity['field']) ? $entity['field'] : 'Default fallback' }}`) so empty fields never cause layout breakages.
+
+---
+
+## Polymorphic FAQs Standard (`HasFaqs`)
+
+Follow `.agents/rules/page-detail-crud-and-faqs.md`.
+
+* The `faqs` table uses polymorphic relationship columns (`$table->nullableMorphs('faqable')`).
+* Any model that requires FAQs (`Destination`, `Journey`, `Experience`, `Article`, `Guide`, etc.) must use the `Admin\Models\Concerns\HasFaqs` trait.
+* Calling `$model->faqs` returns the entity's ordered polymorphic FAQs.
+* Global website FAQs have `faqable_type = null` and `faqable_id = null`.
+* Admin UI must provide an entity-scoped FAQ management tab or component (reference `packages/admin/resources/admin/pages/destinations/detail_tabs/TabFaqs.vue`), passing `faqable_type` and `faqable_id`.
+* Public controllers query active FAQs for the entity by `faqable_type` and `faqable_id`, falling back to standard defaults if none are defined in the database.
+
+---
+
 ## Ponytail Coding Principles
 
 Follow `.agents/rules/ponytail.md`.

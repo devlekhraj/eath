@@ -148,8 +148,8 @@ import { useGlobalModal } from '@/composables/globalModal'
 import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
 import { getInquiriesApi } from '@/api/inquiries.api'
-import InquiryDetailModal from './modal/InquiryDetailModal.vue'
-import InquiryDeleteModal from './modal/InquiryDeleteModal.vue'
+import InquiryDetailModal from '@/modal-form/inquiries/InquiryDetailModal.vue'
+import InquiryDeleteModal from '@/modal-form/inquiries/InquiryDeleteModal.vue'
 
 const loading = ref(false)
 const search = ref('')

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class WebsitePage extends Model
 {
     use SoftDeletes;
+    use Concerns\HasMediaAttachments;
 
     public const TYPE_STANDARD = 'standard';
     public const TYPE_POLICY = 'policy';
@@ -32,6 +33,14 @@ class WebsitePage extends Model
         'body',
         'type',
         'hero_image_id',
+        'notice_title',
+        'notice_body',
+        'cta_title',
+        'cta_description',
+        'cta_primary_btn_text',
+        'cta_primary_btn_url',
+        'cta_secondary_btn_text',
+        'cta_secondary_btn_url',
         'is_active',
         'is_published',
         'published_at',

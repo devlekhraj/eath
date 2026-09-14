@@ -66,53 +66,55 @@
             </div>
           </v-col>
 
-          <v-col cols="12">
-            <div class="text-caption font-weight-medium text-medium-emphasis mb-2">
-              Association / Scope (Leave empty for global website FAQs)
-            </div>
-          </v-col>
+          <template v-if="!props.lockEntity">
+            <v-col cols="12" class="pt-2">
+              <div class="text-caption font-weight-medium text-medium-emphasis mb-2">
+                Association / Scope (Leave empty for global website FAQs)
+              </div>
+            </v-col>
 
-          <v-col cols="12" sm="4">
-            <div class="mb-2">
-                <v-autocomplete
-                  v-model="form.journey_id"
-                  :items="journeyOptions"
-                  item-title="name"
-                  item-value="id"
-                  label="Specific Journey"
-                  clearable
-                  :loading="loadingOptions"
-                />
-            </div>
-          </v-col>
+            <v-col cols="12" sm="4">
+              <div class="mb-2">
+                  <v-autocomplete
+                    v-model="form.journey_id"
+                    :items="journeyOptions"
+                    item-title="name"
+                    item-value="id"
+                    label="Specific Journey"
+                    clearable
+                    :loading="loadingOptions"
+                  />
+              </div>
+            </v-col>
 
-          <v-col cols="12" sm="4">
-            <div class="mb-2">
-                <v-select
-                  v-model="form.destination_id"
-                  :items="destinationOptions"
-                  item-title="name"
-                  item-value="id"
-                  label="Specific Destination"
-                  clearable
-                  :loading="loadingOptions"
-                />
-            </div>
-          </v-col>
+            <v-col cols="12" sm="4">
+              <div class="mb-2">
+                  <v-select
+                    v-model="form.destination_id"
+                    :items="destinationOptions"
+                    item-title="name"
+                    item-value="id"
+                    label="Specific Destination"
+                    clearable
+                    :loading="loadingOptions"
+                  />
+              </div>
+            </v-col>
 
-          <v-col cols="12" sm="4">
-            <div class="mb-2">
-                <v-select
-                  v-model="form.experience_id"
-                  :items="experienceOptions"
-                  item-title="name"
-                  item-value="id"
-                  label="Specific Experience"
-                  clearable
-                  :loading="loadingOptions"
-                />
-            </div>
-          </v-col>
+            <v-col cols="12" sm="4">
+              <div class="mb-2">
+                  <v-select
+                    v-model="form.experience_id"
+                    :items="experienceOptions"
+                    item-title="name"
+                    item-value="id"
+                    label="Specific Experience"
+                    clearable
+                    :loading="loadingOptions"
+                  />
+              </div>
+            </v-col>
+          </template>
 
           <v-col cols="12" class="pt-2">
             <div class="mb-2">
@@ -155,6 +157,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  lockEntity: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const formRef = ref(null)
@@ -193,18 +199,29 @@ const rules = {
 }
 
 onMounted(async () => {
-  await fetchOptions()
+  if (!props.lockEntity) {
+    await fetchOptions()
+  }
 
-  if (props.item?.id) {
-    form.id = props.item.id
-    form.question = props.item.question || ''
-    form.answer = props.item.answer || ''
-    form.category = props.item.category || ''
-    form.journey_id = props.item.journey_id || null
-    form.destination_id = props.item.destination_id || null
-    form.experience_id = props.item.experience_id || null
-    form.sort_order = props.item.sort_order ?? 0
-    form.is_active = props.item.is_active ?? true
+  if (props.item) {
+    if (props.item.id) {
+      form.id = props.item.id
+      form.question = props.item.question || ''
+      form.answer = props.item.answer || ''
+      form.category = props.item.category || 'General'
+      form.sort_order = props.item.sort_order ?? 0
+      form.is_active = props.item.is_active ?? true
+    }
+
+    if (props.item.faqable_type === 'journey' || props.item.journey_id) {
+      form.journey_id = Number(props.item.faqable_id || props.item.journey_id)
+    }
+    if (props.item.faqable_type === 'destination' || props.item.destination_id) {
+      form.destination_id = Number(props.item.faqable_id || props.item.destination_id)
+    }
+    if (props.item.faqable_type === 'experience' || props.item.experience_id) {
+      form.experience_id = Number(props.item.faqable_id || props.item.experience_id)
+    }
   }
 })
 
@@ -243,13 +260,26 @@ async function handleSubmit() {
 
   loading.value = true
   try {
+    let faqable_type = null
+    let faqable_id = null
+
+    if (form.destination_id) {
+      faqable_type = 'destination'
+      faqable_id = Number(form.destination_id)
+    } else if (form.journey_id) {
+      faqable_type = 'journey'
+      faqable_id = Number(form.journey_id)
+    } else if (form.experience_id) {
+      faqable_type = 'experience'
+      faqable_id = Number(form.experience_id)
+    }
+
     const payload = {
       question: form.question,
       answer: form.answer,
       category: form.category || null,
-      journey_id: form.journey_id ? Number(form.journey_id) : null,
-      destination_id: form.destination_id ? Number(form.destination_id) : null,
-      experience_id: form.experience_id ? Number(form.experience_id) : null,
+      faqable_type,
+      faqable_id,
       sort_order: Number(form.sort_order) || 0,
       is_active: Boolean(form.is_active),
     }

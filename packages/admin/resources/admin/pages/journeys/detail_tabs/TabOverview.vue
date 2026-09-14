@@ -391,6 +391,230 @@
                 />
               </div>
             </v-col>
+
+            <v-col cols="12" md="6">
+              <div class="mb-2">
+                <v-textarea
+                  v-model="form.preparation_note"
+                  label="Preparation & Training Notes"
+                  placeholder="e.g. Cardio and endurance conditioning advised 8-12 weeks prior; include stair climbing with weighted daypack."
+                  rows="2"
+                  auto-grow
+                />
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="6">
+              <div class="mb-2">
+                <v-textarea
+                  v-model="form.packing_note"
+                  label="Gear & Packing Notes"
+                  placeholder="e.g. 4-season down sleeping bag (-15°C rating), broken-in trekking boots, thermal base layers, and UV category 4 sunglasses."
+                  rows="2"
+                  auto-grow
+                />
+              </div>
+            </v-col>
+
+            <v-col cols="12">
+              <div class="mb-2">
+                <v-textarea
+                  v-model="form.operational_notice"
+                  label="Operational Notice / Advisory Banner (Optional)"
+                  placeholder="e.g. Lukla mountain weather buffer days strongly recommended; local permit checks in Lukla require passport copy."
+                  rows="2"
+                  auto-grow
+                  hint="If provided, this appears as an urgent advisory notice on the public trek detail page."
+                  persistent-hint
+                />
+              </div>
+            </v-col>
+
+            <!-- Expedition Safety Protocols Repeater -->
+            <v-col cols="12" class="mt-4">
+              <v-card variant="outlined" class="pa-4">
+                <div class="d-flex align-center justify-space-between mb-3">
+                  <div>
+                    <div class="text-subtitle-2 font-weight-bold text-uppercase text-slate-800">
+                      Expedition Safety Protocols & Equipment
+                    </div>
+                    <div class="text-caption text-medium-emphasis">
+                      Manage specific safety measures, medical readiness, and emergency protocols displayed in the Safety section.
+                    </div>
+                  </div>
+                  <v-btn
+                    size="small"
+                    color="primary"
+                    variant="tonal"
+                    prepend-icon="mdi-plus"
+                    @click="addSafetyItem"
+                  >
+                    Add Protocol
+                  </v-btn>
+                </div>
+
+                <v-alert
+                  v-if="!form.safety_items || !form.safety_items.length"
+                  type="info"
+                  variant="tonal"
+                  density="compact"
+                  class="my-2"
+                >
+                  No custom safety items defined. The public trek page will display standard expedition safety protocols.
+                </v-alert>
+
+                <div v-else class="d-flex flex-column ga-3">
+                  <v-card
+                    v-for="(item, index) in form.safety_items"
+                    :key="index"
+                    variant="outlined"
+                    class="pa-3 bg-slate-50"
+                  >
+                    <div class="d-flex align-center justify-space-between mb-2">
+                      <div class="d-flex align-center ga-2">
+                        <v-chip size="x-small" label color="primary">Item #{{ index + 1 }}</v-chip>
+                        <span class="text-caption font-weight-bold">{{ item.title || 'Untitled Protocol' }}</span>
+                      </div>
+                      <div class="d-flex align-center ga-1">
+                        <v-btn
+                          icon="mdi-arrow-up"
+                          variant="text"
+                          size="x-small"
+                          :disabled="index === 0"
+                          @click="moveSafetyItem(index, -1)"
+                        />
+                        <v-btn
+                          icon="mdi-arrow-down"
+                          variant="text"
+                          size="x-small"
+                          :disabled="index === form.safety_items.length - 1"
+                          @click="moveSafetyItem(index, 1)"
+                        />
+                        <v-btn
+                          icon="mdi-delete-outline"
+                          variant="text"
+                          color="error"
+                          size="x-small"
+                          @click="removeSafetyItem(index)"
+                        />
+                      </div>
+                    </div>
+
+                    <v-row dense>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="item.title"
+                          label="Protocol Title *"
+                          density="compact"
+                          placeholder="e.g. Comprehensive Medical Kit & Oxygen"
+                        />
+                      </v-col>
+                      <v-col cols="12" md="4">
+                        <v-text-field
+                          v-model="item.icon"
+                          label="Icon (e.g. mdi-shield-check)"
+                          density="compact"
+                          placeholder="e.g. mdi-shield-cross"
+                        />
+                      </v-col>
+                      <v-col cols="12" md="2">
+                        <v-switch
+                          v-model="item.is_active"
+                          label="Active"
+                          color="success"
+                          density="compact"
+                          hide-details
+                        />
+                      </v-col>
+                      <v-col cols="12">
+                        <v-textarea
+                          v-model="item.description"
+                          label="Description & Procedures *"
+                          rows="2"
+                          auto-grow
+                          density="compact"
+                          placeholder="Describe equipment readiness, evacuation coverage, and guide certifications."
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                </div>
+              </v-card>
+            </v-col>
+
+            <!-- Bottom CTA Banner Customization -->
+            <v-col cols="12" class="mt-4">
+              <v-card variant="outlined" class="pa-4">
+                <div class="d-flex align-center justify-space-between mb-3">
+                  <div>
+                    <div class="text-subtitle-2 font-weight-bold text-uppercase text-slate-800">
+                      Bottom Call-To-Action (CTA) Banner
+                    </div>
+                    <div class="text-caption text-medium-emphasis">
+                      Customize the prominent expedition call-to-action block at the bottom of this trek detail page. Leave empty to use system defaults.
+                    </div>
+                  </div>
+                </div>
+
+                <v-row dense>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="form.cta_title"
+                      label="CTA Banner Title"
+                      :placeholder="`Ready to Trek ${form.name || 'this Route'}?`"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="form.cta_description"
+                      label="CTA Banner Description"
+                      placeholder="Lock in guaranteed small-group departures or request a private bespoke departure tailored to your fitness and scheduling requirements."
+                      rows="2"
+                      auto-grow
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="form.cta_primary_btn_text"
+                      label="Primary Button Text"
+                      placeholder="Inquire / Book This Trek"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="form.cta_primary_btn_url"
+                      label="Primary Button URL / Route"
+                      placeholder="#departures"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="form.cta_secondary_btn_text"
+                      label="Secondary Button Text"
+                      placeholder="Custom Expedition Inquiry"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="form.cta_secondary_btn_url"
+                      label="Secondary Button URL"
+                      placeholder="/contact"
+                      density="comfortable"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
           </v-row>
 
           <div class="d-flex justify-end pt-6 pb-2 border-t">
@@ -467,6 +691,16 @@ const form = reactive({
   logistics_note: '',
   safety_note: '',
   route_map_note: '',
+  preparation_note: '',
+  packing_note: '',
+  operational_notice: '',
+  cta_title: '',
+  cta_description: '',
+  cta_primary_btn_text: '',
+  cta_primary_btn_url: '',
+  cta_secondary_btn_text: '',
+  cta_secondary_btn_url: '',
+  safety_items: [],
 })
 
 const rules = {
@@ -483,6 +717,30 @@ const pricingBasisOptions = [
   { title: 'Per Person', value: 'per_person' },
   { title: 'Per Group', value: 'group' },
 ]
+
+function addSafetyItem() {
+  form.safety_items.push({
+    title: '',
+    description: '',
+    icon: 'mdi-shield-check',
+    sort_order: form.safety_items.length + 1,
+    is_active: true,
+  })
+}
+
+function removeSafetyItem(index) {
+  form.safety_items.splice(index, 1)
+}
+
+function moveSafetyItem(index, delta) {
+  const target = index + delta
+  if (target < 0 || target >= form.safety_items.length) return
+  const item = form.safety_items.splice(index, 1)[0]
+  form.safety_items.splice(target, 0, item)
+  form.safety_items.forEach((it, idx) => {
+    it.sort_order = idx + 1
+  })
+}
 
 watch(
   () => props.journey,
@@ -521,6 +779,18 @@ watch(
         logistics_note: newVal.logistics_note || '',
         safety_note: newVal.safety_note || '',
         route_map_note: newVal.route_map_note || '',
+        preparation_note: newVal.preparation_note || '',
+        packing_note: newVal.packing_note || '',
+        operational_notice: newVal.operational_notice || '',
+        cta_title: newVal.cta_title || '',
+        cta_description: newVal.cta_description || '',
+        cta_primary_btn_text: newVal.cta_primary_btn_text || '',
+        cta_primary_btn_url: newVal.cta_primary_btn_url || '',
+        cta_secondary_btn_text: newVal.cta_secondary_btn_text || '',
+        cta_secondary_btn_url: newVal.cta_secondary_btn_url || '',
+        safety_items: Array.isArray(newVal.safety_items)
+          ? newVal.safety_items.map((item) => ({ ...item }))
+          : [],
       })
     }
   },

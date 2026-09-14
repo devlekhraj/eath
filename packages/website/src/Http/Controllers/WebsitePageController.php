@@ -5,6 +5,7 @@ namespace Website\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Admin\Models\Inquiry;
 use Admin\Models\Journey;
+use Admin\Models\WebsitePage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Website\Services\WebsiteCatalogRepository;
@@ -49,10 +50,32 @@ class WebsitePageController extends Controller
     {
         $cultureArticle = WebsiteCatalogRepository::findArticle('planning-a-culture-led-journey');
 
+        $page = WebsitePage::with([
+            'sections' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
+            'heroAttachment.mediaAsset',
+            'heroImage',
+        ])
+        ->where('slug', 'responsible-travel')
+        ->first();
+
+        $heroUrl = $page?->heroAttachment?->mediaAsset?->url
+            ?? $page?->heroImage?->path
+            ?? null;
+
+        $fallbackHero = WebsiteAssetRegistry::resolve('responsible-travel-hero', 'Nepal community and mountain environment landscape');
+
+        $heroImage = [
+            'url' => $heroUrl ?: $fallbackHero['url'],
+            'alt' => $page?->heroAttachment?->alt_text ?: ($page?->heroImage?->alt_text ?: $fallbackHero['alt']),
+            'width' => 1600,
+            'height' => 900,
+        ];
+
         return view('website_preview.pages.responsible', [
-            'heroImage' => WebsiteAssetRegistry::resolve('responsible-travel-hero', 'Nepal community and mountain environment landscape'),
-            'title' => 'Responsible Mountain Travel & Porter Welfare',
-            'metaDescription' => 'Explore our proposed framework for ethical porter welfare, local community benefit, trail waste reduction, and sacred Himalayan etiquette.',
+            'page' => $page,
+            'heroImage' => $heroImage,
+            'title' => $page?->meta_title ?: ($page?->title ?: 'Responsible Mountain Travel & Porter Welfare'),
+            'metaDescription' => $page?->meta_description ?: ($page?->summary ?: 'Explore our proposed framework for ethical porter welfare, local community benefit, trail waste reduction, and sacred Himalayan etiquette.'),
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'Responsible Travel'],

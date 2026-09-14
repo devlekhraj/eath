@@ -156,8 +156,8 @@ async function handleSubmit() {
 }
 
 
-import JourneyPriceDelete from '../modal/JourneyPriceDelete.vue'
-import JourneyPriceForm from '../modal/JourneyPriceForm.vue'
+import JourneyPriceDelete from '@/modal-form/journeys/JourneyPriceDelete.vue'
+import JourneyPriceForm from '@/modal-form/journeys/JourneyPriceForm.vue'
 import { saveJourneyPrice, deleteJourneyPrice } from '@/api/journeys.api'
 
 function deleteItem(item) {

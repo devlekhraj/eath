@@ -59,6 +59,7 @@ class DestinationController extends Controller
                 'heroAttachment.mediaAsset',
                 'cardAttachment.mediaAsset',
                 'galleryAttachments.mediaAsset',
+                'logistics',
                 'journeys' => function ($q) {
                     $q->select(['id', 'destination_id', 'name', 'slug', 'duration_days', 'price_minor', 'is_active'])
                       ->orderBy('sort_order')
@@ -88,6 +89,13 @@ class DestinationController extends Controller
             'trailheads' => ['nullable', 'string'],
             'permits' => ['nullable', 'string'],
             'pacing_note' => ['nullable', 'string'],
+            'operational_notice' => ['nullable', 'string'],
+            'cta_title' => ['nullable', 'string', 'max:255'],
+            'cta_description' => ['nullable', 'string'],
+            'cta_primary_btn_text' => ['nullable', 'string', 'max:255'],
+            'cta_primary_btn_url' => ['nullable', 'string', 'max:255'],
+            'cta_secondary_btn_text' => ['nullable', 'string', 'max:255'],
+            'cta_secondary_btn_url' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
@@ -95,11 +103,13 @@ class DestinationController extends Controller
             'meta_description' => ['nullable', 'string', 'max:300'],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'card_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'logistics' => ['nullable', 'array'],
         ]);
 
         $heroImageId = $validated['hero_image_id'] ?? null;
         $cardImageId = $validated['card_image_id'] ?? null;
-        unset($validated['hero_image_id'], $validated['card_image_id']);
+        $logisticsData = $validated['logistics'] ?? null;
+        unset($validated['hero_image_id'], $validated['card_image_id'], $validated['logistics']);
 
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
@@ -127,12 +137,35 @@ class DestinationController extends Controller
             }
         }
 
+        if ($request->has('logistics') && is_array($logisticsData)) {
+            $existingIds = [];
+            foreach ($logisticsData as $idx => $itemData) {
+                if (empty(trim($itemData['label'] ?? '')) && empty(trim($itemData['value'] ?? ''))) {
+                    continue;
+                }
+                $itemId = !empty($itemData['id']) ? (int) $itemData['id'] : null;
+                $logisticsItem = $destination->logistics()->updateOrCreate(
+                    ['id' => $itemId],
+                    [
+                        'label' => trim($itemData['label'] ?? ''),
+                        'value' => trim($itemData['value'] ?? ''),
+                        'icon' => $itemData['icon'] ?? null,
+                        'sort_order' => isset($itemData['sort_order']) ? (int) $itemData['sort_order'] : ($idx + 1),
+                        'is_active' => isset($itemData['is_active']) ? (bool) $itemData['is_active'] : true,
+                    ]
+                );
+                $existingIds[] = $logisticsItem->id;
+            }
+            $destination->logistics()->whereNotIn('id', $existingIds)->delete();
+        }
+
         return response()->json([
             'success' => true,
             'data' => new DestinationResource($destination->fresh()->load([
                 'heroAttachment.mediaAsset',
                 'cardAttachment.mediaAsset',
                 'galleryAttachments.mediaAsset',
+                'logistics',
             ])->loadCount('journeys')),
             'message' => $id ? 'Destination updated successfully.' : 'Destination created successfully.',
         ], $id ? 200 : 201);
@@ -152,6 +185,13 @@ class DestinationController extends Controller
             'trailheads' => ['nullable', 'string'],
             'permits' => ['nullable', 'string'],
             'pacing_note' => ['nullable', 'string'],
+            'operational_notice' => ['nullable', 'string'],
+            'cta_title' => ['nullable', 'string', 'max:255'],
+            'cta_description' => ['nullable', 'string'],
+            'cta_primary_btn_text' => ['nullable', 'string', 'max:255'],
+            'cta_primary_btn_url' => ['nullable', 'string', 'max:255'],
+            'cta_secondary_btn_text' => ['nullable', 'string', 'max:255'],
+            'cta_secondary_btn_url' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
@@ -159,11 +199,13 @@ class DestinationController extends Controller
             'meta_description' => ['nullable', 'string', 'max:300'],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'card_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'logistics' => ['nullable', 'array'],
         ]);
 
         $heroImageId = $validated['hero_image_id'] ?? null;
         $cardImageId = $validated['card_image_id'] ?? null;
-        unset($validated['hero_image_id'], $validated['card_image_id']);
+        $logisticsData = $validated['logistics'] ?? null;
+        unset($validated['hero_image_id'], $validated['card_image_id'], $validated['logistics']);
 
         if (array_key_exists('name', $validated) && !array_key_exists('slug', $validated)) {
             $validated['slug'] = Str::slug($validated['name']);
@@ -187,6 +229,28 @@ class DestinationController extends Controller
             }
         }
 
+        if ($request->has('logistics') && is_array($logisticsData)) {
+            $existingIds = [];
+            foreach ($logisticsData as $idx => $itemData) {
+                if (empty(trim($itemData['label'] ?? '')) && empty(trim($itemData['value'] ?? ''))) {
+                    continue;
+                }
+                $itemId = !empty($itemData['id']) ? (int) $itemData['id'] : null;
+                $logisticsItem = $destination->logistics()->updateOrCreate(
+                    ['id' => $itemId],
+                    [
+                        'label' => trim($itemData['label'] ?? ''),
+                        'value' => trim($itemData['value'] ?? ''),
+                        'icon' => $itemData['icon'] ?? null,
+                        'sort_order' => isset($itemData['sort_order']) ? (int) $itemData['sort_order'] : ($idx + 1),
+                        'is_active' => isset($itemData['is_active']) ? (bool) $itemData['is_active'] : true,
+                    ]
+                );
+                $existingIds[] = $logisticsItem->id;
+            }
+            $destination->logistics()->whereNotIn('id', $existingIds)->delete();
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Destination updated successfully.',
@@ -194,6 +258,7 @@ class DestinationController extends Controller
                 'heroAttachment.mediaAsset',
                 'cardAttachment.mediaAsset',
                 'galleryAttachments.mediaAsset',
+                'logistics',
             ])->loadCount('journeys')),
         ]);
     }

@@ -38,7 +38,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import ReviewForm from './modal/ReviewForm.vue'
+import ReviewForm from '@/modal-form/guides/ReviewForm.vue'
 import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['close', 'saved'])
 const { open: openModal } = useGlobalModal()

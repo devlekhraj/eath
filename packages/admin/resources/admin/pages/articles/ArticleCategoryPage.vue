@@ -85,8 +85,8 @@ import http from '@/http.config'
 import { ref, onMounted, computed } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import CategoryForm from './modal/CategoryForm.vue'
-import CategoryDelete from './modal/CategoryDelete.vue'
+import CategoryForm from '@/modal-form/articles/CategoryForm.vue'
+import CategoryDelete from '@/modal-form/articles/CategoryDelete.vue'
 
 const { showSuccess, showError } = useSnackbar()
 

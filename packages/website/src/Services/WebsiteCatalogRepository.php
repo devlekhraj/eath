@@ -42,12 +42,22 @@ class WebsiteCatalogRepository
         $treks = self::getTreks();
 
         return Destination::query()
+            ->with(['heroAttachment.mediaAsset'])
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get()
             ->map(function (Destination $destination) use ($treks) {
                 $regionTreks = array_values(array_filter($treks, fn ($trek) => (int) $trek['destination_db_id'] === (int) $destination->id));
+
+                $dynamicHero = $destination->heroAttachment?->mediaAsset;
+                $heroImage = $dynamicHero && !empty($dynamicHero->url) ? [
+                    'url' => $dynamicHero->url,
+                    'alt' => $destination->heroAttachment->alt_text ?? $dynamicHero->alt_text ?? ($destination->name . ' Region'),
+                    'width' => 1600,
+                    'height' => 900,
+                    'is_fallback' => false,
+                ] : WebsiteAssetRegistry::resolve("region-{$destination->slug}", $destination->name);
 
                 return [
                     'id' => $destination->slug,
@@ -62,11 +72,18 @@ class WebsiteCatalogRepository
                     'trailheads' => $destination->trailheads,
                     'permits' => $destination->permits,
                     'pacing' => $destination->pacing_note,
+                    'operational_notice' => $destination->operational_notice,
+                    'cta_title' => $destination->cta_title,
+                    'cta_description' => $destination->cta_description,
+                    'cta_primary_btn_text' => $destination->cta_primary_btn_text,
+                    'cta_primary_btn_url' => $destination->cta_primary_btn_url,
+                    'cta_secondary_btn_text' => $destination->cta_secondary_btn_text,
+                    'cta_secondary_btn_url' => $destination->cta_secondary_btn_url,
                     'meta_title' => $destination->meta_title,
                     'meta_description' => $destination->meta_description,
                     'trek_count' => count($regionTreks),
                     'treks' => $regionTreks,
-                    'image' => WebsiteAssetRegistry::resolve("region-{$destination->slug}", $destination->name),
+                    'image' => $heroImage,
                 ];
             })
             ->values()
@@ -83,12 +100,45 @@ class WebsiteCatalogRepository
         $treks = self::getTreks();
 
         return Experience::query()
+            ->with([
+                'heroAttachment.mediaAsset',
+                'cardAttachment.mediaAsset',
+                'galleryAttachments.mediaAsset',
+                'highlights' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
+                'prepQuestions' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
+            ])
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get()
             ->map(function (Experience $experience) use ($treks) {
                 $experienceTreks = array_values(array_filter($treks, fn ($trek) => in_array($experience->slug, $trek['experience_ids'], true)));
+
+                $dynamicHero = $experience->heroAttachment?->mediaAsset;
+                $heroImage = $dynamicHero && !empty($dynamicHero->url) ? [
+                    'url' => $dynamicHero->url,
+                    'alt' => $experience->heroAttachment->alt_text ?? $dynamicHero->alt_text ?? ($experience->name . ' Experience'),
+                    'width' => 1600,
+                    'height' => 900,
+                    'is_fallback' => false,
+                ] : WebsiteAssetRegistry::resolve("experience-{$experience->slug}", $experience->name);
+
+                $gallery = $experience->galleryAttachments->map(fn ($att) => [
+                    'url' => $att->mediaAsset?->url,
+                    'title' => $att->title ?? $att->mediaAsset?->title,
+                    'alt' => $att->alt_text ?? $att->mediaAsset?->alt_text ?? $experience->name,
+                    'caption' => $att->caption ?? $att->mediaAsset?->caption,
+                ])->filter(fn ($item) => !empty($item['url']))->values()->all();
+
+                $highlights = $experience->highlights->map(fn ($h) => [
+                    'title' => $h->title,
+                    'description' => $h->description,
+                ])->values()->all();
+
+                $prepQuestions = $experience->prepQuestions->map(fn ($q) => [
+                    'title' => $q->title,
+                    'body' => $q->body,
+                ])->values()->all();
 
                 return [
                     'id' => $experience->slug,
@@ -98,9 +148,22 @@ class WebsiteCatalogRepository
                     'intro' => $experience->summary,
                     'summary' => $experience->summary,
                     'description' => $experience->description,
+                    'emphasis' => $experience->emphasis,
+                    'cues' => $experience->cues,
+                    'meta_title' => $experience->meta_title,
+                    'meta_description' => $experience->meta_description,
+                    'cta_title' => $experience->cta_title,
+                    'cta_description' => $experience->cta_description,
+                    'cta_primary_btn_text' => $experience->cta_primary_btn_text,
+                    'cta_primary_btn_url' => $experience->cta_primary_btn_url,
+                    'cta_secondary_btn_text' => $experience->cta_secondary_btn_text,
+                    'cta_secondary_btn_url' => $experience->cta_secondary_btn_url,
+                    'highlights' => $highlights,
+                    'prep_questions' => $prepQuestions,
+                    'gallery' => $gallery,
                     'trek_count' => count($experienceTreks),
                     'treks' => $experienceTreks,
-                    'image' => WebsiteAssetRegistry::resolve("experience-{$experience->slug}", $experience->name),
+                    'image' => $heroImage,
                 ];
             })
             ->values()
@@ -154,7 +217,7 @@ class WebsiteCatalogRepository
     public static function getTreks(): array
     {
         return Journey::query()
-            ->with(['destination', 'experiences', 'travelMonths', 'itineraryDays', 'highlights', 'services', 'departures'])
+            ->with(['destination', 'experiences', 'travelMonths', 'itineraryDays', 'highlights', 'services', 'departures', 'heroAttachment.mediaAsset'])
             ->where('is_active', true)
             ->where('is_published', true)
             ->orderByRaw('featured_rank is null')
@@ -171,7 +234,7 @@ class WebsiteCatalogRepository
         $normalizedSlug = self::normalizeTrekIdentifier($idOrSlug);
 
         $journey = Journey::query()
-            ->with(['destination', 'experiences', 'travelMonths', 'itineraryDays', 'highlights', 'services', 'departures'])
+            ->with(['destination', 'experiences', 'travelMonths', 'itineraryDays', 'highlights', 'services', 'departures', 'heroAttachment.mediaAsset', 'galleryAttachments.mediaAsset', 'safetyItems'])
             ->where(function ($query) use ($idOrSlug, $normalizedSlug) {
                 $query->where('slug', $idOrSlug);
                 if (is_numeric($idOrSlug)) {
@@ -364,7 +427,13 @@ class WebsiteCatalogRepository
         }
 
         if (!empty($trekContext['db_id'])) {
-            $query->where(fn ($builder) => $builder->whereNull('journey_id')->orWhere('journey_id', $trekContext['db_id']));
+            $query->where(function ($builder) use ($trekContext) {
+                $builder->whereNull('faqable_id')
+                    ->orWhere(function ($q) use ($trekContext) {
+                        $q->where('faqable_type', 'journey')
+                          ->where('faqable_id', $trekContext['db_id']);
+                    });
+            });
         }
 
         return $query->get()->map(fn (Faq $faq) => [
@@ -372,7 +441,7 @@ class WebsiteCatalogRepository
             'category' => $faq->category,
             'question' => $faq->question,
             'answer' => str_replace('{duration_days}', (string) ($trekContext['duration_days'] ?? ''), $faq->answer),
-            'trek_specific' => (bool) $faq->journey_id,
+            'trek_specific' => $faq->faqable_type === 'journey' && !empty($faq->faqable_id),
         ])->values()->all();
     }
 
@@ -569,6 +638,37 @@ class WebsiteCatalogRepository
             default => "trek-{$journey->slug}",
         };
 
+        $heroImage = $journey->heroAttachment?->mediaAsset?->url;
+        $image = $heroImage ?: WebsiteAssetRegistry::resolve($imageKey, $journey->name);
+
+        $gallery = [];
+        if ($journey->relationLoaded('galleryAttachments') && $journey->galleryAttachments) {
+            $gallery = $journey->galleryAttachments
+                ->map(fn ($att) => [
+                    'url' => $att->mediaAsset?->url,
+                    'title' => $att->title ?: ($att->mediaAsset?->title ?: $journey->name),
+                    'caption' => $att->caption ?: $att->mediaAsset?->caption,
+                ])
+                ->filter(fn ($item) => !empty($item['url']))
+                ->values()
+                ->all();
+        }
+
+        $safetyItems = [];
+        if ($journey->relationLoaded('safetyItems') && $journey->safetyItems) {
+            $safetyItems = $journey->safetyItems
+                ->where('is_active', true)
+                ->sortBy('sort_order')
+                ->map(fn ($item) => [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'description' => $item->description,
+                    'icon' => $item->icon,
+                ])
+                ->values()
+                ->all();
+        }
+
         return [
             'id' => $journey->slug,
             'db_id' => $journey->id,
@@ -605,11 +705,21 @@ class WebsiteCatalogRepository
             'accommodation_note' => $journey->accommodation_note,
             'logistics_note' => $journey->logistics_note,
             'safety_note' => $journey->safety_note,
+            'preparation_note' => $journey->preparation_note,
+            'packing_note' => $journey->packing_note,
+            'operational_notice' => $journey->operational_notice,
+            'cta_title' => $journey->cta_title,
+            'cta_description' => $journey->cta_description,
+            'cta_primary_btn_text' => $journey->cta_primary_btn_text,
+            'cta_primary_btn_url' => $journey->cta_primary_btn_url,
+            'cta_secondary_btn_text' => $journey->cta_secondary_btn_text,
+            'cta_secondary_btn_url' => $journey->cta_secondary_btn_url,
+            'safety_items' => $safetyItems,
             'logistics_safety_note' => trim(($journey->logistics_note ?? '') . ' ' . ($journey->safety_note ?? '')),
             'route_map_note' => $journey->route_map_note,
             'related_trek_ids' => self::relatedJourneySlugs($journey),
-            'image' => WebsiteAssetRegistry::resolve($imageKey, $journey->name),
-            'gallery' => [],
+            'image' => $image,
+            'gallery' => $gallery,
             'meta_title' => $journey->meta_title,
             'meta_description' => $journey->meta_description,
         ];

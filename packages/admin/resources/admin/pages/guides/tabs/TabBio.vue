@@ -10,7 +10,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import ModalBioForm from './modal/ModalBioForm.vue'
+import ModalBioForm from '@/modal-form/guides/ModalBioForm.vue'
 import SummarnoteViewer from '@/components/SummarnoteViewer.vue'
 
 import { useGlobalModal } from '@/composables/globalModal'

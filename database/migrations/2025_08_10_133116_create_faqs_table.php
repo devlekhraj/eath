@@ -16,9 +16,7 @@ return new class extends Migration
             $table->string('question');
             $table->longText('answer');
             $table->string('category')->nullable();
-            $table->foreignId('journey_id')->nullable()->constrained('journeys')->nullOnDelete();
-            $table->foreignId('destination_id')->nullable()->constrained('destinations')->nullOnDelete();
-            $table->foreignId('experience_id')->nullable()->constrained('experiences')->nullOnDelete();
+            $table->nullableMorphs('faqable');
             $table->unsignedInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

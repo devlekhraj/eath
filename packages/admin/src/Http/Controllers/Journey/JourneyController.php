@@ -66,6 +66,7 @@ class JourneyController extends Controller
                 'cardAttachment.mediaAsset',
                 'routeMapAttachment.mediaAsset',
                 'galleryAttachments.mediaAsset',
+                'safetyItems',
             ])
             ->findOrFail($id);
 
@@ -132,6 +133,15 @@ class JourneyController extends Controller
             'logistics_note' => ['nullable', 'string'],
             'safety_note' => ['nullable', 'string'],
             'route_map_note' => ['nullable', 'string'],
+            'preparation_note' => ['nullable', 'string'],
+            'packing_note' => ['nullable', 'string'],
+            'operational_notice' => ['nullable', 'string'],
+            'cta_title' => ['nullable', 'string', 'max:255'],
+            'cta_description' => ['nullable', 'string'],
+            'cta_primary_btn_text' => ['nullable', 'string', 'max:100'],
+            'cta_primary_btn_url' => ['nullable', 'string', 'max:255'],
+            'cta_secondary_btn_text' => ['nullable', 'string', 'max:100'],
+            'cta_secondary_btn_url' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:300'],
@@ -139,6 +149,7 @@ class JourneyController extends Controller
             'experience_ids.*' => ['integer', 'exists:experiences,id'],
             'travel_month_ids' => ['nullable', 'array'],
             'travel_month_ids.*' => ['integer', 'exists:travel_months,id'],
+            'safety_items' => ['nullable', 'array'],
         ];
 
         $validated = $request->validate($rules);
@@ -229,6 +240,22 @@ class JourneyController extends Controller
             $journey->travelMonths()->sync($validated['travel_month_ids'] ?? []);
         }
 
+        if ($request->has('safety_items')) {
+            $submittedItems = $request->input('safety_items', []);
+            $journey->safetyItems()->delete();
+            foreach ($submittedItems as $index => $sItem) {
+                if (!empty($sItem['title'])) {
+                    $journey->safetyItems()->create([
+                        'title' => $sItem['title'],
+                        'description' => $sItem['description'] ?? '',
+                        'icon' => $sItem['icon'] ?? null,
+                        'sort_order' => $sItem['sort_order'] ?? ($index + 1),
+                        'is_active' => $sItem['is_active'] ?? true,
+                    ]);
+                }
+            }
+        }
+
         return response()->json([
             'success' => true,
             'data' => $this->serializeJourney($journey->fresh()->load([
@@ -240,6 +267,7 @@ class JourneyController extends Controller
                 'cardAttachment.mediaAsset',
                 'routeMapAttachment.mediaAsset',
                 'galleryAttachments.mediaAsset',
+                'safetyItems',
             ])),
             'message' => $id ? 'Journey updated successfully.' : 'Journey created successfully.',
         ]);
@@ -406,9 +434,27 @@ class JourneyController extends Controller
             'logistics_note' => $journey->logistics_note,
             'safety_note' => $journey->safety_note,
             'route_map_note' => $journey->route_map_note,
+            'preparation_note' => $journey->preparation_note,
+            'packing_note' => $journey->packing_note,
+            'operational_notice' => $journey->operational_notice,
+            'cta_title' => $journey->cta_title,
+            'cta_description' => $journey->cta_description,
+            'cta_primary_btn_text' => $journey->cta_primary_btn_text,
+            'cta_primary_btn_url' => $journey->cta_primary_btn_url,
+            'cta_secondary_btn_text' => $journey->cta_secondary_btn_text,
+            'cta_secondary_btn_url' => $journey->cta_secondary_btn_url,
             'sort_order' => $journey->sort_order,
             'meta_title' => $journey->meta_title,
             'meta_description' => $journey->meta_description,
+            'safety_items' => ($journey->relationLoaded('safetyItems') && $journey->safetyItems) ? $journey->safetyItems->map(fn ($item) => [
+                'id' => $item->id,
+                'journey_id' => $item->journey_id,
+                'title' => $item->title,
+                'description' => $item->description,
+                'icon' => $item->icon,
+                'sort_order' => $item->sort_order,
+                'is_active' => $item->is_active,
+            ])->values() : [],
             'experience_ids' => $journey->relationLoaded('experiences') ? $journey->experiences->pluck('id')->values() : [],
             'travel_month_ids' => $journey->relationLoaded('travelMonths') ? $journey->travelMonths->pluck('id')->values() : [],
             'experiences' => $journey->relationLoaded('experiences') ? $journey->experiences : [],

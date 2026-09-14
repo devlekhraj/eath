@@ -219,9 +219,9 @@
 import { computed } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
 import SummarnoteViewer from '@/components/SummarnoteViewer.vue'
-import ItineraryForm from '../modal/ItineraryForm.vue'
-import ItineraryHighlightsForm from '../modal/ItineraryHighlightsForm.vue'
-import JourneyHighlightForm from '../modal/JourneyHighlightForm.vue'
+import ItineraryForm from '@/modal-form/journeys/ItineraryForm.vue'
+import ItineraryHighlightsForm from '@/modal-form/journeys/ItineraryHighlightsForm.vue'
+import JourneyHighlightForm from '@/modal-form/journeys/JourneyHighlightForm.vue'
 
 const props = defineProps({
   journey: {

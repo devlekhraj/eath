@@ -160,6 +160,16 @@ const routes: RouteRecordRaw[] = [
 				},
 			},
 			{
+				path: 'experiences/:id',
+				name: 'adminExperienceDetailPage',
+				component: () => import('@pages/experiences/ExperienceDetailPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Experience Detail',
+					subtitle: 'View and manage experience page details',
+				},
+			},
+			{
 				path: 'package-categories',
 				redirect: '/admin/experiences',
 			},
@@ -328,6 +338,11 @@ const routes: RouteRecordRaw[] = [
 					title: 'Pages',
 					subtitle: 'Web Page Detail',
 				},
+			},
+			{
+				path: 'website-pages-alias/:id',
+				name: 'adminWebPageDetail',
+				redirect: (to) => `/admin/website-pages/${to.params.id}`,
 			},
 			{
 				path: 'webpages',

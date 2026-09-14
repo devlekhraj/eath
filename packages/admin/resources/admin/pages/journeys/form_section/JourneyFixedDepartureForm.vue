@@ -162,9 +162,9 @@
 import { computed, ref } from 'vue'
 import { formatHuman, getStatusColor } from '@/utils/utils'
 import { useGlobalModal } from '@/composables/globalModal'
-import FixedDepartureForm from '../modal/DepartureForm.vue'
-import EditFixedDepartureForm from '../modal/DepartureEditForm.vue'
-import ConfirmDeleteModal from '../modal/DepartureDeleteModal.vue'
+import FixedDepartureForm from '@/modal-form/journeys/DepartureForm.vue'
+import EditFixedDepartureForm from '@/modal-form/journeys/DepartureEditForm.vue'
+import ConfirmDeleteModal from '@/modal-form/journeys/DepartureDeleteModal.vue'
 
 const props = defineProps({
 	journey: {

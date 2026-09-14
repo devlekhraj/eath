@@ -83,6 +83,10 @@
             <v-icon color="primary" start>mdi-map-marker-path</v-icon>
             Journeys ({{ destination.journeys_count ?? destination.journeys?.length ?? 0 }})
           </v-tab>
+          <v-tab value="tab_faqs">
+            <v-icon color="primary" start>mdi-frequently-asked-questions</v-icon>
+            Regional FAQs
+          </v-tab>
           <v-tab value="tab_seo">
             <v-icon color="primary" start>mdi-google</v-icon>
             SEO & Meta
@@ -123,6 +127,7 @@ import TabOverview from './detail_tabs/TabOverview.vue'
 import TabLogistics from './detail_tabs/TabLogistics.vue'
 import TabMedia from './detail_tabs/TabMedia.vue'
 import TabJourneys from './detail_tabs/TabJourneys.vue'
+import TabFaqs from './detail_tabs/TabFaqs.vue'
 import TabSeo from './detail_tabs/TabSeo.vue'
 import { getDestinationByIdApi } from '@/api/destinations.api'
 import { useSnackbar } from '@/composables/snackbar'
@@ -141,6 +146,7 @@ const tabComponents = {
   tab_logistics: TabLogistics,
   tab_media: TabMedia,
   tab_journeys: TabJourneys,
+  tab_faqs: TabFaqs,
   tab_seo: TabSeo,
 }
 

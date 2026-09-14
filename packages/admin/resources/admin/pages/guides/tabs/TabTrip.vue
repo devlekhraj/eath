@@ -44,7 +44,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import TripForm from './modal/TripForm.vue'
+import TripForm from '@/modal-form/guides/TripForm.vue'
 import { useGlobalModal } from '@/composables/globalModal'
 const emit = defineEmits(['close'])
 const { open: openModal } = useGlobalModal()

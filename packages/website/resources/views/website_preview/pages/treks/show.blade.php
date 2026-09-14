@@ -255,6 +255,20 @@ $hideTopBreadcrumbs = true;
     <div class="website-detail-layout">
         <!-- Main Editorial Column (Left 2fr) -->
         <div class="website-detail-main">
+            @if(!empty($trek['operational_notice']))
+            <aside class="website-advisory-notice" style="background: rgba(2, 132, 199, 0.08); border-left: 4px solid var(--color-primary); padding: var(--space-4); margin-bottom: var(--space-5); border-radius: 0 !important;">
+                <div style="display: flex; align-items: flex-start; gap: var(--space-3);">
+                    <i class="fa-solid fa-circle-info" style="color: var(--color-primary); font-size: 1.15rem; margin-top: 2px;"></i>
+                    <div>
+                        <strong style="color: var(--color-primary); text-transform: uppercase; font-size: var(--type-micro); letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Field Advisory &amp; Operational Notice</strong>
+                        <p class="website-body website-text-secondary" style="margin: 0; font-size: var(--type-small); line-height: 1.5;">
+                            {{ $trek['operational_notice'] }}
+                        </p>
+                    </div>
+                </div>
+            </aside>
+            @endif
+
             <!-- Section 05: Upcoming Fixed Departure Dates & Pricing -->
             <section id="dates" class="website-anchor-section website-trek-dates" aria-labelledby="trek-dates-title">
                 <header class="website-trek-dates__header">
@@ -538,8 +552,17 @@ $hideTopBreadcrumbs = true;
                     </div>
 
                     <p class="website-body website-text-secondary" style="margin-bottom: var(--space-4); line-height: 1.6;">
-                        This route involves regular ascents over uneven mountain paths, suspension bridges, and stone staircases. Acclimatization days are built into the schedule to minimize acute mountain sickness (AMS) risks. Cardiovascular conditioning and endurance training before travel are strongly recommended.
+                        {{ !empty($trek['preparation_note']) ? $trek['preparation_note'] : 'This route involves regular ascents over uneven mountain paths, suspension bridges, and stone staircases. Acclimatization days are built into the schedule to minimize acute mountain sickness (AMS) risks. Cardiovascular conditioning and endurance training before travel are strongly recommended.' }}
                     </p>
+
+                    @if(!empty($trek['packing_note']))
+                    <div style="margin-bottom: var(--space-4); padding-top: var(--space-3); border-top: 1px dashed var(--color-border);">
+                        <strong class="website-small" style="color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: var(--space-1);">Gear &amp; Packing Advisory</strong>
+                        <p class="website-body website-text-secondary" style="margin: 0; line-height: 1.6;">
+                            {{ $trek['packing_note'] }}
+                        </p>
+                    </div>
+                    @endif
 
                     <div style="display: flex; flex-wrap: wrap; gap: var(--space-3);">
                         <a href="{{ route('website.articles.index') }}" class="website-btn website-btn--outline website-btn--compact">
@@ -557,7 +580,7 @@ $hideTopBreadcrumbs = true;
                 <h2 class="website-anchor-section__title">Permits, Transport &amp; Logistics</h2>
                 <div class="website-card">
                     <p class="website-body website-text-secondary" style="margin-bottom: var(--space-3); line-height: 1.6;">
-                        {{ $trek['logistics_safety_note'] }}
+                        {{ !empty($trek['logistics_note']) ? $trek['logistics_note'] : ($trek['logistics_safety_note'] ?: 'All internal logistics, peak conservation permits, and transportation contingencies are coordinated by our alpine field operations team.') }}
                     </p>
                     <ul class="website-small website-text-secondary" style="padding-left: var(--space-5); margin: 0; line-height: 1.6;">
                         <li>Mandatory Trekker Information Management System (TIMS) cards and national park entry permits handled by our operations team.</li>
@@ -571,39 +594,55 @@ $hideTopBreadcrumbs = true;
             <section id="safety" class="website-anchor-section">
                 <h2 class="website-anchor-section__title">Safety Protocols &amp; Field Support</h2>
                 <div class="website-grid-2" style="margin-bottom: var(--space-4);">
-                    <div class="website-card">
-                        <h3 class="website-card-title" style="margin-bottom: var(--space-2);">Certified Leadership</h3>
-                        <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
-                            All lead guides hold government licensing, Wilderness First Responder certification, and high-altitude navigation credentials.
-                        </p>
-                    </div>
-                    <div class="website-card">
-                        <h3 class="website-card-title" style="margin-bottom: var(--space-2);">Health Monitoring</h3>
-                        <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
-                            Pulse oximeter readings taken every morning and evening. Strict descent protocols enforced if severe altitude symptoms emerge.
-                        </p>
-                    </div>
+                    @if(!empty($trek['safety_items']) && count($trek['safety_items']) > 0)
+                        @foreach($trek['safety_items'] as $sItem)
+                        <div class="website-card">
+                            <h3 class="website-card-title" style="margin-bottom: var(--space-2); display: flex; align-items: center; gap: var(--space-2);">
+                                @if(!empty($sItem['icon']))
+                                    <i class="fa-solid {{ str_starts_with($sItem['icon'], 'fa-') ? $sItem['icon'] : 'fa-shield-halved' }}" style="color: var(--color-primary); font-size: 1rem;"></i>
+                                @endif
+                                {{ $sItem['title'] }}
+                            </h3>
+                            <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
+                                {{ $sItem['description'] }}
+                            </p>
+                        </div>
+                        @endforeach
+                    @else
+                        <div class="website-card">
+                            <h3 class="website-card-title" style="margin-bottom: var(--space-2);">Certified Leadership</h3>
+                            <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
+                                All lead guides hold government licensing, Wilderness First Responder certification, and high-altitude navigation credentials.
+                            </p>
+                        </div>
+                        <div class="website-card">
+                            <h3 class="website-card-title" style="margin-bottom: var(--space-2);">Health Monitoring</h3>
+                            <p class="website-small website-text-secondary" style="margin: 0; line-height: 1.5;">
+                                Pulse oximeter readings taken every morning and evening. Strict descent protocols enforced if severe altitude symptoms emerge.
+                            </p>
+                        </div>
+                    @endif
                 </div>
                 <a href="{{ route('website.safety') }}" class="website-link website-small">
                     Inspect complete safety, altitude &amp; evacuation protocols &rarr;
                 </a>
             </section>
 
-            <!-- Section 15: Photo Gallery (4 resolved images, lazy loaded) -->
+            <!-- Section 15: Photo Gallery (resolved images, lazy loaded) -->
+            @if(!empty($trek['gallery']) && count($trek['gallery']) > 0)
             <section id="gallery" class="website-anchor-section">
                 <h2 class="website-anchor-section__title">Trek Photo Gallery</h2>
                 <div class="website-gallery-grid">
                     @foreach($trek['gallery'] as $photo)
                     <div class="website-gallery-grid__item">
                         <img src="{{ $photo['url'] }}"
-                            alt="{{ $photo['alt'] }}"
-                            width="{{ $photo['width'] }}"
-                            height="{{ $photo['height'] }}"
+                            alt="{{ $photo['title'] ?? ($photo['caption'] ?? $trek['name']) }}"
                             loading="lazy">
                     </div>
                     @endforeach
                 </div>
             </section>
+            @endif
 
             <!-- Section 16: Traveler Stories (Associated or compact browse link) -->
             <section id="stories" class="website-anchor-section">
@@ -706,19 +745,26 @@ $hideTopBreadcrumbs = true;
             <section class="website-final-cta" style="margin-top: var(--space-8);">
                 <div class="website-final-cta__inner">
                     <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3);">
-                        SAMPLE PLANNING SIMULATION
+                        EXPEDITION PLANNING
                     </span>
                     <h2 class="website-final-cta__title" style="font-size: var(--type-h2);">
-                        Ready to plan your {{ $trek['name'] }} expedition?
+                        {{ !empty($trek['cta_title']) ? $trek['cta_title'] : 'Ready to plan your ' . $trek['name'] . ' expedition?' }}
                     </h2>
                     <p class="website-final-cta__subtitle">
-                        Build an unhurried, custom-paced itinerary draft with our licensed mountain team.
+                        {{ !empty($trek['cta_description']) ? $trek['cta_description'] : 'Build an unhurried, custom-paced itinerary draft with our licensed mountain team.' }}
                     </p>
                     <div class="website-final-cta__actions">
-                        <a href="{{ route('website.planner.start', ['mode' => 'selected', 'trek' => $trek['id'], 'source' => 'detail']) }}"
+                        <a href="{{ !empty($trek['cta_primary_btn_url']) ? $trek['cta_primary_btn_url'] : route('website.planner.start', ['mode' => 'selected', 'trek' => $trek['id'], 'source' => 'detail']) }}"
                             class="website-btn website-btn--accent">
-                            Plan This Trek
+                            {{ !empty($trek['cta_primary_btn_text']) ? $trek['cta_primary_btn_text'] : 'Plan This Trek' }}
                         </a>
+                        @if(!empty($trek['cta_secondary_btn_text']))
+                        <a href="{{ !empty($trek['cta_secondary_btn_url']) ? $trek['cta_secondary_btn_url'] : route('website.contact') }}"
+                            class="website-btn website-btn--outline"
+                            style="color: #ffffff; border-color: rgba(255, 255, 255, 0.5);">
+                            {{ $trek['cta_secondary_btn_text'] }}
+                        </a>
+                        @else
                         <a href="{{ route('website.planner.form', ['mode' => 'custom', 'trek' => $trek['id'], 'source' => 'detail']) }}"
                             class="website-btn website-btn--outline"
                             data-open-panel
@@ -732,6 +778,7 @@ $hideTopBreadcrumbs = true;
                             style="color: #ffffff;">
                             Ask a Question
                         </a>
+                        @endif
                     </div>
                 </div>
             </section>

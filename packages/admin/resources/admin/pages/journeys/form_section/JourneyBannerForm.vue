@@ -52,7 +52,7 @@ const props = defineProps({
     },
 })
 
-import DeleteImage from '../modal/DeleteImage.vue'
+import DeleteImage from '@/modal-form/journeys/DeleteImage.vue'
 import http from '@/http.config'
 
 function handleDelete(item = {}) {

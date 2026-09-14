@@ -13,29 +13,40 @@ class Faq extends Model
         'question',
         'answer',
         'category',
-        'journey_id',
-        'destination_id',
-        'experience_id',
+        'faqable_type',
+        'faqable_id',
         'sort_order',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'sort_order' => 'integer',
     ];
 
-    public function journey()
+    protected $appends = [
+        'journey',
+        'destination',
+        'experience',
+    ];
+
+    public function faqable()
     {
-        return $this->belongsTo(Journey::class);
+        return $this->morphTo();
     }
 
-    public function destination()
+    public function getJourneyAttribute()
     {
-        return $this->belongsTo(Destination::class);
+        return ($this->faqable_type === 'journey' || $this->faqable_type === Journey::class) ? $this->faqable : null;
     }
 
-    public function experience()
+    public function getDestinationAttribute()
     {
-        return $this->belongsTo(Experience::class);
+        return ($this->faqable_type === 'destination' || $this->faqable_type === Destination::class) ? $this->faqable : null;
+    }
+
+    public function getExperienceAttribute()
+    {
+        return ($this->faqable_type === 'experience' || $this->faqable_type === Experience::class) ? $this->faqable : null;
     }
 }

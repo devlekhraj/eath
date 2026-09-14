@@ -240,8 +240,8 @@
 import { computed, reactive, ref } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
 import { useSnackbar } from '@/composables/snackbar'
-import JourneyPriceForm from '../modal/JourneyPriceForm.vue'
-import JourneyPriceDelete from '../modal/JourneyPriceDelete.vue'
+import JourneyPriceForm from '@/modal-form/journeys/JourneyPriceForm.vue'
+import JourneyPriceDelete from '@/modal-form/journeys/JourneyPriceDelete.vue'
 import http from '@/http.config'
 
 const props = defineProps({

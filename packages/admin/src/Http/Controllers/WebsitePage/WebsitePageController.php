@@ -3,6 +3,7 @@
 namespace Admin\Http\Controllers\WebsitePage;
 
 use App\Http\Controllers\Controller;
+use Admin\Models\MediaAttachment;
 use Admin\Models\WebsitePage;
 use Admin\Models\WebsitePageSection;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class WebsitePageController extends Controller
 
     public function show($id)
     {
-        $page = WebsitePage::with(['sections', 'heroImage'])->findOrFail($id);
+        $page = WebsitePage::with(['sections', 'heroImage', 'heroAttachment.mediaAsset', 'galleryAttachments.mediaAsset'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -73,6 +74,14 @@ class WebsitePageController extends Controller
             'content' => ['nullable', 'string'],
             'type' => ['nullable', 'string', Rule::in(WebsitePage::TYPES)],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'notice_title' => ['nullable', 'string', 'max:255'],
+            'notice_body' => ['nullable', 'string'],
+            'cta_title' => ['nullable', 'string', 'max:255'],
+            'cta_description' => ['nullable', 'string'],
+            'cta_primary_btn_text' => ['nullable', 'string', 'max:100'],
+            'cta_primary_btn_url' => ['nullable', 'string', 'max:255'],
+            'cta_secondary_btn_text' => ['nullable', 'string', 'max:100'],
+            'cta_secondary_btn_url' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
             'published_at' => ['nullable', 'date'],
@@ -91,6 +100,14 @@ class WebsitePageController extends Controller
             'body' => $body,
             'type' => $payload['type'] ?? WebsitePage::TYPE_STANDARD,
             'hero_image_id' => $payload['hero_image_id'] ?? null,
+            'notice_title' => $payload['notice_title'] ?? null,
+            'notice_body' => $payload['notice_body'] ?? null,
+            'cta_title' => $payload['cta_title'] ?? null,
+            'cta_description' => $payload['cta_description'] ?? null,
+            'cta_primary_btn_text' => $payload['cta_primary_btn_text'] ?? null,
+            'cta_primary_btn_url' => $payload['cta_primary_btn_url'] ?? null,
+            'cta_secondary_btn_text' => $payload['cta_secondary_btn_text'] ?? null,
+            'cta_secondary_btn_url' => $payload['cta_secondary_btn_url'] ?? null,
             'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
             'is_published' => $isPublished,
             'published_at' => $payload['published_at'] ?? ($isPublished ? now() : null),
@@ -98,7 +115,11 @@ class WebsitePageController extends Controller
             'meta_description' => $payload['meta_description'] ?? null,
         ]);
 
-        $page->load(['sections', 'heroImage']);
+        if (!empty($payload['hero_image_id'])) {
+            $page->syncMediaAttachment((int) $payload['hero_image_id'], MediaAttachment::COLLECTION_HERO);
+        }
+
+        $page->load(['sections', 'heroImage', 'heroAttachment.mediaAsset', 'galleryAttachments.mediaAsset']);
 
         return response()->json([
             'success' => true,
@@ -121,6 +142,14 @@ class WebsitePageController extends Controller
             'content' => ['nullable', 'string'],
             'type' => ['nullable', 'string', Rule::in(WebsitePage::TYPES)],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'notice_title' => ['nullable', 'string', 'max:255'],
+            'notice_body' => ['nullable', 'string'],
+            'cta_title' => ['nullable', 'string', 'max:255'],
+            'cta_description' => ['nullable', 'string'],
+            'cta_primary_btn_text' => ['nullable', 'string', 'max:100'],
+            'cta_primary_btn_url' => ['nullable', 'string', 'max:255'],
+            'cta_secondary_btn_text' => ['nullable', 'string', 'max:100'],
+            'cta_secondary_btn_url' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
             'published_at' => ['nullable', 'date'],
@@ -130,25 +159,19 @@ class WebsitePageController extends Controller
 
         $updateData = [];
 
-        if (array_key_exists('title', $payload)) {
-            $updateData['title'] = $payload['title'];
+        foreach (['title', 'summary', 'type', 'hero_image_id', 'notice_title', 'notice_body', 'cta_title', 'cta_description', 'cta_primary_btn_text', 'cta_primary_btn_url', 'cta_secondary_btn_text', 'cta_secondary_btn_url', 'meta_title', 'meta_description'] as $attr) {
+            if (array_key_exists($attr, $payload)) {
+                $updateData[$attr] = $payload[$attr];
+            }
         }
+
         if (array_key_exists('slug', $payload)) {
             $updateData['slug'] = !empty($payload['slug'])
                 ? Str::slug($payload['slug'])
                 : (!empty($payload['title']) ? Str::slug($payload['title']) : $page->slug);
         }
-        if (array_key_exists('summary', $payload)) {
-            $updateData['summary'] = $payload['summary'];
-        }
         if (array_key_exists('body', $payload) || array_key_exists('content', $payload)) {
             $updateData['body'] = $payload['body'] ?? $payload['content'] ?? null;
-        }
-        if (array_key_exists('type', $payload)) {
-            $updateData['type'] = $payload['type'];
-        }
-        if (array_key_exists('hero_image_id', $payload)) {
-            $updateData['hero_image_id'] = $payload['hero_image_id'];
         }
         if (array_key_exists('is_active', $payload)) {
             $updateData['is_active'] = $payload['is_active'];
@@ -162,15 +185,18 @@ class WebsitePageController extends Controller
         if (array_key_exists('published_at', $payload)) {
             $updateData['published_at'] = $payload['published_at'];
         }
-        if (array_key_exists('meta_title', $payload)) {
-            $updateData['meta_title'] = $payload['meta_title'];
-        }
-        if (array_key_exists('meta_description', $payload)) {
-            $updateData['meta_description'] = $payload['meta_description'];
-        }
 
         $page->update($updateData);
-        $page->load(['sections', 'heroImage']);
+
+        if (array_key_exists('hero_image_id', $payload)) {
+            if (!empty($payload['hero_image_id'])) {
+                $page->syncMediaAttachment((int) $payload['hero_image_id'], MediaAttachment::COLLECTION_HERO);
+            } else {
+                $page->detachMediaCollection(MediaAttachment::COLLECTION_HERO);
+            }
+        }
+
+        $page->load(['sections', 'heroImage', 'heroAttachment.mediaAsset', 'galleryAttachments.mediaAsset']);
 
         return response()->json([
             'success' => true,
@@ -297,11 +323,107 @@ class WebsitePageController extends Controller
         ]);
     }
 
+    public function attachMedia(Request $request, $id)
+    {
+        $page = WebsitePage::findOrFail($id);
+        $validated = $request->validate([
+            'media_asset_id' => ['required', 'integer', 'exists:media_assets,id'],
+            'collection' => ['nullable', 'string', Rule::in(MediaAttachment::COLLECTIONS)],
+            'title' => ['nullable', 'string', 'max:255'],
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'caption' => ['nullable', 'string', 'max:500'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+        ]);
+
+        $collection = $validated['collection'] ?? MediaAttachment::COLLECTION_HERO;
+
+        if (in_array($collection, [MediaAttachment::COLLECTION_HERO, MediaAttachment::COLLECTION_CARD])) {
+            $page->syncMediaAttachment($validated['media_asset_id'], $collection, $validated);
+            if ($collection === MediaAttachment::COLLECTION_HERO) {
+                $page->hero_image_id = $validated['media_asset_id'];
+                $page->save();
+            }
+        } else {
+            $isAlreadyAttached = $page->mediaAttachments()
+                ->where('media_asset_id', $validated['media_asset_id'])
+                ->where('collection', $collection)
+                ->exists();
+
+            if ($isAlreadyAttached) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'This photo is already attached to this page.',
+                ], 422);
+            }
+
+            $page->attachMediaAsset($validated['media_asset_id'], $collection, $validated);
+        }
+
+        $page->load(['sections', 'heroImage', 'heroAttachment.mediaAsset', 'galleryAttachments.mediaAsset']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Media attached successfully.',
+            'data' => $this->formatPageDetail($page),
+            'page' => $this->formatPageDetail($page),
+        ]);
+    }
+
+    public function updateMediaAttachment(Request $request, $id, $attachmentId)
+    {
+        $page = WebsitePage::findOrFail($id);
+        $attachment = $page->mediaAttachments()->findOrFail($attachmentId);
+
+        $validated = $request->validate([
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'caption' => ['nullable', 'string', 'max:500'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+        ]);
+
+        $attachment->update($validated);
+        $page->load(['sections', 'heroImage', 'heroAttachment.mediaAsset', 'galleryAttachments.mediaAsset']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Image details updated successfully.',
+            'data' => $this->formatPageDetail($page),
+            'page' => $this->formatPageDetail($page),
+        ]);
+    }
+
+    public function detachMedia($id, $attachmentId)
+    {
+        $page = WebsitePage::findOrFail($id);
+        $attachment = $page->mediaAttachments()->findOrFail($attachmentId);
+
+        if ($attachment->collection === MediaAttachment::COLLECTION_HERO) {
+            $page->hero_image_id = null;
+            $page->save();
+        }
+
+        $attachment->delete();
+        $page->load(['sections', 'heroImage', 'heroAttachment.mediaAsset', 'galleryAttachments.mediaAsset']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Media removed successfully.',
+            'data' => $this->formatPageDetail($page),
+            'page' => $this->formatPageDetail($page),
+        ]);
+    }
+
     private function extractPayload(Request $request): array
     {
         $payload = [];
 
-        foreach (['title', 'slug', 'summary', 'body', 'content', 'type', 'hero_image_id', 'published_at', 'meta_title', 'meta_description'] as $field) {
+        foreach ([
+            'title', 'slug', 'summary', 'body', 'content', 'type', 'hero_image_id',
+            'notice_title', 'notice_body',
+            'cta_title', 'cta_description', 'cta_primary_btn_text', 'cta_primary_btn_url',
+            'cta_secondary_btn_text', 'cta_secondary_btn_url',
+            'published_at', 'meta_title', 'meta_description'
+        ] as $field) {
             if ($request->has($field)) {
                 $payload[$field] = $request->input($field);
             }
@@ -319,7 +441,8 @@ class WebsitePageController extends Controller
 
     private function formatPageListItem(WebsitePage $page): array
     {
-        $bannerUrl = $page->heroImage ? $page->heroImage->path : null;
+        $heroMedia = $page->heroAttachment?->mediaAsset ?? $page->heroImage;
+        $bannerUrl = $heroMedia?->url ?? $heroMedia?->path ?? null;
 
         return [
             'id' => $page->id,
@@ -331,6 +454,14 @@ class WebsitePageController extends Controller
             'type' => $page->type,
             'hero_image_id' => $page->hero_image_id,
             'banner_url' => $bannerUrl,
+            'notice_title' => $page->notice_title,
+            'notice_body' => $page->notice_body,
+            'cta_title' => $page->cta_title,
+            'cta_description' => $page->cta_description,
+            'cta_primary_btn_text' => $page->cta_primary_btn_text,
+            'cta_primary_btn_url' => $page->cta_primary_btn_url,
+            'cta_secondary_btn_text' => $page->cta_secondary_btn_text,
+            'cta_secondary_btn_url' => $page->cta_secondary_btn_url,
             'is_active' => (bool) $page->is_active,
             'is_published' => (bool) $page->is_published,
             'published_at' => $page->published_at ? $page->published_at->toISOString() : null,
@@ -342,7 +473,22 @@ class WebsitePageController extends Controller
 
     private function formatPageDetail(WebsitePage $page): array
     {
-        $bannerUrl = $page->heroImage ? $page->heroImage->path : null;
+        $heroMedia = $page->heroAttachment?->mediaAsset ?? $page->heroImage;
+        $bannerUrl = $heroMedia?->url ?? $heroMedia?->path ?? null;
+
+        $heroImageObject = null;
+        if ($heroMedia) {
+            $heroImageObject = [
+                'id' => $heroMedia->id,
+                'url' => $heroMedia->url ?? $heroMedia->path,
+                'path' => $heroMedia->path,
+                'filename' => $heroMedia->filename ?? basename($heroMedia->path ?? ''),
+                'title' => $page->heroAttachment?->title ?? $heroMedia->title ?? null,
+                'alt_text' => $page->heroAttachment?->alt_text ?? $heroMedia->alt_text ?? null,
+                'caption' => $page->heroAttachment?->caption ?? $heroMedia->caption ?? null,
+                'attachment_id' => $page->heroAttachment?->id ?? null,
+            ];
+        }
 
         return [
             'id' => $page->id,
@@ -353,8 +499,16 @@ class WebsitePageController extends Controller
             'content' => $page->body, // backward-compat alias
             'type' => $page->type,
             'hero_image_id' => $page->hero_image_id,
-            'hero_image' => $page->heroImage,
+            'hero_image' => $heroImageObject,
             'banner_url' => $bannerUrl,
+            'notice_title' => $page->notice_title,
+            'notice_body' => $page->notice_body,
+            'cta_title' => $page->cta_title,
+            'cta_description' => $page->cta_description,
+            'cta_primary_btn_text' => $page->cta_primary_btn_text,
+            'cta_primary_btn_url' => $page->cta_primary_btn_url,
+            'cta_secondary_btn_text' => $page->cta_secondary_btn_text,
+            'cta_secondary_btn_url' => $page->cta_secondary_btn_url,
             'is_active' => (bool) $page->is_active,
             'is_published' => (bool) $page->is_published,
             'published_at' => $page->published_at ? $page->published_at->toISOString() : null,

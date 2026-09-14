@@ -35,7 +35,7 @@
 
       <template #item.title="{ item }">
         <div>
-          <router-link :to="{ name: 'adminWebPageDetail', params: { id: item.id } }" class="text-primary text-decoration-underline text-capitalize">
+          <router-link :to="{ name: 'adminWebsitePageDetail', params: { id: item.id } }" class="text-primary text-decoration-underline text-capitalize">
             {{ item.title }}
           </router-link>
         </div>
@@ -77,7 +77,7 @@
 
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
-          <v-btn size="small" variant="outlined" color="primary" :to="{ name: 'adminWebPageDetail', params: { id: item.id } }" title="Edit website page">
+          <v-btn size="small" variant="outlined" color="primary" :to="{ name: 'adminWebsitePageDetail', params: { id: item.id } }" title="Edit website page">
             <v-icon start size="14">mdi-pencil</v-icon>
             Edit
           </v-btn>
@@ -94,10 +94,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import http from '@/http.config'
+import { getWebsitePagesApi } from '@/api/website-pages.api'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import PageForm from './modal/PageForm.vue'
-import PageDelete from './modal/PageDelete.vue'
+import PageForm from '@/modal-form/website-pages/PageForm.vue'
+import PageDelete from '@/modal-form/website-pages/PageDelete.vue'
 
 const { open: openModal } = useGlobalModal()
 
@@ -117,8 +118,9 @@ const search = ref('')
 const fetching_data = ref(false)
 
 const filteredItems = computed(() => {
+  if (!Array.isArray(data_list.value)) return []
   if (!search.value) return data_list.value
-  const term = search.value.toLowerCase()
+  const term = search.value.toLowerCase().trim()
   return data_list.value.filter(item =>
     item.title?.toLowerCase().includes(term) ||
     item.slug?.toLowerCase().includes(term) ||
@@ -134,25 +136,27 @@ function addPage(item = {}) {
     props: {
       item,
     },
-        onClose: fetchData,
-    })
+    onClose: fetchData,
+  })
 }
 
 const fetchData = async () => {
   try {
     fetching_data.value = true
-    const resp = await http.get('admin/website-pages')
-    fetching_data.value = false
-    data_list.value = resp.data || []
+    const resp = await getWebsitePagesApi()
+    const rawData = resp.data
+    const list = Array.isArray(rawData?.data)
+      ? rawData.data
+      : (Array.isArray(rawData)
+        ? rawData
+        : (Array.isArray(resp) ? resp : []))
+    data_list.value = list
   } catch (error) {
-    try {
-      const fallback = await http.get('admin/pages')
-      data_list.value = fallback.data || []
-    } catch {
-      data_list.value = []
-    } finally {
-      fetching_data.value = false
-    }
+    console.error('Failed to load website pages:', error)
+    data_list.value = []
+    showError('Failed to load website pages')
+  } finally {
+    fetching_data.value = false
   }
 }
 

@@ -3,6 +3,7 @@
 namespace Website\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Admin\Models\Faq;
 use Illuminate\Http\Request;
 use Website\Services\WebsiteCatalogRepository;
 
@@ -113,7 +114,20 @@ class DestinationController extends Controller
         }
         $matchedArticles = array_slice($matchedArticles, 0, 3);
 
-        // Regional logistics notes directly from database model
+        // Regional logistics items from separate database table if available, fallback to legacy fields
+        $dbLogistics = \Admin\Models\DestinationLogistics::query()
+            ->where('destination_id', $region['db_id'])
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        $logisticsItems = $dbLogistics->map(fn ($item) => [
+            'label' => $item->label,
+            'value' => $item->value,
+            'icon' => $item->icon,
+        ])->all();
+
         $logistics = [
             'gateway' => $region['gateway'] ?? 'Kathmandu transit connection',
             'trailheads' => $region['trailheads'] ?? 'Regional access points',
@@ -121,25 +135,40 @@ class DestinationController extends Controller
             'pacing' => $region['pacing'] ?? 'Tailored to route altitude profiles.',
         ];
 
-        // Regional FAQs
-        $regionalFaqs = [
-            [
-                'question' => "What is the best trekking season for the {$region['name']} Region?",
-                'answer' => "In this sample preview, optimal trekking windows are derived from associated route fixtures. Autumn (October–November) and Spring (March–May) offer clear mountain vistas across most Himalayan routes, while trans-Himalayan valleys like Mustang remain viable through summer rain-shadow windows. Real-world planning requires verified meteorological advice.",
-            ],
-            [
-                'question' => "How physically demanding are treks in {$region['name']}?",
-                'answer' => "Sample routes in {$region['name']} range up to {$maxAlt} meters in elevation. Pacing depends on route length and daily ascent rates. Acclimatization schedules should always be confirmed with professional mountain guides.",
-            ],
-            [
-                'question' => "Are flights or road transfers required to reach {$region['name']}?",
-                'answer' => "Access to {$region['name']} is typically organized via {$logistics['gateway']}. Transport arrangements, road passability, and mountain flight schedules depend on seasonal weather and operational conditions.",
-            ],
-            [
-                'question' => "Can I customize a private itinerary in {$region['name']}?",
-                'answer' => "Yes. You can start our interactive planner with {$region['name']} pre-selected to specify custom dates, private porter ratios, and lodge preferences without committing to fixed departures.",
-            ],
-        ];
+        // Regional FAQs: Load active FAQs assigned to this destination from DB if present, fallback to defaults
+        $dbFaqs = Faq::query()
+            ->where('faqable_type', 'destination')
+            ->where('faqable_id', $region['db_id'])
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        if ($dbFaqs->isNotEmpty()) {
+            $regionalFaqs = $dbFaqs->map(fn (Faq $f) => [
+                'question' => $f->question,
+                'answer' => $f->answer,
+            ])->all();
+        } else {
+            $regionalFaqs = [
+                [
+                    'question' => "What is the best trekking season for the {$region['name']} Region?",
+                    'answer' => "In this sample preview, optimal trekking windows are derived from associated route fixtures. Autumn (October–November) and Spring (March–May) offer clear mountain vistas across most Himalayan routes, while trans-Himalayan valleys like Mustang remain viable through summer rain-shadow windows. Real-world planning requires verified meteorological advice.",
+                ],
+                [
+                    'question' => "How physically demanding are treks in {$region['name']}?",
+                    'answer' => "Sample routes in {$region['name']} range up to {$maxAlt} meters in elevation. Pacing depends on route length and daily ascent rates. Acclimatization schedules should always be confirmed with professional mountain guides.",
+                ],
+                [
+                    'question' => "Are flights or road transfers required to reach {$region['name']}?",
+                    'answer' => "Access to {$region['name']} is typically organized via {$logistics['gateway']}. Transport arrangements, road passability, and mountain flight schedules depend on seasonal weather and operational conditions.",
+                ],
+                [
+                    'question' => "Can I customize a private itinerary in {$region['name']}?",
+                    'answer' => "Yes. You can start our interactive planner with {$region['name']} pre-selected to specify custom dates, private porter ratios, and lodge preferences without committing to fixed departures.",
+                ],
+            ];
+        }
 
         return view('website_preview.pages.destinations.show', [
             'region' => $region,
@@ -153,6 +182,7 @@ class DestinationController extends Controller
             'difficultiesPresent' => $difficultiesPresent,
             'matchedArticles' => $matchedArticles,
             'logistics' => $logistics,
+            'logisticsItems' => $logisticsItems,
             'regionalFaqs' => $regionalFaqs,
             'activeFilters' => [
                 'difficulty' => $difficulty,

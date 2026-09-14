@@ -249,9 +249,9 @@ import { ref, computed, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import { getMediaAssetsApi } from '@/api/media-assets.api'
-import MediaUploadModal from './modal/MediaUploadModal.vue'
-import MediaDetailModal from './modal/MediaDetailModal.vue'
-import MediaDeleteModal from './modal/MediaDeleteModal.vue'
+import MediaUploadModal from '@/modal-form/media/MediaUploadModal.vue'
+import MediaDetailModal from '@/modal-form/media/MediaDetailModal.vue'
+import MediaDeleteModal from '@/modal-form/media/MediaDeleteModal.vue'
 
 const { open: openModal } = useGlobalModal()
 

@@ -4,6 +4,7 @@ namespace Admin\Http\Controllers\Faq;
 
 use App\Http\Controllers\Controller;
 use Admin\Models\Faq;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 
 class FaqController extends Controller
@@ -11,11 +12,7 @@ class FaqController extends Controller
     public function index(Request $request)
     {
         $query = Faq::query()
-            ->with([
-                'journey:id,name,slug',
-                'destination:id,name,slug',
-                'experience:id,name,slug',
-            ])
+            ->with(['faqable'])
             ->orderBy('sort_order', 'asc')
             ->orderBy('id', 'asc');
 
@@ -23,16 +20,13 @@ class FaqController extends Controller
             $query->where('category', $request->input('category'));
         }
 
-        if ($request->filled('journey_id')) {
-            $query->where('journey_id', $request->input('journey_id'));
+        if ($request->filled('faqable_type')) {
+            $alias = Relation::getMorphAlias($request->input('faqable_type')) ?? $request->input('faqable_type');
+            $query->where('faqable_type', $alias);
         }
 
-        if ($request->filled('destination_id')) {
-            $query->where('destination_id', $request->input('destination_id'));
-        }
-
-        if ($request->filled('experience_id')) {
-            $query->where('experience_id', $request->input('experience_id'));
+        if ($request->filled('faqable_id')) {
+            $query->where('faqable_id', $request->input('faqable_id'));
         }
 
         if ($request->filled('is_active')) {
@@ -58,11 +52,7 @@ class FaqController extends Controller
 
     public function show($id)
     {
-        $faq = Faq::with([
-            'journey:id,name,slug',
-            'destination:id,name,slug',
-            'experience:id,name,slug',
-        ])->findOrFail($id);
+        $faq = Faq::with('faqable')->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -76,12 +66,15 @@ class FaqController extends Controller
             'question' => ['required', 'string', 'max:500'],
             'answer' => ['required', 'string'],
             'category' => ['nullable', 'string', 'max:100'],
-            'journey_id' => ['nullable', 'integer', 'exists:journeys,id'],
-            'destination_id' => ['nullable', 'integer', 'exists:destinations,id'],
-            'experience_id' => ['nullable', 'integer', 'exists:experiences,id'],
+            'faqable_type' => ['nullable', 'string', 'max:255'],
+            'faqable_id' => ['nullable', 'integer'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);
+
+        if (!empty($validated['faqable_type'])) {
+            $validated['faqable_type'] = Relation::getMorphAlias($validated['faqable_type']) ?? $validated['faqable_type'];
+        }
 
         if (!isset($validated['sort_order'])) {
             $maxSortOrder = Faq::max('sort_order') ?? 0;
@@ -91,7 +84,7 @@ class FaqController extends Controller
         $validated['is_active'] = $request->has('is_active') ? $request->boolean('is_active') : true;
 
         $faq = Faq::create($validated);
-        $faq->load(['journey:id,name,slug', 'destination:id,name,slug', 'experience:id,name,slug']);
+        $faq->load('faqable');
 
         return response()->json([
             'success' => true,
@@ -108,19 +101,23 @@ class FaqController extends Controller
             'question' => ['sometimes', 'required', 'string', 'max:500'],
             'answer' => ['sometimes', 'required', 'string'],
             'category' => ['nullable', 'string', 'max:100'],
-            'journey_id' => ['nullable', 'integer', 'exists:journeys,id'],
-            'destination_id' => ['nullable', 'integer', 'exists:destinations,id'],
-            'experience_id' => ['nullable', 'integer', 'exists:experiences,id'],
+            'faqable_type' => ['nullable', 'string', 'max:255'],
+            'faqable_id' => ['nullable', 'integer'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);
+
+        if (array_key_exists('faqable_type', $validated)) {
+            $type = $validated['faqable_type'];
+            $validated['faqable_type'] = $type ? (Relation::getMorphAlias($type) ?? $type) : null;
+        }
 
         if ($request->has('is_active')) {
             $validated['is_active'] = $request->boolean('is_active');
         }
 
         $faq->update($validated);
-        $faq->load(['journey:id,name,slug', 'destination:id,name,slug', 'experience:id,name,slug']);
+        $faq->load('faqable');
 
         return response()->json([
             'success' => true,

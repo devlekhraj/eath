@@ -86,7 +86,7 @@ import { ref, onMounted } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import Form from './modal/Form.vue'
+import Form from '@/modal-form/travel-months/Form.vue'
 import { getTravelMonthsApi, toggleTravelMonthActiveApi } from '@/api/travel-months.api'
 
 const { open: openModal } = useGlobalModal()

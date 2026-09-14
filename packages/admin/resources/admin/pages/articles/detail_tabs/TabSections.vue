@@ -49,63 +49,17 @@
                     <v-icon size="40" color="grey-lighten-1" class="mb-2">mdi-format-list-numbered</v-icon>
                     <div>No sections added yet. Click "Add Section" to create structured content blocks.</div>
                 </div>
-
-                <!-- Section Dialog -->
-                <v-dialog v-model="dialog" max-width="700" persistent>
-                    <v-card>
-                        <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-                            <span class="text-uppercase font-weight-medium text-slate-800">
-                                {{ editingSection.id ? 'Edit Section' : 'Add Section' }}
-                            </span>
-                            <v-btn icon variant="text" size="small" @click="closeDialog">
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-card-title>
-                        <v-divider />
-                        <v-card-text>
-                            <v-row>
-                                <v-col cols="12" sm="9">
-                                    <div class="mb-2">
-                                        <v-text-field
-                                            v-model="editingSection.heading"
-                                            label="Section Heading"
-                                            :rules="[v => !!v || 'Heading is required']"
-                                        />
-                                    </div>
-                                </v-col>
-                                <v-col cols="12" sm="3">
-                                    <div class="mb-2">
-                                        <v-text-field
-                                            v-model.number="editingSection.sort_order"
-                                            label="Sort Order"
-                                            type="number"
-                                        />
-                                    </div>
-                                </v-col>
-                                <v-col cols="12">
-                                    <div class="mb-2">
-                                        <label class="text-caption mb-1 d-block">Section Body</label>
-                                        <SummarnoteEditor v-model="editingSection.body" minHeight="200" />
-                                    </div>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                        <v-card-actions class="pa-3 justify-end">
-                            <v-btn variant="text" @click="closeDialog">Cancel</v-btn>
-                            <v-btn color="primary" :loading="saving" @click="saveSection">Save Section</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import http from '@/http.config'
-import SummarnoteEditor from '@components/SummarnoteEditor.vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
+import ArticleSectionModal from '@/modal-form/articles/ArticleSectionModal.vue'
 
 const props = defineProps({
     form: { type: Object, required: true },
@@ -114,15 +68,7 @@ const props = defineProps({
 
 const emit = defineEmits(['saved'])
 const { showSuccess, showError } = useSnackbar()
-
-const dialog = ref(false)
-const saving = ref(false)
-const editingSection = ref({
-    id: null,
-    heading: '',
-    body: '',
-    sort_order: 0,
-})
+const globalModal = useGlobalModal()
 
 const sections = computed(() => props.form?.sections || [])
 
@@ -132,59 +78,28 @@ function stripHtml(html) {
 }
 
 function openSectionDialog(sec = null) {
-    if (sec) {
-        editingSection.value = {
-            id: sec.id,
-            heading: sec.heading || '',
-            body: sec.body || '',
-            sort_order: sec.sort_order ?? 0,
-        }
-    } else {
-        editingSection.value = {
-            id: null,
-            heading: '',
-            body: '',
-            sort_order: sections.value.length + 1,
-        }
-    }
-    dialog.value = true
-}
-
-function closeDialog() {
-    dialog.value = false
-    editingSection.value = { id: null, heading: '', body: '', sort_order: 0 }
-}
-
-async function saveSection() {
-    if (!editingSection.value.heading || !editingSection.value.body) {
-        showError('Please provide both heading and body content.')
-        return
-    }
-
-    if (!props.articleId) {
-        // If article not created yet, push to local array
-        if (!props.form.sections) props.form.sections = []
-        if (editingSection.value.id) {
-            const idx = props.form.sections.findIndex(s => s.id === editingSection.value.id)
-            if (idx !== -1) props.form.sections[idx] = { ...editingSection.value }
-        } else {
-            props.form.sections.push({ ...editingSection.value })
-        }
-        closeDialog()
-        return
-    }
-
-    saving.value = true
-    try {
-        const resp = await http.post(`/admin/articles/${props.articleId}/sections`, editingSection.value)
-        showSuccess(resp.message || 'Section saved')
-        closeDialog()
-        emit('saved', { message: 'Section updated' })
-    } catch (error) {
-        showError(error?.response?.data?.message || 'Failed to save section')
-    } finally {
-        saving.value = false
-    }
+    globalModal.open({
+        title: sec?.id ? 'Edit Article Section' : 'Add Article Section',
+        component: ArticleSectionModal,
+        size: 'lg',
+        props: {
+            section: sec ? { ...sec } : { sort_order: sections.value.length + 1 },
+            articleId: props.articleId,
+        },
+        onSaved: (savedSec) => {
+            if (!props.articleId) {
+                if (!props.form.sections) props.form.sections = []
+                if (savedSec.id) {
+                    const idx = props.form.sections.findIndex(s => s.id === savedSec.id)
+                    if (idx !== -1) props.form.sections[idx] = savedSec
+                } else {
+                    props.form.sections.push(savedSec)
+                }
+            } else {
+                emit('saved', { message: 'Section updated' })
+            }
+        },
+    })
 }
 
 async function deleteSection(sec) {

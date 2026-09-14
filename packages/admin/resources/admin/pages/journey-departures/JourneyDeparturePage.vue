@@ -140,48 +140,19 @@
 				</v-data-table>
 			</v-card-text>
 		</v-card>
-
-		<!-- Confirmation Dialog -->
-		<v-dialog v-model="deleteDialogOpen" max-width="480px">
-			<v-card>
-				<v-card-title class="d-flex align-center justify-space-between pa-3 text-error">
-					<div class="d-flex align-center ga-2">
-						<v-avatar size="24" rounded variant="tonal" color="error">
-							<v-icon size="14">mdi-alert-outline</v-icon>
-						</v-avatar>
-						<span class="text-uppercase font-weight-medium">Delete Departure</span>
-					</div>
-					<v-btn icon="mdi-close" variant="text" size="small" @click="deleteDialogOpen = false" />
-				</v-card-title>
-				<v-divider />
-				<v-card-text class="pt-4">
-					<p>
-						Are you sure you want to delete departure
-						<strong>{{ activeItem?.code || activeItem?.start_date }}</strong> for journey
-						<strong>{{ activeItem?.journey?.title || ('#' + activeItem?.journey_id) }}</strong>?
-					</p>
-				</v-card-text>
-				<v-divider />
-				<v-card-actions class="pa-3 justify-end ga-2">
-					<v-btn variant="outlined" @click="deleteDialogOpen = false">
-						Cancel
-					</v-btn>
-					<v-btn color="error" :loading="deleting" @click="confirmDelete">
-						Delete Departure
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
 	</div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useSnackbar } from '@/composables/snackbar';
+import { useGlobalModal } from '@/composables/globalModal';
 import { getStatusColor } from '@/utils/utils';
-import { getDeparturesApi, toggleDepartureActiveApi, deleteJourneyDepartureApi } from '@/api/journey-departures.api'
+import { getDeparturesApi, toggleDepartureActiveApi } from '@/api/journey-departures.api';
+import FormDelete from '@/modal-form/journey-departures/FormDelete.vue'
 
 const { showSuccess, showError } = useSnackbar();
+const globalModal = useGlobalModal();
 
 const headers = [
 	{ title: 'SN', key: 'sn', sortable: false },
@@ -201,10 +172,6 @@ const dataList = ref([]);
 const fetchingData = ref(false);
 const search = ref('');
 const statusFilter = ref(null);
-
-const deleteDialogOpen = ref(false);
-const deleting = ref(false);
-const activeItem = ref(null);
 
 const statusOptions = [
 	{ label: 'Open', value: 'open' },
@@ -252,24 +219,15 @@ async function toggleActive(item) {
 }
 
 function openDeleteDialog(item) {
-	activeItem.value = item;
-	deleteDialogOpen.value = true;
-}
-
-async function confirmDelete() {
-	if (!activeItem.value) return;
-	try {
-		deleting.value = true;
-		await deleteJourneyDepartureApi(activeItem.value.id);
-		showSuccess('Departure deleted successfully');
-		deleteDialogOpen.value = false;
-		dataList.value = dataList.value.filter((dep) => dep.id !== activeItem.value.id);
-		activeItem.value = null;
-	} catch (error) {
-		showError(error?.response?.data?.message || 'Failed to delete departure');
-	} finally {
-		deleting.value = false;
-	}
+	globalModal.open({
+		title: 'Confirm Delete Departure',
+		component: FormDelete,
+		size: 'sm',
+		props: {
+			item,
+		},
+		onSaved: () => fetchData(),
+	});
 }
 
 onMounted(() => {

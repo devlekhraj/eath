@@ -30,7 +30,7 @@
           </v-col>
 
           <v-col cols="auto" class="mt-2 mt-sm-0">
-            <v-btn color="primary" variant="flat" @click="openAddDialog = true">
+            <v-btn color="primary" variant="flat" @click="promptAddSubscriber">
               <v-icon start>mdi-plus</v-icon> Add Subscriber
             </v-btn>
           </v-col>
@@ -91,107 +91,27 @@
         </div>
       </template>
     </v-data-table>
-
-    <!-- Quick Add Dialog -->
-    <v-dialog v-model="openAddDialog" max-width="460">
-      <v-card>
-        <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-          <span class="text-uppercase font-weight-medium text-slate-800">Add Newsletter Subscriber</span>
-          <v-btn icon variant="text" size="small" @click="openAddDialog = false">
-            <v-icon size="18">mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-divider />
-        <v-card-text class="pa-4">
-          <div class="mb-2">
-            <v-text-field
-              v-model="addForm.email"
-              label="Email Address *"
-              type="email"
-              :error-messages="addErrors.email"
-            />
-          </div>
-          <div class="mb-2">
-            <v-text-field
-              v-model="addForm.name"
-              label="Subscriber Name"
-              placeholder="e.g. John Doe"
-              :error-messages="addErrors.name"
-            />
-          </div>
-        </v-card-text>
-        <v-card-actions class="pa-3 justify-end">
-          <v-btn variant="text" @click="openAddDialog = false">Cancel</v-btn>
-          <v-btn
-            color="primary"
-            variant="flat"
-            :loading="adding"
-            @click="handleAddSubscriber"
-          >
-            Save Subscriber
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- Delete Confirmation Dialog -->
-    <v-dialog v-model="openDeleteDialog" max-width="420">
-      <v-card>
-        <v-card-title class="d-flex align-center justify-space-between pa-3 text-primary">
-          <span class="text-uppercase font-weight-medium text-slate-800">Delete Subscriber</span>
-          <v-btn icon variant="text" size="small" @click="openDeleteDialog = false">
-            <v-icon size="18">mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-divider />
-        <v-card-text class="text-center pt-4">
-          <div class="text-subtitle-1">Are you sure you want to remove this subscriber?</div>
-          <div class="text-caption text-grey mt-2">
-            <strong>{{ itemToDelete?.email }}</strong>
-          </div>
-        </v-card-text>
-        <v-divider />
-        <v-card-actions class="pa-3 justify-end">
-          <v-btn variant="text" @click="openDeleteDialog = false">Cancel</v-btn>
-          <v-btn
-            color="error"
-            variant="flat"
-            :loading="deleting"
-            @click="handleDeleteSubscriber"
-          >
-            Delete
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
+import { useGlobalModal } from '@/composables/globalModal'
 import {
   getNewsletterSubscriptionsApi,
-  createNewsletterSubscriptionApi,
   toggleNewsletterSubscriptionApi,
-  deleteNewsletterSubscriptionApi,
 } from '@/api/newsletter-subscriptions.api'
+import SubscriberForm from '@/modal-form/newsletter-subscriptions/SubscriberForm.vue'
+import SubscriberDelete from '@/modal-form/newsletter-subscriptions/SubscriberDelete.vue'
 
 const { showSuccess, showError } = useSnackbar()
+const globalModal = useGlobalModal()
 
 const subscribers = ref([])
 const loading = ref(false)
 const search = ref('')
 const selectedStatus = ref(null)
-
-const openAddDialog = ref(false)
-const adding = ref(false)
-const addErrors = reactive({})
-const addForm = reactive({ email: '', name: '' })
-
-const openDeleteDialog = ref(false)
-const deleting = ref(false)
-const itemToDelete = ref(null)
 
 const headers = [
   { title: 'SN', key: 'sn', sortable: false },
@@ -257,53 +177,25 @@ async function toggleStatus(item) {
   }
 }
 
-async function handleAddSubscriber() {
-  Object.keys(addErrors).forEach(key => (addErrors[key] = null))
-  if (!addForm.email) {
-    addErrors.email = ['Email is required']
-    return
-  }
-
-  adding.value = true
-  try {
-    await createNewsletterSubscriptionApi({
-      email: addForm.email,
-      name: addForm.name || null,
-    })
-    showSuccess('Subscriber added successfully')
-    openAddDialog.value = false
-    addForm.email = ''
-    addForm.name = ''
-    fetchSubscribers()
-  } catch (error) {
-    if (error.response?.status === 422) {
-      Object.assign(addErrors, error.response.data.errors || {})
-    } else {
-      showError(error?.response?.data?.message || 'Failed to add subscriber')
-    }
-  } finally {
-    adding.value = false
-  }
+function promptAddSubscriber() {
+  globalModal.open({
+    title: 'Add Newsletter Subscriber',
+    component: SubscriberForm,
+    size: 'sm',
+    onSaved: () => fetchSubscribers(),
+  })
 }
 
 function confirmDelete(item) {
-  itemToDelete.value = item
-  openDeleteDialog.value = true
-}
-
-async function handleDeleteSubscriber() {
-  if (!itemToDelete.value) return
-  deleting.value = true
-  try {
-    await deleteNewsletterSubscriptionApi(itemToDelete.value.id)
-    showSuccess('Subscriber deleted successfully')
-    openDeleteDialog.value = false
-    fetchSubscribers()
-  } catch (error) {
-    showError(error?.response?.data?.message || 'Failed to delete subscriber')
-  } finally {
-    deleting.value = false
-  }
+  globalModal.open({
+    title: 'Delete Subscriber',
+    component: SubscriberDelete,
+    size: 'sm',
+    props: {
+      item,
+    },
+    onSaved: () => fetchSubscribers(),
+  })
 }
 
 onMounted(() => {

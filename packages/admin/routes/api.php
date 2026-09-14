@@ -41,7 +41,7 @@ Route::prefix('api/v1')->middleware('api')->group(function () {
         Route::post('journeys', [JourneyController::class, 'storeUpdate']);
         Route::get('journeys/{id}', [JourneyController::class, 'show']);
         Route::patch('journeys/{id}/update', [JourneyController::class, 'update']);
-        Route::patch('journeys/{id}', [JourneyController::class, 'update']);
+        Route::match(['put', 'patch'], 'journeys/{id}', [JourneyController::class, 'update']);
         Route::patch('journeys/{id}/toggle-active', [JourneyController::class, 'toggleActive']);
         Route::patch('journeys/{id}/toggle-publish', [JourneyController::class, 'togglePublish']);
         Route::delete('journeys/{id}/delete', [JourneyController::class, 'destroy']);
@@ -103,6 +103,9 @@ Route::prefix('api/v1')->middleware('api')->group(function () {
         Route::delete('experiences/{id}/delete', [ExperienceController::class, 'destroy']);
         Route::delete('experiences/{id}', [ExperienceController::class, 'destroy']);
         Route::patch('experiences/{id}/toggle-active', [ExperienceController::class, 'toggleActive']);
+        Route::post('experiences/{id}/media-attachments', [ExperienceController::class, 'attachMedia']);
+        Route::patch('experiences/{id}/media-attachments/{attachmentId}', [ExperienceController::class, 'updateMediaAttachment']);
+        Route::delete('experiences/{id}/media-attachments/{attachmentId}', [ExperienceController::class, 'detachMedia']);
 
         // Travel Months
         Route::get('travel-months', [TravelMonthController::class, 'index']);
@@ -186,6 +189,9 @@ Route::prefix('api/v1')->middleware('api')->group(function () {
         Route::delete('website-pages/{id}', [WebsitePageController::class, 'destroy']);
         Route::patch('website-pages/{id}/toggle-active', [WebsitePageController::class, 'toggleActive']);
         Route::patch('website-pages/{id}/toggle-publish', [WebsitePageController::class, 'togglePublish']);
+        Route::post('website-pages/{id}/media-attachments', [WebsitePageController::class, 'attachMedia']);
+        Route::patch('website-pages/{id}/media-attachments/{attachmentId}', [WebsitePageController::class, 'updateMediaAttachment']);
+        Route::delete('website-pages/{id}/media-attachments/{attachmentId}', [WebsitePageController::class, 'detachMedia']);
         Route::post('website-pages/{id}/sections', [WebsitePageController::class, 'storeSection']);
         Route::delete('website-pages/{id}/sections/{sectionId}', [WebsitePageController::class, 'deleteSection']);
 

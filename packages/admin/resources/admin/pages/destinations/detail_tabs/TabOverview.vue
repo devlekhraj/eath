@@ -79,6 +79,80 @@
               </div>
               <SummarnoteEditor v-model="destination.description" />
             </v-col>
+
+            <!-- Bottom CTA Banner Customization -->
+            <v-col cols="12" class="mt-4">
+              <v-card variant="outlined" class="pa-4">
+                <div class="d-flex align-center justify-space-between mb-3">
+                  <div>
+                    <div class="text-subtitle-2 font-weight-bold text-uppercase text-slate-800">
+                      Bottom Call-To-Action (CTA) Banner
+                    </div>
+                    <div class="text-caption text-medium-emphasis">
+                      Customize the prominent call-to-action block at the bottom of the destination detail page. Leave empty to use system defaults.
+                    </div>
+                  </div>
+                </div>
+
+                <v-row dense>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="destination.cta_title"
+                      label="CTA Banner Title"
+                      :placeholder="`Ready to Plan Your ${destination.name || 'Destination'} Adventure?`"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="destination.cta_description"
+                      label="CTA Banner Description"
+                      placeholder="Launch our interactive trek planner with this region pre-selected. Tailor your travel window, pacing, and group size to receive curated itinerary recommendations."
+                      rows="2"
+                      auto-grow
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="destination.cta_primary_btn_text"
+                      label="Primary Button Text"
+                      :placeholder="`Plan a ${destination.name || 'Region'} Trek →`"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="destination.cta_primary_btn_url"
+                      label="Primary Button URL / Route"
+                      placeholder="Default: /plan-my-trek?mode=discover&region=...&source=destination"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="destination.cta_secondary_btn_text"
+                      label="Secondary Button Text"
+                      placeholder="Ask a Planning Question"
+                      density="comfortable"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="destination.cta_secondary_btn_url"
+                      label="Secondary Button URL"
+                      placeholder="Default: /contact"
+                      density="comfortable"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
           </v-row>
 
           <div class="d-flex justify-end pt-6 pb-2">
@@ -134,6 +208,12 @@ async function handleUpdate() {
       is_featured: Boolean(props.destination.is_featured),
       summary: props.destination.summary || '',
       description: props.destination.description || '',
+      cta_title: props.destination.cta_title || '',
+      cta_description: props.destination.cta_description || '',
+      cta_primary_btn_text: props.destination.cta_primary_btn_text || '',
+      cta_primary_btn_url: props.destination.cta_primary_btn_url || '',
+      cta_secondary_btn_text: props.destination.cta_secondary_btn_text || '',
+      cta_secondary_btn_url: props.destination.cta_secondary_btn_url || '',
     }
 
     const resp = await updateDestinationApi(props.destination.id, payload)

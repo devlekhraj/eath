@@ -164,8 +164,8 @@ async function handleSubmit() {
 }
 
 
-import DeleteIncludeItem from '../modal/DeleteIncludeItem.vue'
-import IncludeExcludeForm from '../modal/IncludeExcludeForm.vue'
+import DeleteIncludeItem from '@/modal-form/journeys/DeleteIncludeItem.vue'
+import IncludeExcludeForm from '@/modal-form/journeys/IncludeExcludeForm.vue'
 
 function deleteItem(item) {
     openModal({

@@ -2,13 +2,14 @@
 
 namespace Admin\Models;
 
+use Admin\Models\Concerns\HasFaqs;
 use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Journey extends Model
 {
-    use SoftDeletes, HasMediaAttachments;
+    use SoftDeletes, HasMediaAttachments, HasFaqs;
 
     // Difficulty
     public const DIFFICULTY_EASY = 'easy';
@@ -100,6 +101,15 @@ class Journey extends Model
         'logistics_note',
         'safety_note',
         'route_map_note',
+        'preparation_note',
+        'packing_note',
+        'operational_notice',
+        'cta_title',
+        'cta_description',
+        'cta_primary_btn_text',
+        'cta_primary_btn_url',
+        'cta_secondary_btn_text',
+        'cta_secondary_btn_url',
         'sort_order',
         'meta_title',
         'meta_description',
@@ -183,5 +193,10 @@ class Journey extends Model
     public function guides()
     {
         return $this->belongsToMany(Guide::class)->withPivot(['role', 'sort_order'])->withTimestamps();
+    }
+
+    public function safetyItems()
+    {
+        return $this->hasMany(JourneySafetyItem::class)->orderBy('sort_order');
     }
 }

@@ -2,12 +2,13 @@
 
 namespace Admin\Models;
 
+use Admin\Models\Concerns\HasFaqs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guide extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFaqs;
 
     protected $fillable = [
         'name',

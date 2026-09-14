@@ -55,7 +55,7 @@ const props = defineProps({
     },
 })
 
-import JourneyHighlightForm from '../modal/JourneyHighlightForm.vue'
+import JourneyHighlightForm from '@/modal-form/journeys/JourneyHighlightForm.vue'
 
 function openForm(item = {}) {
     openModal({

@@ -5,6 +5,15 @@ export interface FaqItem {
   question: string
   answer: string
   category?: string | null
+  faqable_type?: string | null
+  faqable_id?: number | null
+  faqable?: {
+    id: number
+    name?: string
+    title?: string
+    slug?: string
+    [key: string]: unknown
+  } | null
   journey_id?: number | null
   journey?: {
     id: number

@@ -349,116 +349,6 @@
         </v-row>
       </v-col>
     </v-row>
-
-    <!-- Edit Image Details Dialog -->
-    <v-dialog v-model="editDialog.open" max-width="540px" persistent>
-      <v-card>
-        <v-card-title class="d-flex align-center justify-space-between py-0">
-          <span>Edit Image Details</span>
-          <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="editDialog.open = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <div v-if="editDialog.item?.url" class="d-flex align-center ga-3 mb-4 pa-2 bg-slate-50 border rounded">
-            <v-img :src="editDialog.item.url" width="70" height="50" cover class="rounded flex-shrink-0" />
-            <div class="overflow-hidden">
-              <div class="text-body-2 font-weight-medium text-truncate">{{ editDialog.item.filename || 'Image Asset' }}</div>
-              <div class="text-caption text-medium-emphasis text-capitalize">{{ editDialog.targetLabel }}</div>
-            </div>
-          </div>
-
-          <v-form @submit.prevent="handleSaveEdit">
-            <v-row dense>
-              <v-col cols="12">
-                <div class="mb-2">
-                  <v-text-field
-                    v-model="editDialog.form.alt_text"
-                    label="Alt Text (SEO & Accessibility) *"
-                    placeholder="Descriptive explanation for screen readers and SEO"
-                    hint="Important for search engine ranking and accessibility"
-                    persistent-hint
-                  />
-                </div>
-              </v-col>
-
-              <v-col cols="12">
-                <div class="mb-2">
-                  <v-text-field
-                    v-model="editDialog.form.title"
-                    label="Title (optional)"
-                    placeholder="e.g. Scenic mountain vista"
-                  />
-                </div>
-              </v-col>
-
-              <v-col cols="12">
-                <div class="mb-2">
-                  <v-textarea
-                    v-model="editDialog.form.caption"
-                    label="Caption / Description (optional)"
-                    placeholder="Optional editorial context"
-                    rows="3"
-                  />
-                </div>
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-card-text>
-
-        <v-card-actions class="justify-end">
-          <v-btn variant="text" @click="editDialog.open = false">Cancel</v-btn>
-          <v-btn
-            color="primary"
-            variant="flat"
-            :loading="editDialog.saving"
-            @click="handleSaveEdit"
-          >
-            Save Changes
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- Confirm Removal Dialog -->
-    <v-dialog v-model="deleteDialog.open" max-width="440px">
-      <v-card>
-        <v-card-title class="d-flex align-center justify-space-between py-0">
-          <span>Confirm Removal</span>
-          <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="deleteDialog.open = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-divider />
-
-        <v-card-text class="pt-4 text-center">
-          <div v-if="deleteDialog.item?.url" class="mb-3 d-flex justify-center">
-            <v-img :src="deleteDialog.item.url" max-width="180" height="110" cover class="border rounded" />
-          </div>
-
-          <div class="text-subtitle-1 font-weight-medium">
-            Remove {{ deleteDialog.targetLabel }}?
-          </div>
-          <div class="text-caption text-grey mt-2">
-            Are you sure you want to remove this image from the destination? This will unlink it from this collection.
-          </div>
-        </v-card-text>
-
-        <v-card-actions class="justify-end">
-          <v-btn variant="text" @click="deleteDialog.open = false">Cancel</v-btn>
-          <v-btn
-            color="error"
-            variant="flat"
-            :loading="deleteDialog.loading"
-            @click="executeRemove"
-          >
-            Remove
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -473,7 +363,9 @@ import {
 import { uploadMediaAssetApi } from '@/api/media-assets.api'
 import { useGlobalModal } from '@/composables/globalModal'
 import { useSnackbar } from '@/composables/snackbar'
-import MediaAssetPickerModal from '@/components/media/MediaAssetPickerModal.vue'
+import MediaAssetPickerModal from '@/modal-form/media/MediaAssetPickerModal.vue'
+import MediaAttachmentEditModal from '@/modal-form/media/MediaAttachmentEditModal.vue'
+import MediaAttachmentDeleteModal from '@/modal-form/media/MediaAttachmentDeleteModal.vue'
 
 const props = defineProps({
   destination: {
@@ -644,113 +536,81 @@ function openLibraryPicker(targetType) {
 
 // ── Edit Alt Text & Metadata Dialog ──────────────────────────────────────────
 
-const editDialog = reactive({
-  open: false,
-  saving: false,
-  targetType: null,
-  targetLabel: '',
-  item: null,
-  form: {
-    alt_text: '',
-    title: '',
-    caption: '',
-  },
-})
-
 function openEditModal(targetType, item) {
   if (!item) return
-  editDialog.targetType = targetType
-  editDialog.targetLabel = targetType === 'hero' ? 'Hero Banner' : targetType === 'card' ? 'Card Thumbnail' : 'Gallery Photo'
-  editDialog.item = item
-  editDialog.form.alt_text = item.alt_text || ''
-  editDialog.form.title = item.title || ''
-  editDialog.form.caption = item.caption || ''
-  editDialog.open = true
-}
+  const targetLabel = targetType === 'hero' ? 'Hero Banner' : targetType === 'card' ? 'Card Thumbnail' : 'Gallery Photo'
 
-async function handleSaveEdit() {
-  if (!props.destination?.id || !editDialog.item) return
-  editDialog.saving = true
-
-  try {
-    const attachmentId = editDialog.item.attachment_id
-    if (attachmentId) {
-      await updateDestinationMediaApi(props.destination.id, attachmentId, {
-        alt_text: editDialog.form.alt_text,
-        title: editDialog.form.title,
-        caption: editDialog.form.caption,
-      })
-    } else {
-      await attachDestinationMediaApi(props.destination.id, {
-        media_asset_id: editDialog.item.id,
-        collection: editDialog.targetType,
-        alt_text: editDialog.form.alt_text,
-        title: editDialog.form.title,
-        caption: editDialog.form.caption,
-      })
-    }
-
-    showSuccess(`${editDialog.targetLabel} details updated.`)
-    editDialog.open = false
-    emit('refresh')
-  } catch (error) {
-    console.error('Failed to update image details:', error)
-    showError(error?.response?.data?.message || 'Failed to update image details.')
-  } finally {
-    editDialog.saving = false
-  }
+  globalModal.open({
+    title: `Edit ${targetLabel} Details`,
+    component: MediaAttachmentEditModal,
+    size: 'sm',
+    props: {
+      attachment: item,
+      showTitle: true,
+      showCaption: true,
+      showSortOrder: false,
+      onSave: async (payload) => {
+        const attachmentId = item.attachment_id
+        if (attachmentId) {
+          await updateDestinationMediaApi(props.destination.id, attachmentId, {
+            alt_text: payload.alt_text,
+            title: payload.title,
+            caption: payload.caption,
+          })
+        } else {
+          await attachDestinationMediaApi(props.destination.id, {
+            media_asset_id: item.id,
+            collection: targetType,
+            alt_text: payload.alt_text,
+            title: payload.title,
+            caption: payload.caption,
+          })
+        }
+      },
+    },
+    onSaved: () => emit('refresh'),
+  })
 }
 
 // ── Confirm Delete / Removal Dialog ─────────────────────────────────────────
 
-const deleteDialog = reactive({
-  open: false,
-  loading: false,
-  targetType: null,
-  targetLabel: '',
-  item: null,
-})
-
 function promptRemoveImage(targetType, item) {
   if (!item) return
-  deleteDialog.targetType = targetType
-  deleteDialog.targetLabel = targetType === 'hero' ? 'Hero Banner' : 'Card Thumbnail'
-  deleteDialog.item = item
-  deleteDialog.open = true
+  const isHero = targetType === 'hero'
+  const label = isHero ? 'Hero Banner' : 'Card Thumbnail'
+  const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
+
+  globalModal.open({
+    title: `Remove ${label}`,
+    component: MediaAttachmentDeleteModal,
+    size: 'sm',
+    props: {
+      attachment: item,
+      title: `Remove ${label}`,
+      onDelete: async () => {
+        await updateDestinationApi(props.destination.id, {
+          [fieldKey]: null,
+        })
+      },
+    },
+    onSaved: () => emit('refresh'),
+  })
 }
 
 function promptRemoveGallery(item) {
   if (!item) return
-  deleteDialog.targetType = 'gallery'
-  deleteDialog.targetLabel = 'Gallery Photo'
-  deleteDialog.item = item
-  deleteDialog.open = true
-}
-
-async function executeRemove() {
-  if (!props.destination?.id) return
-  deleteDialog.loading = true
-
-  try {
-    if (deleteDialog.targetType === 'gallery') {
-      await detachDestinationMediaApi(props.destination.id, deleteDialog.item.attachment_id)
-      showSuccess('Photo removed from gallery.')
-    } else {
-      const isHero = deleteDialog.targetType === 'hero'
-      const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
-      const label = isHero ? 'Hero banner' : 'Card thumbnail'
-      await updateDestinationApi(props.destination.id, {
-        [fieldKey]: null,
-      })
-      showSuccess(`${label} removed.`)
-    }
-    deleteDialog.open = false
-    emit('refresh')
-  } catch (error) {
-    console.error('Failed to remove image:', error)
-    showError(error?.response?.data?.message || 'Failed to remove image.')
-  } finally {
-    deleteDialog.loading = false
-  }
+  globalModal.open({
+    title: 'Remove Gallery Photo',
+    component: MediaAttachmentDeleteModal,
+    size: 'sm',
+    props: {
+      attachment: item,
+      title: 'Remove Gallery Photo',
+      onDelete: async () => {
+        await detachDestinationMediaApi(props.destination.id, item.attachment_id)
+      },
+    },
+    onSaved: () => emit('refresh'),
+  })
 }
 </script>
