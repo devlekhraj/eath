@@ -18,11 +18,11 @@
 				<template #item.description="{ item }"> <div class="text-caption" style="min-width: 350px;"> {{ resolveMeta(item, 'description') }} </div> </template>
 				<template #item.actions="{ item }">
 					<div class="d-flex align-center justify-center ga-1">
-						<v-btn size="small" variant="outlined" color="primary" @click="handleEdit(item)" title="Edit image">
+						<v-btn variant="outlined" color="primary" @click="handleEdit(item)" title="Edit image">
 							<v-icon start size="14">mdi-pencil</v-icon>
 							Edit
 						</v-btn>
-						<v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete image">
+						<v-btn variant="outlined" color="error" @click="handleDelete(item)" title="Delete image">
 							<v-icon start size="14">mdi-delete</v-icon>
 							Delete
 						</v-btn>

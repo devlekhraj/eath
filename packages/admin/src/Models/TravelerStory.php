@@ -2,12 +2,13 @@
 
 namespace Admin\Models;
 
+use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TravelerStory extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasMediaAttachments;
 
     protected $fillable = [
         'journey_id',
@@ -19,7 +20,6 @@ class TravelerStory extends Model
         'traveler_name',
         'traveler_country',
         'traveled_on',
-        'hero_image_id',
         'is_featured',
         'is_active',
         'is_published',
@@ -44,10 +44,5 @@ class TravelerStory extends Model
     public function destination()
     {
         return $this->belongsTo(Destination::class);
-    }
-
-    public function heroImage()
-    {
-        return $this->belongsTo(MediaAsset::class, 'hero_image_id');
     }
 }

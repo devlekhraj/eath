@@ -43,15 +43,15 @@
 		</template>
 		<template #item.actions="{ item }">
 			<div class="d-flex align-center justify-center ga-1">
-				<v-btn size="small" variant="outlined" color="secondary" @click="toggleExpand(item)" :title="isExpanded(item) ? 'Collapse bookings' : 'View bookings'">
+				<v-btn variant="outlined" color="secondary" @click="toggleExpand(item)" :title="isExpanded(item) ? 'Collapse bookings' : 'View bookings'">
 					<v-icon start size="14">{{ isExpanded(item) ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
 					Bookings
 				</v-btn>
-				<v-btn size="small" variant="outlined" color="primary" @click="editDeparture(item)" title="Edit departure">
+				<v-btn variant="outlined" color="primary" @click="editDeparture(item)" title="Edit departure">
 					<v-icon start size="14">mdi-pencil</v-icon>
 					Edit
 				</v-btn>
-				<v-btn size="small" variant="outlined" color="error" @click="deleteDeparture(item)" :loading="deletingId === item.id" title="Delete departure">
+				<v-btn variant="outlined" color="error" @click="deleteDeparture(item)" :loading="deletingId === item.id" title="Delete departure">
 					<v-icon start size="14">mdi-delete</v-icon>
 					Delete
 				</v-btn>

@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="d-flex align-center justify-space-between py-0">
       <span class="font-medium">Select Image</span>
-      <v-btn size="small" icon variant="text" @click="handleClose">
+      <v-btn icon variant="text" @click="handleClose">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -37,7 +37,7 @@
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import SelectGalleryExisting from './SelectGalleryExisting.vue'
 import SelectGalleryUpload from './SelectGalleryUpload.vue'
-import { getGalleryImagesApi } from '@/api/gallery.api'
+import { getGalleryImagesApi } from '@/http/gallery.http'
 
 const props = defineProps({
   onSelect: {

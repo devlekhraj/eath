@@ -28,7 +28,7 @@
               <div class="hover-actions">
                 <v-tooltip location="top">
                   <template #activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" icon variant="text" color="blue" size="x-small" @click.stop="onView(gallery, index)">
+                    <v-btn v-bind="attrs" v-on="on" icon variant="text" color="blue" @click.stop="onView(gallery, index)">
                       <v-icon>mdi-eye</v-icon>
                     </v-btn>
                   </template>
@@ -37,7 +37,7 @@
 
                 <v-tooltip location="top">
                   <template #activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" icon color="red" variant="text" size="x-small" @click.stop="onDelete(gallery, index)">
+                    <v-btn v-bind="attrs" v-on="on" icon color="red" variant="text" @click.stop="onDelete(gallery, index)">
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </template>

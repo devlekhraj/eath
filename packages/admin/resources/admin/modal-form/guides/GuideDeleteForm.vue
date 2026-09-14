@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-0">
             <span>Confirm Delete</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleClose">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleClose">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -24,7 +24,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { deleteGuideApi } from '@/api/guides.api'
+import { deleteGuideApi } from '@/http/guides.http'
 
 const { showSuccess, showError } = useSnackbar()
 const props = defineProps({

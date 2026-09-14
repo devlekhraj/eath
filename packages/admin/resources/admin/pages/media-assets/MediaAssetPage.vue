@@ -21,10 +21,10 @@
           density="compact"
           color="primary"
         >
-          <v-btn value="grid" variant="outlined" size="small">
+          <v-btn value="grid" variant="outlined">
             <v-icon size="18">mdi-view-grid-outline</v-icon>
           </v-btn>
-          <v-btn value="table" variant="outlined" size="small">
+          <v-btn value="table" variant="outlined">
             <v-icon size="18">mdi-view-list</v-icon>
           </v-btn>
         </v-btn-toggle>
@@ -118,7 +118,6 @@
             <v-divider />
             <div class="pa-2 d-flex align-center justify-space-between bg-slate-50">
               <v-btn
-                size="x-small"
                 variant="text"
                 color="primary"
                 @click="copyAssetUrl(asset)"
@@ -128,7 +127,6 @@
 
               <div class="d-flex ga-1">
                 <v-btn
-                  size="x-small"
                   icon
                   variant="tonal"
                   color="warning"
@@ -138,7 +136,6 @@
                   <v-icon size="14">mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn
-                  size="x-small"
                   icon
                   variant="tonal"
                   color="error"
@@ -208,7 +205,6 @@
         <template #item.actions="{ item }">
           <div class="d-flex align-center justify-center ga-1">
             <v-btn
-              size="small"
               variant="outlined"
               color="primary"
               title="Copy URL"
@@ -218,7 +214,6 @@
               Copy
             </v-btn>
             <v-btn
-              size="small"
               variant="outlined"
               color="secondary"
               title="Edit Metadata"
@@ -228,7 +223,6 @@
               Edit
             </v-btn>
             <v-btn
-              size="small"
               variant="outlined"
               color="error"
               title="Delete"
@@ -248,7 +242,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import { getMediaAssetsApi } from '@/api/media-assets.api'
+import { getMediaAssetsApi } from '@/http/media-assets.http'
 import MediaUploadModal from '@/modal-form/media/MediaUploadModal.vue'
 import MediaDetailModal from '@/modal-form/media/MediaDetailModal.vue'
 import MediaDeleteModal from '@/modal-form/media/MediaDeleteModal.vue'

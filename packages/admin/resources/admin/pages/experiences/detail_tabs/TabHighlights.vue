@@ -25,7 +25,6 @@
             <v-btn
               color="primary"
               variant="outlined"
-              size="small"
               @click="addHighlight"
             >
               <v-icon start size="16">mdi-plus</v-icon>
@@ -37,7 +36,7 @@
             <v-icon size="32" color="secondary" class="mb-2">mdi-star-outline</v-icon>
             <div class="text-body-2 font-weight-medium">No custom highlights defined yet.</div>
             <div class="text-caption mb-3">Add items such as "Sunrise Over Kala Patthar" or "Direct Views of Everest, Lhotse & Nuptse".</div>
-            <v-btn color="primary" variant="tonal" size="small" @click="addHighlight">
+            <v-btn color="primary" variant="tonal" @click="addHighlight">
               Add First Highlight
             </v-btn>
           </div>
@@ -63,7 +62,6 @@
                   <v-btn
                     icon
                     variant="text"
-                    size="x-small"
                     :disabled="index === 0"
                     @click="moveHighlight(index, -1)"
                   >
@@ -72,7 +70,6 @@
                   <v-btn
                     icon
                     variant="text"
-                    size="x-small"
                     :disabled="index === highlights.length - 1"
                     @click="moveHighlight(index, 1)"
                   >
@@ -82,7 +79,6 @@
                     icon
                     color="error"
                     variant="text"
-                    size="x-small"
                     @click="removeHighlight(index)"
                   >
                     <v-icon size="16">mdi-trash-can-outline</v-icon>
@@ -141,7 +137,6 @@
             <v-btn
               color="primary"
               variant="outlined"
-              size="small"
               @click="addPrepQuestion"
             >
               <v-icon start size="16">mdi-plus</v-icon>
@@ -153,7 +148,7 @@
             <v-icon size="32" color="secondary" class="mb-2">mdi-help-circle-outline</v-icon>
             <div class="text-body-2 font-weight-medium">No custom preparation questions defined yet.</div>
             <div class="text-caption mb-3">Add items addressing physical readiness, photography conditions, and gear.</div>
-            <v-btn color="primary" variant="tonal" size="small" @click="addPrepQuestion">
+            <v-btn color="primary" variant="tonal" @click="addPrepQuestion">
               Add First Question
             </v-btn>
           </div>
@@ -179,7 +174,6 @@
                   <v-btn
                     icon
                     variant="text"
-                    size="x-small"
                     :disabled="index === 0"
                     @click="movePrepQuestion(index, -1)"
                   >
@@ -188,7 +182,6 @@
                   <v-btn
                     icon
                     variant="text"
-                    size="x-small"
                     :disabled="index === prepQuestions.length - 1"
                     @click="movePrepQuestion(index, 1)"
                   >
@@ -198,7 +191,6 @@
                     icon
                     color="error"
                     variant="text"
-                    size="x-small"
                     @click="removePrepQuestion(index)"
                   >
                     <v-icon size="16">mdi-trash-can-outline</v-icon>
@@ -264,7 +256,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { updateExperienceApi } from '@/api/experiences.api'
+import { updateExperienceApi } from '@/http/experiences.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({

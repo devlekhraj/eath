@@ -6,7 +6,7 @@
 				<v-file-input class="dropzone-input" :model-value="uploadFile" accept="image/*" label="Select Image" prepend-icon="" prepend-inner-icon="mdi-image" :error-messages="fieldErrors.image || []" @update:modelValue="(file) => emit('update:uploadFile', file)" />
 				<v-img v-if="uploadPreviewUrl" :src="uploadPreviewUrl" aspect-ratio="16/9" contain
 					class="dropzone-preview" />
-				<v-btn v-if="uploadPreviewUrl" class="dropzone-remove" icon color="error" size="x-small" variant="flat" @click.stop="handleClear">
+				<v-btn v-if="uploadPreviewUrl" class="dropzone-remove" icon color="error" variant="flat" @click.stop="handleClear">
 					<v-icon size="16">mdi-close</v-icon>
 				</v-btn>
 				<div v-else class="dropzone-placeholder d-flex align-center justify-center">

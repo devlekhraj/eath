@@ -119,7 +119,7 @@ import TabMedia from './detail_tabs/TabMedia.vue'
 import TabJourneys from './detail_tabs/TabJourneys.vue'
 import TabFaqs from './detail_tabs/TabFaqs.vue'
 import TabSeo from './detail_tabs/TabSeo.vue'
-import { getExperienceByIdApi } from '@/api/experiences.api'
+import { getExperienceByIdApi } from '@/http/experiences.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const route = useRoute()
@@ -149,7 +149,7 @@ const experienceUrl = computed(() => {
 })
 
 const headerImageUrl = computed(() => {
-  return experience?.card_image?.url || experience?.hero_image?.url || ''
+  return experience?.media?.card?.url || experience?.media?.hero?.url || experience?.card_image?.url || experience?.hero_image?.url || ''
 })
 
 async function fetchExperience() {

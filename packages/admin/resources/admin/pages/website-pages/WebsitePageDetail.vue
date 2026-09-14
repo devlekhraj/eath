@@ -18,7 +18,6 @@
 							</v-chip>
 							<v-btn
 								v-if="form.slug"
-								size="small"
 								variant="outlined"
 								color="primary"
 								:href="`/${form.slug}`"
@@ -29,7 +28,6 @@
 							</v-btn>
 							<v-btn
 								color="primary"
-								size="small"
 								:loading="submitting"
 								@click="submitForm"
 							>
@@ -202,10 +200,9 @@
 									<!-- Action buttons -->
 									<div class="d-flex align-center justify-end flex-wrap ga-2 pt-2 border-t">
 										<v-btn
-											v-if="form.hero_image?.id || form.hero_image_id"
+											v-if="form.hero_image?.id || form.hero_image?.url || form.banner_url"
 											color="error"
 											variant="outlined"
-											size="small"
 											:disabled="loadingHero"
 											@click="removeHeroImage"
 										>
@@ -217,7 +214,6 @@
 											v-if="form.hero_image?.attachment_id"
 											color="primary"
 											variant="outlined"
-											size="small"
 											:disabled="loadingHero"
 											@click="openAltTextDialog"
 										>
@@ -228,7 +224,6 @@
 										<v-btn
 											variant="outlined"
 											color="secondary"
-											size="small"
 											:disabled="loadingHero"
 											@click="openHeroLibraryPicker"
 										>
@@ -239,7 +234,6 @@
 										<v-btn
 											color="primary"
 											variant="flat"
-											size="small"
 											:loading="loadingHero"
 											@click="heroFileInputRef?.click()"
 										>
@@ -318,7 +312,6 @@
 										</div>
 										<div class="d-flex align-center ga-2">
 											<v-btn
-												size="small"
 												variant="outlined"
 												color="secondary"
 												@click="toggleExpandAll"
@@ -328,7 +321,7 @@
 												</v-icon>
 												{{ allExpanded ? 'Collapse All' : 'Expand All' }}
 											</v-btn>
-											<v-btn size="small" color="primary" @click="addNewSection">
+											<v-btn color="primary" @click="addNewSection">
 												<v-icon start size="16">mdi-plus</v-icon> Add Section
 											</v-btn>
 										</div>
@@ -343,7 +336,7 @@
 										<p class="text-caption text-medium-emphasis mt-1 mb-3">
 											Add sections to create structured checklists, cards grids, or Q&amp;A blocks.
 										</p>
-										<v-btn color="primary" size="small" @click="addNewSection">
+										<v-btn color="primary" @click="addNewSection">
 											<v-icon start size="16">mdi-plus</v-icon> Add First Section
 										</v-btn>
 									</div>
@@ -376,7 +369,6 @@
 													<!-- Header Quick Actions (stop propagation so panel doesn't toggle) -->
 													<div class="d-flex align-center ga-1 flex-shrink-0" @click.stop>
 														<v-btn
-															size="x-small"
 															icon
 															variant="text"
 															:disabled="sIdx === 0"
@@ -386,7 +378,6 @@
 															<v-icon size="16">mdi-arrow-up</v-icon>
 														</v-btn>
 														<v-btn
-															size="x-small"
 															icon
 															variant="text"
 															:disabled="sIdx === form.sections.length - 1"
@@ -396,7 +387,6 @@
 															<v-icon size="16">mdi-arrow-down</v-icon>
 														</v-btn>
 														<v-btn
-															size="x-small"
 															icon
 															variant="text"
 															color="error"
@@ -463,7 +453,7 @@
 																Add checklist points, policy cards, or question &amp; answer pairs for this section.
 															</div>
 														</div>
-														<v-btn size="small" color="primary" variant="tonal" @click="addSectionItem(sec)">
+														<v-btn color="primary" variant="tonal" @click="addSectionItem(sec)">
 															<v-icon start size="16">mdi-plus</v-icon> Add Item
 														</v-btn>
 													</div>
@@ -488,7 +478,6 @@
 																</div>
 																<div class="d-flex align-center ga-1">
 																	<v-btn
-																		size="x-small"
 																		icon
 																		variant="text"
 																		:disabled="itIdx === 0"
@@ -497,7 +486,6 @@
 																		<v-icon size="16">mdi-arrow-up</v-icon>
 																	</v-btn>
 																	<v-btn
-																		size="x-small"
 																		icon
 																		variant="text"
 																		:disabled="itIdx === sec.items.length - 1"
@@ -506,7 +494,6 @@
 																		<v-icon size="16">mdi-arrow-down</v-icon>
 																	</v-btn>
 																	<v-btn
-																		size="x-small"
 																		icon
 																		variant="text"
 																		color="error"
@@ -557,7 +544,6 @@
 													<v-btn
 														color="primary"
 														variant="tonal"
-														size="small"
 														:loading="sec._saving"
 														@click="saveSingleSection(sec)"
 													>
@@ -747,7 +733,7 @@ import http from '@/http.config'
 import { useRoute } from 'vue-router'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import { uploadMediaAssetApi } from '@/api/media-assets.api'
+import { uploadMediaAssetApi } from '@/http/media-assets.http'
 import MediaAssetPickerModal from '@/modal-form/media/MediaAssetPickerModal.vue'
 import MediaAttachmentEditModal from '@/modal-form/media/MediaAttachmentEditModal.vue'
 
@@ -789,7 +775,6 @@ const form = reactive({
 	type: 'standard',
 	summary: '',
 	body: '',
-	hero_image_id: null,
 	hero_image: null,
 	banner_url: null,
 	notice_title: '',
@@ -865,6 +850,7 @@ const fetchData = async () => {
 
 		Object.assign(form, {
 			...data,
+			hero_image: data.media?.hero || data.hero_image || null,
 			body: data.body || data.content || '',
 			sections: rawSections,
 		})
@@ -887,6 +873,9 @@ const submitForm = async () => {
 		const payload = {
 			...form,
 			content: form.body,
+			media: {
+				hero: form.hero_image?.id || null,
+			},
 		}
 		const resp = page_id.value
 			? await http.patch(`/admin/website-pages/${page_id.value}`, payload)
@@ -933,7 +922,7 @@ function openHeroLibraryPicker() {
 						})
 						showSuccess('Hero banner updated.')
 						if (resp.data?.data) {
-							form.hero_image = resp.data.data.hero_image
+							form.hero_image = resp.data.data.media?.hero || resp.data.data.hero_image
 							form.banner_url = resp.data.data.banner_url
 						} else {
 							fetchData()
@@ -944,7 +933,6 @@ function openHeroLibraryPicker() {
 						loadingHero.value = false
 					}
 				} else {
-					form.hero_image_id = asset.id
 					form.hero_image = asset
 					form.banner_url = asset.url
 				}
@@ -977,13 +965,12 @@ async function handleHeroDirectUpload(event) {
 			})
 			showSuccess('Hero banner uploaded and attached.')
 			if (resp.data?.data) {
-				form.hero_image = resp.data.data.hero_image
+				form.hero_image = resp.data.data.media?.hero || resp.data.data.hero_image
 				form.banner_url = resp.data.data.banner_url
 			} else {
 				fetchData()
 			}
 		} else {
-			form.hero_image_id = mediaAsset.id
 			form.hero_image = mediaAsset
 			form.banner_url = mediaAsset.url
 			showSuccess('Hero image selected.')
@@ -1007,7 +994,6 @@ async function removeHeroImage() {
 			if (resp.data?.data) {
 				form.hero_image = null
 				form.banner_url = null
-				form.hero_image_id = null
 			} else {
 				fetchData()
 			}
@@ -1017,7 +1003,6 @@ async function removeHeroImage() {
 			loadingHero.value = false
 		}
 	} else {
-		form.hero_image_id = null
 		form.hero_image = null
 		form.banner_url = null
 	}

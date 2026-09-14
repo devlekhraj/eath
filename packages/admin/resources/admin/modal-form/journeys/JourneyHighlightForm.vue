@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-0">
             <span>Journey Highlight</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -59,7 +59,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { saveJourneyHighlight, deleteJourneyHighlight } from '@/api/journeys.api'
+import { saveJourneyHighlight, deleteJourneyHighlight } from '@/http/journeys.http'
 
 const { showSuccess, showError } = useSnackbar()
 

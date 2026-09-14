@@ -74,7 +74,6 @@
             <template #item.actions="{ item }">
               <div class="d-flex align-center justify-center ga-1">
                 <v-btn
-                  size="small"
                   variant="text"
                   color="primary"
                   icon="mdi-pencil"
@@ -82,7 +81,6 @@
                   @click="openEditDialog(item)"
                 />
                 <v-btn
-                  size="small"
                   variant="text"
                   color="error"
                   icon="mdi-delete"
@@ -110,7 +108,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { getFaqsApi, updateFaqApi } from '@/api/faqs.api'
+import { getFaqsApi, updateFaqApi } from '@/http/faqs.http'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import FaqForm from '@/modal-form/faqs/FaqForm.vue'

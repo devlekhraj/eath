@@ -13,34 +13,20 @@ class WebsiteDemoSeeder extends Seeder
     public function run(): void
     {
         Schema::disableForeignKeyConstraints();
-        DB::table('journey_month')->truncate();
-        DB::table('experience_journey')->truncate();
-        DB::table('guide_journey')->truncate();
-        DB::table('article_journey')->truncate();
-        DB::table('journey_departures')->truncate();
-        DB::table('journey_itinerary_days')->truncate();
-        DB::table('journey_itinerary_highlights')->truncate();
-        DB::table('journey_highlights')->truncate();
-        DB::table('journey_prices')->truncate();
-        DB::table('journey_services')->truncate();
-        DB::table('article_sections')->truncate();
-        DB::table('articles')->truncate();
-        DB::table('article_categories')->truncate();
-        DB::table('traveler_stories')->truncate();
-        DB::table('faqs')->truncate();
-        DB::table('website_page_sections')->truncate();
-        DB::table('website_pages')->truncate();
-        DB::table('website_sections')->truncate();
-        DB::table('website_settings')->truncate();
-        DB::table('journey_safety_items')->truncate();
-        DB::table('journeys')->truncate();
-        DB::table('guides')->truncate();
-        DB::table('travel_months')->truncate();
-        DB::table('experience_highlights')->truncate();
-        DB::table('experience_prep_questions')->truncate();
-        DB::table('experiences')->truncate();
-        DB::table('destination_logistics')->truncate();
-        DB::table('destinations')->truncate();
+        $tablesToTruncate = [
+            'journey_month', 'experience_journey', 'guide_journey', 'article_journey',
+            'journey_departures', 'journey_itinerary_days', 'journey_itinerary_highlights',
+            'journey_highlights', 'journey_prices', 'journey_services', 'article_sections',
+            'articles', 'article_categories', 'traveler_stories', 'faqs', 'website_page_sections',
+            'website_pages', 'website_sections', 'website_settings', 'journey_safety_items',
+            'journeys', 'guides', 'travel_months', 'experience_highlights',
+            'experience_prep_questions', 'experiences', 'destination_logistics', 'destinations',
+        ];
+        foreach ($tablesToTruncate as $tbl) {
+            if (Schema::hasTable($tbl)) {
+                DB::table($tbl)->truncate();
+            }
+        }
         Schema::enableForeignKeyConstraints();
 
         $catalog = $this->readJson('packages/website/src/Data/website-catalog.json');
@@ -1120,7 +1106,6 @@ class WebsiteDemoSeeder extends Seeder
             'type' => 'responsible',
             'summary' => 'The Himalayas are home to ancient living cultures, sensitive high-altitude ecosystems, and hardworking mountain communities. Explore our proposed operational code for ethical field leadership and environmental stewardship.',
             'body' => '<p>Responsible Himalayan trekking balances deep exploration with cultural integrity, fair employment practices, and proactive trail preservation.</p>',
-            'hero_image_id' => $heroAssetId,
             'notice_title' => 'Proposed Practices Notice — Not Verified Factual Achievements',
             'notice_body' => 'This editorial document outlines proposed environmental standards, porter protection policies, and cultural etiquette guidelines for the EATH platform prototype. It does not represent audited historical achievements, third-party eco-certifications, carbon offset claims, or verified conservation partnership data. In live commercial operations, sustainability policies require external verification and rigorous field compliance audits.',
             'cta_title' => 'Ready to Plan a Mindful Himalayan Trek?',

@@ -4,7 +4,7 @@
       <span>
         {{ props.item?.id ? 'Edit FAQ' : 'Add FAQ' }}
       </span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+      <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -147,7 +147,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
-import { createFaqApi, updateFaqApi, getFaqCategoriesApi } from '@/api/faqs.api'
+import { createFaqApi, updateFaqApi, getFaqCategoriesApi } from '@/http/faqs.http'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])

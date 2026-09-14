@@ -62,10 +62,7 @@ class JourneyController extends Controller
                 'prices',
                 'departures.plannerSubmissions',
                 'guides:id,name',
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'routeMapAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
                 'safetyItems',
             ])
             ->findOrFail($id);
@@ -126,6 +123,10 @@ class JourneyController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
             'published_at' => ['nullable', 'date'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media.card' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media.route_map' => ['nullable', 'integer', 'exists:media_assets,id'],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'card_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'route_map_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
@@ -205,30 +206,15 @@ class JourneyController extends Controller
             $journey = Journey::query()->create($payload);
         }
 
-        if ($request->has('hero_image_id')) {
-            $heroId = $request->input('hero_image_id');
-            if ($heroId) {
-                $journey->syncMediaAttachment((int) $heroId, MediaAttachment::COLLECTION_HERO);
-            } else {
-                $journey->detachMediaCollection(MediaAttachment::COLLECTION_HERO);
-            }
-        }
-
-        if ($request->has('card_image_id')) {
-            $cardId = $request->input('card_image_id');
-            if ($cardId) {
-                $journey->syncMediaAttachment((int) $cardId, MediaAttachment::COLLECTION_CARD);
-            } else {
-                $journey->detachMediaCollection(MediaAttachment::COLLECTION_CARD);
-            }
-        }
-
-        if ($request->has('route_map_image_id')) {
-            $routeMapId = $request->input('route_map_image_id');
-            if ($routeMapId) {
-                $journey->syncMediaAttachment((int) $routeMapId, MediaAttachment::COLLECTION_ROUTE_MAP);
-            } else {
-                $journey->detachMediaCollection(MediaAttachment::COLLECTION_ROUTE_MAP);
+        if ($request->has('media') && is_array($validated['media'] ?? null)) {
+            $journey->syncMediaFromRequest($validated['media']);
+        } else {
+            $legacyMedia = [];
+            if ($request->has('hero_image_id')) $legacyMedia['hero'] = $request->input('hero_image_id');
+            if ($request->has('card_image_id')) $legacyMedia['card'] = $request->input('card_image_id');
+            if ($request->has('route_map_image_id')) $legacyMedia['route_map'] = $request->input('route_map_image_id');
+            if (!empty($legacyMedia)) {
+                $journey->syncMediaFromRequest($legacyMedia);
             }
         }
 
@@ -263,10 +249,7 @@ class JourneyController extends Controller
                 'guide:id,name',
                 'experiences',
                 'travelMonths',
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'routeMapAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
                 'safetyItems',
             ])),
             'message' => $id ? 'Journey updated successfully.' : 'Journey created successfully.',
@@ -390,46 +373,11 @@ class JourneyController extends Controller
             'pace' => $journey->pace,
             'pricing_basis' => $journey->pricing_basis,
             'featured_rank' => $journey->featured_rank,
-            'hero_image_id' => $journey->heroAttachment?->media_asset_id,
-            'card_image_id' => $journey->cardAttachment?->media_asset_id,
-            'hero_image' => $journey->heroAttachment?->mediaAsset ? [
-                'id' => $journey->heroAttachment->mediaAsset->id,
-                'attachment_id' => $journey->heroAttachment->id,
-                'url' => $journey->heroAttachment->mediaAsset->url,
-                'filename' => $journey->heroAttachment->mediaAsset->filename,
-                'title' => $journey->heroAttachment->title ?? $journey->heroAttachment->mediaAsset->title,
-                'alt_text' => $journey->heroAttachment->alt_text ?? $journey->heroAttachment->mediaAsset->alt_text,
-                'caption' => $journey->heroAttachment->caption ?? $journey->heroAttachment->mediaAsset->caption,
-            ] : null,
-            'card_image' => $journey->cardAttachment?->mediaAsset ? [
-                'id' => $journey->cardAttachment->mediaAsset->id,
-                'attachment_id' => $journey->cardAttachment->id,
-                'url' => $journey->cardAttachment->mediaAsset->url,
-                'filename' => $journey->cardAttachment->mediaAsset->filename,
-                'title' => $journey->cardAttachment->title ?? $journey->cardAttachment->mediaAsset->title,
-                'alt_text' => $journey->cardAttachment->alt_text ?? $journey->cardAttachment->mediaAsset->alt_text,
-                'caption' => $journey->cardAttachment->caption ?? $journey->cardAttachment->mediaAsset->caption,
-            ] : null,
-            'gallery' => ($journey->relationLoaded('galleryAttachments') && $journey->galleryAttachments) ? $journey->galleryAttachments->map(fn ($attachment) => [
-                'attachment_id' => $attachment->id,
-                'id' => $attachment->media_asset_id,
-                'url' => $attachment->mediaAsset?->url,
-                'filename' => $attachment->mediaAsset?->filename,
-                'title' => $attachment->title ?? $attachment->mediaAsset?->title,
-                'alt_text' => $attachment->alt_text ?? $attachment->mediaAsset?->alt_text,
-                'caption' => $attachment->caption ?? $attachment->mediaAsset?->caption,
-                'sort_order' => $attachment->sort_order,
-            ])->values() : [],
-            'route_map_image_id' => $journey->routeMapAttachment?->media_asset_id,
-            'route_map_image' => $journey->routeMapAttachment?->mediaAsset ? [
-                'id' => $journey->routeMapAttachment->mediaAsset->id,
-                'attachment_id' => $journey->routeMapAttachment->id,
-                'url' => $journey->routeMapAttachment->mediaAsset->url,
-                'filename' => $journey->routeMapAttachment->mediaAsset->filename,
-                'title' => $journey->routeMapAttachment->title ?? $journey->routeMapAttachment->mediaAsset->title,
-                'alt_text' => $journey->routeMapAttachment->alt_text ?? $journey->routeMapAttachment->mediaAsset->alt_text,
-                'caption' => $journey->routeMapAttachment->caption ?? $journey->routeMapAttachment->mediaAsset->caption,
-            ] : null,
+            'media' => $media = $journey->getGroupedMedia(),
+            'hero_image' => $media['hero'] ?? null,
+            'card_image' => $media['card'] ?? null,
+            'gallery' => $media['gallery'] ?? [],
+            'route_map_image' => $media['route_map'] ?? null,
             'accommodation_note' => $journey->accommodation_note,
             'logistics_note' => $journey->logistics_note,
             'safety_note' => $journey->safety_note,
@@ -616,10 +564,10 @@ class JourneyController extends Controller
                 'prices',
                 'departures.plannerSubmissions',
                 'guides:id,name',
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'routeMapAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
+                
             ])),
         ]);
     }
@@ -652,10 +600,10 @@ class JourneyController extends Controller
                 'prices',
                 'departures.plannerSubmissions',
                 'guides:id,name',
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'routeMapAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
+                
             ])),
         ]);
     }
@@ -680,10 +628,10 @@ class JourneyController extends Controller
                 'prices',
                 'departures.plannerSubmissions',
                 'guides:id,name',
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'routeMapAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
+                
             ])),
         ]);
     }

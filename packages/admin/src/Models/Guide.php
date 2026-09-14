@@ -3,12 +3,13 @@
 namespace Admin\Models;
 
 use Admin\Models\Concerns\HasFaqs;
+use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guide extends Model
 {
-    use SoftDeletes, HasFaqs;
+    use SoftDeletes, HasFaqs, HasMediaAttachments;
 
     protected $fillable = [
         'name',
@@ -20,7 +21,6 @@ class Guide extends Model
         'languages',
         'qualifications',
         'years_experience',
-        'profile_image_id',
         'is_featured',
         'is_active',
         'sort_order',

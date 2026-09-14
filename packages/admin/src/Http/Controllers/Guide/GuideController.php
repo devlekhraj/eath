@@ -21,8 +21,7 @@ class GuideController extends Controller
 {
     public function index()
     {
-        // Logic to retrieve travel packages
-        $guideList = Guide::latest()->get();
+        $guideList = Guide::with(['mediaAttachments.mediaAsset'])->latest()->get();
 
         return response()->json([
             'success' => true,
@@ -45,7 +44,12 @@ class GuideController extends Controller
             'license_number' => 'nullable|string|max:100',
             'experience_years' => 'nullable|integer|min:0|max:100',
             'status' => 'nullable|in:active,inactive,deleted,pending,suspended',
+            'media' => ['nullable', 'array'],
+            'media.avatar' => ['nullable', 'integer', 'exists:media_assets,id'],
         ]);
+
+        $mediaData = $validated['media'] ?? [];
+        unset($validated['media']);
 
         if ($id) {
             $guide = Guide::findOrFail($id);
@@ -54,18 +58,22 @@ class GuideController extends Controller
             $guide = Guide::create($validated);
         }
 
+        if ($request->has('media')) {
+            $guide->syncMediaFromRequest($mediaData);
+        }
+
+        $guide->load(['mediaAttachments.mediaAsset', 'reviews', 'trips']);
+
         return response()->json([
             'message' => 'Guide saved successfully',
-            'data' => $guide,
+            'data' => new GuideResource($guide),
         ]);
     }
 
 
     public function show(Request $request, $id)
     {
-        // Logic to retrieve travel packages
-        $guide = Guide::find($id);
-        $guide->load('reviews', 'trips');
+        $guide = Guide::with(['mediaAttachments.mediaAsset', 'reviews', 'trips'])->findOrFail($id);
 
         return response()->json([
             'success' => true,

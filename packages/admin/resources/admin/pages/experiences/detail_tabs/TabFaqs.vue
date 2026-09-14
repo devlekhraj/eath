@@ -74,7 +74,6 @@
             <template #item.actions="{ item }">
               <div class="d-flex align-center justify-center ga-1">
                 <v-btn
-                  size="small"
                   variant="outlined"
                   color="primary"
                   title="Edit FAQ"
@@ -84,7 +83,6 @@
                   Edit
                 </v-btn>
                 <v-btn
-                  size="small"
                   variant="outlined"
                   color="error"
                   title="Delete FAQ"
@@ -112,7 +110,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { getFaqsApi, toggleFaqActiveApi } from '@/api/faqs.api'
+import { getFaqsApi, toggleFaqActiveApi } from '@/http/faqs.http'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import FaqForm from '@/modal-form/faqs/FaqForm.vue'

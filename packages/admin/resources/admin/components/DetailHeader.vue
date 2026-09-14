@@ -10,7 +10,7 @@
 					<span class="text-medium-emphasis">
 						{{ url }}
 					</span>
-					<v-btn size="x-small" class="ml-2" color="primary" icon variant="tonal" :href="url" target="_blank" rel="noopener">
+					<v-btn class="ml-2" color="primary" icon variant="tonal" :href="url" target="_blank" rel="noopener">
 						<v-icon>mdi-open-in-new</v-icon>
 					</v-btn>
 				</div>

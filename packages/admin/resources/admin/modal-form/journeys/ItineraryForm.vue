@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-0">
             <span>Itinerary Form</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -73,7 +73,7 @@ import SummarnoteEditor from '@components/SummarnoteEditor.vue';
 
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { saveJourneyItineraryDay, deleteJourneyItineraryDay } from '@/api/journeys.api'
+import { saveJourneyItineraryDay, deleteJourneyItineraryDay } from '@/http/journeys.http'
 
 const { showSuccess, showError } = useSnackbar()
 

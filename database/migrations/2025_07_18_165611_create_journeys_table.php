@@ -41,9 +41,18 @@ return new class extends Migration
             $table->text('logistics_note')->nullable();
             $table->text('safety_note')->nullable();
             $table->text('route_map_note')->nullable();
+            $table->text('preparation_note')->nullable();
+            $table->text('packing_note')->nullable();
+            $table->text('operational_notice')->nullable();
             $table->unsignedInteger('sort_order')->default(0);
             $table->string('meta_title')->nullable();
             $table->string('meta_description', 300)->nullable();
+            $table->string('cta_title')->nullable();
+            $table->text('cta_description')->nullable();
+            $table->string('cta_primary_btn_text')->nullable();
+            $table->string('cta_primary_btn_url')->nullable();
+            $table->string('cta_secondary_btn_text')->nullable();
+            $table->string('cta_secondary_btn_url')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -76,7 +76,6 @@
               <div class="d-flex align-center justify-end ga-2 pt-2 border-t">
                 <v-btn
                   v-if="heroImage?.url"
-                  size="small"
                   color="error"
                   variant="text"
                   @click="promptRemoveDirect('hero')"
@@ -86,7 +85,6 @@
                 </v-btn>
 
                 <v-btn
-                  size="small"
                   variant="outlined"
                   color="secondary"
                   :loading="loadingHero"
@@ -97,7 +95,6 @@
                 </v-btn>
 
                 <v-btn
-                  size="small"
                   variant="flat"
                   color="primary"
                   @click="openLibraryPicker('hero')"
@@ -166,7 +163,6 @@
               <div class="d-flex align-center justify-end ga-2 pt-2 border-t">
                 <v-btn
                   v-if="cardImage?.url"
-                  size="small"
                   color="error"
                   variant="text"
                   @click="promptRemoveDirect('card')"
@@ -176,7 +172,6 @@
                 </v-btn>
 
                 <v-btn
-                  size="small"
                   variant="outlined"
                   color="secondary"
                   :loading="loadingCard"
@@ -187,7 +182,6 @@
                 </v-btn>
 
                 <v-btn
-                  size="small"
                   variant="flat"
                   color="primary"
                   @click="openLibraryPicker('card')"
@@ -228,7 +222,6 @@
                   />
 
                   <v-btn
-                    size="small"
                     variant="outlined"
                     color="secondary"
                     :loading="loadingGallery"
@@ -239,7 +232,6 @@
                   </v-btn>
 
                   <v-btn
-                    size="small"
                     variant="flat"
                     color="primary"
                     @click="openLibraryPicker('gallery')"
@@ -289,7 +281,6 @@
 
                       <div class="d-flex align-center justify-end ga-1 mt-2 pt-2 border-t">
                         <v-btn
-                          size="small"
                           color="primary"
                           variant="outlined"
                           @click="openEditModal('gallery', item)"
@@ -298,7 +289,6 @@
                           Edit
                         </v-btn>
                         <v-btn
-                          size="small"
                           color="error"
                           variant="outlined"
                           @click="promptRemoveGallery(item)"
@@ -339,8 +329,8 @@ import {
   attachExperienceMediaApi,
   detachExperienceMediaApi,
   updateExperienceMediaApi,
-} from '@/api/experiences.api'
-import { uploadMediaAssetApi } from '@/api/media-assets.api'
+} from '@/http/experiences.http'
+import { uploadMediaAssetApi } from '@/http/media-assets.http'
 import { useGlobalModal } from '@/composables/globalModal'
 import { useSnackbar } from '@/composables/snackbar'
 import MediaAssetPickerModal from '@/modal-form/media/MediaAssetPickerModal.vue'
@@ -367,15 +357,17 @@ const loadingCard = ref(false)
 const loadingGallery = ref(false)
 
 const heroImage = computed(() => {
-  return props.experience?.hero_image || null
+  return props.experience?.media?.hero || props.experience?.hero_image || null
 })
 
 const cardImage = computed(() => {
-  return props.experience?.card_image || null
+  return props.experience?.media?.card || props.experience?.card_image || null
 })
 
 const galleryList = computed(() => {
-  return Array.isArray(props.experience?.gallery) ? props.experience.gallery : []
+  return Array.isArray(props.experience?.media?.gallery)
+    ? props.experience.media.gallery
+    : (Array.isArray(props.experience?.gallery) ? props.experience.gallery : [])
 })
 
 async function handleDirectUpload(targetType, event) {
@@ -384,7 +376,6 @@ async function handleDirectUpload(targetType, event) {
 
   const isHero = targetType === 'hero'
   const loadingRef = isHero ? loadingHero : loadingCard
-  const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
   const label = isHero ? 'Hero banner' : 'Card thumbnail'
 
   try {
@@ -401,7 +392,9 @@ async function handleDirectUpload(targetType, event) {
     }
 
     const updateResp = await updateExperienceApi(props.experience.id, {
-      [fieldKey]: mediaAsset.id,
+      media: {
+        [targetType]: mediaAsset.id,
+      },
     })
 
     showSuccess(updateResp.data?.message ?? `${label} updated successfully.`)
@@ -484,7 +477,6 @@ function openLibraryPicker(targetType) {
 
   const isHero = targetType === 'hero'
   const title = isHero ? 'Select Hero Banner Image' : 'Select Card Thumbnail Image'
-  const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
   const label = isHero ? 'Hero banner' : 'Card thumbnail'
 
   globalModal.open({
@@ -496,7 +488,9 @@ function openLibraryPicker(targetType) {
         if (!asset?.id || !props.experience?.id) return
         try {
           const updateResp = await updateExperienceApi(props.experience.id, {
-            [fieldKey]: asset.id,
+            media: {
+              [targetType]: asset.id,
+            },
           })
           showSuccess(updateResp.data?.message ?? `${label} updated.`)
           globalModal.close()
@@ -568,8 +562,11 @@ function promptRemoveDirect(targetType) {
       attachment: item,
       title: `Remove ${label}`,
       onDelete: async () => {
-        const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
-        await updateExperienceApi(props.experience.id, { [fieldKey]: null })
+        await updateExperienceApi(props.experience.id, {
+          media: {
+            [targetType]: null,
+          },
+        })
       },
     },
     onSaved: () => emit('refresh'),

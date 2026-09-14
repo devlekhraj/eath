@@ -4,7 +4,7 @@
             <div class="d-flex align-center">
                 <span>Form Price</span>
             </div>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -70,7 +70,7 @@
 <script setup>
 import http from '@/http.config'
 import { ref, reactive, onMounted } from 'vue'
-import { saveJourneyPrice, deleteJourneyPrice } from '@/api/journeys.api'
+import { saveJourneyPrice, deleteJourneyPrice } from '@/http/journeys.http'
 
 const emit = defineEmits(['close', 'saved'])
 const props = defineProps({

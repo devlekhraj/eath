@@ -47,9 +47,7 @@ class ExperienceController extends Controller
     public function show($id)
     {
         $experience = Experience::with([
-            'heroAttachment.mediaAsset',
-            'cardAttachment.mediaAsset',
-            'galleryAttachments.mediaAsset',
+            'mediaAttachments.mediaAsset',
             'highlights',
             'prepQuestions',
             'journeys.destination',
@@ -94,6 +92,9 @@ class ExperienceController extends Controller
             'cta_primary_btn_url' => ['nullable', 'string', 'max:500'],
             'cta_secondary_btn_text' => ['nullable', 'string', 'max:255'],
             'cta_secondary_btn_url' => ['nullable', 'string', 'max:500'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media.card' => ['nullable', 'integer', 'exists:media_assets,id'],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'card_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'highlights' => ['nullable', 'array'],
@@ -104,11 +105,16 @@ class ExperienceController extends Controller
             $validated['slug'] = Str::slug($validated['name']);
         }
 
-        $heroImageId = $validated['hero_image_id'] ?? null;
-        $cardImageId = $validated['card_image_id'] ?? null;
+        $mediaData = $validated['media'] ?? [];
+        if ($request->has('hero_image_id')) {
+            $mediaData['hero'] = $request->input('hero_image_id');
+        }
+        if ($request->has('card_image_id')) {
+            $mediaData['card'] = $request->input('card_image_id');
+        }
         $highlightsData = $validated['highlights'] ?? null;
         $prepQuestionsData = $validated['prep_questions'] ?? null;
-        unset($validated['hero_image_id'], $validated['card_image_id'], $validated['highlights'], $validated['prep_questions'], $validated['id']);
+        unset($validated['media'], $validated['highlights'], $validated['prep_questions'], $validated['id'], $validated['hero_image_id'], $validated['card_image_id']);
 
         if ($targetId) {
             $experience = Experience::findOrFail($targetId);
@@ -121,20 +127,8 @@ class ExperienceController extends Controller
             $experience = Experience::create($validated);
         }
 
-        if ($request->has('hero_image_id')) {
-            if ($heroImageId) {
-                $experience->syncMediaAttachment((int) $heroImageId, MediaAttachment::COLLECTION_HERO);
-            } else {
-                $experience->detachMediaCollection(MediaAttachment::COLLECTION_HERO);
-            }
-        }
-
-        if ($request->has('card_image_id')) {
-            if ($cardImageId) {
-                $experience->syncMediaAttachment((int) $cardImageId, MediaAttachment::COLLECTION_CARD);
-            } else {
-                $experience->detachMediaCollection(MediaAttachment::COLLECTION_CARD);
-            }
+        if ($request->has('media')) {
+            $experience->syncMediaFromRequest($mediaData);
         }
 
         if ($request->has('highlights') && is_array($highlightsData)) {
@@ -166,9 +160,7 @@ class ExperienceController extends Controller
         }
 
         $fresh = $experience->fresh()->load([
-            'heroAttachment.mediaAsset',
-            'cardAttachment.mediaAsset',
-            'galleryAttachments.mediaAsset',
+            'mediaAttachments.mediaAsset',
             'highlights',
             'prepQuestions',
             'journeys.destination',
@@ -213,9 +205,7 @@ class ExperienceController extends Controller
         }
 
         $fresh = $experience->fresh()->load([
-            'heroAttachment.mediaAsset',
-            'cardAttachment.mediaAsset',
-            'galleryAttachments.mediaAsset',
+            'mediaAttachments.mediaAsset',
             'highlights',
             'prepQuestions',
             'journeys.destination',
@@ -243,9 +233,7 @@ class ExperienceController extends Controller
         $attachment->update($validated);
 
         $fresh = $experience->fresh()->load([
-            'heroAttachment.mediaAsset',
-            'cardAttachment.mediaAsset',
-            'galleryAttachments.mediaAsset',
+            'mediaAttachments.mediaAsset',
             'highlights',
             'prepQuestions',
             'journeys.destination',
@@ -265,9 +253,9 @@ class ExperienceController extends Controller
         $attachment->delete();
 
         $fresh = $experience->fresh()->load([
-            'heroAttachment.mediaAsset',
-            'cardAttachment.mediaAsset',
-            'galleryAttachments.mediaAsset',
+            'mediaAttachments.mediaAsset',
+            
+            
             'highlights',
             'prepQuestions',
             'journeys.destination',
@@ -330,34 +318,9 @@ class ExperienceController extends Controller
             'cta_secondary_btn_text' => $exp->cta_secondary_btn_text,
             'cta_secondary_btn_url' => $exp->cta_secondary_btn_url,
             'journeys_count' => $exp->journeys_count ?? ($exp->relationLoaded('journeys') ? $exp->journeys->count() : 0),
-            'hero_image' => ($exp->relationLoaded('heroAttachment') && $exp->heroAttachment?->mediaAsset) ? [
-                'id' => $exp->heroAttachment->mediaAsset->id,
-                'attachment_id' => $exp->heroAttachment->id,
-                'url' => $exp->heroAttachment->mediaAsset->url,
-                'filename' => $exp->heroAttachment->mediaAsset->filename,
-                'title' => $exp->heroAttachment->title ?? $exp->heroAttachment->mediaAsset->title,
-                'alt_text' => $exp->heroAttachment->alt_text ?? $exp->heroAttachment->mediaAsset->alt_text,
-                'caption' => $exp->heroAttachment->caption ?? $exp->heroAttachment->mediaAsset->caption,
-            ] : null,
-            'card_image' => ($exp->relationLoaded('cardAttachment') && $exp->cardAttachment?->mediaAsset) ? [
-                'id' => $exp->cardAttachment->mediaAsset->id,
-                'attachment_id' => $exp->cardAttachment->id,
-                'url' => $exp->cardAttachment->mediaAsset->url,
-                'filename' => $exp->cardAttachment->mediaAsset->filename,
-                'title' => $exp->cardAttachment->title ?? $exp->cardAttachment->mediaAsset->title,
-                'alt_text' => $exp->cardAttachment->alt_text ?? $exp->cardAttachment->mediaAsset->alt_text,
-                'caption' => $exp->cardAttachment->caption ?? $exp->cardAttachment->mediaAsset->caption,
-            ] : null,
-            'gallery_images' => ($exp->relationLoaded('galleryAttachments') && $exp->galleryAttachments) ? $exp->galleryAttachments->map(fn ($attachment) => [
-                'id' => $attachment->mediaAsset->id,
-                'attachment_id' => $attachment->id,
-                'url' => $attachment->mediaAsset->url,
-                'filename' => $attachment->mediaAsset->filename,
-                'title' => $attachment->title ?? $attachment->mediaAsset->title,
-                'alt_text' => $attachment->alt_text ?? $attachment->mediaAsset->alt_text,
-                'caption' => $attachment->caption ?? $attachment->mediaAsset->caption,
-                'sort_order' => $attachment->sort_order,
-            ])->values() : [],
+            'media' => $media = $exp->getGroupedMedia(),
+            'hero_image' => $media['hero'] ?? null,
+            'card_image' => $media['card'] ?? null,
             'highlights' => ($exp->relationLoaded('highlights') && $exp->highlights) ? $exp->highlights->map(fn ($item) => [
                 'id' => $item->id,
                 'title' => $item->title,

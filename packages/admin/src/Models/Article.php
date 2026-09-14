@@ -3,12 +3,13 @@
 namespace Admin\Models;
 
 use Admin\Models\Concerns\HasFaqs;
+use Admin\Models\Concerns\HasMediaAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
 {
-    use SoftDeletes, HasFaqs;
+    use SoftDeletes, HasFaqs, HasMediaAttachments;
 
     protected $fillable = [
         'article_category_id',
@@ -17,7 +18,6 @@ class Article extends Model
         'summary',
         'body',
         'author_name',
-        'hero_image_id',
         'published_at',
         'updated_on',
         'is_featured',
@@ -48,10 +48,5 @@ class Article extends Model
     public function journeys()
     {
         return $this->belongsToMany(Journey::class, 'article_journey')->withPivot('sort_order')->withTimestamps();
-    }
-
-    public function heroImage()
-    {
-        return $this->belongsTo(MediaAsset::class, 'hero_image_id');
     }
 }

@@ -25,7 +25,6 @@
             <v-btn
               color="primary"
               variant="outlined"
-              size="small"
               @click="addLogisticsItem"
             >
               <v-icon start size="16">mdi-plus</v-icon>
@@ -37,7 +36,7 @@
             <v-icon size="32" color="secondary" class="mb-2">mdi-clipboard-text-outline</v-icon>
             <div class="text-body-2 font-weight-medium">No logistics facts defined yet.</div>
             <div class="text-caption mb-3">Add items like Transit Gateway, Permits, Baggage Limits, or Acclimatization Pacing.</div>
-            <v-btn color="primary" variant="tonal" size="small" @click="addLogisticsItem">
+            <v-btn color="primary" variant="tonal" @click="addLogisticsItem">
               Add First Fact
             </v-btn>
           </div>
@@ -63,7 +62,6 @@
                   <v-btn
                     icon
                     variant="text"
-                    size="x-small"
                     :disabled="index === 0"
                     @click="moveItem(index, -1)"
                   >
@@ -72,7 +70,6 @@
                   <v-btn
                     icon
                     variant="text"
-                    size="x-small"
                     :disabled="index === logisticsItems.length - 1"
                     @click="moveItem(index, 1)"
                   >
@@ -82,7 +79,6 @@
                     icon
                     color="error"
                     variant="text"
-                    size="x-small"
                     @click="removeItem(index)"
                   >
                     <v-icon size="16">mdi-trash-can-outline</v-icon>
@@ -230,7 +226,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { updateDestinationApi } from '@/api/destinations.api'
+import { updateDestinationApi } from '@/http/destinations.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({

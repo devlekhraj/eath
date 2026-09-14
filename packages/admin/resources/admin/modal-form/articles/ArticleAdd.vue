@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-0">
             <span>Add New Article</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -48,7 +48,7 @@
 import { ref, reactive, watch } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useRouter } from 'vue-router'
-import { createArticleApi } from '@/api/articles.api'
+import { createArticleApi } from '@/http/articles.http'
 
 const router = useRouter()
 const loading = ref(false)

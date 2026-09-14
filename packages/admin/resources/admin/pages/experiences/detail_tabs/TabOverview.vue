@@ -189,7 +189,7 @@
 <script setup>
 import { ref } from 'vue'
 import SummarnoteEditor from '@/components/SummarnoteEditor.vue'
-import { updateExperienceApi } from '@/api/experiences.api'
+import { updateExperienceApi } from '@/http/experiences.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({

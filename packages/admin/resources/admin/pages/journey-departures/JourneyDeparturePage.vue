@@ -11,7 +11,6 @@
 				<v-btn
 					color="primary"
 					variant="outlined"
-					size="small"
 					:to="{ name: 'adminJourneyPage' }"
 					prepend-icon="mdi-map-search-outline"
 				>
@@ -116,7 +115,6 @@
 					<template #item.actions="{ item }">
 						<div class="d-flex align-center justify-center ga-1">
 							<v-btn
-								size="small"
 								variant="outlined"
 								color="primary"
 								title="Edit in Journey detail"
@@ -126,7 +124,6 @@
 								Edit
 							</v-btn>
 							<v-btn
-								size="small"
 								variant="outlined"
 								color="error"
 								title="Delete departure"
@@ -148,7 +145,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useSnackbar } from '@/composables/snackbar';
 import { useGlobalModal } from '@/composables/globalModal';
 import { getStatusColor } from '@/utils/utils';
-import { getDeparturesApi, toggleDepartureActiveApi } from '@/api/journey-departures.api';
+import { getDeparturesApi, toggleDepartureActiveApi } from '@/http/journey-departures.http';
 import FormDelete from '@/modal-form/journey-departures/FormDelete.vue'
 
 const { showSuccess, showError } = useSnackbar();

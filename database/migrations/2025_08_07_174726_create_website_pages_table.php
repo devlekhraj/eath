@@ -16,9 +16,16 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('summary')->nullable();
+            $table->string('notice_title')->nullable();
+            $table->text('notice_body')->nullable();
             $table->longText('body')->nullable();
+            $table->string('cta_title')->nullable();
+            $table->text('cta_description')->nullable();
+            $table->string('cta_primary_btn_text')->nullable();
+            $table->string('cta_primary_btn_url', 500)->nullable();
+            $table->string('cta_secondary_btn_text')->nullable();
+            $table->string('cta_secondary_btn_url', 500)->nullable();
             $table->enum('type', ['standard', 'policy', 'safety', 'responsible', 'about', 'contact'])->default('standard');
-            $table->foreignId('hero_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();

@@ -150,7 +150,7 @@ import TabDepartures from './detail_tabs/TabDepartures.vue'
 import TabMedia from './detail_tabs/TabMedia.vue'
 import TabFaqs from './detail_tabs/TabFaqs.vue'
 import TabSeo from './detail_tabs/TabSeo.vue'
-import { getJourney } from '@/api/journeys.api'
+import { getJourney } from '@/http/journeys.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const route = useRoute()
@@ -181,7 +181,7 @@ const journeyUrl = computed(() => {
 })
 
 const headerImageUrl = computed(() => {
-  return journey?.card_image?.url || journey?.hero_image?.url || ''
+  return journey?.media?.card?.url || journey?.media?.hero?.url || journey?.card_image?.url || journey?.hero_image?.url || ''
 })
 
 async function fetchJourney() {

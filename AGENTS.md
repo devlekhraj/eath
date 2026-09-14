@@ -157,6 +157,18 @@ Before considering any task complete:
 
 ---
 
+## Admin Modal & Dialog Architecture
+
+Follow `.agents/rules/modal.md`.
+
+* All modal form components must live under `packages/admin/resources/admin/modal-form/{entity}/`.
+* All dialogs must be invoked exclusively through `useGlobalModal()` from `packages/admin/resources/admin/composables/globalModal.ts`.
+* No page, tab, or feature component may contain an inline `<v-dialog>` tag.
+* The only file permitted to contain `<v-dialog>` is `GlobalModalHost.vue`.
+* Do not place modal components in `pages/{entity}/modal/`, `components/`, or inline within `.vue` files.
+
+---
+
 # Website & Demo Global Design Standards
 
 ## 1. Universal Zero Border-Radius Policy
@@ -635,6 +647,9 @@ variant="text"
 ```
 
 Prefer existing global button defaults before adding local styles.
+
+### No `size="small"` or `size="x-small"` on Action Buttons
+Never add `size="small"` or `size="x-small"` to `<v-btn>` action buttons in tables, toolbars, headers, cards, or dialogs. Omit the `size` attribute entirely and let `<v-btn>` render using Vuetify's standard default dimensions.
 
 ---
 

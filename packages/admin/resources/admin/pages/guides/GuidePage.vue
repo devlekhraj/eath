@@ -50,15 +50,15 @@
 
                 <template #item.actions="{ item }">
                     <div class="d-flex align-center justify-center ga-1">
-                        <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminGuideDetailPage', params: { id: item.id } }" title="View guide details">
+                        <v-btn color="primary" variant="outlined" :to="{ name: 'adminGuideDetailPage', params: { id: item.id } }" title="View guide details">
                             <v-icon start size="14">mdi-eye</v-icon>
                             View
                         </v-btn>
-                        <v-btn size="small" color="secondary" variant="outlined" @click="openForm(item)" title="Edit guide">
+                        <v-btn color="secondary" variant="outlined" @click="openForm(item)" title="Edit guide">
                             <v-icon start size="14">mdi-pencil</v-icon>
                             Edit
                         </v-btn>
-                        <v-btn size="small" color="error" variant="outlined" @click="deleteItem(item)" title="Delete guide">
+                        <v-btn color="error" variant="outlined" @click="deleteItem(item)" title="Delete guide">
                             <v-icon start size="14">mdi-delete</v-icon>
                             Delete
                         </v-btn>
@@ -77,7 +77,7 @@ import { ref, onMounted, computed } from 'vue'
 
 import GuideForm from '@/modal-form/guides/GuideForm.vue'
 import GuideDeleteForm from '@/modal-form/guides/GuideDeleteForm.vue'
-import { getGuidesApi } from '@/api/guides.api'
+import { getGuidesApi } from '@/http/guides.http'
 
 
 const loading = ref(false)

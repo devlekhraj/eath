@@ -65,7 +65,6 @@
 
                     <div class="d-flex ga-2">
                       <v-btn
-                        size="small"
                         color="primary"
                         variant="outlined"
                         @click="handleOpenDay(itinerary)"
@@ -74,7 +73,6 @@
                         Edit Day
                       </v-btn>
                       <v-btn
-                        size="small"
                         color="primary"
                         variant="tonal"
                         @click="handleHighlights(itinerary)"
@@ -113,7 +111,6 @@
                             </div>
                             <v-btn
                               icon
-                              size="x-small"
                               variant="text"
                               color="primary"
                               @click="handleHighlights(itinerary, highlight)"
@@ -185,7 +182,6 @@
 
                 <div class="d-flex justify-end pt-3 mt-2 border-t">
                   <v-btn
-                    size="small"
                     variant="outlined"
                     color="primary"
                     @click="openHighlightForm(highlight)"

@@ -161,4 +161,61 @@ trait HasMediaAttachments
         }
         $query->delete();
     }
+
+    /**
+     * Get all media attachments grouped by collection.
+     * Gallery = array of multiple. All others = single object or null.
+     */
+    public function getGroupedMedia(): array
+    {
+        $attachments = $this->mediaAttachments()->with('mediaAsset')->get();
+        $grouped = $attachments->groupBy('collection');
+        $media = [];
+
+        foreach (MediaAttachment::COLLECTIONS as $collection) {
+            $items = $grouped->get($collection, collect());
+
+            if ($collection === MediaAttachment::COLLECTION_GALLERY) {
+                $media[$collection] = $items->map(fn ($a) => self::formatAttachment($a))->values()->all();
+            } else {
+                $media[$collection] = $items->isNotEmpty() ? self::formatAttachment($items->first()) : null;
+            }
+        }
+
+        return $media;
+    }
+
+    /**
+     * Sync multiple media collections from a keyed array.
+     * Example: ['hero' => 5, 'card' => 12, 'route_map' => null]
+     */
+    public function syncMediaFromRequest(array $mediaData): void
+    {
+        foreach ($mediaData as $collection => $assetId) {
+            if ($assetId) {
+                $this->syncMediaAttachment((int) $assetId, $collection);
+            } else {
+                $this->detachMediaCollection($collection);
+            }
+        }
+    }
+
+    protected static function formatAttachment(MediaAttachment $attachment): ?array
+    {
+        $asset = $attachment->mediaAsset;
+        if (!$asset) {
+            return null;
+        }
+
+        return [
+            'id'            => $asset->id,
+            'attachment_id' => $attachment->id,
+            'url'           => $asset->url,
+            'filename'      => $asset->filename,
+            'title'         => $attachment->title ?? $asset->title,
+            'alt_text'      => $attachment->alt_text ?? $asset->alt_text,
+            'caption'       => $attachment->caption ?? $asset->caption,
+            'sort_order'    => $attachment->sort_order,
+        ];
+    }
 }

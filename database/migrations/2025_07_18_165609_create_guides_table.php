@@ -22,7 +22,6 @@ return new class extends Migration
             $table->json('languages')->nullable();
             $table->json('qualifications')->nullable();
             $table->unsignedTinyInteger('years_experience')->nullable();
-            $table->foreignId('profile_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('sort_order')->default(0);

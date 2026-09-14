@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-0">
             <span>Add New Journey</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -41,7 +41,7 @@
 import { ref, reactive, watch } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useRouter } from 'vue-router'
-import { saveJourney } from '@/api/journeys.api'
+import { saveJourney } from '@/http/journeys.http'
 
 const router = useRouter()
 const loading = ref(false)

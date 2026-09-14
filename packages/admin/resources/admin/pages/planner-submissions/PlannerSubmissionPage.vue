@@ -110,7 +110,6 @@
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
           <v-btn
-            size="small"
             variant="outlined"
             color="primary"
             title="Inspect Planner Request"
@@ -120,7 +119,6 @@
             View
           </v-btn>
           <v-btn
-            size="small"
             variant="outlined"
             color="error"
             title="Delete Request"
@@ -140,7 +138,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
 import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
-import { getPlannerSubmissionsApi } from '@/api/planner-submissions.api'
+import { getPlannerSubmissionsApi } from '@/http/planner-submissions.http'
 import PlannerDetailModal from '@/modal-form/planner-submissions/PlannerDetailModal.vue'
 import PlannerDeleteModal from '@/modal-form/planner-submissions/PlannerDeleteModal.vue'
 

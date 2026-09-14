@@ -33,10 +33,10 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex align-center justify-center ga-2">
-                                        <v-btn size="x-small" icon variant="tonal" color="primary" @click="openSectionDialog(sec)">
+                                        <v-btn icon variant="tonal" color="primary" @click="openSectionDialog(sec)">
                                             <v-icon size="16">mdi-pencil</v-icon>
                                         </v-btn>
-                                        <v-btn size="x-small" icon variant="tonal" color="error" @click="deleteSection(sec)">
+                                        <v-btn icon variant="tonal" color="error" @click="deleteSection(sec)">
                                             <v-icon size="16">mdi-delete</v-icon>
                                         </v-btn>
                                     </div>

@@ -79,11 +79,11 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center ga-1">
-                    <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminArticleDetailPage', params: { id: item.id } }" title="View article">
+                    <v-btn color="primary" variant="outlined" :to="{ name: 'adminArticleDetailPage', params: { id: item.id } }" title="View article">
                         <v-icon start size="14">mdi-eye</v-icon>
                         View
                     </v-btn>
-                    <v-btn size="small" color="error" variant="outlined" @click="deleteItem(item)" title="Delete article">
+                    <v-btn color="error" variant="outlined" @click="deleteItem(item)" title="Delete article">
                         <v-icon start size="14">mdi-delete</v-icon>
                         Delete
                     </v-btn>
@@ -99,7 +99,7 @@ import { dotStyle } from '@/utils/utils'
 import { useGlobalModal } from '@/composables/globalModal'
 import ArticleAdd from '@/modal-form/articles/ArticleAdd.vue'
 import ArticleDelete from '@/modal-form/articles/ArticleDelete.vue'
-import { getArticlesApi } from '@/api/articles.api'
+import { getArticlesApi } from '@/http/articles.http'
 
 const { open: openModal } = useGlobalModal()
 

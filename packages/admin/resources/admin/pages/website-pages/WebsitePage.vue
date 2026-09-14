@@ -77,11 +77,11 @@
 
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
-          <v-btn size="small" variant="outlined" color="primary" :to="{ name: 'adminWebsitePageDetail', params: { id: item.id } }" title="Edit website page">
+          <v-btn variant="outlined" color="primary" :to="{ name: 'adminWebsitePageDetail', params: { id: item.id } }" title="Edit website page">
             <v-icon start size="14">mdi-pencil</v-icon>
             Edit
           </v-btn>
-          <v-btn size="small" variant="outlined" color="error" @click="deleteItem(item)" title="Delete website page">
+          <v-btn variant="outlined" color="error" @click="deleteItem(item)" title="Delete website page">
             <v-icon start size="14">mdi-delete</v-icon>
             Delete
           </v-btn>
@@ -94,7 +94,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import http from '@/http.config'
-import { getWebsitePagesApi } from '@/api/website-pages.api'
+import { getWebsitePagesApi } from '@/http/website-pages.http'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import PageForm from '@/modal-form/website-pages/PageForm.vue'

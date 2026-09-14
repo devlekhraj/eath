@@ -22,8 +22,8 @@ class DestinationController extends Controller
     {
         $query = Destination::query()
             ->with([
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
             ])
             ->withCount('journeys')
             ->orderBy('sort_order', 'asc')
@@ -56,9 +56,9 @@ class DestinationController extends Controller
         $destination = Destination::query()
             ->withCount('journeys')
             ->with([
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
                 'logistics',
                 'journeys' => function ($q) {
                     $q->select(['id', 'destination_id', 'name', 'slug', 'duration_days', 'price_minor', 'is_active'])
@@ -101,15 +101,23 @@ class DestinationController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:300'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media.card' => ['nullable', 'integer', 'exists:media_assets,id'],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'card_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'logistics' => ['nullable', 'array'],
         ]);
 
-        $heroImageId = $validated['hero_image_id'] ?? null;
-        $cardImageId = $validated['card_image_id'] ?? null;
+        $mediaData = $validated['media'] ?? [];
+        if ($request->has('hero_image_id')) {
+            $mediaData['hero'] = $request->input('hero_image_id');
+        }
+        if ($request->has('card_image_id')) {
+            $mediaData['card'] = $request->input('card_image_id');
+        }
         $logisticsData = $validated['logistics'] ?? null;
-        unset($validated['hero_image_id'], $validated['card_image_id'], $validated['logistics']);
+        unset($validated['media'], $validated['logistics'], $validated['hero_image_id'], $validated['card_image_id']);
 
         $validated['slug'] = $validated['slug'] ?? Str::slug($validated['name']);
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
@@ -121,20 +129,8 @@ class DestinationController extends Controller
             $validated
         );
 
-        if ($request->has('hero_image_id')) {
-            if ($heroImageId) {
-                $destination->syncMediaAttachment((int) $heroImageId, MediaAttachment::COLLECTION_HERO);
-            } else {
-                $destination->detachMediaCollection(MediaAttachment::COLLECTION_HERO);
-            }
-        }
-
-        if ($request->has('card_image_id')) {
-            if ($cardImageId) {
-                $destination->syncMediaAttachment((int) $cardImageId, MediaAttachment::COLLECTION_CARD);
-            } else {
-                $destination->detachMediaCollection(MediaAttachment::COLLECTION_CARD);
-            }
+        if ($request->has('media') || $request->has('hero_image_id') || $request->has('card_image_id')) {
+            $destination->syncMediaFromRequest($mediaData);
         }
 
         if ($request->has('logistics') && is_array($logisticsData)) {
@@ -162,9 +158,7 @@ class DestinationController extends Controller
         return response()->json([
             'success' => true,
             'data' => new DestinationResource($destination->fresh()->load([
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
                 'logistics',
             ])->loadCount('journeys')),
             'message' => $id ? 'Destination updated successfully.' : 'Destination created successfully.',
@@ -197,15 +191,23 @@ class DestinationController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:300'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media.card' => ['nullable', 'integer', 'exists:media_assets,id'],
             'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'card_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
             'logistics' => ['nullable', 'array'],
         ]);
 
-        $heroImageId = $validated['hero_image_id'] ?? null;
-        $cardImageId = $validated['card_image_id'] ?? null;
+        $mediaData = $validated['media'] ?? [];
+        if ($request->has('hero_image_id')) {
+            $mediaData['hero'] = $request->input('hero_image_id');
+        }
+        if ($request->has('card_image_id')) {
+            $mediaData['card'] = $request->input('card_image_id');
+        }
         $logisticsData = $validated['logistics'] ?? null;
-        unset($validated['hero_image_id'], $validated['card_image_id'], $validated['logistics']);
+        unset($validated['media'], $validated['logistics'], $validated['hero_image_id'], $validated['card_image_id']);
 
         if (array_key_exists('name', $validated) && !array_key_exists('slug', $validated)) {
             $validated['slug'] = Str::slug($validated['name']);
@@ -213,20 +215,8 @@ class DestinationController extends Controller
 
         $destination->update($validated);
 
-        if ($request->has('hero_image_id')) {
-            if ($heroImageId) {
-                $destination->syncMediaAttachment((int) $heroImageId, MediaAttachment::COLLECTION_HERO);
-            } else {
-                $destination->detachMediaCollection(MediaAttachment::COLLECTION_HERO);
-            }
-        }
-
-        if ($request->has('card_image_id')) {
-            if ($cardImageId) {
-                $destination->syncMediaAttachment((int) $cardImageId, MediaAttachment::COLLECTION_CARD);
-            } else {
-                $destination->detachMediaCollection(MediaAttachment::COLLECTION_CARD);
-            }
+        if ($request->has('media') || $request->has('hero_image_id') || $request->has('card_image_id')) {
+            $destination->syncMediaFromRequest($mediaData);
         }
 
         if ($request->has('logistics') && is_array($logisticsData)) {
@@ -255,9 +245,9 @@ class DestinationController extends Controller
             'success' => true,
             'message' => 'Destination updated successfully.',
             'data' => new DestinationResource($destination->fresh()->load([
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
                 'logistics',
             ])->loadCount('journeys')),
         ]);
@@ -299,9 +289,9 @@ class DestinationController extends Controller
             'success' => true,
             'message' => 'Media attached successfully.',
             'data' => new DestinationResource($destination->fresh()->load([
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
             ])->loadCount('journeys')),
         ]);
     }
@@ -324,9 +314,9 @@ class DestinationController extends Controller
             'success' => true,
             'message' => 'Image details updated successfully.',
             'data' => new DestinationResource($destination->fresh()->load([
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
             ])->loadCount('journeys')),
         ]);
     }
@@ -341,9 +331,9 @@ class DestinationController extends Controller
             'success' => true,
             'message' => 'Media removed successfully.',
             'data' => new DestinationResource($destination->fresh()->load([
-                'heroAttachment.mediaAsset',
-                'cardAttachment.mediaAsset',
-                'galleryAttachments.mediaAsset',
+                'mediaAttachments.mediaAsset',
+                
+                
             ])->loadCount('journeys')),
         ]);
     }

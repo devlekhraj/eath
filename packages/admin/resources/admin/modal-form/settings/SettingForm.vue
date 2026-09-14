@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-0">
             <span>Setting Form</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="$emit('close')">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="$emit('close')">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -64,8 +64,8 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { saveSettingApi } from '@/api/settings.api'
-import { uploadGalleryImageApi } from '@/api/gallery.api'
+import { saveSettingApi } from '@/http/settings.http'
+import { uploadGalleryImageApi } from '@/http/gallery.http'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])

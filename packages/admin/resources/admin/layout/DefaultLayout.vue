@@ -24,7 +24,7 @@
             </div>
 
             <div class="d-flex align-center justify-center flex-shrink-0" style="width: 44px; height: 44px">
-              <v-btn :icon="isBaseDrawerRail ? 'mdi-chevron-right' : 'mdi-chevron-left'" variant="text" size="small"
+              <v-btn :icon="isBaseDrawerRail ? 'mdi-chevron-right' : 'mdi-chevron-left'" variant="text"
                 class="text-white" aria-label="Toggle rail mode" @click.stop="toggleRail" />
             </div>
           </div>
@@ -148,7 +148,7 @@
             </div>
 
             <div class="d-flex align-center justify-center flex-shrink-0" style="width: 44px; height: 44px">
-              <v-btn icon="mdi-close" variant="text" size="small" class="text-white" aria-label="Close menu"
+              <v-btn icon="mdi-close" variant="text" class="text-white" aria-label="Close menu"
                 @click.stop="mobileDrawer = false" />
             </div>
           </div>
@@ -220,7 +220,7 @@
           <template #activator="{ props }">
             <v-badge :content="notificationCount" :model-value="notificationCount > 0" color="error" overlap
               offset-x="6" offset-y="6">
-              <v-btn v-bind="props" icon variant="tonal" color="primary" size="small" aria-label="Notifications menu">
+              <v-btn v-bind="props" icon variant="tonal" color="primary" aria-label="Notifications menu">
                 <v-icon size="20">mdi-bell-outline</v-icon>
               </v-btn>
             </v-badge>
@@ -241,7 +241,7 @@
         <!-- User Profile Menu -->
         <v-menu location="bottom end" transition="scale-transition" min-width="240">
           <template #activator="{ props }">
-            <v-btn v-bind="props" icon variant="tonal" color="primary" size="small" aria-label="Profile menu">
+            <v-btn v-bind="props" icon variant="tonal" color="primary" aria-label="Profile menu">
               <v-avatar size="32" color="primary">
                 <span class="text-caption font-weight-bold text-white">{{ userInitials }}</span>
               </v-avatar>
@@ -297,7 +297,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter, type RouteLocationRaw } from 'vue-router';
 import { useDisplay, useTheme } from 'vuetify';
-import { logoutApi, profileApi, type UserProfile } from '@/api/auth.api';
+import { logoutApi, profileApi, type UserProfile } from '@/http/auth.http';
 
 const router = useRouter();
 const route = useRoute();

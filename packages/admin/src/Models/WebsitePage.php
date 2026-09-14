@@ -32,7 +32,6 @@ class WebsitePage extends Model
         'summary',
         'body',
         'type',
-        'hero_image_id',
         'notice_title',
         'notice_body',
         'cta_title',
@@ -59,8 +58,4 @@ class WebsitePage extends Model
         return $this->hasMany(WebsitePageSection::class)->orderBy('sort_order');
     }
 
-    public function heroImage()
-    {
-        return $this->belongsTo(MediaAsset::class, 'hero_image_id');
-    }
 }

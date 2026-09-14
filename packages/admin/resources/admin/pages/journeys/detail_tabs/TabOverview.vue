@@ -443,7 +443,6 @@
                     </div>
                   </div>
                   <v-btn
-                    size="small"
                     color="primary"
                     variant="tonal"
                     prepend-icon="mdi-plus"
@@ -479,14 +478,12 @@
                         <v-btn
                           icon="mdi-arrow-up"
                           variant="text"
-                          size="x-small"
                           :disabled="index === 0"
                           @click="moveSafetyItem(index, -1)"
                         />
                         <v-btn
                           icon="mdi-arrow-down"
                           variant="text"
-                          size="x-small"
                           :disabled="index === form.safety_items.length - 1"
                           @click="moveSafetyItem(index, 1)"
                         />
@@ -494,7 +491,6 @@
                           icon="mdi-delete-outline"
                           variant="text"
                           color="error"
-                          size="x-small"
                           @click="removeSafetyItem(index)"
                         />
                       </div>
@@ -639,8 +635,8 @@
 <script setup>
 import { ref, reactive, watch, onMounted } from 'vue'
 import SummarnoteEditor from '@/components/SummarnoteEditor.vue'
-import { updateJourneyApi } from '@/api/journeys.api'
-import { getDestinationsApi } from '@/api/destinations.api'
+import { updateJourneyApi } from '@/http/journeys.http'
+import { getDestinationsApi } from '@/http/destinations.http'
 import { useSnackbar } from '@/composables/snackbar'
 import http from '@/http.config'
 

@@ -23,7 +23,7 @@
 import SummarnoteEditor from '@components/SummarnoteEditor.vue';
 import { reactive, ref, watch } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { saveJourney } from '@/api/journeys.api'
+import { saveJourney } from '@/http/journeys.http'
 
 const { showSuccess, showError } = useSnackbar()
 

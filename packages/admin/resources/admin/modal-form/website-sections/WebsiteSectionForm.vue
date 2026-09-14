@@ -4,7 +4,7 @@
       <span>
         {{ props.item?.id ? 'Edit Website Section' : 'Add Website Section' }}
       </span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+      <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -115,7 +115,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { createWebsiteSectionApi, updateWebsiteSectionApi } from '@/api/website-sections.api'
+import { createWebsiteSectionApi, updateWebsiteSectionApi } from '@/http/website-sections.http'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])

@@ -13,7 +13,7 @@ class TravelerStoryController extends Controller
     public function index(Request $request)
     {
         $query = TravelerStory::query()
-            ->with(['journey:id,name,slug', 'destination:id,name,slug', 'heroImage:id,path,alt_text'])
+            ->with(['journey:id,name,slug', 'destination:id,name,slug', 'mediaAttachments.mediaAsset'])
             ->orderBy('created_at', 'desc');
 
         if ($request->filled('search')) {
@@ -59,7 +59,7 @@ class TravelerStoryController extends Controller
 
     public function show($id)
     {
-        $story = TravelerStory::with(['journey:id,name,slug', 'destination:id,name,slug', 'heroImage'])->findOrFail($id);
+        $story = TravelerStory::with(['journey:id,name,slug', 'destination:id,name,slug', 'mediaAttachments.mediaAsset'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -80,7 +80,8 @@ class TravelerStoryController extends Controller
             'traveler_name' => ['nullable', 'string', 'max:255'],
             'traveler_country' => ['nullable', 'string', 'max:255'],
             'traveled_on' => ['nullable', 'date'],
-            'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
@@ -88,6 +89,9 @@ class TravelerStoryController extends Controller
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:300'],
         ]);
+
+        $mediaData = $validated['media'] ?? [];
+        unset($validated['media']);
 
         $validated['slug'] = !empty($validated['slug']) ? Str::slug($validated['slug']) : Str::slug($validated['title']);
         $validated['is_featured'] = $request->has('is_featured') ? $request->boolean('is_featured') : false;
@@ -99,7 +103,12 @@ class TravelerStoryController extends Controller
         }
 
         $story = TravelerStory::create($validated);
-        $story->load(['journey:id,name,slug', 'destination:id,name,slug', 'heroImage']);
+
+        if ($request->has('media')) {
+            $story->syncMediaFromRequest($mediaData);
+        }
+
+        $story->load(['journey:id,name,slug', 'destination:id,name,slug', 'mediaAttachments.mediaAsset']);
 
         return response()->json([
             'success' => true,
@@ -123,7 +132,8 @@ class TravelerStoryController extends Controller
             'traveler_name' => ['nullable', 'string', 'max:255'],
             'traveler_country' => ['nullable', 'string', 'max:255'],
             'traveled_on' => ['nullable', 'date'],
-            'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
@@ -131,6 +141,9 @@ class TravelerStoryController extends Controller
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:300'],
         ]);
+
+        $mediaData = $validated['media'] ?? [];
+        unset($validated['media']);
 
         if (array_key_exists('title', $validated) && empty($validated['slug']) && empty($story->slug)) {
             $validated['slug'] = Str::slug($validated['title']);
@@ -146,7 +159,12 @@ class TravelerStoryController extends Controller
         }
 
         $story->update($validated);
-        $story->load(['journey:id,name,slug', 'destination:id,name,slug', 'heroImage']);
+
+        if ($request->has('media')) {
+            $story->syncMediaFromRequest($mediaData);
+        }
+
+        $story->load(['journey:id,name,slug', 'destination:id,name,slug', 'mediaAttachments.mediaAsset']);
 
         return response()->json([
             'success' => true,
@@ -211,7 +229,8 @@ class TravelerStoryController extends Controller
 
     private function formatStory(TravelerStory $story): array
     {
-        $bannerUrl = $story->heroImage ? $story->heroImage->path : null;
+        $media = $story->getGroupedMedia();
+        $bannerUrl = $media['hero']['url'] ?? null;
 
         return [
             'id' => $story->id,
@@ -234,9 +253,8 @@ class TravelerStoryController extends Controller
             'traveler_name' => $story->traveler_name,
             'traveler_country' => $story->traveler_country,
             'traveled_on' => $story->traveled_on ? $story->traveled_on->toDateString() : null,
-            'hero_image_id' => $story->hero_image_id,
+            'media' => $media,
             'banner_url' => $bannerUrl,
-            'hero_image' => $story->heroImage,
             'is_featured' => (bool) $story->is_featured,
             'is_active' => (bool) $story->is_active,
             'is_published' => (bool) $story->is_published,

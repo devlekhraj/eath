@@ -23,7 +23,7 @@ export interface WebsitePage {
     body?: string | null
     content?: string | null // alias
     type?: 'standard' | 'policy' | 'safety' | 'responsible' | 'about' | 'contact' | string
-    hero_image_id?: number | null
+    media?: Record<string, unknown> | null
     banner_url?: string | null
     is_active?: boolean
     is_published?: boolean

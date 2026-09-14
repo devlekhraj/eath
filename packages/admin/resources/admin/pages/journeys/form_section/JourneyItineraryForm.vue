@@ -50,7 +50,7 @@
                                                     </div>
                                                     <v-spacer></v-spacer>
                                                     <div>
-                                                        <v-btn color="primary" icon size="small" @click="editHighlight(itinerary, highlight)" variant="tonal">
+                                                        <v-btn color="primary" icon @click="editHighlight(itinerary, highlight)" variant="tonal">
                                                             <v-icon>mdi-pencil</v-icon>
                                                         </v-btn>
                                                     </div>

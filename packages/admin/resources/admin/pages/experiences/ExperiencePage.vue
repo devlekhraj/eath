@@ -75,15 +75,15 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center ga-1">
-                    <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminExperienceDetailPage', params: { id: item.id } }" title="View experience details">
+                    <v-btn color="primary" variant="outlined" :to="{ name: 'adminExperienceDetailPage', params: { id: item.id } }" title="View experience details">
                         <v-icon start size="14">mdi-eye</v-icon>
                         View
                     </v-btn>
-                    <v-btn size="small" color="secondary" variant="outlined" @click="handleOpen(item)" title="Quick edit">
+                    <v-btn color="secondary" variant="outlined" @click="handleOpen(item)" title="Quick edit">
                         <v-icon start size="14">mdi-pencil</v-icon>
                         Edit
                     </v-btn>
-                    <v-btn size="small" color="error" variant="outlined" @click="handleDelete(item)" title="Delete experience">
+                    <v-btn color="error" variant="outlined" @click="handleDelete(item)" title="Delete experience">
                         <v-icon start size="14">mdi-delete</v-icon>
                         Delete
                     </v-btn>
@@ -106,7 +106,7 @@ import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import Form from '@/modal-form/experiences/Form.vue'
 import FormDelete from '@/modal-form/experiences/FormDelete.vue'
-import { getExperiencesApi, toggleExperienceActiveApi } from '@/api/experiences.api'
+import { getExperiencesApi, toggleExperienceActiveApi } from '@/http/experiences.http'
 
 const { open: openModal } = useGlobalModal()
 

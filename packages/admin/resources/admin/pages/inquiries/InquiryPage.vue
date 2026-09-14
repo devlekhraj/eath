@@ -117,7 +117,6 @@
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
           <v-btn
-            size="small"
             variant="outlined"
             color="primary"
             title="Inspect Inquiry"
@@ -127,7 +126,6 @@
             View
           </v-btn>
           <v-btn
-            size="small"
             variant="outlined"
             color="error"
             title="Delete Inquiry"
@@ -147,7 +145,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useGlobalModal } from '@/composables/globalModal'
 import { getStatusColor } from '@/utils/utils'
 const { open: openModal } = useGlobalModal()
-import { getInquiriesApi } from '@/api/inquiries.api'
+import { getInquiriesApi } from '@/http/inquiries.http'
 import InquiryDetailModal from '@/modal-form/inquiries/InquiryDetailModal.vue'
 import InquiryDeleteModal from '@/modal-form/inquiries/InquiryDeleteModal.vue'
 

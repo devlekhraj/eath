@@ -119,7 +119,7 @@
 
 <script setup>
 import { computed, ref, toRefs, watch } from 'vue'
-import { createBlogApi, updateBlogApi } from '@/api/articles.api'
+import { createBlogApi, updateBlogApi } from '@/http/articles.http'
 
 const props = defineProps({
     form: { type: Object, required: true },

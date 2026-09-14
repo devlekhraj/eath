@@ -60,10 +60,10 @@
                                         <p class="text-capitalize">{{ item.description ||'n/a' }}</p>
                                     </td>
                                     <td class="py-2">
-                                        <v-btn icon size="x-small" variant="tonal" color="primary" @click="editItem(item, false)">
+                                        <v-btn icon variant="tonal" color="primary" @click="editItem(item, false)">
                                             <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
-                                        <v-btn icon size="x-small" variant="tonal" color="error" class="ml-2" @click="deleteItem(item)">
+                                        <v-btn icon variant="tonal" color="error" class="ml-2" @click="deleteItem(item)">
                                             <v-icon>mdi-delete</v-icon>
                                         </v-btn>
                                     </td>
@@ -158,7 +158,7 @@ async function handleSubmit() {
 
 import JourneyPriceDelete from '@/modal-form/journeys/JourneyPriceDelete.vue'
 import JourneyPriceForm from '@/modal-form/journeys/JourneyPriceForm.vue'
-import { saveJourneyPrice, deleteJourneyPrice } from '@/api/journeys.api'
+import { saveJourneyPrice, deleteJourneyPrice } from '@/http/journeys.http'
 
 function deleteItem(item) {
     console.log({ item });

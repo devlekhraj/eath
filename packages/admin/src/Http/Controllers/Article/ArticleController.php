@@ -15,7 +15,7 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $query = Article::query()
-            ->with(['category', 'heroImage'])
+            ->with(['category', 'mediaAttachments.mediaAsset'])
             ->withCount(['sections', 'journeys'])
             ->orderBy('created_at', 'desc');
 
@@ -53,7 +53,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-        $article = Article::with(['category', 'heroImage', 'sections', 'journeys'])->findOrFail($id);
+        $article = Article::with(['category', 'mediaAttachments.mediaAsset', 'sections', 'journeys'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -73,7 +73,8 @@ class ArticleController extends Controller
             'summary' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],
             'author_name' => ['nullable', 'string', 'max:255'],
-            'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
@@ -88,6 +89,7 @@ class ArticleController extends Controller
             'journey_ids' => ['nullable', 'array'],
             'journey_ids.*' => ['integer', 'exists:journeys,id'],
         ]);
+        $mediaData = $payload['media'] ?? [];
 
         $createData = [
             'title' => $payload['title'],
@@ -96,7 +98,6 @@ class ArticleController extends Controller
             'summary' => $payload['summary'] ?? null,
             'body' => $payload['body'] ?? null,
             'author_name' => $payload['author_name'] ?? 'Admin',
-            'hero_image_id' => $payload['hero_image_id'] ?? null,
             'is_featured' => $payload['is_featured'] ?? false,
             'is_active' => $payload['is_active'] ?? true,
             'is_published' => $payload['is_published'] ?? false,
@@ -107,6 +108,10 @@ class ArticleController extends Controller
         ];
 
         $article = Article::create($createData);
+
+        if (!empty($mediaData)) {
+            $article->syncMediaFromRequest($mediaData);
+        }
 
         if (!empty($validated['sections'])) {
             foreach ($validated['sections'] as $idx => $sec) {
@@ -122,7 +127,7 @@ class ArticleController extends Controller
             $article->journeys()->sync($validated['journey_ids']);
         }
 
-        $article->load(['category', 'heroImage', 'sections', 'journeys']);
+        $article->load(['category', 'mediaAttachments.mediaAsset', 'sections', 'journeys']);
 
         return response()->json([
             'success' => true,
@@ -145,7 +150,8 @@ class ArticleController extends Controller
             'summary' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],
             'author_name' => ['nullable', 'string', 'max:255'],
-            'hero_image_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'media' => ['nullable', 'array'],
+            'media.hero' => ['nullable', 'integer', 'exists:media_assets,id'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
@@ -180,9 +186,6 @@ class ArticleController extends Controller
         if (array_key_exists('author_name', $payload)) {
             $updateData['author_name'] = $payload['author_name'];
         }
-        if (array_key_exists('hero_image_id', $payload)) {
-            $updateData['hero_image_id'] = $payload['hero_image_id'];
-        }
         if (array_key_exists('is_featured', $payload)) {
             $updateData['is_featured'] = $payload['is_featured'];
         }
@@ -210,11 +213,15 @@ class ArticleController extends Controller
 
         $article->update($updateData);
 
+        if (array_key_exists('media', $payload)) {
+            $article->syncMediaFromRequest($payload['media'] ?? []);
+        }
+
         if (array_key_exists('journey_ids', $validated)) {
             $article->journeys()->sync($validated['journey_ids'] ?? []);
         }
 
-        $article->load(['category', 'heroImage', 'sections', 'journeys']);
+        $article->load(['category', 'mediaAttachments.mediaAsset', 'sections', 'journeys']);
 
         return response()->json([
             'success' => true,
@@ -378,8 +385,8 @@ class ArticleController extends Controller
             $payload['author_name'] = $request->input('author');
         }
 
-        if ($request->has('hero_image_id')) {
-            $payload['hero_image_id'] = $request->input('hero_image_id');
+        if ($request->has('media')) {
+            $payload['media'] = $request->input('media');
         }
         if ($request->has('is_featured')) {
             $payload['is_featured'] = $request->boolean('is_featured');
@@ -408,7 +415,8 @@ class ArticleController extends Controller
 
     private function formatArticleListItem(Article $article): array
     {
-        $bannerUrl = $article->heroImage ? $article->heroImage->path : null;
+        $media = $article->getGroupedMedia();
+        $bannerUrl = $media['hero']['url'] ?? null;
 
         return [
             'id' => $article->id,
@@ -425,6 +433,7 @@ class ArticleController extends Controller
                 'name' => $article->category->name,
                 'slug' => $article->category->slug,
             ] : null,
+            'media' => $media,
             'status' => (bool) $article->is_active, // alias
             'is_active' => (bool) $article->is_active,
             'is_published' => (bool) $article->is_published,
@@ -442,7 +451,8 @@ class ArticleController extends Controller
     private function formatArticleDetail(Article $article): array
     {
         $categorySlug = $article->category ? $article->category->slug : 'general';
-        $bannerUrl = $article->heroImage ? $article->heroImage->path : null;
+        $media = $article->getGroupedMedia();
+        $bannerUrl = $media['hero']['url'] ?? null;
 
         return [
             'id' => $article->id,
@@ -461,8 +471,7 @@ class ArticleController extends Controller
                 'name' => $article->category->name,
                 'slug' => $article->category->slug,
             ] : null,
-            'hero_image_id' => $article->hero_image_id,
-            'hero_image' => $article->heroImage,
+            'media' => $media,
             'banner_url' => $bannerUrl,
             'status' => (bool) $article->is_active,
             'is_active' => (bool) $article->is_active,

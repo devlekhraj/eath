@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="d-flex align-center justify-space-between py-0">
       <span>Upload Media Asset</span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+      <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
         <v-icon size="18">mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -32,7 +32,6 @@
                 <v-img :src="previewUrl" height="220" cover class="border" />
                 <v-btn
                   icon
-                  size="x-small"
                   color="error"
                   variant="flat"
                   class="position-absolute"
@@ -122,7 +121,7 @@
 <script setup>
 import { ref, reactive, onUnmounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { uploadMediaAssetApi } from '@/api/media-assets.api'
+import { uploadMediaAssetApi } from '@/http/media-assets.http'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])

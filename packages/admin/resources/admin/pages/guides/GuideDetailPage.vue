@@ -28,7 +28,7 @@
                         </v-chip>
                     </div>
                 </div>
-                <v-btn icon size="small" variant="tonal" color="primary" style="position: absolute;top:10px; right: 10px;" @click="openForm(guide)"><v-icon>mdi-pencil</v-icon></v-btn>
+                <v-btn icon variant="tonal" color="primary" style="position: absolute;top:10px; right: 10px;" @click="openForm(guide)"><v-icon>mdi-pencil</v-icon></v-btn>
             </v-card>
 
 
@@ -72,8 +72,8 @@ import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import { getStatusColor } from '@/utils/utils'
 import GuideForm from '@/modal-form/guides/GuideForm.vue'
-import { getGuideByIdApi } from '@/api/guides.api'
-import { uploadGalleryImageApi } from '@/api/gallery.api'
+import { getGuideByIdApi } from '@/http/guides.http'
+import { uploadGalleryImageApi } from '@/http/gallery.http'
 
 const { open: openModal } = useGlobalModal()
 

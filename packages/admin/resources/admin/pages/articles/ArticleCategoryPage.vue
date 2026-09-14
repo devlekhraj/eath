@@ -66,11 +66,11 @@
 
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
-          <v-btn size="small" color="primary" variant="outlined" @click="handleOpen(item)" title="Edit category">
+          <v-btn color="primary" variant="outlined" @click="handleOpen(item)" title="Edit category">
             <v-icon start size="14">mdi-pencil</v-icon>
             Edit
           </v-btn>
-          <v-btn size="small" color="error" variant="outlined" @click="handleDelete(item)" title="Delete category">
+          <v-btn color="error" variant="outlined" @click="handleDelete(item)" title="Delete category">
             <v-icon start size="14">mdi-delete</v-icon>
             Delete
           </v-btn>

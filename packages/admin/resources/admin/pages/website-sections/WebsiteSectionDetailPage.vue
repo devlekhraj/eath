@@ -34,11 +34,11 @@
 				</template>
 				<template #item.actions="{ item }">
 					<div class="d-flex align-center justify-center ga-1">
-						<v-btn size="small" variant="outlined" color="primary" @click="handleEdit(item)" title="Edit image">
+						<v-btn variant="outlined" color="primary" @click="handleEdit(item)" title="Edit image">
 							<v-icon start size="14">mdi-pencil</v-icon>
 							Edit
 						</v-btn>
-						<v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete image">
+						<v-btn variant="outlined" color="error" @click="handleDelete(item)" title="Delete image">
 							<v-icon start size="14">mdi-delete</v-icon>
 							Delete
 						</v-btn>
@@ -59,7 +59,7 @@ import { useRoute } from 'vue-router'
 import SelectGalleryImage from '@components/gallery/SelectGalleryImage.vue'
 import FormGalleryUpdate from '@components/gallery/FormGalleryUpdate.vue'
 import FormImageDelete from '@components/gallery/FormImageDelete.vue'
-import { getBannerByIdApi } from '@/api/website-sections.api'
+import { getBannerByIdApi } from '@/http/website-sections.http'
 import { useGlobalModal } from '@/composables/globalModal'
 
 const emit = defineEmits(['refresh'])

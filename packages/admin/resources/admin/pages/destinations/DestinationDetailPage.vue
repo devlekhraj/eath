@@ -129,7 +129,7 @@ import TabMedia from './detail_tabs/TabMedia.vue'
 import TabJourneys from './detail_tabs/TabJourneys.vue'
 import TabFaqs from './detail_tabs/TabFaqs.vue'
 import TabSeo from './detail_tabs/TabSeo.vue'
-import { getDestinationByIdApi } from '@/api/destinations.api'
+import { getDestinationByIdApi } from '@/http/destinations.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const route = useRoute()

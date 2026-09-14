@@ -70,15 +70,15 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center ga-1">
-                    <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'admin.destination.detail', params: { id: item.id } }" title="View destination details">
+                    <v-btn color="primary" variant="outlined" :to="{ name: 'admin.destination.detail', params: { id: item.id } }" title="View destination details">
                         <v-icon start size="14">mdi-eye</v-icon>
                         View
                     </v-btn>
-                    <v-btn size="small" color="secondary" variant="outlined" @click="handleOpen(item)" title="Edit destination">
+                    <v-btn color="secondary" variant="outlined" @click="handleOpen(item)" title="Edit destination">
                         <v-icon start size="14">mdi-pencil</v-icon>
                         Edit
                     </v-btn>
-                    <v-btn size="small" color="error" variant="outlined" @click="handleDelete(item)" title="Delete destination">
+                    <v-btn color="error" variant="outlined" @click="handleDelete(item)" title="Delete destination">
                         <v-icon start size="14">mdi-delete</v-icon>
                         Delete
                     </v-btn>

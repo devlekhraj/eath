@@ -113,7 +113,7 @@
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { loginApi } from '@/api/auth.api'
+import { loginApi } from '@/http/auth.http'
 
 const credentials = reactive({
   username: '',

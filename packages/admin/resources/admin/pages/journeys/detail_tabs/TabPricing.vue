@@ -54,7 +54,6 @@
                 <td class="text-right">
                   <div class="d-flex align-center justify-end ga-1">
                     <v-btn
-                      size="small"
                       color="primary"
                       variant="outlined"
                       @click="openPriceModal(item)"
@@ -63,7 +62,6 @@
                       Edit
                     </v-btn>
                     <v-btn
-                      size="small"
                       color="error"
                       variant="outlined"
                       @click="deletePriceModal(item)"
@@ -174,7 +172,6 @@
                     </div>
                     <v-btn
                       icon
-                      size="x-small"
                       variant="text"
                       color="error"
                       @click="handleDeleteService(item)"
@@ -214,7 +211,6 @@
                     </div>
                     <v-btn
                       icon
-                      size="x-small"
                       variant="text"
                       color="error"
                       @click="handleDeleteService(item)"

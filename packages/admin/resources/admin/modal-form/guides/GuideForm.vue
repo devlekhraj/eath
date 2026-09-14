@@ -4,7 +4,7 @@
             <div class="w-100 d-flex justify-between align-center">
         <span>{{ item && item.id ? 'Update Guide Profile' : 'Add New Guide' }}</span>
       </div>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -62,7 +62,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import AppPhoneInput from '@/components/AppPhoneInput.vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { createGuideApi } from '@/api/guides.api'
+import { createGuideApi } from '@/http/guides.http'
 
 const emit = defineEmits(['close', 'saved'])
 const { showSuccess, showError } = useSnackbar()

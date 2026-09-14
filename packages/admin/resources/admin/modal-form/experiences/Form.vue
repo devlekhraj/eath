@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="d-flex align-center justify-space-between py-0">
             <span class="text-subtitle-1 font-weight-bold text-uppercase">{{ form.id ? 'Edit Experience' : 'Add Experience' }}</span>
-            <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="handleCancel">
+            <v-btn icon variant="text" aria-label="Close dialog" @click="handleCancel">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
@@ -103,7 +103,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { createExperienceApi } from '@/api/experiences.api'
+import { createExperienceApi } from '@/http/experiences.http'
 
 const { showSuccess, showError } = useSnackbar()
 const emit = defineEmits(['close', 'saved'])

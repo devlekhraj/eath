@@ -72,7 +72,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { updateDestinationApi } from '@/api/destinations.api'
+import { updateDestinationApi } from '@/http/destinations.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({

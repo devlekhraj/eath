@@ -76,7 +76,7 @@
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import { updateJourneyApi } from '@/api/journeys.api'
+import { updateJourneyApi } from '@/http/journeys.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({

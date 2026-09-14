@@ -57,7 +57,7 @@ import JourneyHighlightsForm from './form_section/JourneyHighlightsForm.vue'
 import JourneyGalleryForm from './form_section/JourneyGalleryForm.vue'
 import JourneyPricingForm from './form_section/JourneyPricingForm.vue'
 import JourneyFixedDepartureForm from './form_section/JourneyFixedDepartureForm.vue'
-import { getJourney } from '@/api/journeys.api'
+import { getJourney } from '@/http/journeys.http'
 
 // Get journey ID from route
 const route = useRoute()

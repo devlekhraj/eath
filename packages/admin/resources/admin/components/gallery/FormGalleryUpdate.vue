@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="d-flex align-center justify-space-between py-0">
       <span class="font-medium">Edit Gallery Item</span>
-      <v-btn size="small" icon variant="text" @click="handleClose">
+      <v-btn icon variant="text" @click="handleClose">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -62,7 +62,7 @@
 <script setup>
 import http from '@/http.config'
 import { ref, watch } from 'vue'
-import { updateMediaUsageApi } from '@/api/gallery.api'
+import { updateMediaUsageApi } from '@/http/gallery.http'
 
 const props = defineProps({
   imageItem: {

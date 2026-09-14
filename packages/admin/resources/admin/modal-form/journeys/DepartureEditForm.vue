@@ -2,7 +2,7 @@
 	<v-card>
 		<v-card-title class="d-flex align-center justify-space-between py-0">
 			<span class="text-subtitle-1 font-weight-bold text-uppercase">Edit Fixed Departure</span>
-			<v-btn icon variant="text" size="small" aria-label="Close dialog" @click="$emit('close')">
+			<v-btn icon variant="text" aria-label="Close dialog" @click="$emit('close')">
 				<v-icon>mdi-close</v-icon>
 			</v-btn>
 		</v-card-title>
@@ -111,7 +111,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { formatHuman, formatYmd } from '@/utils/utils'
-import { updateTrekDeparture } from '@/api/journeys.api'
+import { updateTrekDeparture } from '@/http/journeys.http'
 
 const props = defineProps({
 	item: {

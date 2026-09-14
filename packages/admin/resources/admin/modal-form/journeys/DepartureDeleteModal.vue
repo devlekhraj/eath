@@ -2,7 +2,7 @@
 	<v-card>
 		<v-card-title class="d-flex align-center justify-space-between py-0">
 			<span class="text-subtitle-1 font-weight-bold text-uppercase">Confirm Deletion</span>
-			<v-btn icon variant="text" size="small" aria-label="Close dialog" @click="$emit('close')">
+			<v-btn icon variant="text" aria-label="Close dialog" @click="$emit('close')">
 				<v-icon>mdi-close</v-icon>
 			</v-btn>
 		</v-card-title>
@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { deleteTrekDeparture } from '@/api/journeys.api'
+import { deleteTrekDeparture } from '@/http/journeys.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({

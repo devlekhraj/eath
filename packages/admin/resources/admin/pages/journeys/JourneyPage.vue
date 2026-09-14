@@ -94,11 +94,11 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center ga-1">
-                    <v-btn size="small" color="primary" variant="outlined" :to="{ name: 'adminJourneyForm', query: { id: item.id } }" title="View / Edit Journey">
+                    <v-btn color="primary" variant="outlined" :to="{ name: 'adminJourneyForm', query: { id: item.id } }" title="View / Edit Journey">
                         <v-icon start size="14">mdi-eye</v-icon>
                         View
                     </v-btn>
-                    <v-btn size="small" color="error" variant="outlined" @click="deleteJourney(item)" title="Delete Journey">
+                    <v-btn color="error" variant="outlined" @click="deleteJourney(item)" title="Delete Journey">
                         <v-icon start size="14">mdi-delete</v-icon>
                         Delete
                     </v-btn>
@@ -115,7 +115,7 @@ import JourneyDelete from '@/modal-form/journeys/JourneyDelete.vue'
 import JourneyAdd from '@/modal-form/journeys/JourneyAdd.vue'
 
 import { useGlobalModal } from '@/composables/globalModal'
-import { getJourneys } from '@/api/journeys.api'
+import { getJourneys } from '@/http/journeys.http'
 
 const { open: openModal } = useGlobalModal()
 

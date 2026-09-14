@@ -18,8 +18,6 @@ class Experience extends Model
         'description',
         'emphasis',
         'cues',
-        'hero_image_id',
-        'card_image_id',
         'sort_order',
         'is_featured',
         'is_active',

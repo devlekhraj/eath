@@ -62,7 +62,6 @@
             <template #item.actions="{ item }">
               <div class="d-flex align-center justify-center">
                 <v-btn
-                  size="small"
                   variant="outlined"
                   color="primary"
                   :to="{ name: 'adminJourneyForm', query: { id: item.id } }"

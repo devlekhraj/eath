@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('summary')->nullable();
             $table->longText('body')->nullable();
             $table->string('author_name')->nullable();
-            $table->foreignId('hero_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->timestamp('published_at')->nullable();
             $table->date('updated_on')->nullable();
             $table->boolean('is_featured')->default(false);

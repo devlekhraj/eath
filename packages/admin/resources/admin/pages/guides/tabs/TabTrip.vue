@@ -15,7 +15,7 @@
                                 <h4 class="mb-2 font-weight-medium text-primary">
                                     {{ trip.travel_package?.name || 'No Package' }}
                                 </h4>
-                                <v-btn icon variant="tonal" size="small" color="primary" @click="openForm(trip)"><v-icon>mdi-pencil</v-icon></v-btn>
+                                <v-btn icon variant="tonal" color="primary" @click="openForm(trip)"><v-icon>mdi-pencil</v-icon></v-btn>
                             </div>
                         </v-col>
                     </v-row>

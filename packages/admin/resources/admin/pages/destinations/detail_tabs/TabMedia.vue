@@ -79,7 +79,7 @@
               <!-- Action buttons -->
               <div class="d-flex align-center justify-end flex-wrap ga-2 pt-2 border-t">
                 <v-btn
-                  v-if="destination?.hero_image_id || destination?.hero_image"
+                  v-if="heroImage?.url"
                   color="error"
                   variant="outlined"
                   :disabled="loadingHero"
@@ -90,7 +90,7 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="destination?.hero_image_id || destination?.hero_image"
+                  v-if="heroImage?.url"
                   color="primary"
                   variant="outlined"
                   :disabled="loadingHero"
@@ -117,7 +117,7 @@
                   @click="heroFileInputRef?.click()"
                 >
                   <v-icon start size="16">mdi-cloud-upload</v-icon>
-                  {{ (destination?.hero_image_id || destination?.hero_image) ? 'Replace Image' : 'Upload Image' }}
+                  {{ heroImage?.url ? 'Replace Image' : 'Upload Image' }}
                 </v-btn>
               </div>
             </v-card>
@@ -183,7 +183,7 @@
               <!-- Action buttons -->
               <div class="d-flex align-center justify-end flex-wrap ga-2 pt-2 border-t">
                 <v-btn
-                  v-if="destination?.card_image_id || destination?.card_image"
+                  v-if="cardImage?.url"
                   color="error"
                   variant="outlined"
                   :disabled="loadingCard"
@@ -194,7 +194,7 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="destination?.card_image_id || destination?.card_image"
+                  v-if="cardImage?.url"
                   color="primary"
                   variant="outlined"
                   :disabled="loadingCard"
@@ -221,7 +221,7 @@
                   @click="cardFileInputRef?.click()"
                 >
                   <v-icon start size="16">mdi-cloud-upload</v-icon>
-                  {{ (destination?.card_image_id || destination?.card_image) ? 'Replace Image' : 'Upload Image' }}
+                  {{ cardImage?.url ? 'Replace Image' : 'Upload Image' }}
                 </v-btn>
               </div>
             </v-card>
@@ -309,7 +309,6 @@
 
                       <div class="d-flex align-center justify-end ga-1 mt-2 pt-2 border-t">
                         <v-btn
-                          size="small"
                           color="primary"
                           variant="outlined"
                           @click="openEditModal('gallery', item)"
@@ -318,7 +317,6 @@
                           Edit
                         </v-btn>
                         <v-btn
-                          size="small"
                           color="error"
                           variant="outlined"
                           @click="promptRemoveGallery(item)"
@@ -359,8 +357,8 @@ import {
   attachDestinationMediaApi,
   detachDestinationMediaApi,
   updateDestinationMediaApi,
-} from '@/api/destinations.api'
-import { uploadMediaAssetApi } from '@/api/media-assets.api'
+} from '@/http/destinations.http'
+import { uploadMediaAssetApi } from '@/http/media-assets.http'
 import { useGlobalModal } from '@/composables/globalModal'
 import { useSnackbar } from '@/composables/snackbar'
 import MediaAssetPickerModal from '@/modal-form/media/MediaAssetPickerModal.vue'
@@ -387,15 +385,17 @@ const loadingCard = ref(false)
 const loadingGallery = ref(false)
 
 const heroImage = computed(() => {
-  return props.destination?.hero_image || null
+  return props.destination?.media?.hero || props.destination?.hero_image || null
 })
 
 const cardImage = computed(() => {
-  return props.destination?.card_image || null
+  return props.destination?.media?.card || props.destination?.card_image || null
 })
 
 const galleryList = computed(() => {
-  return Array.isArray(props.destination?.gallery) ? props.destination.gallery : []
+  return Array.isArray(props.destination?.media?.gallery)
+    ? props.destination.media.gallery
+    : (Array.isArray(props.destination?.gallery) ? props.destination.gallery : [])
 })
 
 async function handleDirectUpload(targetType, event) {
@@ -404,7 +404,6 @@ async function handleDirectUpload(targetType, event) {
 
   const isHero = targetType === 'hero'
   const loadingRef = isHero ? loadingHero : loadingCard
-  const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
   const label = isHero ? 'Hero banner' : 'Card thumbnail'
 
   try {
@@ -421,7 +420,9 @@ async function handleDirectUpload(targetType, event) {
     }
 
     const updateResp = await updateDestinationApi(props.destination.id, {
-      [fieldKey]: mediaAsset.id,
+      media: {
+        [targetType]: mediaAsset.id,
+      },
     })
 
     showSuccess(updateResp.data?.message ?? `${label} updated successfully.`)
@@ -502,8 +503,7 @@ function openLibraryPicker(targetType) {
   }
 
   const isHero = targetType === 'hero'
-  const currentId = isHero ? props.destination?.hero_image_id : props.destination?.card_image_id
-  const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
+  const currentId = isHero ? heroImage.value?.id : cardImage.value?.id
   const label = isHero ? 'Hero banner' : 'Card thumbnail'
   const loadingRef = isHero ? loadingHero : loadingCard
 
@@ -519,7 +519,9 @@ function openLibraryPicker(targetType) {
         try {
           loadingRef.value = true
           const resp = await updateDestinationApi(props.destination.id, {
-            [fieldKey]: asset.id,
+            media: {
+              [targetType]: asset.id,
+            },
           })
           showSuccess(resp.data?.message ?? `${label} updated successfully.`)
           emit('refresh')
@@ -578,7 +580,6 @@ function promptRemoveImage(targetType, item) {
   if (!item) return
   const isHero = targetType === 'hero'
   const label = isHero ? 'Hero Banner' : 'Card Thumbnail'
-  const fieldKey = isHero ? 'hero_image_id' : 'card_image_id'
 
   globalModal.open({
     title: `Remove ${label}`,
@@ -589,7 +590,9 @@ function promptRemoveImage(targetType, item) {
       title: `Remove ${label}`,
       onDelete: async () => {
         await updateDestinationApi(props.destination.id, {
-          [fieldKey]: null,
+          media: {
+            [targetType]: null,
+          },
         })
       },
     },

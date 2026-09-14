@@ -41,11 +41,11 @@
 
                 <template #item.actions="{ item }">
                     <div class="d-flex align-center justify-center ga-1">
-                        <v-btn size="small" color="primary" variant="outlined" @click="openForm(item)" title="Edit setting">
+                        <v-btn color="primary" variant="outlined" @click="openForm(item)" title="Edit setting">
                             <v-icon start size="14">mdi-pencil</v-icon>
                             Edit
                         </v-btn>
-                        <v-btn size="small" color="error" variant="outlined" @click="deleteItem(item)" title="Delete setting">
+                        <v-btn color="error" variant="outlined" @click="deleteItem(item)" title="Delete setting">
                             <v-icon start size="14">mdi-delete</v-icon>
                             Delete
                         </v-btn>
@@ -76,7 +76,7 @@ const headers = [
 
 import SettingForm from '@/modal-form/settings/SettingForm.vue';
 import SettingDelete from '@/modal-form/settings/SettingDelete.vue';
-import { getSettingsApi } from '@/api/settings.api'
+import { getSettingsApi } from '@/http/settings.http'
 
 
 function openForm(item = {}) {

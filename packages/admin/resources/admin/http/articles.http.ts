@@ -32,7 +32,7 @@ export interface Article {
     content?: string | null
     author_name?: string | null
     author?: string | null
-    hero_image_id?: number | null
+    media?: Record<string, unknown> | null
     banner_url?: string | null
     published_at?: string | null
     updated_on?: string | null

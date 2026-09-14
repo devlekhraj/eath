@@ -26,7 +26,7 @@
                                     </div>
                                     <v-spacer></v-spacer>
                                     <div>
-                                        <v-btn color="primary" icon size="small" @click="openForm(highlight)" variant="tonal">
+                                        <v-btn color="primary" icon @click="openForm(highlight)" variant="tonal">
                                             <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
                                     </div>

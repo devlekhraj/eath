@@ -79,7 +79,6 @@
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
           <v-btn
-            size="small"
             variant="outlined"
             color="error"
             title="Delete Subscriber"
@@ -101,7 +100,7 @@ import { useGlobalModal } from '@/composables/globalModal'
 import {
   getNewsletterSubscriptionsApi,
   toggleNewsletterSubscriptionApi,
-} from '@/api/newsletter-subscriptions.api'
+} from '@/http/newsletter-subscriptions.http'
 import SubscriberForm from '@/modal-form/newsletter-subscriptions/SubscriberForm.vue'
 import SubscriberDelete from '@/modal-form/newsletter-subscriptions/SubscriberDelete.vue'
 

@@ -74,7 +74,7 @@
     >
       <div class="d-flex align-center justify-space-between">
         <span>{{ error }}</span>
-        <v-btn size="small" variant="text" color="error" @click="loadDashboard">Retry</v-btn>
+        <v-btn variant="text" color="error" @click="loadDashboard">Retry</v-btn>
       </div>
     </v-alert>
 
@@ -214,7 +214,6 @@
               <v-btn
                 variant="text"
                 color="primary"
-                size="small"
                 class="text-capitalize"
                 :to="{ name: 'adminDeparturePage' }"
               >
@@ -309,7 +308,6 @@
                 <v-btn
                   variant="text"
                   color="primary"
-                  size="small"
                   class="text-capitalize"
                   :to="{ name: 'adminDestinationPage' }"
                 >
@@ -354,7 +352,6 @@
                   {{ dashboardData.metrics.total_destinations }} Regions · {{ dashboardData.metrics.total_journeys }} Journeys
                 </span>
                 <v-btn
-                  size="small"
                   variant="tonal"
                   color="primary"
                   class="text-capitalize"
@@ -385,7 +382,6 @@
               <v-btn
                 variant="text"
                 color="primary"
-                size="small"
                 class="text-capitalize"
                 :to="{ name: 'adminPlannerSubmissionPage' }"
               >
@@ -473,7 +469,6 @@
               <v-btn
                 variant="text"
                 color="primary"
-                size="small"
                 class="text-capitalize"
                 :to="{ name: 'adminInquiryPage' }"
               >
@@ -691,7 +686,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { fetchDashboardStats } from '@/api/dashboard.api'
+import { fetchDashboardStats } from '@/http/dashboard.http'
 import { formatDate, formatAmount, getStatusColor } from '@utils/utils'
 
 const loading = ref(true)

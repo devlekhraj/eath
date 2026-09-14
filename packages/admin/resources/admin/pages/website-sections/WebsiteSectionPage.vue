@@ -88,11 +88,11 @@
 
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
-          <v-btn size="small" variant="outlined" color="primary" @click="handleOpen(item)" title="Edit section">
+          <v-btn variant="outlined" color="primary" @click="handleOpen(item)" title="Edit section">
             <v-icon start size="14">mdi-pencil</v-icon>
             Edit
           </v-btn>
-          <v-btn size="small" variant="outlined" color="error" @click="handleDelete(item)" title="Delete section">
+          <v-btn variant="outlined" color="error" @click="handleDelete(item)" title="Delete section">
             <v-icon start size="14">mdi-delete</v-icon>
             Delete
           </v-btn>
@@ -106,7 +106,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
-import { getWebsiteSectionsApi, toggleWebsiteSectionActiveApi } from '@/api/website-sections.api'
+import { getWebsiteSectionsApi, toggleWebsiteSectionActiveApi } from '@/http/website-sections.http'
 import WebsiteSectionForm from '@/modal-form/website-sections/WebsiteSectionForm.vue'
 import WebsiteSectionDelete from '@/modal-form/website-sections/WebsiteSectionDelete.vue'
 

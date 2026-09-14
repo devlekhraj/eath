@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('traveler_name')->nullable();
             $table->string('traveler_country')->nullable();
             $table->date('traveled_on')->nullable();
-            $table->foreignId('hero_image_id')->nullable()->constrained('media_assets')->nullOnDelete();
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_published')->default(false);

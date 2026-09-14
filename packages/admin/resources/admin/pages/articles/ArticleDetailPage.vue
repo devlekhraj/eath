@@ -18,7 +18,6 @@
                         </span>
                         <v-btn
                             v-if="form?.slug"
-                            size="x-small"
                             class="ml-2"
                             color="primary"
                             icon
@@ -78,7 +77,7 @@ import TabSections from './detail_tabs/TabSections.vue'
 import TabJourneys from './detail_tabs/TabJourneys.vue'
 import TabSeo from './detail_tabs/TabSeo.vue'
 import { useSnackbar } from '@/composables/snackbar'
-import { createArticleApi, getArticleByIdApi, updateArticleApi } from '@/api/articles.api'
+import { createArticleApi, getArticleByIdApi, updateArticleApi } from '@/http/articles.http'
 
 const tabComponents = {
     tab_overview: TabOverview,

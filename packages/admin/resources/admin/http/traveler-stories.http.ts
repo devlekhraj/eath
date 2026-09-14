@@ -15,7 +15,7 @@ export interface TravelerStory {
     traveler_name?: string | null
     traveler_country?: string | null
     traveled_on?: string | null
-    hero_image_id?: number | null
+    media?: Record<string, unknown> | null
     banner_url?: string | null
     hero_image?: { id: number; path: string; alt_text?: string } | null
     is_featured?: boolean

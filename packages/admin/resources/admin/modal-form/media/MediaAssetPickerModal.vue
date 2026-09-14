@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title class="d-flex align-center justify-space-between py-0">
       <span>Media Asset Library</span>
-      <v-btn icon variant="text" size="small" aria-label="Close dialog" @click="$emit('close')">
+      <v-btn icon variant="text" aria-label="Close dialog" @click="$emit('close')">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-title>
@@ -135,7 +135,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getMediaAssetsApi, uploadMediaAssetApi } from '@/api/media-assets.api'
+import { getMediaAssetsApi, uploadMediaAssetApi } from '@/http/media-assets.http'
 import { useSnackbar } from '@/composables/snackbar'
 
 const props = defineProps({

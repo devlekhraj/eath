@@ -40,10 +40,10 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <v-btn icon size="x-small" variant="tonal" color="primary" @click="editItem(item, false)">
+                                        <v-btn icon variant="tonal" color="primary" @click="editItem(item, false)">
                                             <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
-                                        <v-btn icon size="x-small" variant="tonal" color="error" class="ml-3" @click="deleteItem(item)">
+                                        <v-btn icon variant="tonal" color="error" class="ml-3" @click="deleteItem(item)">
                                             <v-icon>mdi-delete</v-icon>
                                         </v-btn>
                                     </div>
@@ -73,10 +73,10 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <v-btn icon size="x-small" variant="tonal" color="primary" @click="editItem(item, false)">
+                                        <v-btn icon variant="tonal" color="primary" @click="editItem(item, false)">
                                             <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
-                                        <v-btn icon size="x-small" variant="tonal" color="error" class="ml-3" @click="deleteItem(item)">
+                                        <v-btn icon variant="tonal" color="error" class="ml-3" @click="deleteItem(item)">
                                             <v-icon>mdi-delete</v-icon>
                                         </v-btn>
                                     </div>

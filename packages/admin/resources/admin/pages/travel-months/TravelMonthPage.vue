@@ -65,7 +65,7 @@
 
             <template #item.actions="{ item }">
                 <div class="d-flex align-center justify-center">
-                    <v-btn size="small" color="primary" variant="outlined" @click="handleOpen(item)" title="Edit month details">
+                    <v-btn color="primary" variant="outlined" @click="handleOpen(item)" title="Edit month details">
                         <v-icon start size="14">mdi-pencil</v-icon>
                         Edit
                     </v-btn>
@@ -87,7 +87,7 @@ import http from '@/http.config'
 import { useSnackbar } from '@/composables/snackbar'
 import { useGlobalModal } from '@/composables/globalModal'
 import Form from '@/modal-form/travel-months/Form.vue'
-import { getTravelMonthsApi, toggleTravelMonthActiveApi } from '@/api/travel-months.api'
+import { getTravelMonthsApi, toggleTravelMonthActiveApi } from '@/http/travel-months.http'
 
 const { open: openModal } = useGlobalModal()
 

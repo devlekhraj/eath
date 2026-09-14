@@ -53,20 +53,17 @@ class WebsitePageController extends Controller
         $page = WebsitePage::with([
             'sections' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
             'heroAttachment.mediaAsset',
-            'heroImage',
         ])
         ->where('slug', 'responsible-travel')
         ->first();
 
-        $heroUrl = $page?->heroAttachment?->mediaAsset?->url
-            ?? $page?->heroImage?->path
-            ?? null;
+        $heroUrl = $page?->heroAttachment?->mediaAsset?->url ?? null;
 
         $fallbackHero = WebsiteAssetRegistry::resolve('responsible-travel-hero', 'Nepal community and mountain environment landscape');
 
         $heroImage = [
             'url' => $heroUrl ?: $fallbackHero['url'],
-            'alt' => $page?->heroAttachment?->alt_text ?: ($page?->heroImage?->alt_text ?: $fallbackHero['alt']),
+            'alt' => $page?->heroAttachment?->alt_text ?: $fallbackHero['alt'],
             'width' => 1600,
             'height' => 900,
         ];

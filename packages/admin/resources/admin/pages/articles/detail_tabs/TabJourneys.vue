@@ -36,7 +36,7 @@
                             <tr v-for="j in selectedJourneyDetails" :key="j.id">
                                 <td>{{ j.title }}</td>
                                 <td class="text-center">
-                                    <v-btn size="x-small" icon variant="tonal" color="error" @click="removeJourney(j.id)">
+                                    <v-btn icon variant="tonal" color="error" @click="removeJourney(j.id)">
                                         <v-icon size="16">mdi-close</v-icon>
                                     </v-btn>
                                 </td>
