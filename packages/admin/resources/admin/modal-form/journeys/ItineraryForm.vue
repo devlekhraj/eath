@@ -48,7 +48,9 @@
                     </v-col>
 
                     <v-col cols="12" md="12">
-                        <SummarnoteEditor v-model="form.description" />
+                        <div class="mb-2">
+                            <SummarnoteEditor v-model="form.description" />
+                        </div>
                         <span v-if="descriptionError" class="text-error text-caption">Content is required</span>
                     </v-col>
           

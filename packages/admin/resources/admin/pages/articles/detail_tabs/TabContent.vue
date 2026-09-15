@@ -2,9 +2,11 @@
     <v-container fluid>
         <v-row>
             <v-col cols="12" lg="8" offset-lg="2">
-                <div class="mb-4">
+                <div class="mb-2">
                     <label class="text-subtitle-1 mb-2 d-block">Content</label>
-                    <SummarnoteEditor v-model="form.content" />
+                    <div class="mb-2">
+                        <SummarnoteEditor v-model="form.content" />
+                    </div>
                     <span v-if="contentError || errors.content" class="text-error text-caption">
                         {{ errors.content || 'Content is required' }}
                     </span>

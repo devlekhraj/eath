@@ -88,24 +88,28 @@
 
               <v-row dense>
                 <v-col cols="12" sm="5">
-                  <v-text-field
-                    v-model="item.label"
-                    label="Fact Title / Label *"
-                    placeholder="e.g. Transit Gateway, Permits, Baggage Limit"
-                    density="compact"
-                    hide-details="auto"
-                  />
+                  <div class="mb-2">
+                    <v-text-field
+                      v-model="item.label"
+                      label="Fact Title / Label *"
+                      placeholder="e.g. Transit Gateway, Permits, Baggage Limit"
+                      density="compact"
+                      hide-details="auto"
+                    />
+                  </div>
                 </v-col>
                 <v-col cols="12" sm="7">
-                  <v-textarea
-                    v-model="item.value"
-                    label="Description / Fact Content *"
-                    placeholder="Provide clear, actionable logistical advice..."
-                    rows="2"
-                    auto-grow
-                    density="compact"
-                    hide-details="auto"
-                  />
+                  <div class="mb-2">
+                    <v-textarea
+                      v-model="item.value"
+                      label="Description / Fact Content *"
+                      placeholder="Provide clear, actionable logistical advice..."
+                      rows="2"
+                      auto-grow
+                      density="compact"
+                      hide-details="auto"
+                    />
+                  </div>
                 </v-col>
               </v-row>
             </v-card>
@@ -121,16 +125,18 @@
             <p class="text-caption text-medium-emphasis mb-3">
               Displayed in the warning box at the bottom of the logistics section on the website.
             </p>
-            <v-textarea
-              v-model="operationalNotice"
-              label="Advisory Text"
-              placeholder="Leave blank to use default fallback notice..."
-              hint="Leave blank to use global default advisory text."
-              persistent-hint
-              rows="2"
-              auto-grow
-              density="comfortable"
-            />
+            <div class="mb-2">
+              <v-textarea
+                v-model="operationalNotice"
+                label="Advisory Text"
+                placeholder="Leave blank to use default fallback notice..."
+                hint="Leave blank to use global default advisory text."
+                persistent-hint
+                rows="2"
+                auto-grow
+                density="comfortable"
+              />
+            </div>
           </div>
 
           <v-divider class="my-6" />
@@ -146,61 +152,71 @@
 
             <v-row dense>
               <v-col cols="12">
-                <v-text-field
-                  v-model="ctaTitle"
-                  label="CTA Banner Title"
-                  placeholder="e.g. Ready to Plan Your Everest Adventure?"
-                  density="comfortable"
-                  class="mb-2"
-                />
+                <div class="mb-2">
+                  <v-text-field
+                    v-model="ctaTitle"
+                    label="CTA Banner Title"
+                    placeholder="e.g. Ready to Plan Your Everest Adventure?"
+                    density="comfortable"
+                  />
+                </div>
               </v-col>
 
               <v-col cols="12">
-                <v-textarea
-                  v-model="ctaDescription"
-                  label="CTA Description"
-                  placeholder="e.g. Launch our interactive trek planner with the Everest region pre-selected..."
-                  rows="2"
-                  auto-grow
-                  density="comfortable"
-                  class="mb-2"
-                />
+                <div class="mb-2">
+                  <v-textarea
+                    v-model="ctaDescription"
+                    label="CTA Description"
+                    placeholder="e.g. Launch our interactive trek planner with the Everest region pre-selected..."
+                    rows="2"
+                    auto-grow
+                    density="comfortable"
+                  />
+                </div>
               </v-col>
 
               <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="ctaPrimaryBtnText"
-                  label="Primary Button Text"
-                  placeholder="e.g. Plan an Everest Trek →"
-                  density="compact"
-                />
+                <div class="mb-2">
+                  <v-text-field
+                    v-model="ctaPrimaryBtnText"
+                    label="Primary Button Text"
+                    placeholder="e.g. Plan an Everest Trek →"
+                    density="compact"
+                  />
+                </div>
               </v-col>
 
               <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="ctaPrimaryBtnUrl"
-                  label="Primary Button URL (Optional)"
-                  placeholder="Leave empty for default trip planner shortcut"
-                  density="compact"
-                />
+                <div class="mb-2">
+                  <v-text-field
+                    v-model="ctaPrimaryBtnUrl"
+                    label="Primary Button URL (Optional)"
+                    placeholder="Leave empty for default trip planner shortcut"
+                    density="compact"
+                  />
+                </div>
               </v-col>
 
               <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="ctaSecondaryBtnText"
-                  label="Secondary Button Text"
-                  placeholder="e.g. Ask a Planning Question"
-                  density="compact"
-                />
+                <div class="mb-2">
+                  <v-text-field
+                    v-model="ctaSecondaryBtnText"
+                    label="Secondary Button Text"
+                    placeholder="e.g. Ask a Planning Question"
+                    density="compact"
+                  />
+                </div>
               </v-col>
 
               <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="ctaSecondaryBtnUrl"
-                  label="Secondary Button URL (Optional)"
-                  placeholder="Leave empty for default /contact page"
-                  density="compact"
-                />
+                <div class="mb-2">
+                  <v-text-field
+                    v-model="ctaSecondaryBtnUrl"
+                    label="Secondary Button URL (Optional)"
+                    placeholder="Leave empty for default /contact page"
+                    density="compact"
+                  />
+                </div>
               </v-col>
             </v-row>
           </div>

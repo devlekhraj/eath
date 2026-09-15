@@ -10,31 +10,33 @@
 
 
                 <div class="mt-4">
+                    <v-list v-if="journey?.highlights?.length" style="font-size: 14px;">
+                        <template v-for="(highlight, index) in journey?.highlights" :key="index">
+                            <v-list-item class="px-0 py-3">
+                                <template #prepend>
+                                    <v-avatar size="36" color="primary" variant="tonal" class="mr-3">
+                                        <v-icon size="20">{{ highlight.icon || highlight.icon_url || 'mdi-star' }}</v-icon>
+                                    </v-avatar>
+                                </template>
 
-                    <v-row>
-                        <v-col cols="12" md="6" v-for="(highlight, index) in journey?.highlights" :key="index">
-                            <div class="border pa-4">
-                                <div class="d-flex">
-                                    <div v-if="highlight.icon || highlight.icon_url" style="width: 40px; height: 40px;">
-                                        <v-icon color="primary">{{ highlight.icon || highlight.icon_url }}</v-icon>
-                                    </div>
-                                    <div class="pl-4">
-                                        <p class="text-primary">{{ highlight.title || highlight.highlight_name }}</p>
-                                        <p style="font-size: 0.9rem;">
-                                            {{ highlight.description }}
-                                        </p>
-                                    </div>
-                                    <v-spacer></v-spacer>
-                                    <div>
-                                        <v-btn color="primary" icon @click="openForm(highlight)" variant="tonal">
-                                            <v-icon>mdi-pencil</v-icon>
-                                        </v-btn>
-                                    </div>
-                                </div>
-                            </div>
-                        </v-col>
-                    </v-row>
+                                <v-list-item-title class="text-primary" style="font-size: 14px !important; font-weight: 400; line-height: 1.5; white-space: normal;">
+                                    {{ highlight.title || highlight.highlight_name }}
+                                </v-list-item-title>
 
+                                <v-list-item-subtitle v-if="highlight.description" class="text-slate-600 mt-1" style="font-size: 14px !important; white-space: normal; line-height: 1.4;">
+                                    {{ highlight.description }}
+                                </v-list-item-subtitle>
+
+                                <template #append>
+                                    <v-btn color="primary" variant="outlined" @click="openForm(highlight)">
+                                        <v-icon start size="14">mdi-pencil</v-icon>
+                                        Edit
+                                    </v-btn>
+                                </template>
+                            </v-list-item>
+                            <v-divider v-if="index < journey.highlights.length - 1" />
+                        </template>
+                    </v-list>
                 </div>
 
             </v-card-text>

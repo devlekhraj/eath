@@ -5,92 +5,110 @@
         <v-form v-if="experience" class="mt-2" @submit.prevent="handleUpdate">
           <v-row>
             <v-col cols="12" md="8">
-              <v-text-field
-                v-model="experience.name"
-                label="Experience Name"
-                placeholder="e.g. Mountain Scenery & Alpine Passes"
-                :rules="[rules.required]"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="experience.name"
+                  label="Experience Name"
+                  placeholder="e.g. Mountain Scenery & Alpine Passes"
+                  :rules="[rules.required]"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-text-field
-                v-model="experience.slug"
-                label="URL Slug"
-                placeholder="e.g. mountain-scenery"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="experience.slug"
+                  label="URL Slug"
+                  placeholder="e.g. mountain-scenery"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="6">
-              <v-text-field
-                v-model="experience.emphasis"
-                label="Visual Emphasis / Kicker"
-                placeholder="e.g. Panoramic peaks, glacial valleys, high-altitude ridgelines"
-                density="comfortable"
-                hint="Key thematic phrase shown on header and badges"
-                persistent-hint
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="experience.emphasis"
+                  label="Visual Emphasis / Kicker"
+                  placeholder="e.g. Panoramic peaks, glacial valleys, high-altitude ridgelines"
+                  density="comfortable"
+                  hint="Key thematic phrase shown on header and badges"
+                  persistent-hint
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="6">
-              <v-text-field
-                v-model="experience.cues"
-                label="Experience Cues / Tags"
-                placeholder="e.g. 8,000m summits, vantage points, sunrise vistas"
-                density="comfortable"
-                hint="Comma-separated cues or descriptors displayed across the detail layout"
-                persistent-hint
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="experience.cues"
+                  label="Experience Cues / Tags"
+                  placeholder="e.g. 8,000m summits, vantage points, sunrise vistas"
+                  density="comfortable"
+                  hint="Comma-separated cues or descriptors displayed across the detail layout"
+                  persistent-hint
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-text-field
-                v-model.number="experience.sort_order"
-                label="Sort Order"
-                type="number"
-                min="0"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model.number="experience.sort_order"
+                  label="Sort Order"
+                  type="number"
+                  min="0"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-switch
-                v-model="experience.is_active"
-                label="Active on Public Website"
-                color="success"
-                inset
-                hide-details
-              />
+              <div class="mb-2">
+                <v-switch
+                  v-model="experience.is_active"
+                  label="Active on Public Website"
+                  color="success"
+                  inset
+                  hide-details
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-switch
-                v-model="experience.is_featured"
-                label="Featured Experience"
-                color="primary"
-                inset
-                hide-details
-              />
+              <div class="mb-2">
+                <v-switch
+                  v-model="experience.is_featured"
+                  label="Featured Experience"
+                  color="primary"
+                  inset
+                  hide-details
+                />
+              </div>
             </v-col>
 
             <v-col cols="12">
-              <v-textarea
-                v-model="experience.summary"
-                label="Summary / Introduction"
-                rows="3"
-                auto-grow
-                density="comfortable"
-                placeholder="A compelling high-level summary of the experience that appears on cards and teasers."
-              />
+              <div class="mb-2">
+                <v-textarea
+                  v-model="experience.summary"
+                  label="Summary / Introduction"
+                  rows="3"
+                  auto-grow
+                  density="comfortable"
+                  placeholder="A compelling high-level summary of the experience that appears on cards and teasers."
+                />
+              </div>
             </v-col>
 
             <v-col cols="12">
               <div class="text-subtitle-2 font-weight-medium mb-2 text-slate-700">
                 Detailed Experience Narrative / Description
               </div>
-              <SummarnoteEditor v-model="experience.description" />
+              <div class="mb-2">
+                <SummarnoteEditor v-model="experience.description" />
+              </div>
             </v-col>
 
             <!-- Bottom CTA Banner Customization -->
@@ -109,58 +127,70 @@
 
                 <v-row dense>
                   <v-col cols="12">
-                    <v-text-field
-                      v-model="experience.cta_title"
-                      label="CTA Banner Title"
-                      placeholder="e.g. Ready to Experience Himalayan Peaks Up Close?"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="experience.cta_title"
+                        label="CTA Banner Title"
+                        placeholder="e.g. Ready to Experience Himalayan Peaks Up Close?"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12">
-                    <v-textarea
-                      v-model="experience.cta_description"
-                      label="CTA Description"
-                      placeholder="e.g. Connect with our alpine expedition leaders to design a personalized Himalayan trekking itinerary tailored to your fitness and schedule."
-                      rows="2"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-textarea
+                        v-model="experience.cta_description"
+                        label="CTA Description"
+                        placeholder="e.g. Connect with our alpine expedition leaders to design a personalized Himalayan trekking itinerary tailored to your fitness and schedule."
+                        rows="2"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <v-text-field
-                      v-model="experience.cta_primary_btn_text"
-                      label="Primary Button Text"
-                      placeholder="e.g. Plan Your Expedition"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="experience.cta_primary_btn_text"
+                        label="Primary Button Text"
+                        placeholder="e.g. Plan Your Expedition"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <v-text-field
-                      v-model="experience.cta_primary_btn_url"
-                      label="Primary Button URL"
-                      placeholder="e.g. /plan-your-trip or https://..."
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="experience.cta_primary_btn_url"
+                        label="Primary Button URL"
+                        placeholder="e.g. /plan-your-trip or https://..."
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <v-text-field
-                      v-model="experience.cta_secondary_btn_text"
-                      label="Secondary Button Text"
-                      placeholder="e.g. Speak with an Expert"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="experience.cta_secondary_btn_text"
+                        label="Secondary Button Text"
+                        placeholder="e.g. Speak with an Expert"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <v-text-field
-                      v-model="experience.cta_secondary_btn_url"
-                      label="Secondary Button URL"
-                      placeholder="e.g. /contact"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="experience.cta_secondary_btn_url"
+                        label="Secondary Button URL"
+                        placeholder="e.g. /contact"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
                 </v-row>
               </v-card>

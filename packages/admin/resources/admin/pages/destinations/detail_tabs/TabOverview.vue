@@ -5,79 +5,95 @@
         <v-form v-if="destination" class="mt-2" @submit.prevent="handleUpdate">
           <v-row>
             <v-col cols="12" md="8">
-              <v-text-field
-                v-model="destination.name"
-                label="Destination Name"
-                placeholder="e.g. Everest / Khumbu Region"
-                :rules="[rules.required]"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="destination.name"
+                  label="Destination Name"
+                  placeholder="e.g. Everest / Khumbu Region"
+                  :rules="[rules.required]"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-text-field
-                v-model="destination.slug"
-                label="URL Slug"
-                placeholder="e.g. everest"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="destination.slug"
+                  label="URL Slug"
+                  placeholder="e.g. everest"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="8">
-              <v-text-field
-                v-model="destination.region_label"
-                label="Region Label"
-                placeholder="e.g. Solukhumbu, Eastern Nepal"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="destination.region_label"
+                  label="Region Label"
+                  placeholder="e.g. Solukhumbu, Eastern Nepal"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-text-field
-                v-model.number="destination.sort_order"
-                label="Sort Order"
-                type="number"
-                min="0"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model.number="destination.sort_order"
+                  label="Sort Order"
+                  type="number"
+                  min="0"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="6">
-              <v-switch
-                v-model="destination.is_active"
-                label="Active on Public Website"
-                color="success"
-                inset
-                hide-details
-              />
+              <div class="mb-2">
+                <v-switch
+                  v-model="destination.is_active"
+                  label="Active on Public Website"
+                  color="success"
+                  inset
+                  hide-details
+                />
+              </div>
             </v-col>
 
             <v-col cols="12" md="6">
-              <v-switch
-                v-model="destination.is_featured"
-                label="Featured Destination"
-                color="primary"
-                inset
-                hide-details
-              />
+              <div class="mb-2">
+                <v-switch
+                  v-model="destination.is_featured"
+                  label="Featured Destination"
+                  color="primary"
+                  inset
+                  hide-details
+                />
+              </div>
             </v-col>
 
             <v-col cols="12">
-              <v-textarea
-                v-model="destination.summary"
-                label="Summary / Introduction"
-                rows="3"
-                auto-grow
-                density="comfortable"
-                placeholder="A compelling high-level summary of the region that appears on cards and teasers."
-              />
+              <div class="mb-2">
+                <v-textarea
+                  v-model="destination.summary"
+                  label="Summary / Introduction"
+                  rows="3"
+                  auto-grow
+                  density="comfortable"
+                  placeholder="A compelling high-level summary of the region that appears on cards and teasers."
+                />
+              </div>
             </v-col>
 
             <v-col cols="12">
               <div class="text-subtitle-2 font-weight-medium mb-2 text-slate-700">
                 Detailed Destination Description
               </div>
-              <SummarnoteEditor v-model="destination.description" />
+              <div class="mb-2">
+                <SummarnoteEditor v-model="destination.description" />
+              </div>
             </v-col>
 
             <!-- Bottom CTA Banner Customization -->
@@ -96,59 +112,71 @@
 
                 <v-row dense>
                   <v-col cols="12">
-                    <v-text-field
-                      v-model="destination.cta_title"
-                      label="CTA Banner Title"
-                      :placeholder="`Ready to Plan Your ${destination.name || 'Destination'} Adventure?`"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="destination.cta_title"
+                        label="CTA Banner Title"
+                        :placeholder="`Ready to Plan Your ${destination.name || 'Destination'} Adventure?`"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12">
-                    <v-textarea
-                      v-model="destination.cta_description"
-                      label="CTA Banner Description"
-                      placeholder="Launch our interactive trek planner with this region pre-selected. Tailor your travel window, pacing, and group size to receive curated itinerary recommendations."
-                      rows="2"
-                      auto-grow
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-textarea
+                        v-model="destination.cta_description"
+                        label="CTA Banner Description"
+                        placeholder="Launch our interactive trek planner with this region pre-selected. Tailor your travel window, pacing, and group size to receive curated itinerary recommendations."
+                        rows="2"
+                        auto-grow
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="destination.cta_primary_btn_text"
-                      label="Primary Button Text"
-                      :placeholder="`Plan a ${destination.name || 'Region'} Trek →`"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="destination.cta_primary_btn_text"
+                        label="Primary Button Text"
+                        :placeholder="`Plan a ${destination.name || 'Region'} Trek →`"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="destination.cta_primary_btn_url"
-                      label="Primary Button URL / Route"
-                      placeholder="Default: /plan-my-trek?mode=discover&region=...&source=destination"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="destination.cta_primary_btn_url"
+                        label="Primary Button URL / Route"
+                        placeholder="Default: /plan-my-trek?mode=discover&region=...&source=destination"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="destination.cta_secondary_btn_text"
-                      label="Secondary Button Text"
-                      placeholder="Ask a Planning Question"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="destination.cta_secondary_btn_text"
+                        label="Secondary Button Text"
+                        placeholder="Ask a Planning Question"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="destination.cta_secondary_btn_url"
-                      label="Secondary Button URL"
-                      placeholder="Default: /contact"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="destination.cta_secondary_btn_url"
+                        label="Secondary Button URL"
+                        placeholder="Default: /contact"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
                 </v-row>
               </v-card>

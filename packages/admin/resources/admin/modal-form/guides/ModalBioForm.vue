@@ -10,9 +10,11 @@
 
         <v-card-text>
             <v-form ref="formRef" @submit.prevent="handleSubmit" lazy-validation>
-                <div class="mb-4">
+                <div class="mb-2">
                     <label class="text-sm font-medium">Bio</label>
-                    <SummarnoteEditor v-model="form.bio" />
+                    <div class="mb-2">
+                        <SummarnoteEditor v-model="form.bio" />
+                    </div>
                     <div v-if="!form.bio" class="text-red text-sm mt-1">This field is required</div>
                 </div>
             </v-form>

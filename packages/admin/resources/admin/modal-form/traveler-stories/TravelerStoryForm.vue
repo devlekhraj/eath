@@ -113,7 +113,9 @@
 
                     <v-col cols="12">
                         <label class="text-caption mb-1 d-block font-weight-medium">Full Story & Testimonial</label>
-                        <SummarnoteEditor v-model="form.body" minHeight="240" />
+                        <div class="mb-2">
+                            <SummarnoteEditor v-model="form.body" minHeight="240" />
+                        </div>
                     </v-col>
 
                     <v-col cols="12" sm="4">

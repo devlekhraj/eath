@@ -88,35 +88,40 @@
 
               <v-row dense>
                 <v-col cols="12" md="9">
-                  <v-text-field
-                    v-model="item.title"
-                    label="Highlight Title"
-                    placeholder="e.g. Sunrise from High Alpine Vantage Points"
-                    density="compact"
-                    hide-details="auto"
-                    class="mb-2"
-                  />
+                  <div class="mb-2">
+                    <v-text-field
+                      v-model="item.title"
+                      label="Highlight Title"
+                      placeholder="e.g. Sunrise from High Alpine Vantage Points"
+                      density="compact"
+                      hide-details="auto"
+                    />
+                  </div>
                 </v-col>
 
                 <v-col cols="12" md="3" class="d-flex align-center">
-                  <v-switch
-                    v-model="item.is_active"
-                    label="Active"
-                    color="success"
-                    density="compact"
-                    hide-details
-                  />
+                  <div class="mb-2">
+                    <v-switch
+                      v-model="item.is_active"
+                      label="Active"
+                      color="success"
+                      density="compact"
+                      hide-details
+                    />
+                  </div>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-textarea
-                    v-model="item.description"
-                    label="Highlight Description"
-                    placeholder="Provide evocative sensory detail and context..."
-                    rows="2"
-                    density="compact"
-                    hide-details="auto"
-                  />
+                  <div class="mb-2">
+                    <v-textarea
+                      v-model="item.description"
+                      label="Highlight Description"
+                      placeholder="Provide evocative sensory detail and context..."
+                      rows="2"
+                      density="compact"
+                      hide-details="auto"
+                    />
+                  </div>
                 </v-col>
               </v-row>
             </v-card>
@@ -200,35 +205,40 @@
 
               <v-row dense>
                 <v-col cols="12" md="9">
-                  <v-text-field
-                    v-model="item.title"
-                    label="Question / Heading"
-                    placeholder="e.g. What physical conditioning is required for high panoramic passes?"
-                    density="compact"
-                    hide-details="auto"
-                    class="mb-2"
-                  />
+                  <div class="mb-2">
+                    <v-text-field
+                      v-model="item.title"
+                      label="Question / Heading"
+                      placeholder="e.g. What physical conditioning is required for high panoramic passes?"
+                      density="compact"
+                      hide-details="auto"
+                    />
+                  </div>
                 </v-col>
 
                 <v-col cols="12" md="3" class="d-flex align-center">
-                  <v-switch
-                    v-model="item.is_active"
-                    label="Active"
-                    color="success"
-                    density="compact"
-                    hide-details
-                  />
+                  <div class="mb-2">
+                    <v-switch
+                      v-model="item.is_active"
+                      label="Active"
+                      color="success"
+                      density="compact"
+                      hide-details
+                    />
+                  </div>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-textarea
-                    v-model="item.body"
-                    label="Answer / Guidance"
-                    placeholder="Detailed recommendations, gear suggestions, and conditioning timeline..."
-                    rows="3"
-                    density="compact"
-                    hide-details="auto"
-                  />
+                  <div class="mb-2">
+                    <v-textarea
+                      v-model="item.body"
+                      label="Answer / Guidance"
+                      placeholder="Detailed recommendations, gear suggestions, and conditioning timeline..."
+                      rows="3"
+                      density="compact"
+                      hide-details="auto"
+                    />
+                  </div>
                 </v-col>
               </v-row>
             </v-card>

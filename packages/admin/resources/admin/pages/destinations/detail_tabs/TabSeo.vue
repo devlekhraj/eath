@@ -5,29 +5,33 @@
         <v-form v-if="destination" @submit.prevent="handleUpdate">
           <v-row>
             <v-col cols="12">
-              <v-text-field
-                v-model="destination.meta_title"
-                label="Meta Title"
-                placeholder="e.g. Everest Region Treks & High Passes | E.A.T.H. Travels"
-                hint="Optimal length: 50–60 characters"
-                persistent-hint
-                counter="60"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="destination.meta_title"
+                  label="Meta Title"
+                  placeholder="e.g. Everest Region Treks & High Passes | E.A.T.H. Travels"
+                  hint="Optimal length: 50–60 characters"
+                  persistent-hint
+                  counter="60"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12">
-              <v-textarea
-                v-model="destination.meta_description"
-                label="Meta Description"
-                placeholder="Explore iconic Himalayan trekking routes in the Everest Khumbu region with E.A.T.H. Travels. Professional Sherpa guides, custom itineraries, and high-altitude safety."
-                rows="3"
-                auto-grow
-                hint="Optimal length: 140–160 characters (max 300)"
-                persistent-hint
-                counter="300"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-textarea
+                  v-model="destination.meta_description"
+                  label="Meta Description"
+                  placeholder="Explore iconic Himalayan trekking routes in the Everest Khumbu region with E.A.T.H. Travels. Professional Sherpa guides, custom itineraries, and high-altitude safety."
+                  rows="3"
+                  auto-grow
+                  hint="Optimal length: 140–160 characters (max 300)"
+                  persistent-hint
+                  counter="300"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <!-- Live Google SERP Preview -->

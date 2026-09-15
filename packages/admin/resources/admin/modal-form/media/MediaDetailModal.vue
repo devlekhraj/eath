@@ -21,7 +21,7 @@
           </div>
 
           <div class="mt-3 d-flex align-center ga-2">
-            <div class="flex-grow-1">
+            <div class="flex-grow-1 mb-2">
                 <v-text-field
                   :model-value="asset.url"
                   label="Direct Public URL"

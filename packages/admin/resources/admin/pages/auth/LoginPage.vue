@@ -42,7 +42,7 @@
         </v-alert>
 
         <v-form ref="formRef" @submit.prevent="handleLogin">
-          <div class="mb-4">
+          <div class="mb-2">
             <v-text-field
               v-model="credentials.username"
               label="Username"
@@ -57,7 +57,7 @@
             />
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <v-text-field
               v-model="credentials.password"
               :type="showPassword ? 'text' : 'password'"
@@ -75,7 +75,7 @@
             />
           </div>
 
-          <div class="d-flex align-center justify-space-between mb-4">
+          <div class="d-flex align-center justify-space-between mb-2">
             <v-checkbox
               v-model="rememberMe"
               label="Remember me"

@@ -63,7 +63,9 @@
 
                     <v-col cols="12">
                         <label class="text-caption mb-1 d-block">Description</label>
-                        <SummarnoteEditor v-model="form.description" minHeight="180" />
+                        <div class="mb-2">
+                            <SummarnoteEditor v-model="form.description" minHeight="180" />
+                        </div>
                     </v-col>
                 </v-row>
             </v-form>

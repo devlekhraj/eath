@@ -20,36 +20,18 @@
             </v-btn>
           </div>
 
-          <v-expansion-panels
-            v-if="itineraryDays.length"
-            multiple
-            flat
-            elevation="0"
-          >
-            <v-expansion-panel
-              v-for="itinerary in itineraryDays"
-              :key="itinerary.id"
-              elevation="0"
-              class="mb-2 border rounded elevation-0"
-            >
+          <v-expansion-panels v-if="itineraryDays.length" multiple flat elevation="0">
+            <v-expansion-panel v-for="itinerary in itineraryDays" :key="itinerary.id" elevation="0"
+              class="mb-2 border rounded elevation-0">
               <v-expansion-panel-title class="font-weight-medium">
                 <span class="text-primary font-weight-bold mr-2">Day {{ itinerary.day_number }}:</span>
                 <span>{{ itinerary.title }}</span>
-                <v-chip
-                  v-if="itinerary.altitude_m || itinerary.altitude_label"
-                  size="x-small"
-                  variant="tonal"
-                  color="secondary"
-                  class="ml-3"
-                >
+                <v-chip v-if="itinerary.altitude_m || itinerary.altitude_label" size="x-small" variant="tonal"
+                  color="secondary" class="ml-3">
                   {{ itinerary.altitude_label || `${itinerary.altitude_m}m` }}
                 </v-chip>
-                <v-chip
-                  v-if="itinerary.walking_hours || itinerary.walking_hours_label"
-                  size="x-small"
-                  variant="outlined"
-                  class="ml-2"
-                >
+                <v-chip v-if="itinerary.walking_hours || itinerary.walking_hours_label" size="x-small"
+                  variant="outlined" class="ml-2">
                   {{ itinerary.walking_hours_label || `${itinerary.walking_hours} hrs` }}
                 </v-chip>
               </v-expansion-panel-title>
@@ -64,19 +46,11 @@
                     </div>
 
                     <div class="d-flex ga-2">
-                      <v-btn
-                        color="primary"
-                        variant="outlined"
-                        @click="handleOpenDay(itinerary)"
-                      >
+                      <v-btn color="primary" variant="outlined" @click="handleOpenDay(itinerary)">
                         <v-icon start size="14">mdi-pencil</v-icon>
                         Edit Day
                       </v-btn>
-                      <v-btn
-                        color="primary"
-                        variant="tonal"
-                        @click="handleHighlights(itinerary)"
-                      >
+                      <v-btn color="primary" variant="tonal" @click="handleHighlights(itinerary)">
                         <v-icon start size="14">mdi-star-outline</v-icon>
                         Add Highlight
                       </v-btn>
@@ -93,12 +67,7 @@
                       Day Highlights
                     </div>
                     <v-row dense>
-                      <v-col
-                        v-for="(highlight, hIdx) in itinerary.highlights"
-                        :key="highlight.id || hIdx"
-                        cols="12"
-                        md="6"
-                      >
+                      <v-col v-for="(highlight, hIdx) in itinerary.highlights" :key="highlight.id || hIdx" cols="12">
                         <v-card variant="outlined" class="pa-3 h-100 bg-slate-50">
                           <div class="d-flex align-start justify-space-between">
                             <div>
@@ -109,12 +78,7 @@
                                 {{ highlight.description }}
                               </div>
                             </div>
-                            <v-btn
-                              icon
-                              variant="text"
-                              color="primary"
-                              @click="handleHighlights(itinerary, highlight)"
-                            >
+                            <v-btn icon variant="text" color="primary" @click="handleHighlights(itinerary, highlight)">
                               <v-icon size="14">mdi-pencil</v-icon>
                             </v-btn>
                           </div>
@@ -127,11 +91,7 @@
             </v-expansion-panel>
           </v-expansion-panels>
 
-          <div
-            v-else
-            class="text-center pa-8 bg-grey-lighten-5 rounded"
-            style="border: 1px dashed #cbd5e1;"
-          >
+          <div v-else class="text-center pa-8 bg-grey-lighten-5 rounded" style="border: 1px dashed #cbd5e1;">
             <v-icon size="40" color="grey" class="mb-2">mdi-map-marker-path</v-icon>
             <div class="text-body-2 font-weight-medium text-slate-700">No Itinerary Days Created</div>
             <div class="text-caption text-medium-emphasis mt-1">
@@ -158,47 +118,36 @@
             </v-btn>
           </div>
 
-          <v-row v-if="journeyHighlights.length">
-            <v-col
-              v-for="(highlight, index) in journeyHighlights"
-              :key="highlight.id || index"
-              cols="12"
-              md="6"
-            >
-              <v-card variant="outlined" class="pa-4 h-100 d-flex flex-column justify-space-between">
-                <div class="d-flex align-start ga-3">
-                  <v-avatar size="36" color="primary" variant="tonal" class="flex-shrink-0">
+          <v-list v-if="journeyHighlights.length" class="bg-transparent" style="font-size: 14px;">
+            <template v-for="(highlight, index) in journeyHighlights" :key="highlight.id || index">
+              <v-list-item class="px-0 py-3">
+                <template #prepend>
+                  <v-avatar size="36" color="primary" variant="tonal" class="mr-3">
                     <v-icon size="20">{{ highlight.icon || 'mdi-star' }}</v-icon>
                   </v-avatar>
-                  <div class="overflow-hidden">
-                    <div class="text-subtitle-2 font-weight-bold text-primary text-truncate">
-                      {{ highlight.title || highlight.highlight_name }}
-                    </div>
-                    <div class="text-body-2 text-slate-600 mt-1">
-                      {{ highlight.description }}
-                    </div>
-                  </div>
-                </div>
+                </template>
 
-                <div class="d-flex justify-end pt-3 mt-2 border-t">
-                  <v-btn
-                    variant="outlined"
-                    color="primary"
-                    @click="openHighlightForm(highlight)"
-                  >
+                <v-list-item-title class="text-primary" style="font-size: 14px !important; font-weight: 400; line-height: 1.5; white-space: normal;">
+                  {{ highlight.title || highlight.highlight_name }}
+                </v-list-item-title>
+
+                <v-list-item-subtitle v-if="highlight.description" class="text-slate-600 mt-1"
+                  style="font-size: 14px !important; white-space: normal; line-height: 1.4;">
+                  {{ highlight.description }}
+                </v-list-item-subtitle>
+
+                <template #append>
+                  <v-btn variant="outlined" color="primary" @click="openHighlightForm(highlight)">
                     <v-icon start size="14">mdi-pencil</v-icon>
                     Edit
                   </v-btn>
-                </div>
-              </v-card>
-            </v-col>
-          </v-row>
+                </template>
+              </v-list-item>
+              <v-divider v-if="index < journeyHighlights.length - 1" />
+            </template>
+          </v-list>
 
-          <div
-            v-else
-            class="text-center pa-8 bg-grey-lighten-5 rounded"
-            style="border: 1px dashed #cbd5e1;"
-          >
+          <div v-else class="text-center pa-8 bg-grey-lighten-5 rounded" style="border: 1px dashed #cbd5e1;">
             <v-icon size="40" color="grey" class="mb-2">mdi-star-outline</v-icon>
             <div class="text-body-2 font-weight-medium text-slate-700">No Highlights Added</div>
             <div class="text-caption text-medium-emphasis mt-1">
@@ -289,4 +238,3 @@ function openHighlightForm(item = {}) {
   box-shadow: none !important;
 }
 </style>
-

@@ -498,39 +498,47 @@
 
                     <v-row dense>
                       <v-col cols="12" md="6">
-                        <v-text-field
-                          v-model="item.title"
-                          label="Protocol Title *"
-                          density="compact"
-                          placeholder="e.g. Comprehensive Medical Kit & Oxygen"
-                        />
+                        <div class="mb-2">
+                          <v-text-field
+                            v-model="item.title"
+                            label="Protocol Title *"
+                            density="compact"
+                            placeholder="e.g. Comprehensive Medical Kit & Oxygen"
+                          />
+                        </div>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-text-field
-                          v-model="item.icon"
-                          label="Icon (e.g. mdi-shield-check)"
-                          density="compact"
-                          placeholder="e.g. mdi-shield-cross"
-                        />
+                        <div class="mb-2">
+                          <v-text-field
+                            v-model="item.icon"
+                            label="Icon (e.g. mdi-shield-check)"
+                            density="compact"
+                            placeholder="e.g. mdi-shield-cross"
+                          />
+                        </div>
                       </v-col>
                       <v-col cols="12" md="2">
-                        <v-switch
-                          v-model="item.is_active"
-                          label="Active"
-                          color="success"
-                          density="compact"
-                          hide-details
-                        />
+                        <div class="mb-2">
+                          <v-switch
+                            v-model="item.is_active"
+                            label="Active"
+                            color="success"
+                            density="compact"
+                            hide-details
+                          />
+                        </div>
                       </v-col>
                       <v-col cols="12">
-                        <v-textarea
-                          v-model="item.description"
-                          label="Description & Procedures *"
-                          rows="2"
-                          auto-grow
-                          density="compact"
-                          placeholder="Describe equipment readiness, evacuation coverage, and guide certifications."
-                        />
+                        <div class="mb-2">
+                          <v-textarea
+                            v-model="item.description"
+                            label="Description & Procedures *"
+                            rows="2"
+                            auto-grow
+                            density="compact"
+                            placeholder="Describe equipment readiness, evacuation coverage, and guide certifications."
+                          />
+                        </div>
                       </v-col>
                     </v-row>
                   </v-card>
@@ -554,59 +562,71 @@
 
                 <v-row dense>
                   <v-col cols="12">
-                    <v-text-field
-                      v-model="form.cta_title"
-                      label="CTA Banner Title"
-                      :placeholder="`Ready to Trek ${form.name || 'this Route'}?`"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="form.cta_title"
+                        label="CTA Banner Title"
+                        :placeholder="`Ready to Trek ${form.name || 'this Route'}?`"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12">
-                    <v-textarea
-                      v-model="form.cta_description"
-                      label="CTA Banner Description"
-                      placeholder="Lock in guaranteed small-group departures or request a private bespoke departure tailored to your fitness and scheduling requirements."
-                      rows="2"
-                      auto-grow
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-textarea
+                        v-model="form.cta_description"
+                        label="CTA Banner Description"
+                        placeholder="Lock in guaranteed small-group departures or request a private bespoke departure tailored to your fitness and scheduling requirements."
+                        rows="2"
+                        auto-grow
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.cta_primary_btn_text"
-                      label="Primary Button Text"
-                      placeholder="Inquire / Book This Trek"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="form.cta_primary_btn_text"
+                        label="Primary Button Text"
+                        placeholder="Inquire / Book This Trek"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.cta_primary_btn_url"
-                      label="Primary Button URL / Route"
-                      placeholder="#departures"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="form.cta_primary_btn_url"
+                        label="Primary Button URL / Route"
+                        placeholder="#departures"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.cta_secondary_btn_text"
-                      label="Secondary Button Text"
-                      placeholder="Custom Expedition Inquiry"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="form.cta_secondary_btn_text"
+                        label="Secondary Button Text"
+                        placeholder="Custom Expedition Inquiry"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
 
                   <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.cta_secondary_btn_url"
-                      label="Secondary Button URL"
-                      placeholder="/contact"
-                      density="comfortable"
-                    />
+                    <div class="mb-2">
+                      <v-text-field
+                        v-model="form.cta_secondary_btn_url"
+                        label="Secondary Button URL"
+                        placeholder="/contact"
+                        density="comfortable"
+                      />
+                    </div>
                   </v-col>
                 </v-row>
               </v-card>

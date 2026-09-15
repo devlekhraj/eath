@@ -296,7 +296,9 @@
 										</div>
 									</div>
 
-									<SummarnoteEditor v-model="form.body" minHeight="180" />
+									<div class="mb-2">
+										<SummarnoteEditor v-model="form.body" minHeight="180" />
+									</div>
 								</v-card>
 
 								<!-- 5. Modular Page Sections (Collapsible / Expandable Panels) -->
@@ -433,11 +435,13 @@
 													</v-col>
 
 													<v-col cols="12">
-														<div class="mb-3 mt-1">
+														<div class="mb-2 mt-1">
 															<label class="text-caption mb-1 d-block font-weight-medium">
 																Section Intro / Explanatory Text
 															</label>
-															<SummarnoteEditor v-model="sec.body" minHeight="120" />
+															<div class="mb-2">
+																<SummarnoteEditor v-model="sec.body" minHeight="120" />
+															</div>
 														</div>
 													</v-col>
 												</v-row>
@@ -506,33 +510,37 @@
 
 															<v-row dense>
 																<v-col cols="12" md="8">
-																	<v-text-field
-																		v-model="item.title"
-																		label="Title / Principle / Question *"
-																		density="compact"
-																		hide-details="auto"
-																		class="mb-2"
-																	/>
+																	<div class="mb-2">
+																		<v-text-field
+																			v-model="item.title"
+																			label="Title / Principle / Question *"
+																			density="compact"
+																			hide-details="auto"
+																		/>
+																	</div>
 																</v-col>
 																<v-col cols="12" md="4">
-																	<v-text-field
-																		v-model="item.tag"
-																		label="Badge / Tag / Category"
-																		density="compact"
-																		placeholder="e.g. Standard 01, Protocol"
-																		hide-details="auto"
-																		class="mb-2"
-																	/>
+																	<div class="mb-2">
+																		<v-text-field
+																			v-model="item.tag"
+																			label="Badge / Tag / Category"
+																			density="compact"
+																			placeholder="e.g. Standard 01, Protocol"
+																			hide-details="auto"
+																		/>
+																	</div>
 																</v-col>
 																<v-col cols="12">
-																	<v-textarea
-																		v-model="item.description"
-																		label="Description / Protocol Detail / Answer *"
-																		rows="2"
-																		density="compact"
-																		auto-grow
-																		hide-details="auto"
-																	/>
+																	<div class="mb-2">
+																		<v-textarea
+																			v-model="item.description"
+																			label="Description / Protocol Detail / Answer *"
+																			rows="2"
+																			density="compact"
+																			auto-grow
+																			hide-details="auto"
+																		/>
+																	</div>
 																</v-col>
 															</v-row>
 														</v-card>
@@ -660,7 +668,7 @@
 
 									<v-row dense>
 										<v-col cols="12">
-											<div class="mb-3">
+											<div class="mb-2">
 												<v-text-field
 													v-model="form.meta_title"
 													label="Meta Title (SEO)"
@@ -672,7 +680,7 @@
 										</v-col>
 
 										<v-col cols="12">
-											<div class="mb-3">
+											<div class="mb-2">
 												<v-textarea
 													v-model="form.meta_description"
 													label="Meta Description (SEO)"

@@ -3,7 +3,7 @@
         <v-card class="pa-2">
           
             <v-card-text>
-                <div class="mb-4">
+                <div class="mb-2">
                     <SummarnoteEditor v-model="form.description" />
                     <span v-if="descriptionError" class="text-error text-caption">Content is required</span>
                 </div>

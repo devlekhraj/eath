@@ -5,29 +5,33 @@
         <v-form v-if="experience" @submit.prevent="handleUpdate">
           <v-row>
             <v-col cols="12">
-              <v-text-field
-                v-model="experience.meta_title"
-                label="Meta Title"
-                placeholder="e.g. Mountain Scenery Treks & High Passes in Nepal | E.A.T.H. Travels"
-                hint="Optimal length: 50–60 characters"
-                persistent-hint
-                counter="60"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-text-field
+                  v-model="experience.meta_title"
+                  label="Meta Title"
+                  placeholder="e.g. Mountain Scenery Treks & High Passes in Nepal | E.A.T.H. Travels"
+                  hint="Optimal length: 50–60 characters"
+                  persistent-hint
+                  counter="60"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <v-col cols="12">
-              <v-textarea
-                v-model="experience.meta_description"
-                label="Meta Description"
-                placeholder="Experience iconic Himalayan panoramic vistas, high-altitude ridges, and alpine photography expeditions with E.A.T.H. Travels."
-                rows="3"
-                auto-grow
-                hint="Optimal length: 140–160 characters (max 300)"
-                persistent-hint
-                counter="300"
-                density="comfortable"
-              />
+              <div class="mb-2">
+                <v-textarea
+                  v-model="experience.meta_description"
+                  label="Meta Description"
+                  placeholder="Experience iconic Himalayan panoramic vistas, high-altitude ridges, and alpine photography expeditions with E.A.T.H. Travels."
+                  rows="3"
+                  auto-grow
+                  hint="Optimal length: 140–160 characters (max 300)"
+                  persistent-hint
+                  counter="300"
+                  density="comfortable"
+                />
+              </div>
             </v-col>
 
             <!-- Live Google SERP Preview -->
