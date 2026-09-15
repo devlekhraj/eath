@@ -3,8 +3,18 @@
 @section('title', 'Review Your Himalayan Trek Plan (Website)')
 @section('meta_description', 'Review your tailored Himalayan trek plan, dates, party size, and illustrative pricing before submitting website request.')
 
+@php
+    $hideTopBreadcrumbs = true;
+@endphp
+
 @section('content')
-<div class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12); max-width: 960px;">
+<div id="planner-app" data-planner-root class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12); max-width: 960px;">
+
+    @if(!empty($breadcrumbs))
+        <div style="margin-bottom: var(--space-4);">
+            @include('website_preview.components.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+        </div>
+    @endif
 
     <!-- 1. Header & Navigation -->
     <div style="margin-bottom: var(--space-6);">
@@ -247,7 +257,7 @@
                 </p>
             </div>
         @else
-            <div style="padding: var(--space-4); background: var(--color-background-warm); border-radius: var(--radius-md); text-align: center;">
+            <div style="padding: var(--space-4); background: var(--color-background-warm); border-radius: 0 !important; text-align: center;">
                 <strong style="display: block; font-size: var(--type-h4); color: var(--color-text-secondary); margin-bottom: var(--space-1);">
                     No sample price selected
                 </strong>

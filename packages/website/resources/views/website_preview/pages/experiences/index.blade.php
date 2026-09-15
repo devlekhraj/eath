@@ -109,27 +109,31 @@
     </section>
 
     <!-- 5. Help Me Choose CTA -->
-    <section aria-labelledby="heading-choose-cta">
-        <div class="website-card" style="padding: var(--space-8); background: var(--color-primary-subtle); border: 2px solid var(--color-primary-light); text-align: center;">
-            <span class="website-badge website-badge--primary" style="margin-bottom: var(--space-2); text-transform: uppercase;">
-                Personalized Matching
+    <section aria-labelledby="heading-choose-cta" class="website-final-cta" style="border-radius: 0 !important;">
+        <div class="website-final-cta__inner">
+            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                EXPEDITION PLANNING
             </span>
-            <h2 id="heading-choose-cta" class="website-h2" style="margin-bottom: var(--space-2); color: var(--color-primary-dark);">
+            <h2 id="heading-choose-cta" class="website-final-cta__title" style="font-size: var(--type-h2);">
                 Need Help Choosing Your Experience?
             </h2>
-            <p class="website-body website-text-secondary" style="max-width: 680px; margin: 0 auto var(--space-6) auto; line-height: 1.6;">
+            <p class="website-final-cta__subtitle">
                 Our interactive trip planner balances multiple interest categories against your available days, preferred season, and alpine experience to find your ideal match.
             </p>
 
-            <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
-                <a href="{{ route('website.planner.start') }}?mode=discover&source=experience" class="website-btn website-btn--primary">
+            <div class="website-final-cta__actions">
+                <a href="{{ route('website.planner.start') }}?mode=discover&source=experience"
+                   class="website-btn website-btn--accent"
+                   style="border-radius: 0 !important;">
                     <svg class="website-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
                     </svg>
-                    <span>Plan My Journey &rarr;</span>
+                    <span>Plan My Journey</span>
                 </a>
-                <a href="{{ route('website.compare') }}" class="website-btn website-btn--outline">
+                <a href="{{ route('website.compare') }}"
+                   class="website-btn website-btn--outline"
+                   style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
                     <svg class="website-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="3" y="3" width="7" height="18"></rect>
                         <rect x="14" y="3" width="7" height="18"></rect>

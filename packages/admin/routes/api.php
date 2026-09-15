@@ -24,6 +24,7 @@ use Admin\Http\Controllers\WebsiteSection\WebsiteSectionController;
 use Admin\Http\Controllers\Media\MediaAssetController;
 use Admin\Http\Controllers\Faq\FaqController;
 use Admin\Http\Controllers\Settings\SettingController;
+use Admin\Http\Controllers\ComparisonPreset\ComparisonPresetController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('api/v1')->middleware('api')->group(function () {
@@ -140,7 +141,7 @@ Route::prefix('api/v1')->middleware('api')->group(function () {
         Route::get('article-categories', [ArticleCategoryController::class, 'index']);
         Route::post('article-categories', [ArticleCategoryController::class, 'store']);
         Route::get('article-categories/{id}', [ArticleCategoryController::class, 'show']);
-        Route::patch('article-categories/{id}', [ArticleCategoryController::class, 'update']);
+        Route::match(['put', 'patch'], 'article-categories/{id}', [ArticleCategoryController::class, 'update']);
         Route::patch('article-categories/{id}/toggle-active', [ArticleCategoryController::class, 'toggleActive']);
         Route::delete('article-categories/{id}/delete', [ArticleCategoryController::class, 'delete']);
         Route::delete('article-categories/{id}', [ArticleCategoryController::class, 'delete']);
@@ -229,5 +230,8 @@ Route::prefix('api/v1')->middleware('api')->group(function () {
         Route::get('settings', [SettingController::class, 'index']);
         Route::post('settings', [SettingController::class, 'storeUpdate']);
         Route::get('settings/{key}', [SettingController::class, 'show']);
+
+        // Comparison Presets
+        Route::apiResource('comparison-presets', ComparisonPresetController::class);
     });
 });

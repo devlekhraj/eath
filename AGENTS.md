@@ -452,6 +452,24 @@ for structural heading labels or step indicators.
 
 ---
 
+## 5. Universal Bottom Call-To-Action (CTA) Banner Standard (`.website-final-cta`)
+
+Every bottom Call-To-Action (CTA) section on public website and demo views (detail pages, listing pages, when-to-go, index views, etc.) must strictly follow the **Trek Detail expedition banner standard** using `.website-final-cta`. Never render ordinary pale-blue bordered cards (`--color-primary-subtle`), plain white cards, or custom boxed layouts for bottom CTA sections.
+
+### Required Architecture & Styling
+* **Container**: `<section aria-labelledby="..." class="website-final-cta" style="border-radius: 0 !important;">`
+* **Inner Wrapper**: `<div class="website-final-cta__inner">` (max-width: 680px, auto centered)
+* **Background**: Deep Alpine Azure (`#0369a1` / `var(--color-primary-hover)`), sharp architectural zero border-radius (`border-radius: 0 !important;`)
+* **Eyebrow Label**: Background-free and border-free uppercase tracked kicker (`<span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">` with `EXPEDITION PLANNING` or dynamic `$entity['cta_eyebrow']`) in vivid crimson (`#e11d48` / `var(--color-accent)`)
+* **Heading**: Large white editorial serif headline (`<h2 class="website-final-cta__title" style="font-size: var(--type-h2);">` using `font-family: var(--font-display)`)
+* **Subtitle**: High-contrast white/translucent secondary body copy (`<p class="website-final-cta__subtitle">`)
+* **Action Buttons**:
+  * **Primary CTA Button**: Solid crimson accent (`class="website-btn website-btn--accent" style="border-radius: 0 !important;"`)
+  * **Secondary Action Button**: Translucent white-bordered button (`class="website-btn website-btn--outline" style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;"`)
+* **Dynamic Database Backing**: Map dynamic fields (`cta_title`, `cta_description`, `cta_primary_btn_text`, `cta_primary_btn_url`, `cta_secondary_btn_text`, `cta_secondary_btn_url`) with sensible fallback defaults so empty database values never break layout.
+
+---
+
 # UI & Vuetify Component Standards — Admin Panel Only
 
 > **IMPORTANT:** The Universal Zero Border-Radius Policy applies strictly to public website and demo views. It does **not** apply to the Admin Panel.

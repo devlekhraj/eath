@@ -80,6 +80,20 @@ const routes: RouteRecordRaw[] = [
 				redirect: '/admin/journeys',
 			},
 			{
+				path: 'comparison-presets',
+				name: 'adminComparisonPresetPage',
+				component: () => import('@pages/comparison_presets/ComparisonPresetPage.vue'),
+				meta: {
+					requireAuth: true,
+					title: 'Comparison Presets',
+					subtitle: 'Manage quick comparison presets for website comparison engine',
+				},
+			},
+			{
+				path: 'compare-presets',
+				redirect: '/admin/comparison-presets',
+			},
+			{
 				path: 'packages/:id',
 				redirect: (to) => `/admin/journeys/${to.params.id}`,
 			},
@@ -213,9 +227,13 @@ const routes: RouteRecordRaw[] = [
 				component: () => import('@pages/articles/ArticleCategoryPage.vue'),
 				meta: {
 					requireAuth: true,
-					title: 'Article Categories',
-					subtitle: 'Organize article content',
+					title: 'Pillars & Categories',
+					subtitle: 'Manage the 6 Himalayan expedition pillars, rules, checklists, and article categories',
 				},
+			},
+			{
+				path: 'pillars',
+				redirect: '/admin/article-categories',
 			},
 			// Legacy article aliases
 			{

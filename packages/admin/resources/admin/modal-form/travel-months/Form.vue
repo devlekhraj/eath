@@ -63,6 +63,56 @@
                         </div>
                     </v-col>
 
+                    <v-col cols="12" md="4">
+                        <div class="mb-2">
+                            <v-select
+                                v-model.number="form.content.clarity_score"
+                                :items="[1, 2, 3, 4, 5]"
+                                label="Sky Clarity Score (1-5)"
+                            />
+                        </div>
+                    </v-col>
+
+                    <v-col cols="12" md="8">
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.content.clarity_label"
+                                label="Sky Clarity Label"
+                                placeholder="e.g. Crystal 360° Clarity, Prime Panoramic"
+                            />
+                        </div>
+                    </v-col>
+
+                    <v-col cols="12" md="4">
+                        <div class="mb-2">
+                            <v-select
+                                v-model.number="form.content.footprint_score"
+                                :items="[1, 2, 3, 4, 5]"
+                                label="Trail Footprint / Crowd (1-5)"
+                            />
+                        </div>
+                    </v-col>
+
+                    <v-col cols="12" md="4">
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.content.footprint_label"
+                                label="Trail Footprint Label"
+                                placeholder="e.g. Peak Vitality, Active & Social"
+                            />
+                        </div>
+                    </v-col>
+
+                    <v-col cols="12" md="4">
+                        <div class="mb-2">
+                            <v-text-field
+                                v-model="form.content.badge"
+                                label="Seasonal Badge / Kicker"
+                                placeholder="e.g. Peak Trekking Season"
+                            />
+                        </div>
+                    </v-col>
+
                     <v-col cols="12">
                         <div class="mb-2">
                             <v-textarea
@@ -120,6 +170,11 @@ const form = reactive({
     content: {
         trail_vibe: '',
         pack_tip: '',
+        clarity_score: 3,
+        clarity_label: '',
+        footprint_score: 3,
+        footprint_label: '',
+        badge: '',
     },
     is_active: true,
 })
@@ -150,6 +205,11 @@ onMounted(() => {
             content: {
                 trail_vibe: props.item.content?.trail_vibe || '',
                 pack_tip: props.item.content?.pack_tip || '',
+                clarity_score: Number(props.item.content?.clarity_score) || 3,
+                clarity_label: props.item.content?.clarity_label || '',
+                footprint_score: Number(props.item.content?.footprint_score) || 3,
+                footprint_label: props.item.content?.footprint_label || '',
+                badge: props.item.content?.badge || '',
                 reasons: props.item.content?.reasons || [],
                 limitations: props.item.content?.limitations || [],
             },

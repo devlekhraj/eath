@@ -151,6 +151,34 @@ class TravelMonthController extends Controller
         ];
         $article = WebsiteCatalogRepository::findArticle('choosing-a-travel-month');
 
+        $pageTitle = $page?->meta_title ?: ($page?->title ?: 'When to Trek in Nepal · Month-by-Month Guide · EATH Website');
+        $metaDescription = $page?->meta_description ?: ($page?->summary ?: 'Himalayan trekking conditions shift markedly across elevation zones and seasons. Review seasonal patterns and matching itineraries.');
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'month' => [
+                    'id' => $selectedMonth['id'],
+                    'slug' => $selectedMonth['slug'],
+                    'name' => $selectedMonth['name'],
+                    'season' => $selectedMonth['season'] ?? '',
+                ],
+                'isDefault' => $isDefault,
+                'title' => ($isDefault ? $pageTitle : ('Planning a Trek in ' . $selectedMonth['name'] . ' · When to Go · EATH Website')),
+                'grid_html' => view('website_preview.pages.months.partials.grid', [
+                    'months' => $allMonths,
+                    'selectedMonth' => $selectedMonth,
+                    'isDefault' => $isDefault,
+                ])->render(),
+                'content_html' => view('website_preview.pages.months.partials.selected_content', [
+                    'page' => $page,
+                    'selectedMonth' => $selectedMonth,
+                    'isDefault' => $isDefault,
+                    'currentEditorial' => $currentEditorial,
+                    'matchingTreks' => $matchingTreks,
+                ])->render(),
+            ]);
+        }
+
         return view('website_preview.pages.months.index', [
             'page' => $page,
             'months' => $allMonths,
@@ -160,8 +188,8 @@ class TravelMonthController extends Controller
             'currentEditorial' => $currentEditorial,
             'matchingTreks' => $matchingTreks,
             'article' => $article,
-            'title' => $page?->meta_title ?: ($page?->title ?: 'When to Trek in Nepal · Month-by-Month Guide · EATH Website'),
-            'metaDescription' => $page?->meta_description ?: ($page?->summary ?: 'Himalayan trekking conditions shift markedly across elevation zones and seasons. Review seasonal patterns and matching itineraries.'),
+            'title' => $pageTitle,
+            'metaDescription' => $metaDescription,
             'breadcrumbs' => [
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'When to Go'],

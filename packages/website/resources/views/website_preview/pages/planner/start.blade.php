@@ -3,8 +3,18 @@
 @section('title', 'Plan My Himalayan Trek — Interactive Planner (Website)')
 @section('meta_description', 'Plan your personalized Himalayan trek in Nepal with our interactive trip planner. Tailored pace, altitude guidance, and ground pricing.')
 
+@php
+    $hideTopBreadcrumbs = true;
+@endphp
+
 @section('content')
-<div class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12); max-width: 960px;">
+<div id="planner-app" data-planner-root class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12); max-width: 960px;">
+
+    @if(!empty($breadcrumbs))
+        <div style="margin-bottom: var(--space-4);">
+            @include('website_preview.components.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+        </div>
+    @endif
 
     <!-- 1. Header & Website Disclosure -->
     <div style="margin-bottom: var(--space-6);">
@@ -40,7 +50,7 @@
             </div>
 
             <!-- Summary of current answers -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-3); padding: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: var(--space-6);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-3); padding: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0 !important; margin-bottom: var(--space-6);">
                 <div>
                     <span class="website-micro website-text-secondary" style="display: block;">Planning Mode</span>
                     <strong style="text-transform: capitalize;">{{ $existingDraft['mode'] }}</strong>
@@ -112,7 +122,7 @@
 
                 <div style="display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-6);">
                     <!-- Discover Mode Option -->
-                    <label class="website-mode-choice" style="display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; background: var(--color-surface);">
+                    <label class="website-mode-choice" style="display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: 0 !important; cursor: pointer; background: var(--color-surface);">
                         <input type="radio" name="mode" value="discover" {{ $context['mode'] === 'discover' ? 'checked' : '' }} style="margin-top: 4px; accent-color: var(--color-primary);">
                         <div>
                             <strong style="display: block; margin-bottom: var(--space-1); font-size: 1.05rem;">
@@ -125,7 +135,7 @@
                     </label>
 
                     <!-- Selected Trek Mode Option -->
-                    <label class="website-mode-choice" style="display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; background: var(--color-surface);">
+                    <label class="website-mode-choice" style="display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: 0 !important; cursor: pointer; background: var(--color-surface);">
                         <input type="radio" name="mode" value="selected" {{ $context['mode'] === 'selected' ? 'checked' : '' }} style="margin-top: 4px; accent-color: var(--color-primary);">
                         <div>
                             <strong style="display: block; margin-bottom: var(--space-1); font-size: 1.05rem;">
@@ -141,7 +151,7 @@
                     </label>
 
                     <!-- Custom Trip Mode Option -->
-                    <label class="website-mode-choice" style="display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; background: var(--color-surface);">
+                    <label class="website-mode-choice" style="display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: 0 !important; cursor: pointer; background: var(--color-surface);">
                         <input type="radio" name="mode" value="custom" {{ $context['mode'] === 'custom' ? 'checked' : '' }} style="margin-top: 4px; accent-color: var(--color-primary);">
                         <div>
                             <strong style="display: block; margin-bottom: var(--space-1); font-size: 1.05rem;">
@@ -167,7 +177,7 @@
     @endif
 
     <!-- Trust & Website Notice Card -->
-    <div style="padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+    <div style="padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;">
         <div style="display: flex; gap: var(--space-3); align-items: center;">
             <div style="font-size: 1.5rem;" aria-hidden="true">&bigstar;</div>
             <div class="website-small website-text-secondary">

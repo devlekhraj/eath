@@ -54,22 +54,24 @@
                 </p>
 
                 <!-- Quick Preset Combinations -->
-                <div style="margin-bottom: var(--space-8); padding: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
-                    <span class="website-micro website-text-secondary" style="text-transform: uppercase; font-weight: 600; display: block; margin-bottom: var(--space-2);">
-                        Quick Comparison Presets
-                    </span>
-                    <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
-                        <a href="{{ route('website.compare', ['treks' => ['t-ebc', 't-abc', 't-langtang']]) }}" class="website-btn website-btn--outline website-btn--compact website-compare-set-link">
-                            Classic Trio: EBC vs ABC vs Langtang
-                        </a>
-                        <a href="{{ route('website.compare', ['treks' => ['t-mardi', 't-khopra']]) }}" class="website-btn website-btn--outline website-btn--compact website-compare-set-link">
-                            Annapurna Ridges: Mardi Himal vs Khopra
-                        </a>
-                        <a href="{{ route('website.compare', ['treks' => ['t-ebc', 't-gokyo']]) }}" class="website-btn website-btn--outline website-btn--compact website-compare-set-link">
-                            Everest Routes: Base Camp vs Gokyo Lakes
-                        </a>
+                @if(!empty($presets) && count($presets) > 0)
+                    <div style="margin-bottom: var(--space-8); padding: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0 !important;">
+                        <span class="website-micro website-text-secondary" style="text-transform: uppercase; font-weight: 600; display: block; margin-bottom: var(--space-2); letter-spacing: 0.05em;">
+                            Quick Comparison Presets
+                        </span>
+                        <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
+                            @foreach($presets as $preset)
+                                <a href="{{ route('website.compare', ['preset' => $preset->slug]) }}"
+                                   class="website-btn website-btn--outline website-btn--compact website-compare-set-link"
+                                   data-preset="{{ $preset->slug }}"
+                                   data-trek-ids="{{ json_encode($preset->trek_ids) }}"
+                                   style="border-radius: 0 !important;">
+                                    {{ $preset->name }}
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
 
             <!-- All 8 Treks Selection Grid -->
@@ -114,7 +116,7 @@
 
     @else
         <!-- 3. Active Comparison Toolbar (Differences Toggle, Count, Clear) -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;">
             <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
                 <label style="display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer; font-size: var(--type-small); font-weight: 500;">
                     <input type="checkbox" id="website-toggle-diffs" aria-controls="website-compare-table" style="cursor: pointer; width: 18px; height: 18px; accent-color: var(--color-primary);">
@@ -135,6 +137,25 @@
                 </a>
             </div>
         </div>
+
+        @if(!empty($presets) && count($presets) > 0)
+            <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4); flex-wrap: wrap; padding: var(--space-2) var(--space-3); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0 !important;">
+                <span class="website-micro website-text-secondary" style="font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                    Switch Preset:
+                </span>
+                <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                    @foreach($presets as $preset)
+                        <a href="{{ route('website.compare', ['preset' => $preset->slug]) }}"
+                           class="website-btn website-btn--outline website-btn--compact website-compare-set-link"
+                           data-preset="{{ $preset->slug }}"
+                           data-trek-ids="{{ json_encode($preset->trek_ids) }}"
+                           style="border-radius: 0 !important; font-size: var(--type-micro); padding: 4px 8px;">
+                            {{ $preset->name }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         @if(count($selectedTreks) === 1)
             <div class="website-notice website-notice--info" style="margin-bottom: var(--space-4);">
@@ -175,7 +196,7 @@
                             @endphp
                             <th scope="col" class="website-compare-table__trek-col">
                                 <div class="website-compare-header-card">
-                                    <div style="aspect-ratio: 16/10; overflow: hidden; border-radius: var(--radius-sm); margin-bottom: var(--space-2); background: var(--color-background-warm);">
+                                    <div style="aspect-ratio: 16/10; overflow: hidden; border-radius: 0 !important; margin-bottom: var(--space-2); background: var(--color-background-warm);">
                                         <img src="{{ $trekImage['url'] }}" alt="{{ $trekImage['alt'] }}" width="{{ $trekImage['width'] }}" height="{{ $trekImage['height'] }}" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
 
@@ -351,25 +372,24 @@
         </div>
     @endif
 
-    <!-- 5. Decision Guidance & Planner Return Section -->
-    <section class="website-card" style="background: var(--color-secondary); border: 1px solid var(--color-secondary); border-radius: 0 !important; margin-top: var(--space-8); margin-bottom: var(--space-12); padding: var(--space-8); color: #ffffff;">
-        <div style="max-width: 720px;">
-            <div style="font-size: var(--type-micro); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary-vivid); margin-bottom: var(--space-3);">
-                Unbiased Recommendation Engine
-            </div>
-            <h2 class="website-h2" style="color: #ffffff; margin-bottom: var(--space-3);">
+    <!-- 5. Universal Bottom Call-To-Action (CTA) Banner Standard -->
+    <section aria-labelledby="website-compare-final-cta" class="website-final-cta" style="border-radius: 0 !important; margin-top: var(--space-8); margin-bottom: var(--space-12);">
+        <div class="website-final-cta__inner">
+            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                EXPEDITION PLANNING
+            </span>
+            <h2 id="website-compare-final-cta" class="website-final-cta__title" style="font-size: var(--type-h2);">
                 Need help choosing the right trail?
             </h2>
-            <p class="website-body" style="color: rgba(255, 255, 255, 0.9); margin-bottom: var(--space-6); line-height: 1.6;">
+            <p class="website-final-cta__subtitle">
                 Tell our guided trip planner about your preferred season, physical walking comfort ceiling, travel companions, and ground budget. We will calculate an unbiased compatibility score across all 8 Himalayan routes.
             </p>
-
-            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-                <a href="{{ route('website.planner.start') }}" class="website-btn website-btn--accent">
+            <div class="website-final-cta__actions">
+                <a href="{{ route('website.planner.start') }}" class="website-btn website-btn--accent" style="border-radius: 0 !important;">
                     Open Guided Trip Planner &rarr;
                 </a>
                 @if(!empty($from) && $from === 'planner')
-                    <a href="{{ route('website.planner.start') }}" class="website-btn website-btn--outline" style="color: #ffffff; border-color: rgba(255, 255, 255, 0.5);">
+                    <a href="{{ route('website.planner.start') }}" class="website-btn website-btn--outline" style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
                         Return to Saved Plan
                     </a>
                 @endif

@@ -21,7 +21,7 @@ Every public frontend detail page (such as Destination Detail `/destinations/{sl
    - **Logistics, Practical Guide & Operational Notices**: All route access details, permits, pacing advice, and operational advisory banners (e.g., `operational_notice`) must be editable in Admin.
    - **Assigned Relational Data**: Linking related entities (e.g., Journeys assigned to Destinations, Experiences assigned to Journeys, etc.).
    - **Regional / Entity FAQs**: Every entity must support FAQs through the polymorphic `HasFaqs` trait and a dedicated Admin FAQ tab/component.
-   - **Bottom Call-To-Action (CTA) Banners**: Custom CTA title, description, primary button label/url, and secondary button label/url must be editable in Admin.
+   - **Bottom Call-To-Action (CTA) Banners**: Must use the `.website-final-cta` expedition banner standard (Deep Alpine Azure `#0369a1`, vivid crimson eyebrow `EXPEDITION PLANNING`, white serif display headline, crimson accent button, white outlined button, sharp 0 border-radius). Custom CTA title, description, primary button label/url, and secondary button label/url must be editable in Admin.
    - **SEO Metadata**: `meta_title` and `meta_description` with live SERP preview.
 
 3. **Zero Breakage & Smart Fallbacks Policy**:

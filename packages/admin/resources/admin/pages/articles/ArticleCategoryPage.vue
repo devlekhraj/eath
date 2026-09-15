@@ -23,7 +23,7 @@
 
           <v-col cols="auto">
             <v-btn color="primary" @click="handleOpen()">
-              <v-icon start>mdi-plus</v-icon> Add Category
+              <v-icon start>mdi-plus</v-icon> Add Pillar / Category
             </v-btn>
           </v-col>
         </v-row>
@@ -35,9 +35,24 @@
 
       <template #item.name="{ item }">
         <div>
-          <a href="#" class="text-primary text-decoration-underline" @click.prevent="handleOpen(item)">
+          <a href="#" class="text-primary text-decoration-underline font-weight-medium" @click.prevent="handleOpen(item)">
             {{ item.name }}
           </a>
+          <span v-if="item.kicker" class="text-caption text-slate-500 d-block font-weight-medium" style="font-size: 0.72rem;">
+            {{ item.kicker }}
+          </span>
+          <span v-else-if="item.tagline" class="text-caption text-slate-500 d-block" style="font-size: 0.72rem;">
+            {{ item.tagline }}
+          </span>
+        </div>
+      </template>
+
+      <template #item.rules_count="{ item }">
+        <div>
+          <span v-if="item.rules && item.rules.length" class="text-primary font-weight-medium">
+            {{ item.rules.length }} principles
+          </span>
+          <span v-else class="text-slate-400">—</span>
         </div>
       </template>
 
@@ -66,7 +81,7 @@
 
       <template #item.actions="{ item }">
         <div class="d-flex align-center justify-center ga-1">
-          <v-btn color="primary" variant="outlined" @click="handleOpen(item)" title="Edit category">
+          <v-btn color="primary" variant="outlined" @click="handleOpen(item)" title="Edit category and pillar">
             <v-icon start size="14">mdi-pencil</v-icon>
             Edit
           </v-btn>
@@ -92,7 +107,8 @@ const { showSuccess, showError } = useSnackbar()
 
 const headers = [
   { title: 'SN', key: 'sn', sortable: false },
-  { title: 'Category Name', key: 'name', sortable: false },
+  { title: 'Pillar & Category Name', key: 'name', sortable: false },
+  { title: 'Field Principles', key: 'rules_count', sortable: false },
   { title: 'Articles', key: 'articles_count', sortable: false },
   { title: 'Seq#', key: 'sort_order', sortable: false },
   { title: 'Active', key: 'is_active', sortable: false },

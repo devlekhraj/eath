@@ -239,30 +239,36 @@
     @endif
 
     <!-- 10. Plan This Month CTA -->
-    <section aria-labelledby="heading-plan-cta" style="margin-bottom: var(--space-12);">
-        <div class="website-card" style="padding: var(--space-8); background: var(--color-primary-subtle); border: 1px solid var(--color-primary); border-radius: 0 !important; box-shadow: none !important; text-align: center;">
-            <div style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; margin-bottom: var(--space-2); background: transparent !important; border: none !important; padding: 0 !important;">
-                Custom Journey Planning
-            </div>
-            <h2 id="heading-plan-cta" class="website-h2" style="margin-bottom: var(--space-2); color: var(--color-primary-dark);">
-                Plan a {{ $month['name'] }} Journey
+    <section aria-labelledby="heading-plan-cta" class="website-final-cta" style="margin-bottom: var(--space-12); border-radius: 0 !important;">
+        <div class="website-final-cta__inner">
+            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                {{ !empty($month['cta_eyebrow']) ? $month['cta_eyebrow'] : 'EXPEDITION PLANNING' }}
+            </span>
+            <h2 id="heading-plan-cta" class="website-final-cta__title" style="font-size: var(--type-h2);">
+                {{ !empty($month['cta_title']) ? $month['cta_title'] : ('Ready to plan your ' . $month['name'] . ' expedition?') }}
             </h2>
-            <p class="website-body website-text-secondary" style="max-width: 660px; margin: 0 auto var(--space-6) auto; line-height: 1.6;">
-                Launch our interactive trek planner with {{ $month['name'] }} pre-selected. Customize party size, duration, and route preferences to view tailored recommendations.
+            <p class="website-final-cta__subtitle">
+                {{ !empty($month['cta_description']) ? $month['cta_description'] : 'Build an unhurried, custom-paced itinerary draft with our licensed mountain team.' }}
             </p>
 
-            <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
-                <a href="{{ route('website.planner.start') }}?mode=discover&month={{ $month['id'] }}&source=month" class="website-btn website-btn--primary" style="border-radius: 0 !important;">
-                    Plan {{ $month['name'] }} Trek &rarr;
+            <div class="website-final-cta__actions">
+                <a href="{{ !empty($month['cta_primary_btn_url']) ? $month['cta_primary_btn_url'] : (route('website.planner.start') . '?mode=discover&month=' . $month['id'] . '&source=month') }}"
+                   class="website-btn website-btn--accent"
+                   style="border-radius: 0 !important;">
+                    {{ !empty($month['cta_primary_btn_text']) ? $month['cta_primary_btn_text'] : ('Plan ' . $month['name'] . ' Trek') }}
+                </a>
+                <a href="{{ !empty($month['cta_secondary_btn_url']) ? $month['cta_secondary_btn_url'] : route('website.contact') }}"
+                   class="website-btn website-btn--outline"
+                   style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
+                    {{ !empty($month['cta_secondary_btn_text']) ? $month['cta_secondary_btn_text'] : 'Ask a Question' }}
                 </a>
                 @if(count($matchingTreks) > 0)
-                    <a href="{{ route('website.treks.index', ['month' => $month['id']]) }}" class="website-btn website-btn--outline" style="border-radius: 0 !important;">
+                    <a href="{{ route('website.treks.index', ['month' => $month['id']]) }}"
+                       class="website-btn website-btn--outline"
+                       style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
                         View All {{ $month['name'] }} Treks
                     </a>
                 @endif
-                <a href="{{ route('website.months.index') }}" class="website-btn website-btn--ghost" style="border-radius: 0 !important;">
-                    All Months Overview
-                </a>
             </div>
         </div>
     </section>

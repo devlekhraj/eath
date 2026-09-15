@@ -15,6 +15,13 @@ use Website\Support\WebsiteClock;
 
 class PlannerController extends Controller
 {
+    protected function isAjaxRequest(Request $request): bool
+    {
+        return $request->ajax()
+            || $request->header('X-Planner-Ajax') === '1'
+            || $request->wantsJson();
+    }
+
     public function index(Request $request)
     {
         $context = WebsitePlannerDraftService::validateEntryContext($request->all());
@@ -26,7 +33,7 @@ class PlannerController extends Controller
             $treksKeyed[$t['id']] = $t;
         }
 
-        return view('website_preview.pages.planner.start', [
+        $data = [
             'context' => $context,
             'existingDraft' => $existingDraft,
             'nextStep' => $nextStep,
@@ -35,7 +42,19 @@ class PlannerController extends Controller
                 ['label' => 'Home', 'url' => route('website.home')],
                 ['label' => 'Plan My Trek'],
             ],
-        ]);
+        ];
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'step' => 'start',
+                'url' => route('website.planner.start'),
+                'title' => 'Plan My Himalayan Trek — Interactive Planner (Website)',
+                'html' => view('website_preview.pages.planner.start', $data)->render(),
+            ]);
+        }
+
+        return view('website_preview.pages.planner.start', $data);
     }
 
     public function form(Request $request)
@@ -50,13 +69,30 @@ class PlannerController extends Controller
     {
         $draft = WebsitePlannerDraftService::createDraft($request->all());
         $nextStep = WebsitePlannerDraftService::getNextAccessibleStep($draft);
+        $redirectUrl = route('website.planner.step', ['step' => $nextStep]);
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'next_step' => $nextStep,
+                'redirect' => $redirectUrl,
+            ]);
+        }
 
         return redirect()->route('website.planner.step', ['step' => $nextStep]);
     }
 
-    public function reset()
+    public function reset(Request $request)
     {
         WebsitePlannerDraftService::resetAll();
+        $redirectUrl = route('website.planner.start');
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'redirect' => $redirectUrl,
+            ]);
+        }
 
         return redirect()->route('website.planner.start');
     }
@@ -65,6 +101,13 @@ class PlannerController extends Controller
     {
         $draft = WebsitePlannerDraftService::getDraft();
         if (!$draft) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                    'notice' => 'Your previous website planning session has expired or was not started. Please begin a new plan below.',
+                ], 401);
+            }
             return redirect()->route('website.planner.start')
                 ->with('notice', 'Your previous website planning session has expired or was not started. Please begin a new plan below.');
         }
@@ -112,10 +155,22 @@ class PlannerController extends Controller
         // Guard: enforce earliest accessible step
         if (!WebsitePlannerDraftService::isStepAccessible($requestedStep, $draft)) {
             $earliest = WebsitePlannerDraftService::getNextAccessibleStep($draft);
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.step', ['step' => $earliest]),
+                ]);
+            }
             return redirect()->route('website.planner.step', ['step' => $earliest]);
         }
 
         if ($requestedStep === 'review') {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => true,
+                    'redirect' => route('website.planner.review'),
+                ]);
+            }
             return redirect()->route('website.planner.review');
         }
 
@@ -146,7 +201,7 @@ class PlannerController extends Controller
             $recommendationResult = WebsiteRecommendationService::evaluate($draft);
         }
 
-        return view('website_preview.pages.planner.step', [
+        $data = [
             'draft' => $draft,
             'currentStep' => $requestedStep,
             'stepIndex' => $stepIndex,
@@ -166,7 +221,19 @@ class PlannerController extends Controller
                 ['label' => 'Plan My Trek', 'url' => route('website.planner.start')],
                 ['label' => $allSteps[$requestedStep]['short']],
             ],
-        ]);
+        ];
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'step' => $requestedStep,
+                'url' => route('website.planner.step', ['step' => $requestedStep]),
+                'title' => "Plan My Trek — {$allSteps[$requestedStep]['title']} (Website)",
+                'html' => view('website_preview.pages.planner.step', $data)->render(),
+            ]);
+        }
+
+        return view('website_preview.pages.planner.step', $data);
     }
 
     public function step(Request $request)
@@ -174,11 +241,24 @@ class PlannerController extends Controller
         $currentStep = $request->input('step', 'timing');
         $allSteps = ['timing', 'travelers', 'preferences', 'budget', 'recommendations', 'review'];
         if (!in_array($currentStep, $allSteps, true)) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                ], 400);
+            }
             return redirect()->route('website.planner.start');
         }
 
         $draft = WebsitePlannerDraftService::getDraft();
         if (!$draft) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                    'notice' => 'Your website planning session has expired. Please start a new plan.',
+                ], 401);
+            }
             return redirect()->route('website.planner.start')
                 ->with('notice', 'Your website planning session has expired. Please start a new plan.');
         }
@@ -186,6 +266,14 @@ class PlannerController extends Controller
         $validation = WebsitePlannerDraftService::validateStep($currentStep, $request->all(), $draft);
 
         if (!$validation['valid']) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'step' => $currentStep,
+                    'errors' => $validation['errors'],
+                ], 422);
+            }
+
             return redirect()->route('website.planner.step', ['step' => $currentStep])
                 ->withErrors($validation['errors'])
                 ->withInput();
@@ -194,7 +282,7 @@ class PlannerController extends Controller
         // Merge and update draft
         $draft = WebsitePlannerDraftService::updateDraft($validation['data']);
 
-        // Check if custom request action was chosen in step 4
+        // Check if custom request action was chosen in step 4 or recommendations
         if ($request->input('action') === 'custom_request') {
             $draft = WebsitePlannerDraftService::updateDraft([
                 'mode' => 'custom',
@@ -204,6 +292,20 @@ class PlannerController extends Controller
 
         $currentIndex = array_search($currentStep, $allSteps, true);
         $nextStep = ($currentIndex !== false && $currentIndex < count($allSteps) - 1) ? $allSteps[$currentIndex + 1] : 'review';
+
+        $redirectUrl = ($nextStep === 'review')
+            ? route('website.planner.review')
+            : route('website.planner.step', ['step' => $nextStep]);
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'current_step' => $currentStep,
+                'next_step' => $nextStep,
+                'redirect' => $redirectUrl,
+                'warnings' => $validation['warnings'] ?? [],
+            ]);
+        }
 
         $redirect = redirect()->route('website.planner.step', ['step' => $nextStep]);
 
@@ -222,6 +324,13 @@ class PlannerController extends Controller
             : null;
 
         if (!$draft || !$trek) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                    'notice' => 'That sample trek selection is no longer available. Please choose another option.',
+                ], 400);
+            }
             return redirect()->route('website.planner.start')
                 ->with('notice', 'That sample trek selection is no longer available. Please choose another option.');
         }
@@ -231,13 +340,28 @@ class PlannerController extends Controller
             'mode' => 'selected',
         ]);
 
+        $redirectUrl = route('website.planner.review');
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'redirect' => $redirectUrl,
+            ]);
+        }
+
         return redirect()->route('website.planner.review');
     }
 
-    public function review()
+    public function review(Request $request)
     {
         $draft = WebsitePlannerDraftService::getDraft();
         if (!$draft) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                    'notice' => 'Your website planning session has expired or was not started. Please begin a new plan below.',
+                ], 401);
+            }
             return redirect()->route('website.planner.start')
                 ->with('notice', 'Your website planning session has expired or was not started. Please begin a new plan below.');
         }
@@ -246,6 +370,13 @@ class PlannerController extends Controller
         $requiredSteps = ['timing', 'travelers', 'preferences', 'budget'];
         foreach ($requiredSteps as $req) {
             if (!in_array($req, $completed, true)) {
+                if ($this->isAjaxRequest($request)) {
+                    return response()->json([
+                        'success' => false,
+                        'redirect' => route('website.planner.step', ['step' => $req]),
+                        'notice' => 'Please complete the earlier steps before reviewing your plan.',
+                    ]);
+                }
                 return redirect()->route('website.planner.step', ['step' => $req])
                     ->with('notice', 'Please complete the earlier steps before reviewing your plan.');
             }
@@ -293,19 +424,38 @@ class PlannerController extends Controller
             }
         }
 
-        return view('website_preview.pages.planner.review', [
+        $data = [
             'draft' => $draft,
             'selectedTrek' => $selectedTrek,
             'selectedDeparture' => $selectedDeparture,
             'unitPrice' => $unitPrice,
             'conflicts' => $conflicts,
-        ]);
+        ];
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'step' => 'review',
+                'url' => route('website.planner.review'),
+                'title' => 'Review Your Himalayan Trek Plan (Website)',
+                'html' => view('website_preview.pages.planner.review', $data)->render(),
+            ]);
+        }
+
+        return view('website_preview.pages.planner.review', $data);
     }
 
-    public function contact()
+    public function contact(Request $request)
     {
         $draft = WebsitePlannerDraftService::getDraft();
         if (!$draft) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                    'notice' => 'Your website planning session has expired or was not started. Please begin a new plan below.',
+                ], 401);
+            }
             return redirect()->route('website.planner.start')
                 ->with('notice', 'Your website planning session has expired or was not started. Please begin a new plan below.');
         }
@@ -314,6 +464,12 @@ class PlannerController extends Controller
         $requiredSteps = ['timing', 'travelers', 'preferences', 'budget'];
         foreach ($requiredSteps as $req) {
             if (!in_array($req, $completed, true)) {
+                if ($this->isAjaxRequest($request)) {
+                    return response()->json([
+                        'success' => false,
+                        'redirect' => route('website.planner.step', ['step' => $req]),
+                    ]);
+                }
                 return redirect()->route('website.planner.step', ['step' => $req]);
             }
         }
@@ -334,18 +490,37 @@ class PlannerController extends Controller
 
         $idempotencyToken = WebsitePlannerDraftService::getOrCreateIdempotencyToken();
 
-        return view('website_preview.pages.planner.contact', [
+        $data = [
             'draft' => $draft,
             'selectedTrek' => $selectedTrek,
             'unitPrice' => $unitPrice,
             'idempotencyToken' => $idempotencyToken,
-        ]);
+        ];
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'step' => 'contact',
+                'url' => route('website.planner.contact'),
+                'title' => 'Sample Contact Details (Website)',
+                'html' => view('website_preview.pages.planner.contact', $data)->render(),
+            ]);
+        }
+
+        return view('website_preview.pages.planner.contact', $data);
     }
 
     public function submit(Request $request)
     {
         $draft = WebsitePlannerDraftService::getDraft();
         if (!$draft) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                    'notice' => 'Your website planning session expired. Please start fresh.',
+                ], 401);
+            }
             return redirect()->route('website.planner.start')
                 ->with('notice', 'Your website planning session expired. Please start fresh.');
         }
@@ -357,16 +532,29 @@ class PlannerController extends Controller
         // Check if this token was already used to generate an active receipt
         $existingReceipt = WebsitePlannerDraftService::getReceipt();
         if ($existingReceipt && ($existingReceipt['idempotency_token'] ?? null) === $submittedToken) {
+            $redirectUrl = route('website.planner.confirmation');
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => true,
+                    'redirect' => $redirectUrl,
+                ]);
+            }
             return redirect()->route('website.planner.confirmation');
         }
 
         if (!$submittedToken || $submittedToken !== $expectedToken) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['idempotency_token' => ['Invalid or expired submission token. Please submit again.']],
+                ], 422);
+            }
             return redirect()->route('website.planner.contact')
                 ->withErrors(['idempotency_token' => 'Invalid or expired submission token. Please submit again.']);
         }
 
         // Server validation of contact fields
-        $validated = $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'string', 'email:rfc', 'max:254'],
             'phone' => ['nullable', 'string', 'max:32', 'regex:/^[+0-9\s().-]*$/'],
@@ -381,6 +569,21 @@ class PlannerController extends Controller
             'phone.regex' => 'Phone number contains invalid characters.',
             'contact_method.in' => 'Please select a valid contact method option.',
         ]);
+
+        if ($validator->fails()) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            return redirect()->route('website.planner.contact')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $validated = $validator->validated();
 
         // Server-side recalculation of pricing
         $selectedTrek = null;
@@ -495,19 +698,47 @@ class PlannerController extends Controller
             'special_requests' => '',
         ]);
 
+        $redirectUrl = route('website.planner.confirmation');
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'redirect' => $redirectUrl,
+                'reference' => $reference,
+            ]);
+        }
+
         return redirect()->route('website.planner.confirmation');
     }
 
-    public function confirmation()
+    public function confirmation(Request $request)
     {
         $receipt = WebsitePlannerDraftService::getReceipt();
         if (!$receipt) {
+            if ($this->isAjaxRequest($request)) {
+                return response()->json([
+                    'success' => false,
+                    'redirect' => route('website.planner.start'),
+                    'notice' => 'No active website receipt found. Please configure a trek plan to view a simulated confirmation.',
+                ], 404);
+            }
             return redirect()->route('website.planner.start')
                 ->with('notice', 'No active website receipt found. Please configure a trek plan to view a simulated confirmation.');
         }
 
-        return view('website_preview.pages.planner.confirmation', [
+        $data = [
             'receipt' => $receipt,
-        ]);
+        ];
+
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'success' => true,
+                'step' => 'confirmation',
+                'url' => route('website.planner.confirmation'),
+                'title' => 'Website Request Completed · ' . ($receipt['reference'] ?? 'Website Confirmation'),
+                'html' => view('website_preview.pages.planner.confirmation', $data)->render(),
+            ]);
+        }
+
+        return view('website_preview.pages.planner.confirmation', $data);
     }
 }

@@ -272,32 +272,28 @@
     </section>
 
     <!-- 10. Plan This Experience CTA -->
-    <section aria-labelledby="heading-plan-exp-cta">
-        <div class="website-card" style="padding: var(--space-8); background: var(--color-primary-subtle); border: 1px solid var(--color-primary-light); text-align: center; border-radius: 0 !important;">
-            <span style="background: transparent !important; border: none !important; padding: 0 !important; color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; display: inline-block; margin-bottom: var(--space-2); font-size: 0.8125rem;">
-                Personalized Trip Builder
+    <section aria-labelledby="heading-plan-exp-cta" class="website-final-cta" style="margin-top: var(--space-8); border-radius: 0 !important;">
+        <div class="website-final-cta__inner">
+            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                {{ !empty($exp['cta_eyebrow']) ? $exp['cta_eyebrow'] : 'EXPEDITION PLANNING' }}
             </span>
-            <h2 id="heading-plan-exp-cta" class="website-h2" style="margin-bottom: var(--space-2); color: var(--color-primary-dark);">
+            <h2 id="heading-plan-exp-cta" class="website-final-cta__title" style="font-size: var(--type-h2);">
                 {{ !empty($exp['cta_title']) ? $exp['cta_title'] : "Plan a {$exp['name']} Journey" }}
             </h2>
-            <p class="website-body website-text-secondary" style="max-width: 680px; margin: 0 auto var(--space-6) auto; line-height: 1.6;">
+            <p class="website-final-cta__subtitle">
                 {{ !empty($exp['cta_description']) ? $exp['cta_description'] : "Launch our interactive trek planner with the {$exp['name']} theme pre-selected. Specify your travel duration, difficulty comfort, and party size to discover matching routes." }}
             </p>
 
-            <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
-                <a href="{{ !empty($exp['cta_primary_btn_url']) ? $exp['cta_primary_btn_url'] : route('website.planner.start') . '?mode=discover&experience=' . $exp['slug'] . '&source=experience' }}" class="website-btn website-btn--primary" style="border-radius: 0 !important;">
-                    <svg class="website-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                    </svg>
-                    <span>{{ !empty($exp['cta_primary_btn_text']) ? $exp['cta_primary_btn_text'] : 'Plan My Journey →' }}</span>
+            <div class="website-final-cta__actions">
+                <a href="{{ !empty($exp['cta_primary_btn_url']) ? $exp['cta_primary_btn_url'] : route('website.planner.start') . '?mode=discover&experience=' . $exp['slug'] . '&source=experience' }}"
+                   class="website-btn website-btn--accent"
+                   style="border-radius: 0 !important;">
+                    {{ !empty($exp['cta_primary_btn_text']) ? $exp['cta_primary_btn_text'] : 'Plan My Journey' }}
                 </a>
-                <a href="{{ !empty($exp['cta_secondary_btn_url']) ? $exp['cta_secondary_btn_url'] : route('website.compare') }}" class="website-btn website-btn--outline" style="border-radius: 0 !important;">
-                    <svg class="website-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="3" y="3" width="7" height="18"></rect>
-                        <rect x="14" y="3" width="7" height="18"></rect>
-                    </svg>
-                    <span>{{ !empty($exp['cta_secondary_btn_text']) ? $exp['cta_secondary_btn_text'] : 'Compare Shortlisted Routes' }}</span>
+                <a href="{{ !empty($exp['cta_secondary_btn_url']) ? $exp['cta_secondary_btn_url'] : route('website.compare') }}"
+                   class="website-btn website-btn--outline"
+                   style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
+                    {{ !empty($exp['cta_secondary_btn_text']) ? $exp['cta_secondary_btn_text'] : 'Compare Shortlisted Routes' }}
                 </a>
             </div>
         </div>

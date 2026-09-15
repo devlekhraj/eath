@@ -3,8 +3,18 @@
 @section('title', "Plan My Trek — {$stepDetails['title']} (Website)")
 @section('meta_description', 'Interactive Himalayan trip planner step: ' . $stepDetails['title'])
 
+@php
+    $hideTopBreadcrumbs = true;
+@endphp
+
 @section('content')
-<div class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12);">
+<div id="planner-app" data-planner-root class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12);">
+
+    @if(!empty($breadcrumbs))
+        <div style="margin-bottom: var(--space-4);">
+            @include('website_preview.components.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+        </div>
+    @endif
 
     <!-- 1. Top Mode & Progress Navigation -->
     <div style="margin-bottom: var(--space-6);">
@@ -145,7 +155,12 @@
                             </fieldset>
 
                             <!-- Conditional Group A: Exact Target Date -->
-                            <div id="timing-dates-container" style="{{ $currentTimingMode === 'dates' ? 'display: block;' : 'display: none;' }} padding: var(--space-4); background: var(--color-background-warm); border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                            <div id="timing-dates-container"
+                                 @if($currentTimingMode !== 'dates')
+                                     style="display: none; padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;"
+                                 @else
+                                     style="display: block; padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;"
+                                 @endif>
                                 <label for="field-start_date" style="display: block; font-weight: 600; margin-bottom: var(--space-1);">
                                     Target Start Date <span style="color: var(--color-error);" aria-hidden="true">*</span>
                                 </label>
@@ -169,7 +184,12 @@
                             </div>
 
                             <!-- Conditional Group B: Month Selector -->
-                            <div id="timing-month-container" style="{{ $currentTimingMode === 'month' ? 'display: block;' : 'display: none;' }} padding: var(--space-4); background: var(--color-background-warm); border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                            <div id="timing-month-container"
+                                 @if($currentTimingMode !== 'month')
+                                     style="display: none; padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;"
+                                 @else
+                                     style="display: block; padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;"
+                                 @endif>
                                 <label style="display: block; font-weight: 600; margin-bottom: var(--space-1);">
                                     Select Preferred Travel Month <span style="color: var(--color-error);" aria-hidden="true">*</span>
                                 </label>
@@ -290,7 +310,13 @@
                                 $childCount = (int) old('children', $draft['children'] ?? 0);
                                 $bands = old('child_age_bands', $draft['child_age_bands'] ?? []);
                             @endphp
-                            <div id="child-age-bands-wrapper" style="{{ $childCount > 0 ? 'display: block;' : 'display: none;' }} padding: var(--space-4); background: var(--color-background-warm); border-radius: var(--radius-md); border: 1px solid var(--color-border);" id="field-child_age_bands">
+                            <div id="child-age-bands-wrapper"
+                                 @if($childCount > 0)
+                                     style="display: block; padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;"
+                                 @else
+                                     style="display: none; padding: var(--space-4); background: var(--color-background-warm); border: 1px solid var(--color-border); border-radius: 0 !important;"
+                                 @endif
+                                 data-field="child_age_bands">
                                 <label style="display: block; font-weight: 600; margin-bottom: var(--space-1);">
                                     Child Age Categories
                                 </label>
@@ -926,7 +952,7 @@
                     <!-- REVIEW STEP PLACEHOLDER (Phase 13) -->
                     <!-- ======================================================= -->
                     @else
-                        <div style="padding: var(--space-6); background: var(--color-background-warm); border-radius: var(--radius-md); margin-bottom: var(--space-6);">
+                        <div style="padding: var(--space-6); background: var(--color-background-warm); border-radius: 0 !important; margin-bottom: var(--space-6);">
                             <h2 class="website-h3" style="margin-bottom: var(--space-2);">Step Preview: {{ $stepDetails['title'] }}</h2>
                             <p class="website-body website-text-secondary">
                                 Complete itinerary review, sample contact, and simulated booking confirmation are handled in Phase 13.
@@ -1136,16 +1162,16 @@
 </div>
 
 <script>
-function updateTimingMode(mode) {
+window.updateTimingMode = function updateTimingMode(mode) {
     const datesEl = document.getElementById('timing-dates-container');
     const monthEl = document.getElementById('timing-month-container');
     if (datesEl && monthEl) {
         datesEl.style.display = (mode === 'dates') ? 'block' : 'none';
         monthEl.style.display = (mode === 'month') ? 'block' : 'none';
     }
-}
+};
 
-function updateChildrenUI() {
+window.updateChildrenUI = function updateChildrenUI() {
     const childrenInput = document.getElementById('field-children');
     const wrapper = document.getElementById('child-age-bands-wrapper');
     const list = document.getElementById('child-age-bands-list');
@@ -1176,7 +1202,7 @@ function updateChildrenUI() {
         list.appendChild(div);
         currentRows = list.querySelectorAll('.child-band-row');
     }
-}
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     // Focus error summary if present

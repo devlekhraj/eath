@@ -326,23 +326,27 @@
     </section>
 
     <!-- 6. Planning CTA -->
-    <section aria-labelledby="heading-plan-journey-cta">
-        <div class="website-card" style="padding: var(--space-8); background: var(--color-primary-subtle); border: 2px solid var(--color-primary-light); text-align: center;">
-            <span class="website-badge website-badge--primary" style="margin-bottom: var(--space-2); text-transform: uppercase;">
-                Custom Trek Builder
+    <section aria-labelledby="heading-plan-journey-cta" class="website-final-cta" style="border-radius: 0 !important;">
+        <div class="website-final-cta__inner">
+            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                EXPEDITION PLANNING
             </span>
-            <h2 id="heading-plan-journey-cta" class="website-h2" style="margin-bottom: var(--space-2); color: var(--color-primary-dark);">
+            <h2 id="heading-plan-journey-cta" class="website-final-cta__title" style="font-size: var(--type-h2);">
                 Ready to Build Your Himalayan Itinerary?
             </h2>
-            <p class="website-body website-text-secondary" style="max-width: 660px; margin: 0 auto var(--space-6) auto; line-height: 1.6;">
+            <p class="website-final-cta__subtitle">
                 Use our guided trip planner to match itineraries with your party size, comfort level, and target travel months.
             </p>
 
-            <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
-                <a href="{{ route('website.planner.start') }}?mode=discover&source=departure" class="website-btn website-btn--primary">
-                    Launch Interactive Planner &rarr;
+            <div class="website-final-cta__actions">
+                <a href="{{ route('website.planner.start') }}?mode=discover&source=departure"
+                   class="website-btn website-btn--accent"
+                   style="border-radius: 0 !important;">
+                    Launch Interactive Planner
                 </a>
-                <a href="{{ route('website.treks.index') }}" class="website-btn website-btn--outline">
+                <a href="{{ route('website.treks.index') }}"
+                   class="website-btn website-btn--outline"
+                   style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
                     Explore All 8 Treks
                 </a>
             </div>

@@ -394,23 +394,27 @@
     </section>
 
     <!-- 11. Plan This Region CTA -->
-    <section aria-labelledby="heading-plan-region-cta">
-        <div class="website-card" style="padding: var(--space-8); background: var(--color-primary-subtle); border: 2px solid var(--color-primary-light); text-align: center;">
-            <span class="website-badge website-badge--primary" style="margin-bottom: var(--space-2); text-transform: uppercase;">
-                Custom Journey Builder
+    <section aria-labelledby="heading-plan-region-cta" class="website-final-cta" style="margin-top: var(--space-8); border-radius: 0 !important;">
+        <div class="website-final-cta__inner">
+            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                {{ !empty($region['cta_eyebrow']) ? $region['cta_eyebrow'] : 'EXPEDITION PLANNING' }}
             </span>
-            <h2 id="heading-plan-region-cta" class="website-h2" style="margin-bottom: var(--space-2); color: var(--color-primary-dark);">
+            <h2 id="heading-plan-region-cta" class="website-final-cta__title" style="font-size: var(--type-h2);">
                 {{ !empty($region['cta_title']) ? $region['cta_title'] : ('Ready to Plan Your ' . $region['name'] . ' Adventure?') }}
             </h2>
-            <p class="website-body website-text-secondary" style="max-width: 680px; margin: 0 auto var(--space-6) auto; line-height: 1.6;">
+            <p class="website-final-cta__subtitle">
                 {{ !empty($region['cta_description']) ? $region['cta_description'] : ('Launch our interactive trek planner with the ' . $region['name'] . ' region pre-selected. Tailor your travel window, pacing, and group size to receive curated itinerary recommendations.') }}
             </p>
 
-            <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
-                <a href="{{ !empty($region['cta_primary_btn_url']) ? $region['cta_primary_btn_url'] : (route('website.planner.start') . '?mode=discover&region=' . $region['slug'] . '&source=destination') }}" class="website-btn website-btn--primary">
-                    {{ !empty($region['cta_primary_btn_text']) ? $region['cta_primary_btn_text'] : ('Plan a ' . $region['name'] . ' Trek →') }}
+            <div class="website-final-cta__actions">
+                <a href="{{ !empty($region['cta_primary_btn_url']) ? $region['cta_primary_btn_url'] : (route('website.planner.start') . '?mode=discover&region=' . $region['slug'] . '&source=destination') }}"
+                   class="website-btn website-btn--accent"
+                   style="border-radius: 0 !important;">
+                    {{ !empty($region['cta_primary_btn_text']) ? $region['cta_primary_btn_text'] : ('Plan a ' . $region['name'] . ' Trek') }}
                 </a>
-                <a href="{{ !empty($region['cta_secondary_btn_url']) ? $region['cta_secondary_btn_url'] : route('website.contact') }}" class="website-btn website-btn--outline">
+                <a href="{{ !empty($region['cta_secondary_btn_url']) ? $region['cta_secondary_btn_url'] : route('website.contact') }}"
+                   class="website-btn website-btn--outline"
+                   style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
                     {{ !empty($region['cta_secondary_btn_text']) ? $region['cta_secondary_btn_text'] : 'Ask a Planning Question' }}
                 </a>
             </div>

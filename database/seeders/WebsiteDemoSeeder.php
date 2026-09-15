@@ -21,7 +21,7 @@ class WebsiteDemoSeeder extends Seeder
             'website_pages', 'website_sections', 'website_settings', 'journey_safety_items',
             'journeys', 'guides', 'travel_months', 'experience_highlights',
             'experience_prep_questions', 'experiences', 'destination_logistics', 'destinations',
-            'media_attachments',
+            'media_attachments', 'comparison_presets',
         ];
         foreach ($tablesToTruncate as $tbl) {
             if (Schema::hasTable($tbl)) {
@@ -52,6 +52,7 @@ class WebsiteDemoSeeder extends Seeder
         $this->seedFaqs($content['faqs'] ?? [], $journeyIds);
         $this->seedWebsitePages();
         $this->seedSettings($content['brand'] ?? []);
+        $this->seedComparisonPresets();
     }
 
     protected function readJson(string $path): array
@@ -564,12 +565,33 @@ class WebsiteDemoSeeder extends Seeder
             $editorial = $monthEditorials[$monthNum] ?? [];
             $detail = $monthDetails[$monthNum] ?? [];
 
+            $ratingsMap = [
+                1  => ['clarity_score' => 3, 'clarity_label' => 'Crisp Silhouettes', 'footprint_score' => 1, 'footprint_label' => 'Quiet', 'badge' => 'Winter Window'],
+                2  => ['clarity_score' => 3, 'clarity_label' => 'Morning Clarity', 'footprint_score' => 1, 'footprint_label' => 'Low Footprint', 'badge' => 'Late Winter'],
+                3  => ['clarity_score' => 4, 'clarity_label' => 'Wildflower Bloom', 'footprint_score' => 3, 'footprint_label' => 'Steady Flow', 'badge' => 'Spring Awakening'],
+                4  => ['clarity_score' => 5, 'clarity_label' => 'Prime Panoramic', 'footprint_score' => 4, 'footprint_label' => 'Active & Social', 'badge' => 'Prime Spring Window'],
+                5  => ['clarity_score' => 4, 'clarity_label' => 'Extended Daylight', 'footprint_score' => 4, 'footprint_label' => 'Expedition Peak', 'badge' => 'High Passes Open'],
+                6  => ['clarity_score' => 2, 'clarity_label' => 'Rain-Shadow Arid', 'footprint_score' => 1, 'footprint_label' => 'Quiet Sanctuaries', 'badge' => 'Rain-Shadow Plateau'],
+                7  => ['clarity_score' => 2, 'clarity_label' => 'Dry Plateau Skies', 'footprint_score' => 1, 'footprint_label' => 'Serene Enclaves', 'badge' => 'Trans-Himalayan'],
+                8  => ['clarity_score' => 2, 'clarity_label' => 'High Pastures', 'footprint_score' => 1, 'footprint_label' => 'Tranquil', 'badge' => 'Rain-Shadow Sanctuaries'],
+                9  => ['clarity_score' => 4, 'clarity_label' => 'Post-Monsoon Wash', 'footprint_score' => 3, 'footprint_label' => 'Rising Vitality', 'badge' => 'Post-Monsoon Clarity'],
+                10 => ['clarity_score' => 5, 'clarity_label' => 'Crystal 360° Clarity', 'footprint_score' => 5, 'footprint_label' => 'Peak Vitality', 'badge' => 'Peak Trekking Season'],
+                11 => ['clarity_score' => 5, 'clarity_label' => 'Razor-Sharp Vistas', 'footprint_score' => 3, 'footprint_label' => 'Tapering Steady', 'badge' => 'Sharp Panoramas'],
+                12 => ['clarity_score' => 4, 'clarity_label' => 'Dry Azure Skies', 'footprint_score' => 2, 'footprint_label' => 'Quiet Valleys', 'badge' => 'Winter Sunshine'],
+            ];
+            $curRating = $ratingsMap[$monthNum] ?? ['clarity_score' => 3, 'clarity_label' => 'Good', 'footprint_score' => 3, 'footprint_label' => 'Moderate', 'badge' => 'Seasonal Window'];
+
             $contentPayload = [
                 'overview' => $editorial['overview'] ?? ($month['intro'] ?? ''),
                 'trail_vibe' => $editorial['trail_vibe'] ?? '',
                 'pack_tip' => $editorial['pack_tip'] ?? '',
                 'reasons' => $detail['reasons'] ?? [],
                 'limitations' => $detail['limitations'] ?? [],
+                'clarity_score' => $curRating['clarity_score'],
+                'clarity_label' => $curRating['clarity_label'],
+                'footprint_score' => $curRating['footprint_score'],
+                'footprint_label' => $curRating['footprint_label'],
+                'badge' => $curRating['badge'],
             ];
 
             $id = DB::table('travel_months')->insertGetId([
@@ -879,15 +901,207 @@ class WebsiteDemoSeeder extends Seeder
         $categoryIds = [];
         $articleIds = [];
 
+        $pillarsData = [
+            'seasons' => [
+                'name' => 'Seasons & Timing',
+                'slug' => 'seasons',
+                'description' => 'Weather windows, pre-monsoon rhododendron blooms, crisp autumn visibility, and high-pass winter considerations.',
+                'kicker' => 'EXPEDITION PILLAR 01 · TIMING',
+                'tagline' => 'Weather Windows & Trail Conditions',
+                'summary' => 'High-altitude Himalayan weather is defined by the Indian monsoon cycle, subtropical jet stream movements, and severe diurnal temperature swings.',
+                'lead' => 'Timing your trek to the appropriate climatic window dictates mountain clarity, snow pass viability, and daily comfort. Choosing correctly between pre-monsoon rhododendron blooms and post-monsoon crystal clarity is the foundation of every successful expedition.',
+                'icon' => 'sun',
+                'sort_order' => 1,
+                'is_active' => true,
+                'rules' => json_encode([
+                    ['rule' => 'Post-Monsoon Peak (Oct – Nov)', 'detail' => 'The premier window for crystal-clear 360° panoramas. Washed clean by autumn winds, skies remain brilliant from sunrise to dusk, though night temperatures at high camp drop below freezing.'],
+                    ['rule' => 'Pre-Monsoon Bloom (Mar – May)', 'detail' => 'Rising temperatures and longer daylight hours awaken the lower foothills in brilliant rhododendron blossoms. Afternoon cloud build-up is common, requiring early-morning ridge crossings.'],
+                    ['rule' => 'Trans-Himalayan Sanctuaries (Jun – Aug)', 'detail' => 'While monsoon rains soak the southern slopes, rain-shadow regions like Upper Mustang and Upper Dolpo remain dry, arid, and ideal for summer high-plateau walking.'],
+                    ['rule' => 'Winter Threshold (Dec – Feb)', 'detail' => 'Characterized by bone-dry azure skies and tranquil, crowd-free teahouses. However, high-altitude passes over 5,000m face heavy drift snow and closed high-camps.'],
+                    ['rule' => 'Flight Weather Contingencies', 'detail' => 'Always budget at least 1–2 contingency buffer days in Kathmandu, especially when flying to visual-flight-dependent airstrips like Lukla or Jomsom.'],
+                ]),
+                'hazards' => json_encode([
+                    'Attempting high pass crossings in late December without technical winter mountaineering equipment.',
+                    'Booking tight international flight connections less than 24 hours after a scheduled mountain domestic flight.',
+                    'Neglecting rain gear during early September shoulder-season transitions.',
+                ]),
+                'checklists' => json_encode([
+                    'Cross-check trail status with Sagarmatha or Annapurna park headquarters.',
+                    'Verify current pass clearance reports with local teahouse operators.',
+                    'Ensure travel insurance covers high-altitude helicopter repatriation up to 6,000m.',
+                ]),
+            ],
+            'packing' => [
+                'name' => 'Packing & Gear',
+                'slug' => 'packing',
+                'description' => 'Tested layering systems, cold-rated sleeping bags, footwear selection, and pack weight discipline.',
+                'kicker' => 'EXPEDITION PILLAR 02 · DISCIPLINE',
+                'tagline' => 'Alpine Layering & Teahouse Kit Discipline',
+                'summary' => 'Warmth at 5,000 meters is generated through modular trapped air layers, not bulky single garments. Strict pack discipline preserves stamina.',
+                'lead' => 'High-altitude teahouses provide wooden beds and foam mattresses in unheated rooms where interior temperatures frequently drop below -10°C. Your personal duffel and daypack comprise your survival shelter on the move.',
+                'icon' => 'backpack',
+                'sort_order' => 2,
+                'is_active' => true,
+                'rules' => json_encode([
+                    ['rule' => 'The 3-Layer Thermodynamic System', 'detail' => 'Base layer (merino wool to wick sweat without odor), Mid layer (breathable grid fleece or lightweight down for insulation), and Outer layer (windproof, waterproof breathable Gore-Tex shell).'],
+                    ['rule' => '-15°C Sleeping Bag Minimum', 'detail' => 'Never rely solely on teahouse blankets. A certified 4-season down sleeping bag with a comfort rating of -15°C to -20°C is mandatory for high-pass sanctuaries.'],
+                    ['rule' => 'Strict 15kg Duffel Cap', 'detail' => 'For porter welfare and trail ergonomics, your main waterproof duffel must not exceed 15kg (33 lbs). Daypacks should stay under 5–7kg including 2 liters of water.'],
+                    ['rule' => 'Footwear Readiness', 'detail' => 'Sturdy, ankle-supporting waterproof trekking boots broken in at least 6 weeks before departure. Pack lightweight camp shoes or down booties for evenings.'],
+                    ['rule' => 'Cold-Proof Electronics & Power', 'detail' => 'Sub-zero temperatures deplete phone and camera batteries rapidly. Keep devices in inner jacket pockets near your body heat, and carry a 20,000mAh insulated power bank.'],
+                ]),
+                'hazards' => json_encode([
+                    'Wearing cotton garments: cotton absorbs sweat, dries slowly, and rapidly induces hypothermia when you halt.',
+                    'Brand-new unproven trekking boots that cause debilitating heel blisters on Day 2.',
+                    'Single-bottle hydration setups that freeze solid on early morning alpine pass crossings.',
+                ]),
+                'checklists' => json_encode([
+                    'Dual water purification: chlorine dioxide tablets + UV SteriPEN or Sawyer squeeze filter.',
+                    'UV Category 3 or 4 polarized sunglasses with side-shields to prevent snow blindness.',
+                    'Waterproof dry-bags to compartmentalize clothing inside your porter duffel.',
+                ]),
+            ],
+            'preparation' => [
+                'name' => 'Preparation & Health',
+                'slug' => 'preparation',
+                'description' => 'Safe elevation gains, hydration baselines, AMS recognition, and physical endurance baselines.',
+                'kicker' => 'EXPEDITION PILLAR 03 · PHYSIOLOGY',
+                'tagline' => 'Altitude Acclimatization Curves & Safety',
+                'summary' => 'High-altitude illness (AMS) is indifferent to physical fitness. Safety is governed by biological adaptation rates and sensible ascent curves.',
+                'lead' => 'At 5,000m, effective atmospheric oxygen is reduced to approximately 50% of sea-level density. Acclimatization is an active physiological process requiring measured ascent pacing, disciplined hydration, and immediate honesty regarding symptoms.',
+                'icon' => 'shield',
+                'sort_order' => 3,
+                'is_active' => true,
+                'rules' => json_encode([
+                    ['rule' => '300m–500m Daily Sleeping Gain Cap', 'detail' => 'Above 3,000m (Namche Bazaar / Manang), limit net sleeping elevation gains to no more than 300m to 500m per 24-hour cycle, regardless of physical energy.'],
+                    ['rule' => 'Mandatory Rest / Active Acclimatization Days', 'detail' => 'Schedule structured rest days every 1,000m of total ascent. Use these days for afternoon active walks ("climb high, sleep low") gaining 200m–300m before returning to sleep.'],
+                    ['rule' => '3–4 Liters Daily Hydration', 'detail' => 'Hyperventilation in dry mountain air dramatically accelerates fluid loss. Drink a minimum of 3 to 4 liters of purified water or electrolyte tea daily.'],
+                    ['rule' => 'The Golden Rule of Altitude', 'detail' => 'Any headache, nausea, or dizziness above 2,500m is assumed to be Acute Mountain Sickness (AMS) until proven otherwise. Never ascend with symptoms.'],
+                    ['rule' => 'Daily Oximeter Monitoring', 'detail' => 'Our lead guides conduct twice-daily pulse-oximeter and Lake Louise Score assessments every morning and evening before dinner.'],
+                ]),
+                'hazards' => json_encode([
+                    'Concealing headaches or mild nausea from your guide out of pride or peer pressure.',
+                    'Consuming alcohol, sedatives, or sleeping pills at or above 3,000m.',
+                    'Pushing forward to "keep up with the group" when an extra acclimatization night is warranted.',
+                ]),
+                'checklists' => json_encode([
+                    'Comprehensive personal medical kit including ibuprofen, blister pads, rehydration salts, and Diamox.',
+                    'Consult your personal travel physician regarding acetazolamide (Diamox) suitability.',
+                    'Familiarity with HAPE/HACE warning indicators (ataxia, confusion, persistent wet cough).',
+                ]),
+            ],
+            'planning' => [
+                'name' => 'Route Planning',
+                'slug' => 'planning',
+                'description' => 'Comparing daily walking hours, teahouse versus camping logistics, and contingency buffer days.',
+                'kicker' => 'EXPEDITION PILLAR 04 · ROUTE ARCHITECTURE',
+                'tagline' => 'Shortlists, Pacing & Technicality Matching',
+                'summary' => 'Matching route difficulty, duration, and group physical comfort creates a transformative, sustainable journey.',
+                'lead' => 'Nepal offers routes ranging from gentle foothill cultural walks with luxury lodges to remote restricted-area wilderness circuits traversing glaciers. Choosing the right trail requires realistic self-assessment.',
+                'icon' => 'map',
+                'sort_order' => 4,
+                'is_active' => true,
+                'rules' => json_encode([
+                    ['rule' => 'Daily Walking Budgets (5–7 Hours)', 'detail' => 'A sustainable pace averages 5 to 7 hours of walking per day, allowing leisurely lunch stops, photo breaks, and arrival at camp before late-afternoon chill.'],
+                    ['rule' => 'Pre-Dawn Alpine Starts (Pass Days)', 'detail' => 'Major pass crossings like Thorong La (5,416m), Cho La (5,420m), or Larkya La (5,106m) demand departures at 4:00 AM to cross before noon wind gusts.'],
+                    ['rule' => 'Permit & Restricted Area Compliance', 'detail' => 'Restricted circuits (Manaslu, Upper Mustang, Nar Phu) require a minimum of two travelers, government-licensed guide accompaniment, and special immigration permits.'],
+                    ['rule' => 'Teahouse vs. Wilderness Camping', 'detail' => 'Teahouse routes offer hot dal bhat and fireside dining. Remote trails require full autonomous support teams, kitchen tents, and pack mules.'],
+                    ['rule' => 'Pacing Homogeneity', 'detail' => 'In private parties, pace to the rhythm of the slowest walker. Rushing separates groups and risks navigational or hypothermic exposure.'],
+                ]),
+                'hazards' => json_encode([
+                    'Selecting high-pass circuits for first-time multi-day hikers without prior foothill experience.',
+                    'Compressing 14-day itineraries into 10 days by eliminating mandatory rest camps.',
+                    'Attempting unescorted solo treks in restricted conservation corridors.',
+                ]),
+                'checklists' => json_encode([
+                    'Review interactive route elevation profiles and daily kilometer distances.',
+                    'Confirm your fitness training (stair climbing with weighted pack) 12 weeks prior.',
+                    'Compare alternative circuit spurs (e.g. adding Gokyo Lakes to EBC).',
+                ]),
+            ],
+            'culture' => [
+                'name' => 'Himalayan Culture',
+                'slug' => 'culture',
+                'description' => 'Buddhist mani stone customs, stupa circumambulation, prayer flags, and mountain etiquette.',
+                'kicker' => 'EXPEDITION PILLAR 05 · REVERENCE',
+                'tagline' => 'Monasteries, Sherpa Heritage & Etiquette',
+                'summary' => 'The high valleys are sacred Buddhist and Hindu sanctuaries. Walking with humility enriches your experience and honors host communities.',
+                'lead' => 'From the Sherpa settlements of Khumbu to the Gurung villages of Annapurna and the Tibetan-origin clans of Manaslu, centuries-old traditions flourish along mountain trails. Understanding local etiquette transforms tourism into genuine human exchange.',
+                'icon' => 'compass',
+                'sort_order' => 5,
+                'is_active' => true,
+                'rules' => json_encode([
+                    ['rule' => 'Clockwise Circumambulation', 'detail' => 'Always pass mani walls (carved prayer stones), chortens, and stupas on your left, walking clockwise. This honors sacred Buddhist custom.'],
+                    ['rule' => 'Monastery Protocol', 'detail' => 'Remove hats, sunglasses, and shoes before entering monastery prayer halls (gompas). Never point the soles of your feet toward an altar or monk.'],
+                    ['rule' => 'Dignified Photography', 'detail' => 'Always seek verbal permission before photographing monks, elderly residents, or children. Respect interior photography bans inside ancient shrines.'],
+                    ['rule' => 'Modesty in Mountain Villages', 'detail' => 'Dress modestly in rural settlements. Avoid sleeveless tops or short shorts; covered shoulders and knees demonstrate cultural respect.'],
+                    ['rule' => 'Direct Economic Reciprocity', 'detail' => 'Support village economies directly: purchase seasonal apples, handwoven woolen items, and locally made tea rather than commercial imports.'],
+                ]),
+                'hazards' => json_encode([
+                    'Stepping directly over religious offerings, fire hearths, or sacred stones.',
+                    'Distributing candy, pens, or money to village children, which encourages begging.',
+                    'Disturbing quiet monastic meditation or evening pujas with loud flash photography.',
+                ]),
+                'checklists' => json_encode([
+                    'Learn fundamental Nepali greetings: "Namaste" and Sherpa "Tashi Delek".',
+                    'Carry small NPR denomination cash for temple maintenance donations (butter lamps).',
+                    'Familiarize yourself with local Tibetan prayer flag meanings and wind-horse symbols.',
+                ]),
+            ],
+            'logistics' => [
+                'name' => 'Travel Logistics',
+                'slug' => 'logistics',
+                'description' => 'Lukla flight weather buffers, TIMS card permits, national park entry fees, and mountain transfers.',
+                'kicker' => 'EXPEDITION PILLAR 06 · EXPEDITION BASELINE',
+                'tagline' => 'Permits, Mountain Flights & Checkpoints',
+                'summary' => 'Remote mountain transit requires realistic time buffers, localized coordination, and adaptability to alpine conditions.',
+                'lead' => 'Mountain logistics in Nepal operate in challenging topography where weather patterns dictate flight safety and landslides can alter road corridors. Smooth transit relies on experienced local dispatch and realistic buffer days.',
+                'icon' => 'plane',
+                'sort_order' => 6,
+                'is_active' => true,
+                'rules' => json_encode([
+                    ['rule' => 'Mountain Flight Realities (VFR Windows)', 'detail' => 'High-altitude airstrips (Lukla, Jomsom, Talcha) operate under Visual Flight Rules only. Morning clear-sky windows dictate operations; afternoon winds frequently halt departures.'],
+                    ['rule' => 'Ramechhap / Manthali Rerouting', 'detail' => 'During peak autumn and spring seasons, civil aviation frequently reroutes Lukla flights through Ramechhap Airport (a 4-hour night drive from Kathmandu) to decongest airspace.'],
+                    ['rule' => 'Hard Cash Currency Requirement', 'detail' => 'High teahouses have no ATMs or card machines. Carry sufficient Nepalese Rupees (NPR) from Kathmandu for hot showers, battery charging, and personal refreshments.'],
+                    ['rule' => 'SIM Cards & Teahouse Wi-Fi', 'detail' => 'NTC and Ncell SIM cards provide 4G in major valley hubs like Namche and Pokhara. In higher camps, teahouses offer satellite Wi-Fi vouchers (AirJaldi / Everest Link).'],
+                    ['rule' => 'Licensed Mountain Leadership', 'detail' => 'Nepal regulations mandate licensed guide accompaniment on most major routes. Always ensure your guide holds certified Ministry of Tourism credentials and wilderness first aid training.'],
+                ]),
+                'hazards' => json_encode([
+                    'Carrying only credit cards and finding yourself stranded without cash for teahouse charging or Wi-Fi.',
+                    'Leaving zero buffer days before long-haul international flights home.',
+                    'Failing to keep passport copies and physical permits in waterproof ziplock bags.',
+                ]),
+                'checklists' => json_encode([
+                    'Secure 4 passport photos in advance for TIMS and National Park permits.',
+                    'Exchange sufficient cash in Kathmandu (budget ~$25–$35 USD/day for personal incidentals).',
+                    'Register emergency contact details with your embassy in Kathmandu.',
+                ]),
+            ],
+        ];
+
+        foreach ($pillarsData as $pSlug => $pData) {
+            $existingCat = DB::table('article_categories')->where('slug', $pSlug)->first();
+            if ($existingCat) {
+                DB::table('article_categories')->where('id', $existingCat->id)->update(array_merge($pData, ['updated_at' => now()]));
+                $categoryIds[$pSlug] = $existingCat->id;
+            } else {
+                $categoryIds[$pSlug] = DB::table('article_categories')->insertGetId(array_merge($pData, [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]));
+            }
+        }
+
         foreach ($articles as $article) {
             $category = $article['category'] ?? 'planning';
-            $categoryIds[$category] ??= DB::table('article_categories')->insertGetId([
-                'name' => Str::headline($category),
-                'slug' => Str::slug($category),
-                'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            if (!isset($categoryIds[$category])) {
+                $categoryIds[$category] = DB::table('article_categories')->insertGetId([
+                    'name' => Str::headline($category),
+                    'slug' => Str::slug($category),
+                    'is_active' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
 
             $id = DB::table('articles')->insertGetId([
                 'article_category_id' => $categoryIds[$category],
@@ -2503,6 +2717,46 @@ class WebsiteDemoSeeder extends Seeder
                     'updated_at' => now(),
                 ]);
             }
+        }
+    }
+
+    protected function seedComparisonPresets(): void
+    {
+        $presets = [
+            [
+                'name' => 'Classic Trio: EBC vs ABC vs Langtang',
+                'slug' => 'classic-trio',
+                'description' => "Direct head-to-head comparison of Nepal's three iconic teahouse trails across Khumbu, Annapurna, and Langtang.",
+                'trek_ids' => json_encode(['everest-base-camp', 'annapurna-base-camp', 'langtang-valley']),
+                'sort_order' => 1,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Annapurna Ridges: Mardi Himal vs Khopra',
+                'slug' => 'annapurna-ridges',
+                'description' => 'Compare scenic panoramic ridge walks in the Annapurna sanctuary with high alpine vantage points and peaceful trails.',
+                'trek_ids' => json_encode(['mardi-himal', 'khopra-ridge']),
+                'sort_order' => 2,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Everest Routes: Base Camp vs Gokyo Lakes',
+                'slug' => 'everest-routes',
+                'description' => 'Decide between the iconic Khumbu glacier classic trail and the turquoise high-altitude lake sanctuary of Gokyo Ri.',
+                'trek_ids' => json_encode(['everest-base-camp', 'gokyo-lakes']),
+                'sort_order' => 3,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
+
+        foreach ($presets as $preset) {
+            DB::table('comparison_presets')->insert($preset);
         }
     }
 }

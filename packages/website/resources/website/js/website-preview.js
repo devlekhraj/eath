@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { Modal, Offcanvas } from 'bootstrap';
 import intlTelInput from 'intl-tel-input/intlTelInputWithUtils';
 import 'intl-tel-input/styles';
+import { initWebsitePlannerAjax } from './modules/website-planner-ajax.js';
 
 window.$ = window.jQuery = $;
 window.bootstrap = window.bootstrap || {};
@@ -277,6 +278,11 @@ window.openRightPanel = function({ url = '', size = '400px', success, error } = 
         const parsed = $('<div>').html(html);
         const loadedHeader = parsed.find('.website-join__header').first();
         if (loadedHeader.length) {
+            const stepEl = header ? header.querySelector('.website-join__step') : null;
+            const loadedStep = loadedHeader.find('.website-join__step').text().trim();
+            if (stepEl && loadedStep) {
+                stepEl.textContent = loadedStep;
+            }
             title.textContent = loadedHeader.find('.website-join__title').text().trim() || 'Plan your trek';
             subtitle.innerHTML = loadedHeader.find('.website-join__subtitle').html() || '';
         }
@@ -701,6 +707,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 data: { treks: ids }
             });
         },
+        setPreset: (presetSlug) => {
+            return compareRequest({
+                url: compareEndpoints.set,
+                method: 'POST',
+                refreshComparePage: true,
+                data: { preset: presetSlug }
+            });
+        },
         has: (id) => readStoredIds().includes(normalizeCompareId(id)),
         add: (id) => {
             const normalizedId = normalizeCompareId(id);
@@ -886,13 +900,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const compareLink = e.target.closest('a.website-compare-set-link[href*="/compare-treks"], a#website-compare-page-clear[href*="/compare-treks"]');
         if (compareLink && !compareLink.classList.contains('website-compare-btn') && compareLink.id !== 'website-compare-tray-cta') {
             const linkUrl = new URL(compareLink.href, window.location.origin);
-            const queryTreks = linkUrl.searchParams.getAll('treks[]').concat(linkUrl.searchParams.getAll('treks'));
-            if (queryTreks.length > 0 || linkUrl.searchParams.get('clear') === '1') {
+            let queryTreks = [];
+            const dataTrekIds = compareLink.getAttribute('data-trek-ids');
+            if (dataTrekIds) {
+                try {
+                    const parsed = JSON.parse(dataTrekIds);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        queryTreks = parsed;
+                    }
+                } catch (err) {}
+            }
+            if (queryTreks.length === 0) {
+                for (const [key, val] of linkUrl.searchParams.entries()) {
+                    if (key === 'treks' || key === 'treks[]' || /^treks\[\d*\]$/.test(key)) {
+                        queryTreks.push(val);
+                    }
+                }
+            }
+            const presetSlug = compareLink.getAttribute('data-preset') || linkUrl.searchParams.get('preset');
+            if (queryTreks.length > 0 || presetSlug || linkUrl.searchParams.get('clear') === '1') {
                 e.preventDefault();
                 if (linkUrl.searchParams.get('clear') === '1') {
                     WebsiteCompare.clear();
-                } else {
+                } else if (queryTreks.length > 0) {
                     WebsiteCompare.setIds(queryTreks);
+                } else if (presetSlug) {
+                    WebsiteCompare.setPreset(presetSlug);
                 }
             }
         }
@@ -2001,6 +2034,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize any page-level elevation charts
     window.initElevationProfile(document);
+
+    // Initialize AJAX-driven interactive planner
+    initWebsitePlannerAjax();
 
     // Initial reconciliation
     reconcileCompareUI();

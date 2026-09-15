@@ -199,7 +199,19 @@
                                 <span>Read Full Field Guide</span>
                                 <span aria-hidden="true">&rarr;</span>
                             </a>
-                            <a href="{{ route('website.planner.start', ['mode' => 'discover', 'source' => 'featured-article']) }}" class="website-btn website-btn--outline">
+                            <button type="button"
+                                    class="website-btn website-btn--outline"
+                                    data-open-panel="{{ route('website.articles.quickview.panel', ['slug' => $featuredArticle['slug']]) }}"
+                                    data-panel-title="{{ $featuredArticle['title'] }}"
+                                    data-panel-size="540px"
+                                    style="border-radius: 0 !important;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <span>Quick Peek</span>
+                            </button>
+                            <a href="{{ route('website.planner.start', ['mode' => 'discover', 'source' => 'featured-article']) }}" class="website-btn website-btn--ghost">
                                 <span>Plan with this Guide</span>
                             </a>
                         </div>
@@ -282,10 +294,26 @@
                                 <span class="website-micro website-text-muted">
                                     {{ $article['author_label'] ?? 'EATH Editorial' }}
                                 </span>
-                                <a href="{{ route('website.articles.show', ['slug' => $article['slug']]) }}" class="website-small text-primary font-weight-medium" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                    <span>Read Guide</span>
-                                    <span aria-hidden="true">&rarr;</span>
-                                </a>
+                                <div style="display: inline-flex; align-items: center; gap: 10px;">
+                                    <button type="button"
+                                            class="website-quickpeek-btn"
+                                            data-open-panel="{{ route('website.articles.quickview.panel', ['slug' => $article['slug']]) }}"
+                                            data-panel-title="{{ $article['title'] }}"
+                                            data-panel-size="540px"
+                                            title="Quick preview in side panel"
+                                            style="background: transparent; border: none; padding: 0; font-size: 0.8125rem; font-weight: 600; color: var(--color-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <span>Quick Peek</span>
+                                    </button>
+                                    <span class="website-text-muted" style="font-size: 0.75rem; opacity: 0.5;">|</span>
+                                    <a href="{{ route('website.articles.show', ['slug' => $article['slug']]) }}" class="website-small text-primary font-weight-medium" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                        <span>Read Guide</span>
+                                        <span aria-hidden="true">&rarr;</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </article>
@@ -375,7 +403,13 @@
                 @php
                     $pUrl = route('website.articles.index', ['category' => $pKey]);
                 @endphp
-                <a href="{{ $pUrl }}" class="website-pillar-card" role="article">
+                <a href="{{ $pUrl }}"
+                   class="website-pillar-card"
+                   role="button"
+                   data-open-panel="{{ route('website.articles.pillar.panel', ['key' => $pKey]) }}"
+                   data-panel-title="{{ $pillar['title'] }}"
+                   data-panel-size="540px"
+                   aria-haspopup="dialog">
                     <div class="website-pillar-card__bg" style="background-image: url('{{ $pillar['image'] ?? '' }}');" role="img" aria-label="{{ $pillar['image_alt'] ?? $pillar['title'] }}"></div>
                     <div class="website-pillar-card__scrim"></div>
                     <div class="website-pillar-card__inner">
@@ -428,7 +462,7 @@
                             <div class="website-pillar-card__tagline">{{ $pillar['tagline'] }}</div>
 
                             <div class="website-pillar-card__footer">
-                                <span class="website-pillar-card__action-text">Explore Guides</span>
+                                <span class="website-pillar-card__action-text">View Pillar Details</span>
                                 <span class="website-pillar-card__arrow" aria-hidden="true">&rarr;</span>
                             </div>
                         </div>
@@ -450,34 +484,24 @@
         </div>
     </section>
 
-    <!-- 8. Journey Planning Callout Banner (CTA) -->
-    <section aria-labelledby="heading-plan-expedition" style="margin-bottom: var(--space-8);">
-        <div class="website-guide-cta">
-            <span class="website-guide-cta__eyebrow">
-                CUSTOM JOURNEY PLANNING
+    <!-- 8. Universal Bottom Call-To-Action (CTA) Banner -->
+    <section aria-labelledby="heading-plan-expedition" class="website-final-cta" style="border-radius: 0 !important; margin-top: var(--space-12); margin-bottom: var(--space-8);">
+        <div class="website-final-cta__inner">
+            <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                EXPEDITION PLANNING
             </span>
-            <h2 id="heading-plan-expedition" class="website-guide-cta__heading">
+            <h2 id="heading-plan-expedition" class="website-final-cta__title" style="font-size: var(--type-h2);">
                 Ready to Put Field Research into Practice?
             </h2>
-            <p class="website-guide-cta__lead">
+            <p class="website-final-cta__subtitle">
                 Launch our interactive trek planner to receive tailored itinerary matches based on your preferred travel month, walking endurance, altitude profile, and party size.
             </p>
-
-            <div class="website-guide-cta__actions">
-                <a href="{{ route('website.planner.start', ['mode' => 'discover', 'source' => 'travel-guide-cta']) }}" class="website-btn website-btn--primary">
-                    <svg class="website-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                    </svg>
-                    <span>Launch Interactive Trek Planner &rarr;</span>
+            <div class="website-final-cta__actions">
+                <a href="{{ route('website.planner.start', ['mode' => 'discover', 'source' => 'travel-guide-cta']) }}" class="website-btn website-btn--accent" style="border-radius: 0 !important;">
+                    Launch Interactive Trek Planner &rarr;
                 </a>
-                <a href="{{ route('website.treks.index') }}" class="website-btn website-btn--outline-light">
-                    <svg class="website-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
-                        <line x1="8" y1="2" x2="8" y2="18"></line>
-                        <line x1="16" y1="6" x2="16" y2="22"></line>
-                    </svg>
-                    <span>Browse All 12 Journeys</span>
+                <a href="{{ route('website.treks.index') }}" class="website-btn website-btn--outline" style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
+                    Browse All 12 Journeys
                 </a>
             </div>
         </div>

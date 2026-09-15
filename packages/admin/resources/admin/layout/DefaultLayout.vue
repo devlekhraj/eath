@@ -447,6 +447,11 @@ const menuGroups = computed<NavGroup[]>(() => [
     routeName: 'adminJourneyPage',
   },
   {
+    group: 'Compare Presets',
+    icon: 'mdi-scale-balance',
+    routeName: 'adminComparisonPresetPage',
+  },
+  {
     group: 'Departures',
     icon: 'mdi-calendar-check',
     routeName: 'adminDeparturePage',
@@ -477,8 +482,8 @@ const menuGroups = computed<NavGroup[]>(() => [
     routeName: 'adminArticlePage',
   },
   {
-    group: 'Article Categories',
-    icon: 'mdi-folder-multiple-outline',
+    group: 'Pillars & Categories',
+    icon: 'mdi-pillar',
     routeName: 'adminArticleCategoryPage',
   },
   {

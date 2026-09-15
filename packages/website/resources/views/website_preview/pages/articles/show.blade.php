@@ -163,24 +163,28 @@
             @endif
 
             <!-- 10. Contextual Planning CTA -->
-            <section aria-labelledby="heading-article-cta" style="margin-top: var(--space-10);">
-                <div class="website-card" style="padding: var(--space-6); background: var(--color-primary-subtle); border: 2px solid var(--color-primary-light); text-align: center;">
-                    <span class="website-badge website-badge--primary" style="margin-bottom: var(--space-2); text-transform: uppercase;">
-                        Interactive Trip Planner
+            <section aria-labelledby="heading-article-cta" class="website-final-cta" style="margin-top: var(--space-10); border-radius: 0 !important;">
+                <div class="website-final-cta__inner">
+                    <span class="website-badge website-badge--accent" style="margin-bottom: var(--space-3); display: inline-block;">
+                        {{ !empty($article['cta_eyebrow']) ? $article['cta_eyebrow'] : 'EXPEDITION PLANNING' }}
                     </span>
-                    <h2 id="heading-article-cta" class="website-h3" style="margin-bottom: var(--space-2); color: var(--color-primary-dark);">
-                        Ready to Apply These Insights?
+                    <h2 id="heading-article-cta" class="website-final-cta__title" style="font-size: var(--type-h2);">
+                        {{ !empty($article['cta_title']) ? $article['cta_title'] : 'Ready to Apply These Insights?' }}
                     </h2>
-                    <p class="website-body website-text-secondary" style="max-width: 580px; margin: 0 auto var(--space-5) auto; line-height: 1.6;">
-                        Step through our guided trek builder to discover itineraries matching your preferred timing, comfort, and group size.
+                    <p class="website-final-cta__subtitle">
+                        {{ !empty($article['cta_description']) ? $article['cta_description'] : 'Step through our guided trek builder to discover itineraries matching your preferred timing, comfort, and group size.' }}
                     </p>
 
-                    <div style="display: flex; justify-content: center; gap: var(--space-3); flex-wrap: wrap;">
-                        <a href="{{ route('website.planner.start') }}?mode=discover&source=article" class="website-btn website-btn--primary">
-                            Start Journey Planner &rarr;
+                    <div class="website-final-cta__actions">
+                        <a href="{{ !empty($article['cta_primary_btn_url']) ? $article['cta_primary_btn_url'] : (route('website.planner.start') . '?mode=discover&source=article') }}"
+                           class="website-btn website-btn--accent"
+                           style="border-radius: 0 !important;">
+                            {{ !empty($article['cta_primary_btn_text']) ? $article['cta_primary_btn_text'] : 'Start Journey Planner' }}
                         </a>
-                        <a href="{{ route('website.articles.index') }}" class="website-btn website-btn--outline">
-                            All Travel Guides
+                        <a href="{{ !empty($article['cta_secondary_btn_url']) ? $article['cta_secondary_btn_url'] : route('website.articles.index') }}"
+                           class="website-btn website-btn--outline"
+                           style="color: #ffffff; border-color: rgba(255, 255, 255, 0.6); border-radius: 0 !important;">
+                            {{ !empty($article['cta_secondary_btn_text']) ? $article['cta_secondary_btn_text'] : 'All Travel Guides' }}
                         </a>
                     </div>
                 </div>

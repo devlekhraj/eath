@@ -98,9 +98,10 @@
 
     <!-- Lightweight Server-Emitted Whitelist for Shared Client Comparison State -->
     <script id="website-trek-whitelist" type="application/json" data-whitelist="{{ base64_encode(json_encode(\Website\Services\WebsiteCatalogRepository::getTrekWhitelist())) }}"></script>
+    <script id="website-compare-endpoints" type="application/json">{!! json_encode($compareEndpoints, JSON_UNESCAPED_SLASHES) !!}</script>
     <script>
         window.__WEBSITE_COMPARE_URL__ = "{{ route('website.compare') }}";
-        window.__WEBSITE_COMPARE_ENDPOINTS__ = {!! json_encode($compareEndpoints, JSON_UNESCAPED_SLASHES) !!};
+        window.__WEBSITE_COMPARE_ENDPOINTS__ = JSON.parse(document.getElementById('website-compare-endpoints')?.textContent || '{}');
     </script>
 
     @stack('scripts')

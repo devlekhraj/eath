@@ -3,8 +3,18 @@
 @section('title', 'Sample Contact Details (Website)')
 @section('meta_description', 'Provide sample traveler contact details for your simulated Himalayan trek request. No actual messages or bookings are sent.')
 
+@php
+    $hideTopBreadcrumbs = true;
+@endphp
+
 @section('content')
-<div class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12); max-width: 820px;">
+<div id="planner-app" data-planner-root class="website-container" style="padding-top: var(--space-6); padding-bottom: var(--space-12); max-width: 820px;">
+
+    @if(!empty($breadcrumbs))
+        <div style="margin-bottom: var(--space-4);">
+            @include('website_preview.components.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+        </div>
+    @endif
 
     <!-- Breadcrumb / Stage indicator -->
     <div style="margin-bottom: var(--space-6);">
@@ -143,7 +153,7 @@
                             ];
                         @endphp
                         @foreach($methods as $methodVal => $methodLabel)
-                            <label style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; background: {{ $selectedMethod === $methodVal ? 'var(--color-primary-subtle)' : 'var(--color-surface)' }};">
+                            <label style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--color-border); border-radius: 0 !important; cursor: pointer; @if($selectedMethod === $methodVal) background: var(--color-primary-subtle); @else background: var(--color-surface); @endif">
                                 <input type="radio" name="contact_method" value="{{ $methodVal }}" {{ $selectedMethod === $methodVal ? 'checked' : '' }}>
                                 <span class="website-small" style="font-weight: 500;">{{ $methodLabel }}</span>
                             </label>
@@ -159,7 +169,7 @@
                 </div>
 
                 <!-- Journey Snapshot Recap inside form -->
-                <div style="padding: var(--space-4); background: var(--color-background-warm); border-radius: var(--radius-md); margin-bottom: var(--space-6); border: 1px solid var(--color-border);">
+                <div style="padding: var(--space-4); background: var(--color-background-warm); border-radius: 0 !important; margin-bottom: var(--space-6); border: 1px solid var(--color-border);">
                     <strong class="website-small" style="display: block; margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">
                         Attached Request Summary
                     </strong>

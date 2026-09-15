@@ -15,18 +15,6 @@
 
     <!-- Login Card -->
     <v-card class="pa-6">
-      <v-card-title class="d-flex align-center justify-space-between pa-0 mb-4 text-primary">
-        <div class="d-flex align-center ga-2">
-          <v-avatar size="24" color="primary">
-            <v-icon size="14">mdi-shield-lock-outline</v-icon>
-          </v-avatar>
-          <span class="text-uppercase font-weight-medium text-slate-800" style="font-size: 0.82rem; letter-spacing: 0.03em;">
-            Admin Authentication
-          </span>
-        </div>
-      </v-card-title>
-
-      <v-divider class="mb-5" />
 
       <v-card-text class="pa-0">
         <!-- Error Alert -->

@@ -3,8 +3,18 @@
 @section('title', 'Website Request Completed &middot; ' . ($receipt['reference'] ?? 'Website Confirmation'))
 @section('meta_description', 'Simulated website request confirmation. Review your non-PII website reference and summary.')
 
+@php
+    $hideTopBreadcrumbs = true;
+@endphp
+
 @section('content')
-<div class="website-container" style="padding-top: var(--space-8); padding-bottom: var(--space-12); max-width: 820px;">
+<div id="planner-app" data-planner-root class="website-container" style="padding-top: var(--space-8); padding-bottom: var(--space-12); max-width: 820px;">
+
+    @if(!empty($breadcrumbs))
+        <div style="margin-bottom: var(--space-4);">
+            @include('website_preview.components.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+        </div>
+    @endif
 
     <!-- Completed Status Card -->
     <div class="website-card" style="padding: var(--space-6); text-align: center; margin-bottom: var(--space-6); border: 2px solid var(--color-primary-light); background: var(--color-background-warm);">
@@ -100,7 +110,7 @@
             </div>
         </div>
 
-        <div style="padding: var(--space-3); background: var(--color-background-warm); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2);">
+        <div style="padding: var(--space-3); background: var(--color-background-warm); border-radius: 0 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2);">
             <span class="website-micro website-text-muted">
                 Receipt Generated: {{ \Carbon\CarbonImmutable::createFromTimestamp($receipt['submitted_at'])->format('M j, Y - H:i:s') }} UTC
             </span>

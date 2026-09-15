@@ -70,6 +70,8 @@ Route::name('website.')->middleware([EnsureWebsiteAllowed::class])->group(functi
 
     // P17: Travel Guide / Articles
     Route::get('/travel-guide', [ArticleController::class, 'index'])->name('articles.index');
+    Route::get('/travel-guide/pillar-panel/{key}', [ArticleController::class, 'pillarPanel'])->name('articles.pillar.panel');
+    Route::get('/travel-guide/{slug}/quickview', [ArticleController::class, 'quickviewPanel'])->name('articles.quickview.panel');
     Route::get('/travel-guide/{slug}', [ArticleController::class, 'show'])->name('articles.show');
 
     // P18: About
